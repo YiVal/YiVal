@@ -1,0 +1,33 @@
+name: PyTest
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10"]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip poetry
+        python -m poetry install
+    - name: Test with pytest
+      run: |
+        poetry run pytest
+    - name: Test with pylint
+      run: |
+        poetry run pytest --pylint -m pylint .
