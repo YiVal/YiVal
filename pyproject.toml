@@ -1,0 +1,53 @@
+[tool.poetry]
+name = "yival"
+version = "0.0.0"
+description = "YiVal is an open-source project designed to revolutionize the way developers and researchers evaluate and refine AI models."
+authors = ["Tao Feng <taofeng.nju@gmail.com>", "Yan QiDong <yanqd0@outlook.com>"]
+license = "AGPLv3"
+readme = "README.md"
+
+packages = [{ include = "yival", from = "src" }]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<4"
+openai = "^0.27.4"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.2"
+pytest-isort = "^3.1.0"
+pytest-mypy = "^0.10.3"
+pytest-pylint = "^0.19.0"
+pytest-yapf3 = "^0.7.0"
+
+
+[build-system]
+requires = ["poetry-core", "poetry-dynamic-versioning"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+
+[tool.poetry-dynamic-versioning]
+enable = true
+dirty = true
+vcs = "git"
+
+[tool.pytest.ini_options]
+addopts = ["--verbose", "--yapf", "--isort", "--mypy"]
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+known_first_party = "yival"
+
+[tool.yapf]
+align_closing_bracket_with_visual_indent = true
+based_on_style = "pep8"
+blank_line_before_nested_class_or_def = true
+coalesce_brackets = true
+dedent_closing_brackets = true
+
+[tool.mypy]
+
+[[tool.mypy.overrides]]
+module = "yival.*"
+ignore_missing_imports = true
