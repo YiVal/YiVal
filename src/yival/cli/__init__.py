@@ -8,7 +8,7 @@ from .run import add_arguments_to as RUN
 
 def add_subcommands_to(parser: ArgumentParser):
     """Add subcommands to the main parser."""
-    subparser = parser.add_subparsers(title='actions')
+    subparser = parser.add_subparsers(title="actions")
 
     for func in (
         ADD,

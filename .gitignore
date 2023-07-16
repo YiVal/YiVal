@@ -1,3 +1,6 @@
+.vs/
+.vscode/
+.idea/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -70,12 +73,14 @@ instance/
 
 # Sphinx documentation
 docs/_build/
+docs/docs/_build/
 
 # PyBuilder
 target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
+notebooks/
 
 # IPython
 profile_default/
@@ -103,7 +108,9 @@ celerybeat.pid
 
 # Environments
 .env
+.envrc
 .venv
+.venvs
 env/
 venv/
 ENV/
@@ -127,3 +134,36 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# macOS display setting files
+.DS_Store
+
+# Wandb directory
+wandb/
+
+# asdf tool versions
+.tool-versions
+/.ruff_cache/
+
+*.pkl
+*.bin
+
+# integration test artifacts
+data_map*
+\[('_type', 'fake'), ('stop', None)]
+
+# Replit files
+*replit*
+
+node_modules
+docs/.yarn/
+docs/node_modules/
+docs/.docusaurus/
+docs/.cache-loader/
+docs/_dist
+docs/api_reference/_build
+docs/docs_skeleton/build
+docs/docs_skeleton/node_modules
+docs/docs_skeleton/yarn.lock
+
+aimebot.pem

@@ -16,13 +16,25 @@ python = ">=3.10,<4"
 openai = "^0.27.4"
 
 
-[tool.poetry.group.dev.dependencies]
-pytest = "^7.2.2"
+[tool.poetry.group.lint.dependencies]
+ruff = "^0.0.278"
+black = "^23.7.0"
+
+
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.4.0"
 pytest-isort = "^3.1.0"
 pytest-mypy = "^0.10.3"
 pytest-pylint = "^0.19.0"
 pytest-yapf3 = "^0.7.0"
 
+[tool.ruff]
+select = [
+  "E",  # pycodestyle
+  "F",  # pyflakes
+  "I",  # isort
+]
 
 [build-system]
 requires = ["poetry-core", "poetry-dynamic-versioning"]

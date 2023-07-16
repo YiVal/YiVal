@@ -22,5 +22,5 @@ def main():
     sys.exit(status)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
