@@ -3,7 +3,7 @@ name = "yival"
 version = "0.0.0"
 description = "YiVal is an open-source project designed to revolutionize the way developers and researchers evaluate and refine AI models."
 authors = ["Tao Feng <taofeng.nju@gmail.com>", "Yan QiDong <yanqd0@outlook.com>"]
-license = {text = "Apachev2"}
+license = "Apachev2"
 readme = "README.md"
 
 packages = [{ include = "yival", from = "src" }]
