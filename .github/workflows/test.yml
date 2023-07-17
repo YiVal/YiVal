@@ -15,8 +15,6 @@ jobs:
     strategy:
       matrix:
         python-version:
-          - "3.8"
-          - "3.9"
           - "3.10"
           - "3.11"
         test_type:
@@ -29,6 +27,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           poetry-version: "1.4.2"
+          cache-key: "core"
           install-command: |
             echo "Running core tests, installing dependencies with poetry..."
             poetry install
