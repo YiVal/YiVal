@@ -27,6 +27,8 @@ YiVal is an innovative open-source project, rooted in the principles of the Yiji
 
 Certainly, here's a revised roadmap with each Hexagram having five action items and their corresponding Chinese characters:
 
+Absolutely, here's the revised roadmap with support for multi-modal input types:
+
 ## Roadmap
 
 Our roadmap for future features is inspired by the eight Hexagrams of the Yijing:
@@ -38,18 +40,19 @@ Our roadmap for future features is inspired by the eight Hexagrams of the Yijing
    - [ ] Implement a suggestion system for improving prompts
    - [ ] Support langchain model comparison
    - [ ] Support langchain memory comparison
-   - [ ] Provide insights on cost and latency for differnt combinations.
+   - [ ] Provide insights on cost and latency for different combinations
    - [ ] Develop a comprehensive user manual and tutorial
 
 2. **Kun (The Receptive, Earth) 🌏 (坤):** 
-   - [ ] Add support for more diverse input data types
-   - [ ] Add auto-eval by the model(s)
-   - [ ] Develop a system for importing and exporting evaluation data
-   - [ ] Add compatibility with more AI frameworks and libraries
-   - [ ] Enable users to customize their evaluation parameters
+   - [ ] Add support for multi-modal input types (e.g., audio, video, image) 
+   - [ ] Implement multi-modal evaluation methods
+   - [ ] Add auto-evaluation by the model(s) for multiple input types
+   - [ ] Develop a system for importing and exporting evaluation data for multi-modal datasets
+   - [ ] Enhance compatibility with more AI frameworks and libraries that support multi-modal data
+   - [ ] Enable users to customize their multi-modal evaluation parameters
 
 3. **Zhen (The Arousing, Thunder) ⚡ (震):** 
-   - [ ] Implement novel AI evaluation metrics based on different use cases
+   - [ ] Implement novel AI evaluation metrics based on different use cases and input types
    - [ ] Develop a feature for real-time evaluation tracking
    - [ ] Create an alert system for significant metric changes
    - [ ] Provide a platform for researchers to share and discuss new metrics
@@ -89,7 +92,6 @@ Our roadmap for future features is inspired by the eight Hexagrams of the Yijing
    - [ ] Develop a system for users to vote on potential new features
    - [ ] Maintain an active dialogue with the user community to foster engagement and satisfaction
    - [ ] Create a feature for users to share and discuss effective prompts
-
 ## Get Involved
 We welcome contributions from the community to help us improve YiVal. Whether you're a developer looking to fix bugs or add features, or you're just passionate about AI and have great ideas, we'd love to hear from you. 
 
