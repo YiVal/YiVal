@@ -1,0 +1,31 @@
+{
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true,
+        "source.organizeImports": true,
+        "source.unusedImports": true,
+    },
+    "editor.formatOnSave": true,
+    "files.autoSave": "onFocusChange",
+    "isort.args": [
+        "-p",
+        "yival",
+    ],
+    "isort.check": true,
+    "python.analysis.addImport.exactMatchOnly": true,
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.importFormat": "relative",
+    "python.analysis.fixAll": [
+        "source.convertImportFormat",
+        "source.unusedImports",
+    ],
+    "python.formatting.provider": "yapf",
+    // "python.linting.flake8Enabled": true,
+    // "python.linting.pydocstyleEnabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.testing.pytestEnabled": true,
+    "python.linting.ignorePatterns": [
+        "**/site-packages/**/*.py",
+        ".vscode/*.py",
+        "tests/**/*.py",
+    ]
+}
