@@ -41,9 +41,7 @@ def test_get_next_variation_with_variations():
     # Check that the variations are rotated through correctly
     assert instance.get_next_variation("test") == "variation1"
     assert instance.get_next_variation("test") == "variation2"
-    assert instance.get_next_variation(
-        "test"
-    ) == "variation1"  # should wrap around
+    assert instance.get_next_variation("test") == "variation1"  # should wrap around
 
 
 def test_thread_safety():

@@ -27,6 +27,7 @@ class ExperimentState:
         The class is designed as a singleton, ensuring a consistent global state
         throughout the application.
     """
+
     _instance = None
 
     def __new__(cls):

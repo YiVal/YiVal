@@ -20,6 +20,7 @@ class BaseWrapper:
             next variation for the associated experiment name. If the state is inactive
             or no variations are found, returns None.
     """
+
     def __init__(self, name):
         """
         Initializes a new BaseWrapper instance with the provided experiment name.
