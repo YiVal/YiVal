@@ -2,4 +2,4 @@
 
 from .add import add
 
-__all__ = (add.__name__, )
+__all__ = (add.__name__,)

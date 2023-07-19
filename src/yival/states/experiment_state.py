@@ -6,7 +6,7 @@ class ExperimentState:
     """
     Represents the state for managing experiment variations.
 
-    This class maintains the state of active experiments and their variations. 
+    This class maintains the state of active experiments and their variations.
 
     Attributes:
         active (bool): Indicates if the experiment is currently active.
@@ -43,7 +43,5 @@ class ExperimentState:
             return variation
         return None
 
-    def set_variations_for_experiment(
-        self, name: str, variations: List[Any]
-    ) -> None:
+    def set_variations_for_experiment(self, name: str, variations: List[Any]) -> None:
         self.current_variations[name] = variations
