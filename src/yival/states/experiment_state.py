@@ -43,7 +43,5 @@ class ExperimentState:
             return variation
         return None
 
-    def set_variations_for_experiment(
-        self, name: str, variations: List[Any]
-    ) -> None:
+    def set_variations_for_experiment(self, name: str, variations: List[Any]) -> None:
         self.current_variations[name] = variations

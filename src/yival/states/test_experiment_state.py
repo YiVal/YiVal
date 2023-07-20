@@ -2,7 +2,6 @@ from .experiment_state import ExperimentState
 
 
 class CustomType:
-
     def __init__(self, value):
         self.value = value
 
@@ -24,9 +23,7 @@ def test_get_next_variation_with_string_variations():
     state.set_variations_for_experiment("test_experiment", ["var1", "var2"])
     assert state.get_next_variation("test_experiment") == "var1"
     assert state.get_next_variation("test_experiment") == "var2"
-    assert state.get_next_variation(
-        "test_experiment"
-    ) is None  # No more variations
+    assert state.get_next_variation("test_experiment") is None  # No more variations
 
 
 def test_get_next_variation_with_mixed_variations():
