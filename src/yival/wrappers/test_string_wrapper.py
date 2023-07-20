@@ -9,36 +9,31 @@ def setup_function():
 
 
 def test_string_representation_without_variation():
-    instance = StringWrapper(original_string="Hello", name="greeting")
-    assert str(instance) == "Hello"
+    # Initialize ExperimentState but don't set it as active
+    state = ExperimentState.get_instance()
+    state.active = False
+
+    # Create a StringWrapper instance
+    wrapper = StringWrapper("Hello", "test_experiment")
+    assert str(wrapper) == "Hello"
 
 
 def test_string_representation_with_variation():
-    # Setting up the ExperimentState with an active state and a variation for the
-    # 'greeting' experiment
-    state = ExperimentState()
+    # Activate the ExperimentState and set a variation
+    state = ExperimentState.get_instance()
     state.active = True
-    state.current_variations["greeting"] = ["Hi"]
+    state.set_variations_for_experiment("test_experiment", ["Hi"])
 
-    instance = StringWrapper(original_string="Hello", name="greeting")
-    assert str(instance) == "Hi"
-
-
-def test_string_representation_with_inactive_experiment_state():
-    # Setting up the ExperimentState with an inactive state
-    state = ExperimentState()
-    state.active = False
-    state.current_variations["greeting"] = ["Hi"]
-
-    instance = StringWrapper(original_string="Hello", name="greeting")
-    assert str(instance) == "Hello"
+    # Create a StringWrapper instance
+    wrapper = StringWrapper("Hello", "test_experiment")
+    assert str(wrapper) == "Hi"
 
 
-def test_string_representation_with_no_variation():
-    # Setting up the ExperimentState with an active state but no variation for the
-    # 'greeting' experiment
-    state = ExperimentState()
+def test_string_representation_with_no_active_variation():
+    # Set the ExperimentState to active but don't provide a variation
+    state = ExperimentState.get_instance()
     state.active = True
 
-    instance = StringWrapper(original_string="Hello", name="greeting")
-    assert str(instance) == "Hello"
+    # Create a StringWrapper instance
+    wrapper = StringWrapper("Hello", "test_experiment")
+    assert str(wrapper) == "Hello"

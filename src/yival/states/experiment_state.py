@@ -1,73 +1,47 @@
-import threading
 from collections import defaultdict
+from typing import Any, Dict, List, Optional
 
 
 class ExperimentState:
     """
-    Represents the global experiment state for managing and rotating experiment
-    variations.
-    This singleton class maintains the state of active experiments, their variations,
-    counters for each
-    variation to ensure rotation, and locks for thread-safe access.
+    Represents the state for managing experiment variations.
+
+    This class maintains the state of active experiments and their variations.
+
     Attributes:
         active (bool): Indicates if the experiment is currently active.
-        current_variations (dict): A dictionary where keys are experiment names and
-        values are lists of variations.
-        counters (defaultdict[int]): A counter for each experiment name to rotat
-        e through its variations.
-        locks (defaultdict[threading.Lock]): A thread lock for each experiment name
-        ensuring thread-safe access.
-    Methods:
-        get_next_variation(name: str) -> str:
-            Retrieves the next variation for the given experiment name, rotating
-            through the list of variations.
-            If there are no variations for the given name, it returns None.
+        current_variations (Dict[str, List[Any]]): A dictionary where keys are
+        experiment names and values are lists of variations.
+        counters (Dict[str, int]): A counter for each experiment name to rotate through
+        its variations.
 
-    Note:
-        The class is designed as a singleton, ensuring a consistent global state
-        throughout the application.
+    Methods:
+        get_next_variation(name: str) -> Optional[Any]:
+            Depending on the global ExperimentState's activity status, retrieves the
+            next variation for the associated experiment name. If the state is inactive
+            or no variations are found, returns None.
     """
 
-    _instance = None
+    _shared_instance = None
 
-    def __new__(cls):
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-        return cls._instance
+    @staticmethod
+    def get_instance():
+        if ExperimentState._shared_instance is None:
+            ExperimentState._shared_instance = ExperimentState()
+        return ExperimentState._shared_instance
 
-    def __init__(self):
-        if not hasattr(self, "initialized"):
-            self.active = False
-            self.current_variations = {}
-            self.counters = defaultdict(int)
-            self.locks = defaultdict(threading.Lock)
-            self.initialized = True
+    def __init__(self) -> None:
+        self.active: bool = False
+        self.current_variations: Dict[str, List[Any]] = {}
+        self.counters: Dict[str, int] = defaultdict(int)
 
-    def get_next_variation(self, name):
-        """
-        Retrieves the next variation for the given experiment name.
+    def get_next_variation(self, name: str) -> Optional[Any]:
+        variations = self.current_variations.get(name, [])
+        if self.counters[name] < len(variations):
+            variation = variations[self.counters[name]]
+            self.counters[name] += 1
+            return variation
+        return None
 
-        This method ensures a rotation through the list of variations associated with
-        the given experiment name.
-        It uses a counter to determine the next variation and increments the counter
-        after each retrieval.
-        If there are no variations associated with the given name, it returns None.
-
-        Thread safety is ensured through locks, allowing for concurrent access without
-        race conditions.
-
-        Parameters:
-        - name (str): The name of the experiment for which to retrieve the next
-        variation.
-
-        Returns:
-        - str: The next variation for the given experiment name. If there are no
-        variations, returns None.
-        """
-        with self.locks[name]:
-            variations = self.current_variations.get(name, [])
-            if variations:
-                index = self.counters[name] % len(variations)
-                self.counters[name] += 1
-                return variations[index]
-            return None
+    def set_variations_for_experiment(self, name: str, variations: List[Any]) -> None:
+        self.current_variations[name] = variations
