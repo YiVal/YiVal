@@ -18,8 +18,8 @@ class WrapperVariation:
     numbers, or configuration dictionaries.
     """
 
-    variation_id: str
     value: Any
+    variation_id: Optional[str] = None
 
 
 @dataclass
