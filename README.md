@@ -23,7 +23,7 @@ YiVal is an innovative open-source project, rooted in the principles of the Yiji
  - [ ] Output formatter
      - [ ] Output to csv
      - [ ] Basic Textual UI
- - [ ] Output parser - Capture detailed information
+ - [x] Output parser - Capture detailed information
  - [ ] Documents
  - [ ] Git setup
  - [ ] Cotribution guid
