@@ -185,6 +185,7 @@ class ExperimentResult:
     - token_usage (int): Number of tokens used for this example.
     - evaluator_outputs (List[EvaluatorOutput]): Evaluator outputs for this example.
     - human_rating (Optional[HumanRating]): Human rating for this example.
+    - intermediate_logs (List[str]): Logs captured during the experiment.
     """
 
     input_data: InputData
@@ -194,6 +195,7 @@ class ExperimentResult:
     token_usage: int
     evaluator_outputs: List[EvaluatorOutput]
     human_rating: Optional[HumanRating] = None
+    intermediate_logs: List[str] = field(default_factory=list)
 
 
 @dataclass
