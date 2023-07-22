@@ -61,8 +61,8 @@ class DatasetConfig:
     Configuration for the dataset used in the experiment.
 
     Attributes:
-    - source_type (DatasetSourceType): Source of dataset, either directly from the user, from a
-      dataset, or machine-generated.
+    - source_type (DatasetSourceType): Source of dataset, either directly from the user,
+      from a dataset, or machine-generated.
     - file_path (Union[str, None]): Path to the dataset file. Relevant only if
       source_type is DATASET.
     - reader (Union[Callable, None]): Callable to read and process the dataset file.
