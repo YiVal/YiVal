@@ -9,6 +9,8 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
+from .dataset_config import DatasetConfig
+
 
 @dataclass
 class WrapperVariation:
@@ -43,41 +45,6 @@ class InputType(Enum):
 
     USER = "user_input"
     DATASET = "dataset"
-
-
-class DatasetSourceType(Enum):
-    """
-    Enum to specify the source of dataset: USER, DATASET, or MACHINE_GENERATED.
-    """
-
-    USER = "user_input"
-    DATASET = "dataset"
-    MACHINE_GENERATED = "machine_generated"
-
-
-@dataclass
-class DatasetConfig:
-    """
-    Configuration for the dataset used in the experiment.
-
-    Attributes:
-    - source_type (DatasetSourceType): Source of dataset, either directly from the user,
-      from a dataset, or machine-generated.
-    - file_path (Union[str, None]): Path to the dataset file. Relevant only if
-      source_type is DATASET.
-    - reader (Union[Callable, None]): Callable to read and process the dataset file.
-      Relevant only if source_type is DATASET.
-    - output_path (Union[str, None]): Path to store the machine-generated data. Relevant
-      only if source_type is MACHINE_GENERATED.
-    - data_generators (Union[List[Callable], None]): List of callables to generate data.
-      Relevant only if source_type is MACHINE_GENERATED.
-    """
-
-    source_type: DatasetSourceType
-    file_path: Union[str, None] = None
-    reader: Union[Callable, None] = None
-    output_path: Union[str, None] = None
-    data_generators: Union[List[Callable], None] = None
 
 
 class EvaluatorType(Enum):
