@@ -21,19 +21,21 @@ input3"""
     assert results[0][2]["input"] == "input3"
 
 
-# def test_csv_chunk_size(tmp_path):
-#     csv_content = """input
-# """ + "\n".join([f"input{i}" for i in range(1, 105)])  # 104 inputs
-#     csv_file = tmp_path / "chunk.csv"
-#     csv_file.write_text(csv_content)
+def test_csv_chunk_size(tmp_path):
+    csv_content = """input
+""" + "\n".join(
+        [f"input{i}" for i in range(1, 105)]
+    )  # 104 inputs
+    csv_file = tmp_path / "chunk.csv"
+    csv_file.write_text(csv_content)
 
-#     reader = CSVReader()
-#     results = list(reader.read(csv_file, chunk_size=25))
-#     print(results)
+    reader = CSVReader()
+    results = list(reader.read(csv_file, chunk_size=25))
+    print(results)
 
-#     assert len(results) == 5  # 4 chunks of 25 + 1 chunk of 4
-#     assert all(len(chunk) == 25 for chunk in results[:-1])
-#     assert len(results[-1]) == 4
+    assert len(results) == 5  # 4 chunks of 25 + 1 chunk of 4
+    assert all(len(chunk) == 25 for chunk in results[:-1])
+    assert len(results[-1]) == 4
 
 
 def test_missing_data(tmp_path, caplog):
