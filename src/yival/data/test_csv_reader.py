@@ -1,5 +1,6 @@
 import logging
 
+from ..schemas.reader_configs import CSVReaderConfig
 from .csv_reader import CSVReader
 
 
@@ -11,7 +12,8 @@ input3"""
     csv_file = tmp_path / "basic.csv"
     csv_file.write_text(csv_content)
 
-    reader = CSVReader()
+    config = CSVReaderConfig()  # Default configuration
+    reader = CSVReader(config)
     results = list(reader.read(csv_file))
 
     assert len(results) == 1
@@ -29,9 +31,9 @@ def test_csv_chunk_size(tmp_path):
     csv_file = tmp_path / "chunk.csv"
     csv_file.write_text(csv_content)
 
-    reader = CSVReader()
-    results = list(reader.read(csv_file, chunk_size=25))
-    print(results)
+    config = CSVReaderConfig(chunk_size=25)  # Configuration with a specific chunk size
+    reader = CSVReader(config)
+    results = list(reader.read(csv_file))
 
     assert len(results) == 5  # 4 chunks of 25 + 1 chunk of 4
     assert all(len(chunk) == 25 for chunk in results[:-1])
@@ -47,7 +49,8 @@ input3,output3
     csv_file = tmp_path / "missing.csv"
     csv_file.write_text(csv_content)
 
-    reader = CSVReader()
+    config = CSVReaderConfig()  # Default configuration
+    reader = CSVReader(config)
     with caplog.at_level(logging.WARNING):
         results = list(reader.read(csv_file))
 

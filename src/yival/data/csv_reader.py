@@ -2,6 +2,7 @@ import csv
 import logging
 from typing import Any, Dict, Iterator, List
 
+from ..schemas.reader_configs import CSVReaderConfig
 from .base_reader import BaseReader
 
 
@@ -24,10 +25,13 @@ class CSVReader(BaseReader):
       a dictionary.
     """
 
-    def read(self, path: str, chunk_size: int = 100) -> Iterator[List[Dict[str, Any]]]:
+    def __init__(self, config: CSVReaderConfig):
+        super().__init__(config)
+
+    def read(self, path: str) -> Iterator[List[Dict[str, Any]]]:
         chunk = []
         issues = []
-
+        chunk_size = self.config.chunk_size
         with open(path, mode="r", encoding="utf-8") as file:
             # Check for header
             header = file.readline().strip().split(",")
