@@ -45,23 +45,39 @@ class InputType(Enum):
     DATASET = "dataset"
 
 
+class DatasetSourceType(Enum):
+    """
+    Enum to specify the source of dataset: USER, DATASET, or MACHINE_GENERATED.
+    """
+
+    USER = "user_input"
+    DATASET = "dataset"
+    MACHINE_GENERATED = "machine_generated"
+
+
 @dataclass
 class DatasetConfig:
     """
     Configuration for the dataset used in the experiment.
 
     Attributes:
-    - input_type (InputType): Type of input, either directly from the user or from a
-      dataset.
+    - source_type (DatasetSourceType): Source of dataset, either directly from the user, from a
+      dataset, or machine-generated.
     - file_path (Union[str, None]): Path to the dataset file. Relevant only if
-      input_type is DATASET.
+      source_type is DATASET.
     - reader (Union[Callable, None]): Callable to read and process the dataset file.
-      Relevant only if input_type is DATASET.
+      Relevant only if source_type is DATASET.
+    - output_path (Union[str, None]): Path to store the machine-generated data. Relevant
+      only if source_type is MACHINE_GENERATED.
+    - data_generators (Union[List[Callable], None]): List of callables to generate data.
+      Relevant only if source_type is MACHINE_GENERATED.
     """
 
-    input_type: InputType
+    source_type: DatasetSourceType
     file_path: Union[str, None] = None
     reader: Union[Callable, None] = None
+    output_path: Union[str, None] = None
+    data_generators: Union[List[Callable], None] = None
 
 
 class EvaluatorType(Enum):
