@@ -20,7 +20,8 @@ class CSVReader(BaseReader):
     - chunk_size (int): The number of rows per chunk. Defaults to 100.
 
     Yields:
-    - List[Dict[str, Any]]: A chunk of rows from the CSV file, each row represented as a dictionary.
+    - List[Dict[str, Any]]: A chunk of rows from the CSV file, each row represented as
+      a dictionary.
     """
 
     def read(self, path: str, chunk_size: int = 100) -> Iterator[List[Dict[str, Any]]]:
