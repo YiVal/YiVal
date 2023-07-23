@@ -3,6 +3,7 @@ from .utils import capture_and_parse_with_base_registry
 
 
 class TestParser(BaseParserWithRegistry):
+
     def parse(self, output):
         return ["Parsed: " + output]
 
@@ -23,6 +24,7 @@ def test_decorator_with_parser_diagnostic():
 
 
 def test_modified_decorator_without_parser():
+
     @capture_and_parse_with_base_registry()
     def function_without_parser():
         print("Message from function_without_parser")

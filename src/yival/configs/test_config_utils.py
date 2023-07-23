@@ -33,4 +33,5 @@ def test_load_and_validate_config(tmpdir):
     assert config["evaluator"]["evaluator_type"] == "individual"
     # Note: The callable check for the formatter will be more complex and might
     # need adjustment
-    assert config["output"]["formatter"] == "__main__:sample_formatter_function"
+    assert config["output"]["formatter"
+                            ] == "__main__:sample_formatter_function"

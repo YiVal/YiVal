@@ -36,7 +36,9 @@ class CSVReader(BaseReader):
             # Check for header
             header = file.readline().strip().split(",")
             if not header or header[0] == "":
-                raise ValueError(f"CSV file at {path} is missing a header row.")
+                raise ValueError(
+                    f"CSV file at {path} is missing a header row."
+                )
 
             # Reset file pointer after header check
             file.seek(0)

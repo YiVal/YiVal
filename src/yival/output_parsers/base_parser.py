@@ -9,9 +9,8 @@ class BaseParserWithRegistry:
     based on its name.
     """
 
-    registry: Dict[
-        str, Type["BaseParserWithRegistry"]
-    ] = {}  # Class-level registry for all parser subclasses
+    registry: Dict[str, Type["BaseParserWithRegistry"]] = {
+    }  # Class-level registry for all parser subclasses
 
     def __init_subclass__(cls, **kwargs):
         """Automatically called when a subclass is defined."""

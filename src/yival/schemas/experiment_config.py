@@ -213,7 +213,8 @@ class ExperimentConfig:
 
     # Optional configurations with default values
     combinations_to_run: Optional[List[Tuple[str, Any]]] = None
-    evaluators: Optional[List[Union[EvaluatorConfig, ComparisonEvaluatorConfig]]] = None
+    evaluators: Optional[List[Union[EvaluatorConfig,
+                                    ComparisonEvaluatorConfig]]] = None
     output: Optional[OutputConfig] = None
     human_ratings: List[HumanRating] = field(default_factory=list)
     existing_experiment_path: Optional[str] = None

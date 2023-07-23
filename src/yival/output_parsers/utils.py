@@ -28,6 +28,7 @@ def capture_and_parse_with_base_registry(config=None):
         parser_instance = parser_class()
 
     def decorator(func):
+
         @wraps(func)
         def wrapper(*args, **kwargs):
             if parser_instance:
