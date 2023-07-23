@@ -25,13 +25,13 @@ input3"""
 
 def test_csv_chunk_size(tmp_path):
     csv_content = """input
-""" + "\n".join(
-        [f"input{i}" for i in range(1, 105)]
-    )  # 104 inputs
+""" + "\n".join([f"input{i}" for i in range(1, 105)])  # 104 inputs
     csv_file = tmp_path / "chunk.csv"
     csv_file.write_text(csv_content)
 
-    config = CSVReaderConfig(chunk_size=25)  # Configuration with a specific chunk size
+    config = CSVReaderConfig(
+        chunk_size=25
+    )  # Configuration with a specific chunk size
     reader = CSVReader(config)
     results = list(reader.read(csv_file))
 
@@ -56,7 +56,8 @@ input3,output3
 
     # Check if the expected warning message is in the captured logs
     assert any(
-        "Missing data on line" in message for _, _, message in caplog.record_tuples
+        "Missing data on line" in message
+        for _, _, message in caplog.record_tuples
     )
     assert len(results) == 1
     assert len(results[0]) == 2  # Excludes the problematic row
