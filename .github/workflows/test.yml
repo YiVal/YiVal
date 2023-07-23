@@ -6,9 +6,6 @@ on:
   pull_request:
   workflow_dispatch:
 
-env:
-  POETRY_VERSION: "1.4.2"
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -32,7 +29,6 @@ jobs:
             echo "Running core tests, installing dependencies with poetry..."
             poetry install
 
-      - name: Run tests
-        run: |
-          make test
+      - name: Run tests and linters with pytest
+        run: poetry run pytest
         shell: bash
