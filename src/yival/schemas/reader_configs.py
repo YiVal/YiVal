@@ -16,4 +16,4 @@ class CSVReaderConfig(BaseReaderConfig):
     Configuration specific to the CSV reader.
     """
 
-    pass
+    use_first_column_as_id: bool = False

@@ -9,6 +9,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
+from .common_structures import InputData
 from .dataset_config import DatasetConfig
 
 
@@ -36,15 +37,6 @@ class WrapperConfig:
 
     name: str
     variations: List[WrapperVariation]
-
-
-class InputType(Enum):
-    """
-    Enum to specify the type of input: directly from the user or from a dataset.
-    """
-
-    USER = "user_input"
-    DATASET = "dataset"
 
 
 class EvaluatorType(Enum):
@@ -136,21 +128,6 @@ class EvaluatorOutput:
 
     name: str
     result: Any
-
-
-@dataclass
-class InputData:
-    """
-    Represents the input data for an experiment example.
-
-    Attributes:
-    - example_id (str): A unique identifier for the example.
-    - content (Dict[str, Any]): A dictionary that contains all the necessary input
-      parameters for the custom function.
-    """
-
-    example_id: str
-    content: Dict[str, Any]
 
 
 @dataclass

@@ -1,7 +1,8 @@
 import csv
 import logging
-from typing import Any, Dict, Iterator, List
+from typing import Iterator, List
 
+from ..schemas.common_structures import InputData
 from ..schemas.reader_configs import CSVReaderConfig
 from .base_reader import BaseReader
 
@@ -28,7 +29,7 @@ class CSVReader(BaseReader):
     def __init__(self, config: CSVReaderConfig):
         super().__init__(config)
 
-    def read(self, path: str) -> Iterator[List[Dict[str, Any]]]:
+    def read(self, path: str) -> Iterator[List[InputData]]:
         chunk = []
         issues = []
         chunk_size = self.config.chunk_size
@@ -49,8 +50,11 @@ class CSVReader(BaseReader):
                 if any(not value for value in row.values()):
                     issues.append(f"Missing data on line {reader.line_num}")
                     continue  # Skip problematic row
-
-                chunk.append(row)
+                example_id = self.generate_example_id(row, path)
+                input_data_instance = InputData(
+                    example_id=example_id, content=row
+                )
+                chunk.append(input_data_instance)
 
                 if len(chunk) >= chunk_size:
                     yield chunk

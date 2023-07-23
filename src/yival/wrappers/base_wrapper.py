@@ -1,5 +1,6 @@
 from typing import Any, Optional
 
+from ..schemas.wrapper_configs import BaseWrapperConfig
 from ..states.experiment_state import ExperimentState
 
 
@@ -23,9 +24,12 @@ class BaseWrapper:
             or no variations are found, returns None.
     """
 
-    def __init__(self, name: str) -> None:
+    def __init__(
+        self, name: str, config: Optional[BaseWrapperConfig] = None
+    ) -> None:
         self.name = name
         self.experiment_state = ExperimentState.get_instance()
+        self.config = config
 
     def get_variation(self) -> Optional[Any]:
         if self.experiment_state.active:
