@@ -1,5 +1,6 @@
 import logging
 
+from ..schemas.common_structures import InputData
 from ..schemas.reader_configs import CSVReaderConfig
 from .csv_reader import CSVReader
 
@@ -18,9 +19,10 @@ input3"""
 
     assert len(results) == 1
     assert len(results[0]) == 3
-    assert results[0][0]["input"] == "input1"
-    assert results[0][1]["input"] == "input2"
-    assert results[0][2]["input"] == "input3"
+    assert isinstance(results[0][0], InputData)
+    assert results[0][0].content["input"] == "input1"
+    assert results[0][1].content["input"] == "input2"
+    assert results[0][2].content["input"] == "input3"
 
 
 def test_csv_chunk_size(tmp_path):
@@ -43,9 +45,9 @@ def test_csv_chunk_size(tmp_path):
 def test_missing_data(tmp_path, caplog):
     csv_content = """input,output
 input1,output1
-input2
+input2,
 input3,output3
-"""  # Last row is missing data
+"""  # Second row is missing data
     csv_file = tmp_path / "missing.csv"
     csv_file.write_text(csv_content)
 

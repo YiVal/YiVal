@@ -1,5 +1,6 @@
 from typing import Optional
 
+from ..schemas.wrapper_configs import StringWrapperConfig
 from .base_wrapper import BaseWrapper
 
 
@@ -19,8 +20,13 @@ class StringWrapper(BaseWrapper):
             Otherwise, returns the original string.
     """
 
-    def __init__(self, original_string: str, name: str) -> None:
-        super().__init__(name)
+    def __init__(
+        self,
+        original_string: str,
+        name: str,
+        config: Optional[StringWrapperConfig] = None
+    ) -> None:
+        super().__init__(name, config)
         self._original_string: str = original_string
 
     def __str__(self) -> str:
