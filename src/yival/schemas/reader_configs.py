@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 
 
 @dataclass
@@ -17,3 +18,4 @@ class CSVReaderConfig(BaseReaderConfig):
     """
 
     use_first_column_as_id: bool = False
+    expected_result_column: Optional[str] = None

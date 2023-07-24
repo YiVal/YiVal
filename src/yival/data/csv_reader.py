@@ -25,9 +25,11 @@ class CSVReader(BaseReader):
     - List[Dict[str, Any]]: A chunk of rows from the CSV file, each row represented as
       a dictionary.
     """
+    config: CSVReaderConfig
 
     def __init__(self, config: CSVReaderConfig):
         super().__init__(config)
+        self.config = config
 
     def read(self, path: str) -> Iterator[List[InputData]]:
         chunk = []
@@ -50,9 +52,26 @@ class CSVReader(BaseReader):
                 if any(not value for value in row.values()):
                     issues.append(f"Missing data on line {reader.line_num}")
                     continue  # Skip problematic row
+
+                expected_result = None
+                # Extract expected result from row if column is set in config
+                if self.config.expected_result_column:
+                    expected_result = row.get(
+                        self.config.expected_result_column
+                    )
+                    if expected_result is not None:
+                        # Remove the column from row as it's already set in expected_result
+                        del row[self.config.expected_result_column]
+                    else:
+                        issues.append(
+                            f"Missing expected result on line {reader.line_num}"
+                        )
+
                 example_id = self.generate_example_id(row, path)
                 input_data_instance = InputData(
-                    example_id=example_id, content=row
+                    example_id=example_id,
+                    content=row,
+                    expected_result=expected_result
                 )
                 chunk.append(input_data_instance)
 

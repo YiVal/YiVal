@@ -25,6 +25,35 @@ input3"""
     assert results[0][2].content["input"] == "input3"
 
 
+def test_expected_result_column_reading(tmp_path):
+    csv_content = """input,expected_result
+input1,expected1
+input2,expected2
+input3,expected3"""
+    csv_file = tmp_path / "expected_result.csv"
+    csv_file.write_text(csv_content)
+
+    config = CSVReaderConfig(
+        expected_result_column="expected_result"
+    )  # Set the expected_result_column
+    reader = CSVReader(config)
+    results = list(reader.read(csv_file))
+
+    assert len(results) == 1
+    assert len(results[0]) == 3
+    assert isinstance(results[0][0], InputData)
+
+    # Check content
+    assert results[0][0].content["input"] == "input1"
+    assert results[0][1].content["input"] == "input2"
+    assert results[0][2].content["input"] == "input3"
+
+    # Check expected results
+    assert results[0][0].expected_result == "expected1"
+    assert results[0][1].expected_result == "expected2"
+    assert results[0][2].expected_result == "expected3"
+
+
 def test_csv_chunk_size(tmp_path):
     csv_content = """input
 """ + "\n".join([f"input{i}" for i in range(1, 105)])  # 104 inputs
