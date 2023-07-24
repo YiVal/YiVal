@@ -6,11 +6,15 @@ experiment.
 """
 
 from dataclasses import dataclass, field
-from enum import Enum
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 from .common_structures import InputData
 from .dataset_config import DatasetConfig
+from .evaluator_config import (
+    ComparisonEvaluatorConfig,
+    EvaluatorConfig,
+    EvaluatorOutput,
+)
 
 
 @dataclass
@@ -37,39 +41,6 @@ class WrapperConfig:
 
     name: str
     variations: List[WrapperVariation]
-
-
-class EvaluatorType(Enum):
-    INDIVIDUAL = "individual"
-    COMPARISON = "comparison"
-    # Additional evaluator types can be added here as needed.
-
-
-@dataclass
-class BaseEvaluatorConfig:
-    """
-    Base configuration for evaluators.
-    """
-
-    evaluator_type: EvaluatorType
-
-
-@dataclass
-class EvaluatorConfig(BaseEvaluatorConfig):
-    """
-    Configuration for custom evaluator.
-    """
-
-    custom_function: Optional[Callable] = None
-
-
-@dataclass
-class ComparisonEvaluatorConfig(BaseEvaluatorConfig):
-    """
-    Configuration for evaluators that compare different outputs.
-    """
-
-    comparison_function: Callable
 
 
 @dataclass
@@ -114,20 +85,6 @@ class HumanRating:
     aspect: str
     rating: float
     scale: Tuple[float, float] = (1.0, 5.0)  # Default scale from 1 to 5
-
-
-@dataclass
-class EvaluatorOutput:
-    """
-    Result of an evaluator.
-
-    Attributes:
-    - name (str): Name of the evaluator.
-    - result (Any): Result produced by the evaluator.
-    """
-
-    name: str
-    result: Any
 
 
 @dataclass
@@ -198,3 +155,46 @@ class ExperimentConfig:
     version: Optional[str] = None
     output_parser: Optional[str] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class Metric:
+    """
+    Represents a metric calculated from evaluator outputs.
+
+    Attributes:
+    - name (str): Name of the metric (e.g., "accuracy").
+    - value (float): Calculated value of the metric.
+    - description (Optional[str]): Description or details about the metric.
+    """
+    name: str
+    value: float
+    description: Optional[str] = None
+
+
+@dataclass
+class ExperimentSummary:
+    """
+    Represents the summary of an entire experiment.
+
+    Attributes:
+    - aggregated_metrics (Dict[str, Dict[str, Metric]]): 
+      A dictionary where keys are evaluator names and values are dictionaries mapping metric names to their values.
+    - ... (other summary attributes)
+    """
+    aggregated_metrics: Dict[str, Dict[str, Metric]]
+
+
+@dataclass
+class Experiment:
+    """
+    Represents an entire experiment.
+
+    Attributes:
+    - results (List[ExperimentResult]): List of results for each input example.
+    - aggregated_metrics (Dict[str, Dict[str, Metric]]): 
+      A dictionary where keys are evaluator names and values are dictionaries mapping metric names to their values.
+    - ... (other experiment attributes)
+    """
+    results: List[ExperimentResult]
+    aggregated_metrics: Dict[str, Dict[str, Metric]]

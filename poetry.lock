@@ -400,6 +400,20 @@ files = [
 ]
 
 [[package]]
+name = "fuzzywuzzy"
+version = "0.18.0"
+description = "Fuzzy string matching in python"
+optional = false
+python-versions = "*"
+files = [
+    {file = "fuzzywuzzy-0.18.0-py2.py3-none-any.whl", hash = "sha256:928244b28db720d1e0ee7587acf660ea49d7e4c632569cad4f1cd7e68a5f0993"},
+    {file = "fuzzywuzzy-0.18.0.tar.gz", hash = "sha256:45016e92264780e58972dca1b3d939ac864b78437422beecebb3095f8efd00e8"},
+]
+
+[package.extras]
+speedup = ["python-levenshtein (>=0.12)"]
+
+[[package]]
 name = "hydra-core"
 version = "1.3.2"
 description = "A framework for elegantly configuring complex applications"
@@ -1219,4 +1233,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<4"
-content-hash = "d5d337119c255032aad56674883295cb6916faed6dfa2723add1f46920035f6e"
+content-hash = "d3e7d63893b5484f5b953604145dee8df17a5b2c6d9f93176e944f3e3f6a8122"
