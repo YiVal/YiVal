@@ -32,6 +32,7 @@ def test_generate_and_load_config(
 ):
     # Generate a sample config using our utility function
     yaml_config = generate_experiment_config_yaml(
+        custom_function="module.function",
         evaluator_names=evaluator_names,
         reader_name=reader_name,
         wrapper_names=wrapper_names,
@@ -49,9 +50,8 @@ def test_generate_and_load_config(
 
     # Load the config using OmegaConf
     loaded_config = load_and_validate_config(temp_file_path)
-    loaded_config = ExperimentConfig(**loaded_config)
-
     print(loaded_config)
+    loaded_config = ExperimentConfig(**loaded_config)
 
     # Basic assertions to check the loaded configuration
     assert loaded_config.description == "Generated experiment config"
@@ -66,6 +66,6 @@ def test_generate_and_load_config(
     if evaluator_names:
         assert loaded_config.evaluators is not None
         for evaluator in loaded_config.evaluators:
-            assert evaluator in evaluator_names
+            assert evaluator["name"] in evaluator_names
 
     # Additional checks can be added here as necessary

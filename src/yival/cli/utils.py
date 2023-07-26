@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Any, Dict, List, Optional, Type
 
 import yaml
@@ -8,8 +9,22 @@ from ..schemas.experiment_config import WrapperConfig
 from ..wrappers.base_wrapper import BaseWrapper
 
 
+def recursive_asdict(obj) -> Any:
+    if isinstance(obj, list):
+        return [recursive_asdict(item) for item in obj]
+    elif isinstance(obj, dict):
+        return {key: recursive_asdict(value) for key, value in obj.items()}
+    elif isinstance(obj, Enum):  # Handle Enum values
+        return obj.value
+    elif hasattr(obj, 'asdict'):  # For dataclasses with asdict
+        return obj.asdict()
+    else:
+        return obj
+
+
 def generate_experiment_config_yaml(
-    source_type: str = "DATASET",
+    custom_function: str,
+    source_type: str = "dataset",
     evaluator_names: Optional[List[str]] = None,
     reader_name: Optional[str] = None,
     wrapper_names: Optional[List[str]] = None,
@@ -35,47 +50,39 @@ def generate_experiment_config_yaml(
             default_config = get_default_config(reader_cls)
             if default_config:
                 dataset_section["config"] = default_config
+    experiment_config: Dict[Any, Any] = {
+        "description": "Generated experiment config",
+        "dataset": dataset_section,
+    }
 
-    evaluators_section = {}
+    evaluators_section = []
     if evaluator_names:
         for name in evaluator_names:
             evaluator_cls = BaseEvaluator.get_evaluator(name)
             if evaluator_cls:
                 default_config = get_default_config(evaluator_cls)
                 if default_config:
-                    if "evaluator_type" in default_config:
-                        default_config["evaluator_type"] = str(
-                            default_config["evaluator_type"]
-                        )
-                    if "matching_technique" in default_config:
-                        default_config["matching_technique"] = str(
-                            default_config["matching_technique"]
-                        )
-                evaluators_section[name] = {
-                    "config": default_config if default_config else {}
-                }
+                    default_config["name"] = name  # Add the name field
+                    evaluators_section.append(default_config)
 
-    wrappers_section = {}
     if wrapper_names:
+        wrappers_list = []
         for name in wrapper_names:
             wrapper_cls = BaseWrapper.get_wrapper(name)
             if wrapper_cls:
                 default_config = get_default_config(wrapper_cls)
-                wrappers_section[name] = {
+                wrappers_list.append({
+                    "name": name,
                     "config": default_config if default_config else {}
-                }
-
-    experiment_config = {
-        "description": "Generated experiment config",
-        "dataset": dataset_section,
-    }
+                })
+        experiment_config["wrapper_configs"] = wrappers_list
 
     if evaluator_names:
         experiment_config["evaluators"] = evaluators_section
 
-    if wrapper_names:
-        experiment_config["wrapper_configs"] = wrappers_section
+    experiment_config["custom_function"] = custom_function
 
+    experiment_config = recursive_asdict(experiment_config)
     yaml_string = yaml.safe_dump(
         experiment_config, default_flow_style=False, allow_unicode=True
     )

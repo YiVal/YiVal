@@ -22,6 +22,7 @@ omegaconf = "^2.3.0"
 fuzzywuzzy = "^0.18.0"
 types-pyyaml = "^6.0.12.11"
 python-levenshtein = "^0.21.1"
+pydantic = "^2.1.1"
 
 
 [tool.poetry.group.test.dependencies]

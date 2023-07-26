@@ -12,14 +12,15 @@ class MockedDefaultConfig:
 
 def test_generate_experiment_config_yaml():
     # Calling the function without any special arguments
-    result = generate_experiment_config_yaml()
+    result = generate_experiment_config_yaml(custom_function="module.function")
 
     # Assertions for default values
     assert "description: Generated experiment config" in result
-    assert "source_type: DATASET" in result
+    assert "source_type: dataset" in result
 
     # Calling the function with specific arguments
     result_with_args = generate_experiment_config_yaml(
+        custom_function="module.function",
         source_type="USER",
         evaluator_names=["string_expected_result"],
         wrapper_names=["string_wrapper"],

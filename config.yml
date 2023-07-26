@@ -1,23 +1,22 @@
 # This is a generated template. Modify the values as needed.
 
+custom_function: module.test
 dataset:
   config:
     chunk_size: 100
     expected_result_column: null
     use_first_column_as_id: false
   reader: csv_reader
-  source_type: DATASET
+  source_type: dataset
 description: Generated experiment config
 evaluators:
-  string_expected_result:
-    config:
-      evaluator_type: individual
-      matching_technique: includes
-      metric_calculators: []
-      name: string_expected_result
+- evaluator_type: individual
+  matching_technique: includes
+  metric_calculators: []
+  name: string_expected_result
 wrapper_configs:
-  string_wrapper:
-    config: {}
+- config: {}
+  name: string_wrapper
 
 # Variations allow for dynamic content during experiments.
 # They are identified by a globally unique name. For example, in your code,
@@ -25,13 +24,13 @@ wrapper_configs:
 # variation = StringWrapper("hello", 'test_experiment')
 # In this config, you would define the variations associated with that name, e.g.
 variations:
-  - name: key1
-    variations:
-      - instantiated_value: value1
-        value: value1
-        value_type: str
-        variation_id: null
-      - instantiated_value: value2
-        value: value2
-        value_type: str
-        variation_id: null
+- name: key1
+  variations:
+  - instantiated_value: value1
+    value: value1
+    value_type: str
+    variation_id: null
+  - instantiated_value: value2
+    value: value2
+    value_type: str
+    variation_id: null

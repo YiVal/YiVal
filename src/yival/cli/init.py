@@ -51,8 +51,8 @@ def add_arguments_to(subparser):
     parser.add_argument(
         "--source_type",
         type=str,
-        default="DATASET",
-        choices=["DATASET", "USER"],
+        default="dataset",
+        choices=["dataset", "user"],
         help=
         "Type of source for the experiment. Choices are ['DATASET', 'USER']."
     )
@@ -68,6 +68,12 @@ def add_arguments_to(subparser):
         type=str,
         choices=[name for name, _ in BaseReader._registry.items()],
         help="Name of the reader to include in the config."
+    )
+    parser.add_argument(
+        "--function",
+        type=str,
+        help=
+        "Function that will be used to run the experiment, module_name.function_name."
     )
     parser.add_argument(
         "--wrapper_names",
@@ -95,6 +101,7 @@ def init(args: Namespace):
 
     # Generate the configuration template dynamically
     yaml_template = generate_experiment_config_yaml(
+        custom_function=args.function,
         source_type=args.source_type,
         evaluator_names=args.evaluator_names,
         reader_name=args.reader_name,

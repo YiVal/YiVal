@@ -2,8 +2,6 @@ from dataclasses import asdict, dataclass
 from enum import Enum
 from typing import List, Optional, Union
 
-from .reader_configs import BaseReaderConfig
-
 
 class DatasetSourceType(Enum):
     """
@@ -35,7 +33,7 @@ class DatasetConfig:
 
     source_type: DatasetSourceType
     file_path: Optional[str] = None
-    reader: Optional[BaseReaderConfig] = None
+    reader: Optional[str] = None
     output_path: Optional[str] = None
     data_generators: Union[List[str], None] = None
 

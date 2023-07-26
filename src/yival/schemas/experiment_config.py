@@ -4,7 +4,6 @@ Module for experiment configuration structures.
 This module provides data structures to capture configurations required to run an
 experiment.
 """
-
 from dataclasses import asdict, dataclass, field
 from typing import Any, Callable, Dict, List, Optional, Tuple, Type, Union
 
@@ -57,7 +56,7 @@ class WrapperVariation:
 
 
 @dataclass
-class WrapperConfig:
+class WrapperConfig():
     """
     Configuration for each individual wrapper used in the experiment.
 
@@ -197,17 +196,18 @@ class ExperimentConfig:
     description: str
     variations: List[WrapperConfig]
     dataset: DatasetConfig
+    custom_function: str
     # Optional configurations with default values
     wrapper_configs: Optional[List[BaseWrapperConfig]] = None
     combinations_to_run: Optional[List[Tuple[str, Any]]] = None
     evaluators: Optional[List[Union[EvaluatorConfig,
                                     ComparisonEvaluatorConfig]]] = None
     output: Optional[OutputConfig] = None
-    human_rating_configs: List[HumanRatingConfig] = field(default_factory=list)
+    human_rating_configs: Optional[List[HumanRatingConfig]] = None
     existing_experiment_path: Optional[str] = None
     version: Optional[str] = None
     output_parser: Optional[str] = None
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: Optional[Dict[str, Any]] = None
 
 
 @dataclass
@@ -260,3 +260,10 @@ class Experiment:
 
     def asdict(self):
         return asdict(self)
+
+
+@dataclass
+class FunctionMetadata:
+    description: str
+    parameters: List[Tuple[str,
+                           Optional[str]]]  # [(param_name, description), ...]
