@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any, Dict, Optional, Type
 
 from ..schemas.wrapper_configs import BaseWrapperConfig
 from ..states.experiment_state import ExperimentState
@@ -23,6 +23,21 @@ class BaseWrapper:
             next variation for the associated experiment name. If the state is inactive
             or no variations are found, returns None.
     """
+    _registry: Dict[str, Dict[str, Any]] = {}
+    default_config: Optional[BaseWrapperConfig] = None
+
+    @classmethod
+    def register(cls, name: str):
+        """Decorator to register new wrappers."""
+
+        def inner(subclass: Type[BaseWrapper]):
+            cls._registry[name] = {
+                "class": subclass,
+                "default_config": subclass.default_config
+            }
+            return subclass
+
+        return inner
 
     def __init__(
         self, name: str, config: Optional[BaseWrapperConfig] = None
@@ -35,3 +50,19 @@ class BaseWrapper:
         if self.experiment_state.active:
             return self.experiment_state.get_next_variation(self.name)
         return None
+
+    @classmethod
+    def get_wrapper(cls, name: str) -> Optional[Type['BaseWrapper']]:
+        """Retrieve wrapper class from registry by its name."""
+        wrapper_info = cls._registry.get(name, {})
+        return wrapper_info.get(
+            "class", None
+        ) if "class" in wrapper_info else None
+
+    @classmethod
+    def get_default_config(cls, name: str) -> Optional[BaseWrapperConfig]:
+        """Retrieve the default configuration of a wrapper by its name."""
+        wrapper_info = cls._registry.get(name, {})
+        return wrapper_info.get(
+            "default_config", None
+        ) if "default_config" in wrapper_info else None

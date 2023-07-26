@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Evaluate and refine AI models."""
 
 import sys

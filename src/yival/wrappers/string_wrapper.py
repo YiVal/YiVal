@@ -4,6 +4,7 @@ from ..schemas.wrapper_configs import StringWrapperConfig
 from .base_wrapper import BaseWrapper
 
 
+@BaseWrapper.register("string_wrapper")
 class StringWrapper(BaseWrapper):
     """
     A wrapper for strings to manage experiment variations based on the global

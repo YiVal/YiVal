@@ -1,8 +1,7 @@
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from enum import Enum
-from typing import Callable, List, Type, Union
+from typing import List, Optional, Union
 
-from ..data.base_reader import BaseReader
 from .reader_configs import BaseReaderConfig
 
 
@@ -17,16 +16,6 @@ class DatasetSourceType(Enum):
 
 
 @dataclass
-class Reader:
-    """
-    Configuration for the reader used in the experiment.
-    """
-
-    reader_config: BaseReaderConfig  # Configuration for the reader
-    reader: Type[BaseReader]  # Class reference to the reader type
-
-
-@dataclass
 class DatasetConfig:
     """
     Configuration for the dataset used in the experiment.
@@ -36,16 +25,19 @@ class DatasetConfig:
       from a dataset, or machine-generated.
     - file_path (Union[str, None]): Path to the dataset file. Relevant only if
       source_type is DATASET.
-    - reader (Union[Callable, None]): Callable to read and process the dataset file.
+    - reader (Union[str, None]): Class name to process the dataset file.
       Relevant only if source_type is DATASET.
     - output_path (Union[str, None]): Path to store the machine-generated data. Relevant
       only if source_type is MACHINE_GENERATED.
-    - data_generators (Union[List[Callable], None]): List of callables to generate data.
+    - data_generators (Union[List[str], None]): List of data_generators to generate data.
       Relevant only if source_type is MACHINE_GENERATED.
     """
 
     source_type: DatasetSourceType
-    file_path: Union[str, None] = None
-    reader: Union[Callable, None] = None
-    output_path: Union[str, None] = None
-    data_generators: Union[List[Callable], None] = None
+    file_path: Optional[str] = None
+    reader: Optional[BaseReaderConfig] = None
+    output_path: Optional[str] = None
+    data_generators: Union[List[str], None] = None
+
+    def asdict(self):
+        return asdict(self)

@@ -2,8 +2,8 @@
 
 from argparse import ArgumentParser
 
-from .add import add_arguments_to as ADD
-from .run import add_arguments_to as RUN
+from .init import add_arguments_to as INIT
+from .validate import add_arguments_to as RUN
 
 
 def add_subcommands_to(parser: ArgumentParser):
@@ -11,7 +11,7 @@ def add_subcommands_to(parser: ArgumentParser):
     subparser = parser.add_subparsers(title="actions")
 
     for func in (
-        ADD,
+        INIT,
         RUN,
     ):
         func(subparser)

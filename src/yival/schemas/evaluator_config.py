@@ -1,30 +1,43 @@
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from enum import Enum
-from typing import Any, Callable, List, Optional
+from typing import Any, List
+
+
+class MethodCalculationMethod(Enum):
+    """
+    Configuration for metric calculation method.
+
+    """
+    AVERAGE = "average"
 
 
 @dataclass
 class MetricCalculatorConfig:
     """
     Configuration for metric calculation.
-
-    Attributes:
-    - method (str): Method or algorithm used for calculation.
-    - ... (any other configuration parameters for metric calculation)
     """
-    method: str
+    method: MethodCalculationMethod
 
-
-class EvaluatorType(Enum):
-    INDIVIDUAL = "individual"
-    COMPARISON = "comparison"
-    # Additional evaluator types can be added here as needed.
+    def asdict(self):
+        return asdict(self)
 
 
 class MatchingTechnique(Enum):
     FUZZY_MATCH = "fuzzy_match"
     JSON_VALIDATOR = "json_validator"
+    INCLUDES = "includes"
     MATCH = "match"
+
+    def __str__(self):
+        return self.value
+
+
+class EvaluatorType(Enum):
+    INDIVIDUAL = "individual"
+    COMPARISON = "comparison"
+
+    def __str__(self):
+        return self.value
 
 
 @dataclass
@@ -35,17 +48,21 @@ class BaseEvaluatorConfig:
     name: str
     evaluator_type: EvaluatorType
 
+    def asdict(self):
+        result = asdict(self)
+        result["evaluator_type"] = self.evaluator_type.name
+        return result
+
 
 @dataclass
 class EvaluatorConfig(BaseEvaluatorConfig):
     """
     Configuration for custom evaluator.
     """
-
-    custom_function: Optional[Callable] = None
     metric_calculators: List[MetricCalculatorConfig] = field(
         default_factory=list
     )
+    evaluator_type = EvaluatorType.INDIVIDUAL
 
 
 @dataclass
@@ -53,16 +70,15 @@ class ComparisonEvaluatorConfig(BaseEvaluatorConfig):
     """
     Configuration for evaluators that compare different outputs.
     """
-
-    comparison_function: Callable
     metric_calculators: List[MetricCalculatorConfig] = field(
         default_factory=list
     )
+    evaluator_type = EvaluatorType.COMPARISON
 
 
 @dataclass
-class ExpectedResultEvaluatorConfig(BaseEvaluatorConfig):
-    matching_technique: MatchingTechnique
+class ExpectedResultEvaluatorConfig(EvaluatorConfig):
+    matching_technique: MatchingTechnique = MatchingTechnique.MATCH
 
 
 @dataclass
@@ -77,3 +93,6 @@ class EvaluatorOutput:
 
     name: str
     result: Any
+
+    def asdict(self):
+        return asdict(self)
