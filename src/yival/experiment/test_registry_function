@@ -1,0 +1,26 @@
+# test_function_registry.py
+
+from .registry_function import FUNCTION_REGISTRY, register_function
+
+
+def test_register_function():
+
+    # Register a function with metadata
+    @register_function("test_func", "This is a test function.", [("param1", "This is the first parameter")])
+    def test_func(param1):
+        return param1
+
+    # Assert that the function is correctly registered
+    assert "test_func" in FUNCTION_REGISTRY
+
+    func_data = FUNCTION_REGISTRY["test_func"]
+
+    # Assert that function is correctly stored
+    assert func_data["function"] == test_func
+
+    # Assert metadata
+    assert func_data["metadata"].description == "This is a test function."
+    assert func_data["metadata"].parameters == [("param1", "This is the first parameter")]
+
+    # Execute the function and check its behavior
+    assert test_func("hello") == "hello"

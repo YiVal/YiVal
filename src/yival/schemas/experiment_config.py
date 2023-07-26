@@ -4,9 +4,8 @@ Module for experiment configuration structures.
 This module provides data structures to capture configurations required to run an
 experiment.
 """
-
-from dataclasses import dataclass, field
-from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+from dataclasses import asdict, dataclass, field
+from typing import Any, Callable, Dict, List, Optional, Tuple, Type, Union
 
 from .common_structures import InputData
 from .dataset_config import DatasetConfig
@@ -15,22 +14,49 @@ from .evaluator_config import (
     EvaluatorConfig,
     EvaluatorOutput,
 )
+from .wrapper_configs import BaseWrapperConfig
+
+# Registry for supported custom classes
+CLASS_REGISTRY: Dict[str, Type] = {
+    # "ClassA": ClassA
+}
 
 
 @dataclass
 class WrapperVariation:
     """
     Represents a variation within a wrapper.
-    The value can be any type, but typical usages might include strings,
-    numbers, or configuration dictionaries.
+    The value can be any type, but typical usages might include strings, 
+    numbers, configuration dictionaries, or even custom class configurations.
     """
 
-    value: Any
+    value_type: str  # e.g., "string", "int", "float", "ClassA", ...
+    value: Any  # The actual value or parameters to initialize a value
+    instantiated_value: Any = field(init=False)
     variation_id: Optional[str] = None
+
+    def asdict(self):
+        return asdict(self)
+
+    def __post_init__(self):
+        self.instantiated_value = self.instantiate()
+
+    def instantiate(self) -> Any:
+        """
+        Returns an instantiated value based on value_type and params.
+        """
+        if self.value_type in ["str", "int", "float", "bool"]:
+            return eval(self.value_type)(
+                self.value
+            )  # Use eval to convert string type to actual type
+        elif self.value_type in CLASS_REGISTRY:
+            return CLASS_REGISTRY[self.value_type](**self.value)
+        else:
+            raise ValueError(f"Unsupported value_type: {self.value_type}")
 
 
 @dataclass
-class WrapperConfig:
+class WrapperConfig():
     """
     Configuration for each individual wrapper used in the experiment.
 
@@ -41,6 +67,9 @@ class WrapperConfig:
 
     name: str
     variations: List[WrapperVariation]
+
+    def asdict(self):
+        return asdict(self)
 
 
 @dataclass
@@ -86,6 +115,26 @@ class HumanRating:
     rating: float
     scale: Tuple[float, float] = (1.0, 5.0)  # Default scale from 1 to 5
 
+    def asdict(self):
+        return asdict(self)
+
+
+@dataclass
+class HumanRatingConfig:
+    """
+    Configuration for human rating.
+
+    Attributes:
+    - aspects (List[str]): List of aspects to rate.
+    - scale (Tuple[float, float]): Minimum and maximum value of the rating scale.
+    """
+
+    aspects: List[str]
+    scale: Tuple[float, float] = (1.0, 5.0)
+
+    def asdict(self):
+        return asdict(self)
+
 
 @dataclass
 class ExperimentResult:
@@ -114,6 +163,9 @@ class ExperimentResult:
     human_rating: Optional[HumanRating] = None
     intermediate_logs: List[str] = field(default_factory=list)
 
+    def asdict(self):
+        return asdict(self)
+
 
 @dataclass
 class ExperimentConfig:
@@ -122,9 +174,9 @@ class ExperimentConfig:
 
     Attributes:
     - description (str): Description of the experiment.
-    - wrappers (List[WrapperConfig]): List of wrapper configurations.
+    - variations (List[WrapperConfig]): List of variations configurations.
     - dataset (DatasetConfig): Dataset configuration.
-
+    - wrapper_configs (List[BaseWrapperConfig]): List of wrapper configurations.
     - combinations_to_run (Optional[List[Tuple[str, Any]]]): List of combinations to
       run.
       Each tuple represents a (group_name, variation) pair.
@@ -132,29 +184,35 @@ class ExperimentConfig:
       List of evaluator configurations.
     - output (Optional[OutputConfig]): Output configuration.
 
-    - human_ratings (List[HumanRating]): List of human ratings for the experiment.
     - existing_experiment_path (Optional[str]): Path to an existing experiment for
       incremental experiments or comparisons.
     - version (Optional[str]): Version or timestamp for the experiment.
     - output_parser (Optional[str]): Class name of the std output parser to use.
     - metadata (Dict[str, Any]): Additional metadata related to the experiment.
+    - custom_reader (Dict[str, Dict[str, Any]]): Custom reader and configurations.
+    - custom_wrappers (Dict[str, Dict[str, Any]]): Custom wrapper and configurations.
+    - custom_evaluators (Dict[str, Dict[str, Any]]): Custom evaluator and configurations.
     """
 
     # Required configurations
     description: str
-    wrappers: List[WrapperConfig]
+    variations: List[WrapperConfig]
     dataset: DatasetConfig
-
+    custom_function: str
     # Optional configurations with default values
+    wrapper_configs: Optional[List[BaseWrapperConfig]] = None
     combinations_to_run: Optional[List[Tuple[str, Any]]] = None
     evaluators: Optional[List[Union[EvaluatorConfig,
                                     ComparisonEvaluatorConfig]]] = None
     output: Optional[OutputConfig] = None
-    human_ratings: List[HumanRating] = field(default_factory=list)
+    human_rating_configs: Optional[List[HumanRatingConfig]] = None
     existing_experiment_path: Optional[str] = None
     version: Optional[str] = None
     output_parser: Optional[str] = None
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: Optional[Dict[str, Any]] = None
+    custom_reader: Optional[Dict[str, Dict[str, Any]]] = None
+    custom_wrappers: Optional[Dict[str, Dict[str, Any]]] = None
+    custom_evaluators: Optional[Dict[str, Dict[str, Any]]] = None
 
 
 @dataclass
@@ -171,6 +229,9 @@ class Metric:
     value: float
     description: Optional[str] = None
 
+    def asdict(self):
+        return asdict(self)
+
 
 @dataclass
 class ExperimentSummary:
@@ -183,6 +244,9 @@ class ExperimentSummary:
     - ... (other summary attributes)
     """
     aggregated_metrics: Dict[str, Dict[str, Metric]]
+
+    def asdict(self):
+        return asdict(self)
 
 
 @dataclass
@@ -198,3 +262,13 @@ class Experiment:
     """
     results: List[ExperimentResult]
     aggregated_metrics: Dict[str, Dict[str, Metric]]
+
+    def asdict(self):
+        return asdict(self)
+
+
+@dataclass
+class FunctionMetadata:
+    description: str
+    parameters: List[Tuple[str,
+                           Optional[str]]]  # [(param_name, description), ...]

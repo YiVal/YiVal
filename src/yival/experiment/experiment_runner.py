@@ -16,8 +16,7 @@ Key Features:
 
 Usage:
 ------
-    user_function = ...
-    runner = ExperimentRunner(user_func=user_function, config_path="path/to/config")
+    runner = ExperimentRunner(config_path="path/to/config")
     results = runner.run()
 
 Classes:
@@ -36,9 +35,9 @@ model evaluations.
 
 """
 
-from typing import Callable
-
 from ..configs.config_utils import load_and_validate_config
+from .data_processor import DataProcessor
+from .utils import register_custom_readers
 
 
 class ExperimentRunner:
@@ -50,8 +49,6 @@ class ExperimentRunner:
 
     Attributes:
     ----------
-    user_func : Callable
-        The user-defined function to be executed as part of the experiment.
     config : Dict
         The loaded and validated configuration for the experiment.
 
@@ -61,8 +58,7 @@ class ExperimentRunner:
         Executes the experiment based on the provided user function and configuration.
     """
 
-    def __init__(self, user_func: Callable, config_path: str):
-        self.user_func = user_func
+    def __init__(self, config_path: str):
         self.config = load_and_validate_config(config_path)
 
     def run(self):
@@ -81,8 +77,11 @@ class ExperimentRunner:
         Any
             The merged results from all evaluators.
         """
-        # Process data based on DatasetConfig
-        # ...
+        if self.config["dataset"]["source_type"] == "dataset":
+            register_custom_readers(self.config.get("custom_readers", {}))
+            processor = DataProcessor(self.config["dataset"])
+            for data in processor.process_data():
+                print(data)
 
         # Parallel processing of user function
         # ...
@@ -96,3 +95,12 @@ class ExperimentRunner:
         # Return merged results
         # ...
         pass
+
+
+def main():
+    runner = ExperimentRunner(config_path="/Users/taofeng/YiVal/config.yml")
+    runner.run()
+
+
+if __name__ == "__main__":
+    main()

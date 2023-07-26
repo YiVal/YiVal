@@ -8,24 +8,11 @@ from .base_reader import BaseReader
 
 
 class CSVReader(BaseReader):
-    """
-    Reader for CSV files.
-
-    This reader expects the first row of the CSV to be a header row, defining
-    the keys for the yielded dictionaries. It yields chunks of rows for efficient
-    processing.
-
-    If the CSV does not have a header row, an exception is raised.
-
-    Attributes:
-    - path (str): The path to the CSV file to be read.
-    - chunk_size (int): The number of rows per chunk. Defaults to 100.
-
-    Yields:
-    - List[Dict[str, Any]]: A chunk of rows from the CSV file, each row represented as
-      a dictionary.
-    """
     config: CSVReaderConfig
+    default_config = CSVReaderConfig(
+        chunk_size=100,
+        use_first_column_as_id=False,
+    )
 
     def __init__(self, config: CSVReaderConfig):
         super().__init__(config)
@@ -54,13 +41,11 @@ class CSVReader(BaseReader):
                     continue  # Skip problematic row
 
                 expected_result = None
-                # Extract expected result from row if column is set in config
                 if self.config.expected_result_column:
                     expected_result = row.get(
                         self.config.expected_result_column
                     )
-                    if expected_result is not None:
-                        # Remove the column from row as it's already set in expected_result
+                    if expected_result:
                         del row[self.config.expected_result_column]
                     else:
                         issues.append(
@@ -82,6 +67,8 @@ class CSVReader(BaseReader):
             if chunk:
                 yield chunk
 
-        # Log all issues at the end
         for issue in issues:
             logging.warning(issue)
+
+
+BaseReader.register_reader("csv_reader", CSVReader, CSVReaderConfig)

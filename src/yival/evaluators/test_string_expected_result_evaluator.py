@@ -94,3 +94,17 @@ def test_string_expected_result_evaluator_invalid_json():
         input_data, raw_output='{"name": "John", "age": 30'
     )
     assert result.result == 0
+
+
+def test_string_expected_result_evaluator_include():
+    config = ExpectedResultEvaluatorConfig(
+        name="Include Match",
+        matching_technique=MatchingTechnique.INCLUDES,
+        evaluator_type=EvaluatorType.INDIVIDUAL
+    )
+    evaluator = StringExpectedResultEvaluator(config)
+    input_data = InputData(
+        content="hello world", expected_result='hello', example_id="id"
+    )  # Invalid JSON, should be False
+    result = evaluator.evaluate(input_data, raw_output="hello world")
+    assert result.result == 1

@@ -1,5 +1,5 @@
 # common_structures.py
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from typing import Any, Dict, Optional
 
 
@@ -18,3 +18,6 @@ class InputData:
     example_id: str
     content: Dict[str, Any]
     expected_result: Optional[Any] = None
+
+    def asdict(self):
+        return asdict(self)

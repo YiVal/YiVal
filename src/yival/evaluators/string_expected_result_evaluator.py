@@ -13,6 +13,7 @@ import json
 from ..schemas.common_structures import InputData
 from ..schemas.evaluator_config import (
     EvaluatorOutput,
+    EvaluatorType,
     ExpectedResultEvaluatorConfig,
     MatchingTechnique,
 )
@@ -39,6 +40,7 @@ def is_valid_json(s: str) -> bool:
         return False
 
 
+@BaseEvaluator.register("string_expected_result")
 class StringExpectedResultEvaluator(BaseEvaluator):
     """
     Class for evaluating string expected results.
@@ -50,6 +52,11 @@ class StringExpectedResultEvaluator(BaseEvaluator):
         config (ExpectedResultEvaluatorConfig): Configuration object for the evaluator.
 
     """
+    default_config = ExpectedResultEvaluatorConfig(
+        matching_technique=MatchingTechnique.INCLUDES,
+        evaluator_type=EvaluatorType.INDIVIDUAL,
+        name="string_expected_result"
+    )
 
     def __init__(self, config: ExpectedResultEvaluatorConfig):
         """
@@ -91,6 +98,11 @@ class StringExpectedResultEvaluator(BaseEvaluator):
                 is_match = True
             else:
                 is_match = expected_result == raw_output
+        elif self.config.matching_technique == MatchingTechnique.INCLUDES:
+            if not expected_result:
+                is_match = True
+            else:
+                is_match = expected_result in raw_output
 
         result = 1 if is_match else 0
         return EvaluatorOutput(name=self.config.name, result=result)

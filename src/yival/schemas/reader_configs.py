@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from typing import Optional
 
 
@@ -10,6 +10,9 @@ class BaseReaderConfig:
 
     chunk_size: int = 100
 
+    def asdict(self):
+        return asdict(self)
+
 
 @dataclass
 class CSVReaderConfig(BaseReaderConfig):
@@ -19,3 +22,6 @@ class CSVReaderConfig(BaseReaderConfig):
 
     use_first_column_as_id: bool = False
     expected_result_column: Optional[str] = None
+
+    def asdict(self):
+        return asdict(self)

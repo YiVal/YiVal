@@ -10,7 +10,7 @@ dataset:
     input_type: "DATASET"
     file_path: "some_path.csv"
 evaluator:
-    evaluator_type: "individual"
+    evaluator_type: "INDIVIDUAL"
 output:
     path: "output_path"
     formatter: "__main__:sample_formatter_function"
@@ -25,12 +25,15 @@ def test_load_and_validate_config(tmpdir):
     # Load and validate the configuration using the function
     config = load_and_validate_config(config_filepath=str(config_file))
 
+    f = open(config_file, "r")
+    print(f.read())
+
     # Assertions to verify that the configuration is loaded and parsed correctly
     assert config["description"] == "Test experiment"
     assert config["wrappers"][0]["name"] == "wrapper1"
     assert config["dataset"]["input_type"] == "DATASET"
     assert config["dataset"]["file_path"] == "some_path.csv"
-    assert config["evaluator"]["evaluator_type"] == "individual"
+    assert config["evaluator"]["evaluator_type"] == "INDIVIDUAL"
     # Note: The callable check for the formatter will be more complex and might
     # need adjustment
     assert config["output"]["formatter"
