@@ -88,6 +88,26 @@ def add_arguments_to(subparser):
         nargs='+',
         help="Variations in 'key=value_type:value1,value2,...' format."
     )
+    parser.add_argument(
+        "--custom_reader",
+        type=str,
+        help=
+        "Specify custom readers in 'name:class_path:config_cls_path' format."
+    )
+    parser.add_argument(
+        "--custom_wrappers",
+        type=str,
+        nargs='+',
+        help=
+        "Specify custom wrappers in 'name:class_path:config_cls_path' format."
+    )
+    parser.add_argument(
+        "--custom_evaluators",
+        type=str,
+        nargs='+',
+        help=
+        "Specify custom evaluators in 'name:class_path:config_cls_path' format."
+    )
 
 
 def init(args: Namespace):
@@ -98,6 +118,35 @@ def init(args: Namespace):
             name=list(wc_dict.keys())[0], variations=list(wc_dict.values())[0]
         ) for wc_dict in args.variations
     ]
+    custom_reader = {}
+    if args.custom_reader:
+        reader_name, reader_class_path, reader_config_cls_path = args.custom_reader.split(
+            ":"
+        )
+        custom_reader[reader_name] = {
+            "class_path": reader_class_path,
+            "config_path": reader_config_cls_path
+        }
+    custom_wrappers = {}
+    if args.custom_wrappers:
+        for custom_wrapper in args.custom_wrappers:
+            wrapper_name, wrapper_class_path, wrapper_config_cls_path = custom_wrapper.split(
+                ":"
+            )
+            custom_wrappers[wrapper_name] = {
+                "class_path": wrapper_class_path,
+                "config_path": wrapper_config_cls_path
+            }
+    custom_evaluators = {}
+    if args.custom_evaluators:
+        for custom_evaluator in args.custom_evaluators:
+            evaluator_name, evaluator_class_path, evaluator_config_cls_path = custom_evaluator(
+                ":"
+            )
+            custom_evaluators[evaluator_name] = {
+                "class_path": evaluator_class_path,
+                "config_path": evaluator_config_cls_path
+            }
 
     # Generate the configuration template dynamically
     yaml_template = generate_experiment_config_yaml(
@@ -106,7 +155,10 @@ def init(args: Namespace):
         evaluator_names=args.evaluator_names,
         reader_name=args.reader_name,
         wrapper_names=args.wrapper_names,
-        wrapper_configs=wrapper_config_objects
+        wrapper_configs=wrapper_config_objects,
+        custom_reader=custom_reader,
+        custom_wrappers=custom_wrappers,
+        custom_evaluators=custom_evaluators
     )
 
     # Save the generated template to the specified config path

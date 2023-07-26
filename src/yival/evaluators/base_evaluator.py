@@ -58,6 +58,19 @@ class BaseEvaluator(ABC):
             "default_config", None
         ) if "default_config" in evaluator_info else None
 
+    @classmethod
+    def register_evaluator(
+        cls,
+        name: str,
+        reader_cls: Type['BaseEvaluator'],
+        config_cls: Optional[Type[BaseEvaluatorConfig]] = None
+    ):
+        cls._registry[name] = {
+            "class": reader_cls,
+            "default_config": reader_cls.default_config,
+            "config_cls": config_cls
+        }
+
     @abstractmethod
     def evaluate(
         self, input_data: InputData, raw_output: str

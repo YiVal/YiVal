@@ -7,11 +7,11 @@ from ..schemas.reader_configs import CSVReaderConfig
 from .base_reader import BaseReader
 
 
-@BaseReader.register(name="csv_reader")
 class CSVReader(BaseReader):
     config: CSVReaderConfig
     default_config = CSVReaderConfig(
-        chunk_size=100, use_first_column_as_id=False
+        chunk_size=100,
+        use_first_column_as_id=False,
     )
 
     def __init__(self, config: CSVReaderConfig):
@@ -69,3 +69,6 @@ class CSVReader(BaseReader):
 
         for issue in issues:
             logging.warning(issue)
+
+
+BaseReader.register_reader("csv_reader", CSVReader, CSVReaderConfig)

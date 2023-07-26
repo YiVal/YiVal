@@ -28,7 +28,10 @@ def generate_experiment_config_yaml(
     evaluator_names: Optional[List[str]] = None,
     reader_name: Optional[str] = None,
     wrapper_names: Optional[List[str]] = None,
-    wrapper_configs: Optional[List[WrapperConfig]] = None
+    wrapper_configs: Optional[List[WrapperConfig]] = None,
+    custom_reader: Optional[Dict[str, Dict[str, Any]]] = None,
+    custom_wrappers: Optional[Dict[str, Dict[str, Any]]] = None,
+    custom_evaluators: Optional[Dict[str, Dict[str, Any]]] = None
 ) -> str:
 
     def get_default_config(
@@ -43,17 +46,28 @@ def generate_experiment_config_yaml(
     dataset_section: Dict[str, Any] = {
         "source_type": source_type,
     }
+    if source_type == "dataset":
+        dataset_section["file_path"] = "/path/to/file_path"
     if reader_name:
         dataset_section["reader"] = reader_name
         reader_cls = BaseReader.get_reader(reader_name)
         if reader_cls:
             default_config = get_default_config(reader_cls)
             if default_config:
-                dataset_section["config"] = default_config
+                dataset_section["reader_config"] = default_config
     experiment_config: Dict[Any, Any] = {
         "description": "Generated experiment config",
         "dataset": dataset_section,
     }
+
+    if custom_reader:
+        experiment_config["custom_reader"] = custom_reader
+
+    if custom_wrappers:
+        experiment_config["custom_wrappers"] = custom_wrappers
+
+    if custom_evaluators:
+        experiment_config["custom_evaluators"] = custom_evaluators
 
     evaluators_section = []
     if evaluator_names:
