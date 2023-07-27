@@ -6,6 +6,10 @@
 ## Introduction
 YiVal is an innovative open-source project, rooted in the principles of the Yijing, focused on revolutionizing the end-to-end evaluation process of AI models. We aim to provide comprehensive insights into not only the individual components such as models and prompts but more importantly, the final output produced by their interaction.
 
+## Result SxS
+<img width="1698" alt="Screenshot 2023-07-27 at 3 05 20 PM" src="https://github.com/YiVal/YiVal/assets/1544154/c667a749-8bdc-469e-a2d2-5086f7bac73e">
+
+
 ## v 0.1.0
  **Qian (The Creative, Heaven) 🌤️ (乾):** 
  - [x] Setup the framework for wrappers that can be used directly in the production code.
