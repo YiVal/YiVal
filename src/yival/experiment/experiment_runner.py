@@ -24,7 +24,7 @@ class ExperimentRunner:
     def __init__(self, config_path: str):
         self.config = load_and_validate_config(config_path)
 
-    def run(self, display: bool = False):
+    def run(self, display: bool = False, output_path: str = ""):
         results: List[ExperimentResult] = []
         register_custom_wrappers(
             self.config.get("custom_wrappers", {})  # type: ignore
@@ -66,6 +66,11 @@ class ExperimentRunner:
             experiment = generate_experiment(results, evaluator)
             if display:
                 display_results(experiment)
+
+            if output_path:
+                import json
+                with open(output_path, "w") as file:
+                    json.dump(experiment.asdict(), file)
 
         elif self.config["dataset"]["source_type"  # type: ignore
                                     ] == "user_input":
