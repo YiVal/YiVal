@@ -1,6 +1,6 @@
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from enum import Enum
-from typing import List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 from .reader_configs import BaseReaderConfig
 
@@ -41,5 +41,18 @@ class DatasetConfig:
     output_path: Optional[str] = None
     data_generators: Union[List[str], None] = None
 
-    def asdict(self):
-        return asdict(self)
+    def asdict(self) -> Dict[str, Any]:
+        return {
+            "source_type":
+            str(self.source_type),
+            "file_path":
+            self.file_path,
+            "reader":
+            self.reader,
+            "reader_config":
+            self.reader_config.asdict() if self.reader_config else None,
+            "output_path":
+            self.output_path,
+            "data_generators":
+            self.data_generators
+        }

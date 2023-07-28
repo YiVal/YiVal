@@ -1,6 +1,6 @@
-from dataclasses import asdict, dataclass, field
+from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, List
+from typing import Any, Dict, List
 
 
 class MethodCalculationMethod(Enum):
@@ -8,7 +8,10 @@ class MethodCalculationMethod(Enum):
     Configuration for metric calculation method.
 
     """
-    AVERAGE = "average"
+    AVERAGE = "AVERAGE"
+
+    def __str__(self):
+        return self.value
 
 
 @dataclass
@@ -18,8 +21,8 @@ class MetricCalculatorConfig:
     """
     method: MethodCalculationMethod
 
-    def asdict(self):
-        return asdict(self)
+    def asdict(self) -> Dict[str, Any]:
+        return {"method": str(self.method)}
 
 
 class MatchingTechnique(Enum):
@@ -48,10 +51,8 @@ class BaseEvaluatorConfig:
     name: str
     evaluator_type: EvaluatorType
 
-    def asdict(self):
-        result = asdict(self)
-        result["evaluator_type"] = self.evaluator_type.name
-        return result
+    def asdict(self) -> Dict[str, Any]:
+        return {"name": self.name, "evaluator_type": str(self.evaluator_type)}
 
 
 @dataclass
@@ -63,6 +64,13 @@ class EvaluatorConfig(BaseEvaluatorConfig):
         default_factory=list
     )
     evaluator_type = EvaluatorType.INDIVIDUAL
+
+    def asdict(self) -> Dict[str, Any]:
+        base_dict = super().asdict()
+        base_dict["metric_calculators"] = [
+            mc.asdict() for mc in self.metric_calculators
+        ]
+        return base_dict
 
 
 @dataclass
@@ -85,14 +93,22 @@ class ExpectedResultEvaluatorConfig(EvaluatorConfig):
 class EvaluatorOutput:
     """
     Result of an evaluator.
-
-    Attributes:
-    - name (str): Name of the evaluator.
-    - result (Any): Result produced by the evaluator.
     """
 
     name: str
     result: Any
+    metric_calculators: List[MetricCalculatorConfig] = field(
+        default_factory=list
+    )
 
-    def asdict(self):
-        return asdict(self)
+    def asdict(self) -> Dict[str, Any]:
+        return {
+            "name":
+            self.name,
+            "result":
+            self.result,
+            "metric_calculators": [
+                mc.asdict() if hasattr(mc, 'asdict') else mc
+                for mc in self.metric_calculators
+            ]
+        }

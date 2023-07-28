@@ -1,8 +1,10 @@
-from abc import ABC, abstractmethod
-from typing import Any, Dict, Optional, Type
+from abc import ABC
+from typing import Any, Dict, List, Optional, Type, TypeVar
 
-from ..schemas.common_structures import InputData
 from ..schemas.evaluator_config import BaseEvaluatorConfig, EvaluatorOutput
+from ..schemas.experiment_config import ExperimentResult
+
+T_Evaluator = TypeVar("T_Evaluator", bound="BaseEvaluator")
 
 
 class BaseEvaluator(ABC):
@@ -62,7 +64,7 @@ class BaseEvaluator(ABC):
     def register_evaluator(
         cls,
         name: str,
-        reader_cls: Type['BaseEvaluator'],
+        reader_cls: Type[T_Evaluator],
         config_cls: Optional[Type[BaseEvaluatorConfig]] = None
     ):
         cls._registry[name] = {
@@ -71,10 +73,14 @@ class BaseEvaluator(ABC):
             "config_cls": config_cls
         }
 
-    @abstractmethod
-    def evaluate(
-        self, input_data: InputData, raw_output: str
-    ) -> EvaluatorOutput:
+    @classmethod
+    def get_config_class(cls,
+                         name: str) -> Optional[Type[BaseEvaluatorConfig]]:
+        """Retrieve the configuration class of a reader by its name."""
+        reader_info = cls._registry.get(name, {})
+        return reader_info.get("config_cls", None)
+
+    def evaluate(self, experiment_result: ExperimentResult) -> EvaluatorOutput:
         """
         Evaluate the input data and produce an evaluator output.
 
@@ -86,4 +92,26 @@ class BaseEvaluator(ABC):
             EvaluatorOutput: The result of the evaluation.
 
         """
-        pass
+        return EvaluatorOutput("evaluate", "evaluate")
+
+    def evaluate_comparison(
+        self, group_data: List[ExperimentResult]
+    ) -> List[EvaluatorOutput]:
+        """
+        Evaluate and compare a list of experiment results.
+        
+        This method is designed to evaluate multiple experiment results together, 
+        allowing for comparisons and potentially identifying trends, anomalies, 
+        or other patterns in the set of results.
+        
+        Args:
+            group_data (List[ExperimentResult]): A list of experiment results to be evaluated together.
+
+        Returns:
+            List[EvaluatorOutput]: A list of evaluation outputs, each corresponding to an input experiment result.
+
+        Note:
+            Implementations of this method in subclasses should handle the specifics 
+            of how multiple experiments are evaluated and compared.
+        """
+        return []

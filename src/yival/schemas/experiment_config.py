@@ -17,6 +17,7 @@ from .evaluator_config import (
 from .wrapper_configs import BaseWrapperConfig
 
 # Registry for supported custom classes
+# TODO Fix it, this is not working right now
 CLASS_REGISTRY: Dict[str, Type] = {
     # "ClassA": ClassA
 }
@@ -68,8 +69,11 @@ class WrapperConfig():
     name: str
     variations: List[WrapperVariation]
 
-    def asdict(self):
-        return asdict(self)
+    def asdict(self) -> Dict[str, Any]:
+        return {
+            "name": self.name,
+            "variations": [var.asdict() for var in self.variations]
+        }
 
 
 @dataclass
@@ -137,37 +141,6 @@ class HumanRatingConfig:
 
 
 @dataclass
-class ExperimentResult:
-    """
-    Result for a single example based on a specific combination of active variations
-    across wrappers.
-
-    Attributes:
-    - combination (Dict[str, str]): The combination of wrapper names and their active
-      variation_ids for this example.
-    - raw_output (str): Raw output for this example.
-    - latency (float): Latency for producing the output for this example
-      (in milliseconds or appropriate unit).
-    - token_usage (int): Number of tokens used for this example.
-    - evaluator_outputs (List[EvaluatorOutput]): Evaluator outputs for this example.
-    - human_rating (Optional[HumanRating]): Human rating for this example.
-    - intermediate_logs (List[str]): Logs captured during the experiment.
-    """
-
-    input_data: InputData
-    combination: Dict[str, str]
-    raw_output: str
-    latency: float
-    token_usage: int
-    evaluator_outputs: List[EvaluatorOutput]
-    human_rating: Optional[HumanRating] = None
-    intermediate_logs: List[str] = field(default_factory=list)
-
-    def asdict(self):
-        return asdict(self)
-
-
-@dataclass
 class ExperimentConfig:
     """
     Configuration for running an experiment.
@@ -200,7 +173,7 @@ class ExperimentConfig:
     dataset: DatasetConfig
     custom_function: str
     # Optional configurations with default values
-    wrapper_configs: Optional[List[BaseWrapperConfig]] = None
+    wrapper_configs: Optional[Dict[str, BaseWrapperConfig]] = None
     combinations_to_run: Optional[List[Tuple[str, Any]]] = None
     evaluators: Optional[List[Union[EvaluatorConfig,
                                     ComparisonEvaluatorConfig]]] = None
@@ -213,6 +186,41 @@ class ExperimentConfig:
     custom_reader: Optional[Dict[str, Dict[str, Any]]] = None
     custom_wrappers: Optional[Dict[str, Dict[str, Any]]] = None
     custom_evaluators: Optional[Dict[str, Dict[str, Any]]] = None
+
+    def asdict(self) -> Dict[str, Any]:
+        # Convert the dataclass instance to a dictionary
+        result = asdict(self)
+
+        # If any attributes have their own asdict methods, apply them
+        if self.variations:
+            result["variations"] = [
+                v.asdict() for v in self.variations if hasattr(v, 'asdict')
+            ]
+        if self.dataset and hasattr(self.dataset, 'asdict'):
+            result["dataset"] = self.dataset.asdict()
+        if self.wrapper_configs:
+            result["wrapper_configs"] = {
+                k: v.asdict()
+                for k, v in self.wrapper_configs.items()
+                if hasattr(v, 'asdict')
+            }
+        if self.evaluators:
+            result["evaluators"] = [
+                e.asdict() for e in self.evaluators if hasattr(e, 'asdict')
+            ]
+        if self.output and hasattr(self.output, 'asdict'):
+            result["output"] = self.output.asdict()
+        if self.human_rating_configs:
+            result["human_rating_configs"] = [
+                h.asdict() for h in self.human_rating_configs
+                if hasattr(h, 'asdict')
+            ]
+
+        # Note: For the custom_reader, custom_wrappers, custom_evaluators attributes,
+        # you'd need additional logic if their nested dictionaries also contain objects
+        # that need to be converted using asdict.
+
+        return result
 
 
 @dataclass
@@ -229,8 +237,12 @@ class Metric:
     value: float
     description: Optional[str] = None
 
-    def asdict(self):
-        return asdict(self)
+    def asdict(self) -> Dict[str, Any]:
+        return {
+            "name": self.name,
+            "value": self.value,
+            "description": self.description
+        }
 
 
 @dataclass
@@ -245,26 +257,105 @@ class ExperimentSummary:
     """
     aggregated_metrics: Dict[str, Dict[str, Metric]]
 
-    def asdict(self):
-        return asdict(self)
+    def asdict(self) -> Dict[str, Any]:
+        return {
+            "aggregated_metrics": {
+                k: {
+                    mk: mv.asdict()
+                    for mk, mv in v.items()
+                }
+                for k, v in self.aggregated_metrics.items()
+            }
+        }
 
 
 @dataclass
-class Experiment:
+class ExperimentResult:
     """
-    Represents an entire experiment.
+    Result for a single example based on a specific combination of active variations
+    across wrappers.
 
     Attributes:
-    - results (List[ExperimentResult]): List of results for each input example.
-    - aggregated_metrics (Dict[str, Dict[str, Metric]]): 
-      A dictionary where keys are evaluator names and values are dictionaries mapping metric names to their values.
-    - ... (other experiment attributes)
+    - combination (Dict[str, str]): The combination of wrapper names and their active
+      variation_ids for this example.
+    - raw_output (str): Raw output for this example.
+    - latency (float): Latency for producing the output for this example
+      (in milliseconds or appropriate unit).
+    - token_usage (int): Number of tokens used for this example.
+    - evaluator_outputs (List[EvaluatorOutput]): Evaluator outputs for this example.
+    - human_rating (Optional[HumanRating]): Human rating for this example.
+    - intermediate_logs (List[str]): Logs captured during the experiment.
     """
-    results: List[ExperimentResult]
-    aggregated_metrics: Dict[str, Dict[str, Metric]]
 
-    def asdict(self):
-        return asdict(self)
+    input_data: InputData
+    combination: Dict[str, str]
+    raw_output: str
+    latency: float
+    token_usage: int
+    evaluator_outputs: Optional[List[EvaluatorOutput]] = None
+    human_rating: Optional[HumanRating] = None
+    intermediate_logs: Optional[List[str]] = None
+
+    def asdict(self) -> Dict[str, Any]:
+        return {
+            "input_data":
+            self.input_data.asdict(),
+            "combination":
+            self.combination,
+            "raw_output":
+            self.raw_output,
+            "latency":
+            self.latency,
+            "token_usage":
+            self.token_usage,
+            "evaluator_outputs":
+            [eo.asdict() for eo in self.evaluator_outputs]
+            if self.evaluator_outputs else None,
+            "human_rating":
+            self.human_rating.asdict() if self.human_rating else None,
+            "intermediate_logs":
+            self.intermediate_logs
+        }
+
+
+@dataclass
+class GroupedExperimentResult:
+    group_key: str
+    experiment_results: List[ExperimentResult]
+    evaluator_outputs: Optional[List[EvaluatorOutput]] = None
+
+    def asdict(self) -> Dict[str, Any]:
+        return {
+            "group_key":
+            self.group_key,
+            "experiment_results":
+            [er.asdict() for er in self.experiment_results],
+            "evaluator_outputs":
+            [eo.asdict() for eo in self.evaluator_outputs]
+            if self.evaluator_outputs else None
+        }
+
+
+@dataclass
+class CombinationAggregatedMetrics:
+    combo_key: str
+    experiment_results: List[ExperimentResult]
+    aggregated_metrics: Dict[str, List[Metric]]
+    average_token_usage: Optional[float] = None
+    average_latency: Optional[float] = None
+
+    def asdict(self) -> Dict[str, Any]:
+        return {
+            "combo_key": self.combo_key,
+            "experiment_results":
+            [er.asdict() for er in self.experiment_results],
+            "aggregated_metrics": {
+                k: [m.asdict() for m in v]
+                for k, v in self.aggregated_metrics.items()
+            },
+            "average_token_usage": self.average_token_usage,
+            "average_latency": self.average_latency
+        }
 
 
 @dataclass
@@ -272,3 +363,21 @@ class FunctionMetadata:
     description: str
     parameters: List[Tuple[str,
                            Optional[str]]]  # [(param_name, description), ...]
+
+
+@dataclass
+class Experiment:
+    """
+    Represents an entire experiment.
+
+    """
+    group_experiment_results: List[GroupedExperimentResult]
+    combination_aggregated_metrics: List[CombinationAggregatedMetrics]
+
+    def asdict(self) -> Dict[str, Any]:
+        return {
+            "group_experiment_results":
+            [ger.asdict() for ger in self.group_experiment_results],
+            "combination_aggregated_metrics":
+            [cam.asdict() for cam in self.combination_aggregated_metrics]
+        }

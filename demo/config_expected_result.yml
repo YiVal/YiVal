@@ -1,0 +1,35 @@
+# This is a generated template. Modify the values as needed.
+
+custom_function: /Users/taofeng/YiVal/demo.qa.qa
+dataset:
+  file_path: demo/data/yival_expected_results.csv
+  reader: csv_reader
+  source_type: dataset
+  reader_config:
+    expected_result_column: expected_result
+description: Generated experiment config
+evaluators:
+  - evaluator_type: individual
+    matching_technique: includes
+    metric_calculators:
+      - method: AVERAGE
+    name: string_expected_result
+
+# wrapper_configs: {}
+
+# Variations allow for dynamic content during experiments.
+# They are identified by a globally unique name. For example, in your code,
+# you might reference a variation by its name, like:
+# variation = StringWrapper("hello", 'test_experiment')
+# In this config, you would define the variations associated with that name, e.g.
+variations:
+  - name: qa
+    variations:
+      - instantiated_value: ""
+        value: ""
+        value_type: str
+        variation_id: null
+      - instantiated_value: "Let's think step by step"
+        value: "Let's think step by step"
+        value_type: str
+        variation_id: null

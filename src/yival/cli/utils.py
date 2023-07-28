@@ -80,16 +80,14 @@ def generate_experiment_config_yaml(
                     evaluators_section.append(default_config)
 
     if wrapper_names:
-        wrappers_list = []
+        wrappers_section = {}
         for name in wrapper_names:
             wrapper_cls = BaseWrapper.get_wrapper(name)
             if wrapper_cls:
                 default_config = get_default_config(wrapper_cls)
-                wrappers_list.append({
-                    "name": name,
-                    "config": default_config if default_config else {}
-                })
-        experiment_config["wrapper_configs"] = wrappers_list
+                wrappers_section[name
+                                 ] = default_config if default_config else {}
+        experiment_config["wrapper_configs"] = wrappers_section
 
     if evaluator_names:
         experiment_config["evaluators"] = evaluators_section
@@ -104,7 +102,7 @@ def generate_experiment_config_yaml(
     if not evaluator_names:
         yaml_string += "\n# evaluators: []\n"
     if not wrapper_names:
-        yaml_string += "\n# wrapper_configs: []\n"
+        yaml_string += "\n# wrapper_configs: {}\n"
 
     variations_section = """
 # Variations allow for dynamic content during experiments.

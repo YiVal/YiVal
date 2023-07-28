@@ -10,13 +10,15 @@ Classes:
 
 import json
 
-from ..schemas.common_structures import InputData
 from ..schemas.evaluator_config import (
     EvaluatorOutput,
     EvaluatorType,
     ExpectedResultEvaluatorConfig,
     MatchingTechnique,
+    MethodCalculationMethod,
+    MetricCalculatorConfig,
 )
+from ..schemas.experiment_config import ExperimentResult
 from .base_evaluator import BaseEvaluator
 from .utils import fuzzy_match_util
 
@@ -40,7 +42,6 @@ def is_valid_json(s: str) -> bool:
         return False
 
 
-@BaseEvaluator.register("string_expected_result")
 class StringExpectedResultEvaluator(BaseEvaluator):
     """
     Class for evaluating string expected results.
@@ -55,7 +56,12 @@ class StringExpectedResultEvaluator(BaseEvaluator):
     default_config = ExpectedResultEvaluatorConfig(
         matching_technique=MatchingTechnique.INCLUDES,
         evaluator_type=EvaluatorType.INDIVIDUAL,
-        name="string_expected_result"
+        name="string_expected_result",
+        metric_calculators=[
+            MetricCalculatorConfig(
+                MethodCalculationMethod(MethodCalculationMethod.AVERAGE)
+            )
+        ]
     )
 
     def __init__(self, config: ExpectedResultEvaluatorConfig):
@@ -69,40 +75,47 @@ class StringExpectedResultEvaluator(BaseEvaluator):
         super().__init__(config)
         self.config: ExpectedResultEvaluatorConfig = config
 
-    def evaluate(
-        self, input_data: InputData, raw_output: str
-    ) -> EvaluatorOutput:
+    def evaluate(self, experiment_result: ExperimentResult) -> EvaluatorOutput:
         """
         Evaluate the expected result against the actual result using the specified matching technique.
-
-        Args:
-            input_data (InputData): Input data containing the actual result and expected result.
-            raw_output (str): The raw output produced by the custom function.
 
         Returns:
             EvaluatorOutput: An EvaluatorOutput object containing the evaluation result.
 
         """
+        input_data = experiment_result.input_data
+        raw_output = experiment_result.raw_output
         expected_result = input_data.expected_result
 
         is_match = False
-        if self.config.matching_technique == MatchingTechnique.FUZZY_MATCH:
+        technique = MatchingTechnique(self.config.matching_technique)
+        if technique == MatchingTechnique.FUZZY_MATCH:
             if not expected_result:
                 is_match = True
             else:
                 is_match = fuzzy_match_util(raw_output, expected_result)
-        elif self.config.matching_technique == MatchingTechnique.JSON_VALIDATOR:
+        elif technique == MatchingTechnique.JSON_VALIDATOR:
             is_match = is_valid_json(raw_output)
-        elif self.config.matching_technique == MatchingTechnique.MATCH:
+        elif technique == MatchingTechnique.MATCH:
             if not expected_result:
                 is_match = True
             else:
                 is_match = expected_result == raw_output
-        elif self.config.matching_technique == MatchingTechnique.INCLUDES:
+        elif technique == MatchingTechnique.INCLUDES:
             if not expected_result:
                 is_match = True
             else:
                 is_match = expected_result in raw_output
 
         result = 1 if is_match else 0
-        return EvaluatorOutput(name=self.config.name, result=result)
+        return EvaluatorOutput(
+            name=self.config.name,
+            result=result,
+            metric_calculators=self.config.metric_calculators
+        )
+
+
+BaseEvaluator.register_evaluator(
+    "string_expected_result", StringExpectedResultEvaluator,
+    ExpectedResultEvaluatorConfig
+)

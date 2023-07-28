@@ -8,9 +8,33 @@ from .base_reader import BaseReader
 
 
 class CSVReader(BaseReader):
+    """
+        CSVReader is a class derived from BaseReader to read datasets from CSV files.
+        
+        Attributes:
+            config (CSVReaderConfig): Configuration object specifying reader parameters.
+            default_config (CSVReaderConfig): Default configuration for the reader.
+
+        Methods:
+            __init__(self, config: CSVReaderConfig): Initializes the CSVReader with a given configuration.
+            read(self, path: str) -> Iterator[List[InputData]]: Reads the CSV file and yields chunks of InputData.
+            
+        Note:
+            The read method checks for headers in the CSV file and raises an error if missing.
+            It also checks for missing data in rows, skipping those with missing values but logs them.
+            If a specified column contains expected results, it extracts those results from the row.
+            Rows are read in chunks, and each chunk is yielded once its size reaches `chunk_size`.
+            The class supports registering with the BaseReader using the `register_reader` method.
+            
+        Usage:
+            reader = CSVReader(config)
+            for chunk in reader.read(path_to_csv_file):
+                process(chunk)
+        """
+
     config: CSVReaderConfig
     default_config = CSVReaderConfig(
-        chunk_size=100,
+        chunk_size=10000000,
         use_first_column_as_id=False,
     )
 

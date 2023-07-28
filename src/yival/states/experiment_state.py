@@ -1,5 +1,8 @@
 from collections import defaultdict
+from itertools import product
 from typing import Any, Dict, List, Optional
+
+from ..schemas.experiment_config import ExperimentConfig
 
 
 class ExperimentState:
@@ -34,6 +37,7 @@ class ExperimentState:
         self.active: bool = False
         self.current_variations: Dict[str, List[Any]] = {}
         self.counters: Dict[str, int] = defaultdict(int)
+        self.config: Optional[ExperimentConfig] = None
 
     def get_next_variation(self, name: str) -> Optional[Any]:
         variations = self.current_variations.get(name, [])
@@ -43,7 +47,51 @@ class ExperimentState:
             return variation
         return None
 
+    def get_all_variation_combinations(self) -> List[Dict[str, Any]]:
+        """
+        Returns a list of dictionaries where each dictionary 
+        represents a unique combination of variations.
+        """
+        all_variations = []
+        for name, variations in self.current_variations.items():
+            all_variations.append([(name, variation)
+                                   for variation in variations])
+        combinations = []
+        for combo in product(*all_variations):
+            combo_dict = {name: variation for name, variation in combo}
+            combinations.append(combo_dict)
+        return combinations
+
+    def initialize_variations_from_config(self) -> None:
+        """
+        Initializes the experiment variations using the provided ExperimentConfig.
+        """
+        if self.config:
+            for wrapper_config in self.config.variations:
+                variations = [
+                    var_variation["instantiated_value"] for var_variation in
+                    wrapper_config["variations"]  # type: ignore
+                ]
+                self.set_variations_for_experiment(
+                    wrapper_config["name"],  # type: ignore
+                    variations
+                )
+
     def set_variations_for_experiment(
         self, name: str, variations: List[Any]
     ) -> None:
         self.current_variations[name] = variations
+
+    def set_experiment_config(self, config: Any) -> None:
+        if isinstance(config, dict):
+            self.config = ExperimentConfig(**config)
+        else:
+            self.config = config
+        self.initialize_variations_from_config()
+
+    def set_specific_variation(self, name: str, variation: Any) -> None:
+        """
+        Sets a specific variation for an experiment without cycling through the variations.
+        """
+        self.current_variations[name] = [variation]
+        self.counters[name] = 0
