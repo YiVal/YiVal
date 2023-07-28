@@ -1,12 +1,9 @@
 from argparse import ArgumentParser, ArgumentTypeError, Namespace
 from mimetypes import inited
 
-from yival.wrappers.base_wrapper import BaseWrapper
 from yival.wrappers.string_wrapper import StringWrapper
 
-from ..data.base_reader import BaseReader
 from ..data.csv_reader import CSVReader
-from ..evaluators.base_evaluator import BaseEvaluator
 from ..evaluators.string_expected_result_evaluator import (
     StringExpectedResultEvaluator,
 )
@@ -60,13 +57,11 @@ def add_arguments_to(subparser):
         "--evaluator_names",
         type=str,
         nargs='+',
-        choices=[name for name, _ in BaseEvaluator._registry.items()],
         help="Names of evaluators to include in the config."
     )
     parser.add_argument(
         "--reader_name",
         type=str,
-        choices=[name for name, _ in BaseReader._registry.items()],
         help="Name of the reader to include in the config."
     )
     parser.add_argument(
@@ -79,7 +74,6 @@ def add_arguments_to(subparser):
         "--wrapper_names",
         type=str,
         nargs='+',
-        choices=[name for name, _ in BaseWrapper._registry.items()],
         help="Names of wrappers to include in the config."
     )
     parser.add_argument(

@@ -66,3 +66,33 @@ class BaseWrapper:
         return wrapper_info.get(
             "default_config", None
         ) if "default_config" in wrapper_info else None
+
+    @classmethod
+    def get_config_class(cls, name: str) -> Optional[Type[BaseWrapperConfig]]:
+        """Retrieve the configuration class of a reader by its name."""
+        reader_info = cls._registry.get(name, {})
+        return reader_info.get("config_cls", None)
+
+    def get_active_config(self, name: str) -> Optional[BaseWrapperConfig]:
+        if self.experiment_state.active and self.experiment_state.config.wrapper_configs:
+            config = self.experiment_state.config.wrapper_configs.get(
+                name, None
+            )
+            if config:
+                config_cls = BaseWrapper.get_config_class(name)
+                if config_cls:
+                    return config_cls(**config.asdict())
+        return None
+
+    @classmethod
+    def register_wrapper(
+        cls,
+        name: str,
+        wrapper_cls: Type['BaseWrapper'],
+        config_cls: Optional[Type[BaseWrapperConfig]] = None
+    ):
+        cls._registry[name] = {
+            "class": wrapper_cls,
+            "default_config": wrapper_cls.default_config,
+            "config_cls": config_cls
+        }

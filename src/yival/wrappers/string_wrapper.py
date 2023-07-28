@@ -35,3 +35,8 @@ class StringWrapper(BaseWrapper):
         if variation:
             return variation
         return self._original_string
+
+
+BaseWrapper.register_wrapper(
+    "string_wrapper", StringWrapper, StringWrapperConfig
+)

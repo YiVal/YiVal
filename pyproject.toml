@@ -23,7 +23,10 @@ fuzzywuzzy = "^0.18.0"
 types-pyyaml = "^6.0.12.11"
 python-levenshtein = "^0.21.1"
 pydantic = "^2.1.1"
-textual = "^0.30.0"
+tqdm = "^4.65.0"
+rich = "^13.4.2"
+types-tqdm = "^4.65.0.2"
+npyscreen = "^4.10.5"
 
 
 [tool.poetry.group.test.dependencies]

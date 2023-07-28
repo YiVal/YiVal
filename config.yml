@@ -2,21 +2,22 @@
 
 custom_function: module.test
 dataset:
-  file_path: demo/data/hello_yival.csv
+  file_path: /path/to/file_path
   reader: csv_reader
   reader_config:
-    chunk_size: 100
+    chunk_size: 10000000
     expected_result_column: null
     use_first_column_as_id: false
   source_type: dataset
 description: Generated experiment config
 evaluators:
-  - evaluator_type: individual
-    matching_technique: includes
-    metric_calculators: []
-    name: string_expected_result
+- evaluator_type: individual
+  matching_technique: includes
+  metric_calculators:
+  - method: AVERAGE
+  name: string_expected_result
 
-# wrapper_configs: []
+# wrapper_configs: {}
 
 # Variations allow for dynamic content during experiments.
 # They are identified by a globally unique name. For example, in your code,
@@ -24,13 +25,13 @@ evaluators:
 # variation = StringWrapper("hello", 'test_experiment')
 # In this config, you would define the variations associated with that name, e.g.
 variations:
-  - name: key1
-    variations:
-      - instantiated_value: value1
-        value: value1
-        value_type: str
-        variation_id: null
-      - instantiated_value: value2
-        value: value2
-        value_type: str
-        variation_id: null
+- name: key1
+  variations:
+  - instantiated_value: value1
+    value: value1
+    value_type: str
+    variation_id: null
+  - instantiated_value: value2
+    value: value2
+    value_type: str
+    variation_id: null

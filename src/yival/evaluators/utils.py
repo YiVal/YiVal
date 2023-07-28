@@ -10,7 +10,7 @@ def fuzzy_match_util(
     Args:
         generated (str): The generated string.
         expected (str): The expected answer(s). Can be a string or list of strings.
-        threshold (int, optional): The threshold for fuzzy matching. Defaults to 85.
+        threshold (int, optional): The threshold for fuzzy matching. Defaults to 80.
 
     Returns:
         int: Returns 1 if there's a match, 0 otherwise.

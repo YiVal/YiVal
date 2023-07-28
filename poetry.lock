@@ -658,26 +658,6 @@ files = [
 rapidfuzz = ">=2.3.0,<4.0.0"
 
 [[package]]
-name = "linkify-it-py"
-version = "2.0.2"
-description = "Links recognition library with FULL unicode support."
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "linkify-it-py-2.0.2.tar.gz", hash = "sha256:19f3060727842c254c808e99d465c80c49d2c7306788140987a1a7a29b0d6ad2"},
-    {file = "linkify_it_py-2.0.2-py3-none-any.whl", hash = "sha256:a3a24428f6c96f27370d7fe61d2ac0be09017be5190d68d8658233171f1b6541"},
-]
-
-[package.dependencies]
-uc-micro-py = "*"
-
-[package.extras]
-benchmark = ["pytest", "pytest-benchmark"]
-dev = ["black", "flake8", "isort", "pre-commit", "pyproject-flake8"]
-doc = ["myst-parser", "sphinx", "sphinx-book-theme"]
-test = ["coverage", "pytest", "pytest-cov"]
-
-[[package]]
 name = "markdown-it-py"
 version = "3.0.0"
 description = "Python port of markdown-it. Markdown parsing, done right!"
@@ -689,8 +669,6 @@ files = [
 ]
 
 [package.dependencies]
-linkify-it-py = {version = ">=1,<3", optional = true, markers = "extra == \"linkify\""}
-mdit-py-plugins = {version = "*", optional = true, markers = "extra == \"plugins\""}
 mdurl = ">=0.1,<1.0"
 
 [package.extras]
@@ -713,25 +691,6 @@ files = [
     {file = "mccabe-0.7.0-py2.py3-none-any.whl", hash = "sha256:6c2d30ab6be0e4a46919781807b4f0d834ebdd6c6e3dca0bda5a15f863427b6e"},
     {file = "mccabe-0.7.0.tar.gz", hash = "sha256:348e0240c33b60bbdf4e523192ef919f28cb2c3d7d5c7794f74009290f236325"},
 ]
-
-[[package]]
-name = "mdit-py-plugins"
-version = "0.4.0"
-description = "Collection of plugins for markdown-it-py"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "mdit_py_plugins-0.4.0-py3-none-any.whl", hash = "sha256:b51b3bb70691f57f974e257e367107857a93b36f322a9e6d44ca5bf28ec2def9"},
-    {file = "mdit_py_plugins-0.4.0.tar.gz", hash = "sha256:d8ab27e9aed6c38aa716819fedfde15ca275715955f8a185a8e1cf90fb1d2c1b"},
-]
-
-[package.dependencies]
-markdown-it-py = ">=1.0.0,<4.0.0"
-
-[package.extras]
-code-style = ["pre-commit"]
-rtd = ["myst-parser", "sphinx-book-theme"]
-testing = ["coverage", "pytest", "pytest-cov", "pytest-regressions"]
 
 [[package]]
 name = "mdurl"
@@ -882,6 +841,16 @@ python-versions = ">=3.5"
 files = [
     {file = "mypy_extensions-1.0.0-py3-none-any.whl", hash = "sha256:4392f6c0eb8a5668a69e23d168ffa70f0be9ccfd32b5cc2d26a34ae5b844552d"},
     {file = "mypy_extensions-1.0.0.tar.gz", hash = "sha256:75dbf8955dc00442a438fc4d0666508a9a97b6bd41aa2f0ffe9d2f2725af0782"},
+]
+
+[[package]]
+name = "npyscreen"
+version = "4.10.5"
+description = "Writing user interfaces without all that ugly mucking about in hyperspace"
+optional = false
+python-versions = "*"
+files = [
+    {file = "npyscreen-4.10.5.tar.gz", hash = "sha256:622ee0f9a5dae946e635b7c6e0f6d65e1ed3c9ea0d20b89dab7f58d580e5126e"},
 ]
 
 [[package]]
@@ -1431,23 +1400,6 @@ pygments = ">=2.13.0,<3.0.0"
 jupyter = ["ipywidgets (>=7.5.1,<9)"]
 
 [[package]]
-name = "textual"
-version = "0.30.0"
-description = "Modern Text User Interface framework"
-optional = false
-python-versions = ">=3.7,<4.0"
-files = [
-    {file = "textual-0.30.0-py3-none-any.whl", hash = "sha256:e87d587e4569236f3809d41955ed9556287dbedaca64724e1d6ad5adbb69c9c5"},
-    {file = "textual-0.30.0.tar.gz", hash = "sha256:bf7045a7e9b7dc3ac589c38ce86ac31aecf0e76e8c8ce09aee474316bc2e2c03"},
-]
-
-[package.dependencies]
-importlib-metadata = ">=4.11.3"
-markdown-it-py = {version = ">=2.1.0", extras = ["linkify", "plugins"]}
-rich = ">=13.3.3"
-typing-extensions = ">=4.4.0,<5.0.0"
-
-[[package]]
 name = "toml"
 version = "0.10.2"
 description = "Python Library for Tom's Obvious, Minimal Language"
@@ -1512,6 +1464,17 @@ files = [
 ]
 
 [[package]]
+name = "types-tqdm"
+version = "4.65.0.2"
+description = "Typing stubs for tqdm"
+optional = false
+python-versions = "*"
+files = [
+    {file = "types-tqdm-4.65.0.2.tar.gz", hash = "sha256:ad07ee08e758cad04299543b2586ef1d3fd5a10c54271457de13e0cba009cc5d"},
+    {file = "types_tqdm-4.65.0.2-py3-none-any.whl", hash = "sha256:956d92e921651309ffe36a783cc10d41d753f107c84e82d84373c84d68737246"},
+]
+
+[[package]]
 name = "typing-extensions"
 version = "4.7.1"
 description = "Backported and Experimental Type Hints for Python 3.7+"
@@ -1521,20 +1484,6 @@ files = [
     {file = "typing_extensions-4.7.1-py3-none-any.whl", hash = "sha256:440d5dd3af93b060174bf433bccd69b0babc3b15b1a8dca43789fd7f61514b36"},
     {file = "typing_extensions-4.7.1.tar.gz", hash = "sha256:b75ddc264f0ba5615db7ba217daeb99701ad295353c45f9e95963337ceeeffb2"},
 ]
-
-[[package]]
-name = "uc-micro-py"
-version = "1.0.2"
-description = "Micro subset of unicode data files for linkify-it-py projects."
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "uc-micro-py-1.0.2.tar.gz", hash = "sha256:30ae2ac9c49f39ac6dce743bd187fcd2b574b16ca095fa74cd9396795c954c54"},
-    {file = "uc_micro_py-1.0.2-py3-none-any.whl", hash = "sha256:8c9110c309db9d9e87302e2f4ad2c3152770930d88ab385cd544e7a7e75f3de0"},
-]
-
-[package.extras]
-test = ["coverage", "pytest", "pytest-cov"]
 
 [[package]]
 name = "urllib3"
@@ -1758,4 +1707,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<4"
-content-hash = "faa2f04dcfa4b8bdbe20f281191339c0dfc6921bd9361f328a2727d92c82617f"
+content-hash = "e7e2944724b0be11351fe37fcc769ec86f7aed8dcceb96a4a1bdb5e47e8bd7ec"
