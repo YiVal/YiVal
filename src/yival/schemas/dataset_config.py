@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, Optional
 
 from .reader_configs import BaseReaderConfig
 
@@ -39,7 +39,7 @@ class DatasetConfig:
     reader: Optional[str] = None
     reader_config: Optional[BaseReaderConfig] = None
     output_path: Optional[str] = None
-    data_generators: Union[List[str], None] = None
+    data_generators: Optional[Dict[str, str]] = None
 
     def asdict(self) -> Dict[str, Any]:
         return {
