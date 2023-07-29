@@ -163,6 +163,7 @@ class ExperimentConfig:
     - output_parser (Optional[str]): Class name of the std output parser to use.
     - metadata (Dict[str, Any]): Additional metadata related to the experiment.
     - custom_reader (Dict[str, Dict[str, Any]]): Custom reader and configurations.
+    - custom_data_generator (Dict[str, Dict[str, Any]]): Custom data generator and configurations.
     - custom_wrappers (Dict[str, Dict[str, Any]]): Custom wrapper and configurations.
     - custom_evaluators (Dict[str, Dict[str, Any]]): Custom evaluator and configurations.
     """
@@ -184,6 +185,7 @@ class ExperimentConfig:
     output_parser: Optional[str] = None
     metadata: Optional[Dict[str, Any]] = None
     custom_reader: Optional[Dict[str, Dict[str, Any]]] = None
+    custom_data_generator: Optional[Dict[str, Dict[str, Any]]] = None
     custom_wrappers: Optional[Dict[str, Dict[str, Any]]] = None
     custom_evaluators: Optional[Dict[str, Dict[str, Any]]] = None
 
