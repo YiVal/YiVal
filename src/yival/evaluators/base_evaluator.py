@@ -2,7 +2,7 @@ from abc import ABC
 from typing import Any, Dict, List, Optional, Type, TypeVar
 
 from ..schemas.evaluator_config import BaseEvaluatorConfig, EvaluatorOutput
-from ..schemas.experiment_config import ExperimentResult
+from ..schemas.experiment_config import Experiment, ExperimentResult
 
 T_Evaluator = TypeVar("T_Evaluator", bound="BaseEvaluator")
 
@@ -96,7 +96,7 @@ class BaseEvaluator(ABC):
 
     def evaluate_comparison(
         self, group_data: List[ExperimentResult]
-    ) -> List[EvaluatorOutput]:
+    ) -> EvaluatorOutput:
         """
         Evaluate and compare a list of experiment results.
         
@@ -107,11 +107,15 @@ class BaseEvaluator(ABC):
         Args:
             group_data (List[ExperimentResult]): A list of experiment results to be evaluated together.
 
-        Returns:
-            List[EvaluatorOutput]: A list of evaluation outputs, each corresponding to an input experiment result.
-
+        EvaluatorOutput: The result of the evaluation.
+        
         Note:
             Implementations of this method in subclasses should handle the specifics 
             of how multiple experiments are evaluated and compared.
         """
-        return []
+        return EvaluatorOutput("evaluate", "evaluate")
+
+    def evaluate_based_on_all_results(
+        self, experiment: List[Experiment]
+    ) -> None:
+        pass

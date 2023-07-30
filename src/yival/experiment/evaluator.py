@@ -7,7 +7,7 @@ from ..schemas.evaluator_config import (
     EvaluatorOutput,
     EvaluatorType,
 )
-from ..schemas.experiment_config import ExperimentResult
+from ..schemas.experiment_config import Experiment, ExperimentResult
 
 
 class Evaluator:
@@ -49,3 +49,8 @@ class Evaluator:
         self, results: List[ExperimentResult]
     ) -> List[EvaluatorOutput]:
         return []
+
+    def evaluate_based_on_all_results(
+        self, experimnet: List[Experiment]
+    ) -> None:
+        pass

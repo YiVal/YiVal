@@ -38,6 +38,7 @@ class MatchingTechnique(Enum):
 class EvaluatorType(Enum):
     INDIVIDUAL = "individual"
     COMPARISON = "comparison"
+    ALL = "all"
 
     def __str__(self):
         return self.value
@@ -85,8 +86,25 @@ class ComparisonEvaluatorConfig(BaseEvaluatorConfig):
 
 
 @dataclass
+class GlobalEvaluatorConfig(BaseEvaluatorConfig):
+    """
+    Configuration for evaluators that compare based on all outputs.
+    """
+    metric_calculators: List[MetricCalculatorConfig] = field(
+        default_factory=list
+    )
+    evaluator_type = EvaluatorType.ALL
+
+
+@dataclass
 class ExpectedResultEvaluatorConfig(EvaluatorConfig):
     matching_technique: MatchingTechnique = MatchingTechnique.MATCH
+
+
+@dataclass
+class OpenAIEloEvaluatorConfig(GlobalEvaluatorConfig):
+    openai_model_name: str = "gpt-4"
+    input_description: str = "This is a description."
 
 
 @dataclass
