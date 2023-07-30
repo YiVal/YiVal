@@ -14,6 +14,7 @@ from .evaluator_config import (
     EvaluatorConfig,
     EvaluatorOutput,
 )
+from .varation_generator_configs import BaseVariationGeneratorConfig
 from .wrapper_configs import BaseWrapperConfig
 
 # Registry for supported custom classes
@@ -61,18 +62,24 @@ class WrapperConfig():
     """
     Configuration for each individual wrapper used in the experiment.
 
-    Attributes:
-    - name (str): Name of the wrapper.
-    - variations (List[WrapperVariation]): Variations for this wrapper.
     """
 
     name: str
-    variations: List[WrapperVariation]
+    variations: Optional[List[WrapperVariation]] = None
+    generator_name: Optional[str] = None
+    generator_config: Optional[BaseVariationGeneratorConfig] = None
 
     def asdict(self) -> Dict[str, Any]:
         return {
-            "name": self.name,
-            "variations": [var.asdict() for var in self.variations]
+            "name":
+            self.name,
+            "variations":
+            [var.asdict()
+             for var in self.variations] if self.variations else None,
+            "generator_name":
+            self.generator_name,
+            "generator_config":
+            self.generator_config.asdict() if self.generator_config else None
         }
 
 
@@ -345,18 +352,25 @@ class CombinationAggregatedMetrics:
     aggregated_metrics: Dict[str, List[Metric]]
     average_token_usage: Optional[float] = None
     average_latency: Optional[float] = None
+    evaluator_outputs: Optional[List[EvaluatorOutput]] = None
 
     def asdict(self) -> Dict[str, Any]:
         return {
-            "combo_key": self.combo_key,
+            "combo_key":
+            self.combo_key,
             "experiment_results":
             [er.asdict() for er in self.experiment_results],
             "aggregated_metrics": {
                 k: [m.asdict() for m in v]
                 for k, v in self.aggregated_metrics.items()
             },
-            "average_token_usage": self.average_token_usage,
-            "average_latency": self.average_latency
+            "average_token_usage":
+            self.average_token_usage,
+            "average_latency":
+            self.average_latency,
+            "evaluator_outputs":
+            [eo.asdict() for eo in self.evaluator_outputs]
+            if self.evaluator_outputs else None
         }
 
 

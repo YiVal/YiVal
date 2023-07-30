@@ -237,7 +237,9 @@ def generate_experiment(
             cobo_aggregated_metric.experiment_results
         )
 
-    return Experiment(
+    experiment = Experiment(
         group_experiment_results=grouped_experiment_results,
         combination_aggregated_metrics=cobo_aggregated_metrics
     )
+    evaluator.evaluate_based_on_all_results([experiment])
+    return experiment
