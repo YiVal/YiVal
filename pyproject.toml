@@ -27,6 +27,7 @@ tqdm = "^4.65.0"
 rich = "^13.4.2"
 types-tqdm = "^4.65.0.2"
 npyscreen = "^4.10.5"
+numpy = "^1.25.1"
 
 
 [tool.poetry.group.test.dependencies]
