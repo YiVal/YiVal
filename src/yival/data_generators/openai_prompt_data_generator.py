@@ -59,7 +59,16 @@ def extract_dict_from_gpt_output(output):
 
 class OpenAIPromptDataGenerator(BaseDataGenerator):
     config: OpenAIPromptBasedGeneratorConfig
-    default_config: OpenAIPromptBasedGeneratorConfig
+    default_config: OpenAIPromptBasedGeneratorConfig = OpenAIPromptBasedGeneratorConfig(
+        input_function={
+            "name": "headline_generation_for_business",
+            "description":
+            "Given an tech startup business, generate corresponding landing page headlines",
+            "parameters": {
+                "tech_startup_business": "str"
+            }
+        }
+    )
 
     def __init__(self, config: OpenAIPromptBasedGeneratorConfig):
         super().__init__(config)

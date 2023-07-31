@@ -12,6 +12,7 @@ from .evaluator import Evaluator
 from .user_input import ExperimentInputApp
 from .utils import (
     generate_experiment,
+    register_custom_data_generator,
     register_custom_evaluators,
     register_custom_readers,
     register_custom_wrappers,
@@ -32,7 +33,12 @@ class ExperimentRunner:
         register_custom_evaluators(
             self.config.get("custom_evaluators", {})  # type: ignore
         )
-        evaluator = Evaluator(self.config["evaluators"])  # type: ignore
+        register_custom_data_generator(
+            self.config.get("custom_data_generators", {})  # type: ignore
+        )
+        evaluator = Evaluator(
+            self.config.get("evaluators", [])  # type: ignore
+        )
 
         logger = TokenLogger()
         # TODO support multi processing in the future
@@ -41,7 +47,10 @@ class ExperimentRunner:
         state.active = True
         all_combinations = state.get_all_variation_combinations(
         )  # type: ignore
-        if self.config["dataset"]["source_type"] == "dataset":  # type: ignore
+        if self.config["dataset"][  # type: ignore
+            "source_type"
+        ] == "dataset" or self.config[  # type: ignore
+            "dataset"]["source_type"] == "machine_generated":  # type: ignore
             register_custom_readers(
                 self.config.get("custom_readers", {})  # type: ignore
             )

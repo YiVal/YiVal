@@ -4,6 +4,7 @@ from typing import Any, Dict, List, Optional, Type
 import yaml
 
 from ..data.base_reader import BaseReader
+from ..data_generators.base_data_generator import BaseDataGenerator
 from ..evaluators.base_evaluator import BaseEvaluator
 from ..schemas.experiment_config import WrapperConfig
 from ..wrappers.base_wrapper import BaseWrapper
@@ -28,10 +29,12 @@ def generate_experiment_config_yaml(
     evaluator_names: Optional[List[str]] = None,
     reader_name: Optional[str] = None,
     wrapper_names: Optional[List[str]] = None,
+    data_generator_names: Optional[List[str]] = None,
     wrapper_configs: Optional[List[WrapperConfig]] = None,
     custom_reader: Optional[Dict[str, Dict[str, Any]]] = None,
     custom_wrappers: Optional[Dict[str, Dict[str, Any]]] = None,
-    custom_evaluators: Optional[Dict[str, Dict[str, Any]]] = None
+    custom_evaluators: Optional[Dict[str, Dict[str, Any]]] = None,
+    custom_data_generators: Optional[Dict[str, Dict[str, Any]]] = None
 ) -> str:
 
     def get_default_config(
@@ -48,13 +51,24 @@ def generate_experiment_config_yaml(
     }
     if source_type == "dataset":
         dataset_section["file_path"] = "/path/to/file_path"
-    if reader_name:
+    if reader_name and source_type == "dataset":
         dataset_section["reader"] = reader_name
         reader_cls = BaseReader.get_reader(reader_name)
         if reader_cls:
             default_config = get_default_config(reader_cls)
             if default_config:
                 dataset_section["reader_config"] = default_config
+    if data_generator_names and source_type == "machine_generated":
+        data_generators_section = {}
+        for name in data_generator_names:
+            data_generator_cls = BaseDataGenerator.get_data_generator(name)
+            if data_generator_cls:
+                default_config = get_default_config(data_generator_cls)
+                if default_config:
+                    data_generators_section[name] = default_config
+        if data_generators_section:
+            dataset_section["data_generators"] = data_generators_section
+
     experiment_config: Dict[Any, Any] = {
         "description": "Generated experiment config",
         "dataset": dataset_section,

@@ -4,6 +4,9 @@ from mimetypes import inited
 from yival.wrappers.string_wrapper import StringWrapper
 
 from ..data.csv_reader import CSVReader
+from ..data_generators.openai_prompt_data_generator import (
+    OpenAIPromptBasedGeneratorConfig,
+)
 from ..evaluators.string_expected_result_evaluator import (
     StringExpectedResultEvaluator,
 )
@@ -15,6 +18,7 @@ def _prevent_unused_imports():
     _ = StringWrapper
     _ = StringExpectedResultEvaluator
     _ = CSVReader
+    _ = OpenAIPromptBasedGeneratorConfig
 
 
 def variation_type(arg: str):
@@ -49,7 +53,7 @@ def add_arguments_to(subparser):
         "--source_type",
         type=str,
         default="dataset",
-        choices=["dataset", "user"],
+        choices=["dataset", "user", "machine_generated"],
         help=
         "Type of source for the experiment. Choices are ['DATASET', 'USER']."
     )
@@ -69,6 +73,12 @@ def add_arguments_to(subparser):
         type=str,
         help=
         "Function that will be used to run the experiment, module_name.function_name."
+    )
+    parser.add_argument(
+        "--data_genertaor_names",
+        type=str,
+        nargs='+',
+        help="Names of data generators to include in the config."
     )
     parser.add_argument(
         "--wrapper_names",
@@ -102,6 +112,13 @@ def add_arguments_to(subparser):
         help=
         "Specify custom evaluators in 'name:class_path:config_cls_path' format."
     )
+    parser.add_argument(
+        "--custom_data_generators",
+        type=str,
+        nargs='+',
+        help=
+        "Specify custom data generators in 'name:class_path:config_cls_path' format."
+    )
 
 
 def init(args: Namespace):
@@ -111,7 +128,7 @@ def init(args: Namespace):
         WrapperConfig(
             name=list(wc_dict.keys())[0], variations=list(wc_dict.values())[0]
         ) for wc_dict in args.variations
-    ]
+    ] if args.variations else []
     custom_reader = {}
     if args.custom_reader:
         reader_name, reader_class_path, reader_config_cls_path = args.custom_reader.split(
@@ -141,6 +158,16 @@ def init(args: Namespace):
                 "class_path": evaluator_class_path,
                 "config_path": evaluator_config_cls_path
             }
+    custom_data_generators = {}
+    if args.custom_data_generators:
+        for custom_data_generator in args.custom_data_generators:
+            data_generator_name, data_generator_class_path, data_generator_config_cls_path = custom_data_generator(
+                ":"
+            )
+            custom_data_generators[data_generator_name] = {
+                "class_path": data_generator_class_path,
+                "config_path": data_generator_config_cls_path
+            }
 
     # Generate the configuration template dynamically
     yaml_template = generate_experiment_config_yaml(
@@ -149,10 +176,12 @@ def init(args: Namespace):
         evaluator_names=args.evaluator_names,
         reader_name=args.reader_name,
         wrapper_names=args.wrapper_names,
+        data_generator_names=args.data_genertaor_names,
         wrapper_configs=wrapper_config_objects,
         custom_reader=custom_reader,
         custom_wrappers=custom_wrappers,
-        custom_evaluators=custom_evaluators
+        custom_evaluators=custom_evaluators,
+        custom_data_generators=custom_data_generators
     )
 
     # Save the generated template to the specified config path
