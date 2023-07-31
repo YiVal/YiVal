@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Dict, Optional
 
+from .data_generator_configs import BaseDataGeneratorConfig
 from .reader_configs import BaseReaderConfig
 
 
@@ -30,7 +31,7 @@ class DatasetConfig:
     - reader_config (Union[BaseReaderConfig, None]): Configuration for the reader.
     - output_path (Union[str, None]): Path to store the machine-generated data. Relevant
       only if source_type is MACHINE_GENERATED.
-    - data_generators (Union[List[str], None]): List of data_generators to generate data.
+    - data_generators (Optional[Dict[str, BaseDataGeneratorConfig]]): List of data_generators to generate data.
       Relevant only if source_type is MACHINE_GENERATED.
     """
 
@@ -39,7 +40,7 @@ class DatasetConfig:
     reader: Optional[str] = None
     reader_config: Optional[BaseReaderConfig] = None
     output_path: Optional[str] = None
-    data_generators: Optional[Dict[str, str]] = None
+    data_generators: Optional[Dict[str, BaseDataGeneratorConfig]] = None
 
     def asdict(self) -> Dict[str, Any]:
         return {
@@ -53,6 +54,8 @@ class DatasetConfig:
             self.reader_config.asdict() if self.reader_config else None,
             "output_path":
             self.output_path,
-            "data_generators":
-            self.data_generators
+            "data_generators": {
+                k: v.asdict()
+                for k, v in self.data_generators.items()
+            } if self.data_generators else None
         }

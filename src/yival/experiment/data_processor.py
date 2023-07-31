@@ -1,7 +1,9 @@
 from typing import Any, Iterator, List
 
 from ..data.base_reader import BaseReader
+from ..data_generators.base_data_generator import BaseDataGenerator
 from ..schemas.common_structures import InputData
+from ..schemas.data_generator_configs import BaseDataGeneratorConfig
 from ..schemas.dataset_config import DatasetConfig, DatasetSourceType
 from ..schemas.reader_configs import BaseReaderConfig
 
@@ -65,5 +67,30 @@ class DataProcessor:
         """
         Processes machine-generated data.
         """
+        if self.config.data_generators:
+            for data_generator, data_generator_config in self.config.data_generators.items(
+            ):
+                data_generator_cls = BaseDataGenerator.get_data_generator(
+                    data_generator
+                )
+                if data_generator_cls:
+                    config_cls = BaseDataGenerator.get_config_class(
+                        data_generator
+                    )
+                    if config_cls:
+                        if isinstance(data_generator_config, dict):
+                            config_data = data_generator_config
+                        else:
+                            config_data = data_generator_config.asdict()
+                        config_instance = config_cls(**config_data)
+                        data_generator_instance = data_generator_cls(
+                            config_instance
+                        )
+                        return data_generator_instance.generate_examples()
+                    else:
+                        data_generator_instance = data_generator_cls(
+                            BaseDataGeneratorConfig()
+                        )
+
         # Implement logic for processing machine-generated data
         return iter([])

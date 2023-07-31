@@ -192,7 +192,7 @@ class ExperimentConfig:
     output_parser: Optional[str] = None
     metadata: Optional[Dict[str, Any]] = None
     custom_reader: Optional[Dict[str, Dict[str, Any]]] = None
-    custom_data_generator: Optional[Dict[str, Dict[str, Any]]] = None
+    custom_data_generators: Optional[Dict[str, Dict[str, Any]]] = None
     custom_wrappers: Optional[Dict[str, Dict[str, Any]]] = None
     custom_evaluators: Optional[Dict[str, Dict[str, Any]]] = None
 
