@@ -21,7 +21,8 @@ Lastly, keep your output crisp: only the prompt, devoid of any extraneous conten
 
 class OpenAIPromptBasedVariationGenerator(BaseVariationGenerator):
     config: OpenAIPromptBasedVariationGeneratorConfig
-    default_config: OpenAIPromptBasedVariationGeneratorConfig
+    default_config: OpenAIPromptBasedVariationGeneratorConfig = OpenAIPromptBasedVariationGeneratorConfig(
+    )
 
     def __init__(self, config: OpenAIPromptBasedVariationGeneratorConfig):
         super().__init__(config)

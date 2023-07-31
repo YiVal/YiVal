@@ -7,6 +7,9 @@ from ..data.base_reader import BaseReader
 from ..data_generators.base_data_generator import BaseDataGenerator
 from ..evaluators.base_evaluator import BaseEvaluator
 from ..schemas.experiment_config import WrapperConfig
+from ..variation_generators.base_variation_generator import (
+    BaseVariationGenerator,
+)
 from ..wrappers.base_wrapper import BaseWrapper
 
 
@@ -34,7 +37,8 @@ def generate_experiment_config_yaml(
     custom_reader: Optional[Dict[str, Dict[str, Any]]] = None,
     custom_wrappers: Optional[Dict[str, Dict[str, Any]]] = None,
     custom_evaluators: Optional[Dict[str, Dict[str, Any]]] = None,
-    custom_data_generators: Optional[Dict[str, Dict[str, Any]]] = None
+    custom_data_generators: Optional[Dict[str, Dict[str, Any]]] = None,
+    custom_variation_generators: Optional[Dict[str, Dict[str, Any]]] = None
 ) -> str:
 
     def get_default_config(
@@ -83,6 +87,13 @@ def generate_experiment_config_yaml(
     if custom_evaluators:
         experiment_config["custom_evaluators"] = custom_evaluators
 
+    if custom_data_generators:
+        experiment_config["custom_data_generators"] = custom_data_generators
+
+    if custom_variation_generators:
+        experiment_config["custom_variation_generators"
+                          ] = custom_variation_generators
+
     evaluators_section = []
     if evaluator_names:
         for name in evaluator_names:
@@ -119,30 +130,50 @@ def generate_experiment_config_yaml(
         yaml_string += "\n# wrapper_configs: {}\n"
 
     variations_section = """
-# Variations allow for dynamic content during experiments.
-# They are identified by a globally unique name. For example, in your code,
-# you might reference a variation by its name, like:
-# variation = StringWrapper("hello", 'test_experiment')
-# In this config, you would define the variations associated with that name, e.g.
-"""
+    # Variations allow for dynamic content during experiments.
+    # They are identified by a globally unique name. For example, in your code,
+    # you might reference a variation by its name, like:
+    # variation = StringWrapper("hello", 'test_experiment')
+    # In this config, you would define the variations associated with that name.
+    """
+
     if wrapper_configs:
         variations_list = []
         for wrapper_config in wrapper_configs:
             wrapper_dict = wrapper_config.asdict()
+            # Check if there's a generator config, and if so, convert it to dict as well
+            if wrapper_config.generator_name:
+                wrapper_generator_cls = BaseVariationGenerator.get_variation_generator(
+                    wrapper_config.generator_name
+                )
+                if wrapper_generator_cls:
+                    default_config = get_default_config(wrapper_generator_cls)
+                    if default_config:
+                        wrapper_dict["generator_config"] = default_config
             variations_list.append(wrapper_dict)
-
-        variations_section += yaml.safe_dump({"variations": variations_list},
-                                             default_flow_style=False,
-                                             allow_unicode=True)
+        yaml_string += "\nvariations:\n"
+        yaml_string += yaml.safe_dump(
+            variations_list,
+            default_flow_style=False,
+            allow_unicode=True,
+            indent=2
+        )
+        # variations_section += yaml.safe_dump({"variations": variations_list},
+        #                                     default_flow_style=False,
+        #                                     allow_unicode=True)
     else:
         variations_section += """
-# variations:
-#   - name: wrapper_name
-#     variations:
-#       - value_type: str
-#         value: "example_variation"
-#         instantiated_value: "example_variation"
-"""
+    # variations:
+    #   - name: wrapper_name
+    #     variations:
+    #       - value_type: str
+    #         value: "example_variation"
+    #         instantiated_value: "example_variation"
+    #     generator_name: example_generator_name
+    #     generator_config:
+    #       number_of_variations: 5
+    #       output_path: /path/to/output
+    """
 
     yaml_string += variations_section
     yaml_string = "# This is a generated template. Modify the values as needed.\n\n" + yaml_string

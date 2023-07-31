@@ -134,6 +134,29 @@ def register_custom_data_generator(
     _ = OpenAIPromptDataGenerator
 
 
+def register_variation_generator(
+    custom_data_generators: Dict[str, Dict[str, Any]]
+):
+    for name, details in custom_data_generators.items():
+        data_generator_cls_path = details["class"]
+        module_name, class_name = data_generator_cls_path.rsplit(".", 1)
+        data_generator_cls = getattr(import_module(module_name), class_name)
+
+        config_cls = None
+        if "config_cls" in details:
+            config_cls_path = details["config_cls"]
+            module_name, class_name = config_cls_path.rsplit(".", 1)
+            config_cls = getattr(import_module(module_name), class_name)
+
+        BaseDataGenerator.register_data_generator(
+            name, data_generator_cls, config_cls
+        )
+    from ..data_generators.openai_prompt_data_generator import (
+        OpenAIPromptDataGenerator,
+    )
+    _ = OpenAIPromptDataGenerator
+
+
 def calculate_metrics(
     results: List[ExperimentResult]
 ) -> Dict[str, List[Metric]]:

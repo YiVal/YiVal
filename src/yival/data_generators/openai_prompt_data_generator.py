@@ -122,7 +122,6 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
             if len(chunk) >= self.config.chunk_size:
                 yield chunk
                 chunk = []
-
         if self.config.output_path:
             with open(self.config.output_path, 'wb') as file:
                 pickle.dump(all_data, file)
