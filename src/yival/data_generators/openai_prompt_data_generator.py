@@ -63,7 +63,7 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
         input_function={
             "name": "headline_generation_for_business",
             "description":
-            "Given an tech startup business, generate corresponding landing page headlines",
+            "Given an tech startup business, generate a corresponding landing page headline",
             "parameters": {
                 "tech_startup_business": "str"
             }

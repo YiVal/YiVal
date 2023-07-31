@@ -8,6 +8,7 @@ from typing import Any, Dict, List
 from ..data.base_reader import BaseReader
 from ..data_generators.base_data_generator import BaseDataGenerator
 from ..evaluators.base_evaluator import BaseEvaluator
+from ..evaluators.openai_elo_evaluator import OpenAIEloEvaluator
 from ..logger.token_logger import TokenLogger
 from ..schemas.evaluator_config import MethodCalculationMethod
 from ..schemas.experiment_config import (
@@ -92,6 +93,7 @@ def register_custom_evaluators(custom_evaulators: Dict[str, Dict[str, Any]]):
         StringExpectedResultEvaluator,
     )
     _ = StringExpectedResultEvaluator
+    _ = OpenAIEloEvaluator
 
 
 def register_custom_wrappers(custom_wrappers: Dict[str, Dict[str, Any]]):
@@ -288,5 +290,6 @@ def generate_experiment(
         group_experiment_results=grouped_experiment_results,
         combination_aggregated_metrics=cobo_aggregated_metrics
     )
-    evaluator.evaluate_based_on_all_results([experiment])
+    er = [experiment]
+    evaluator.evaluate_based_on_all_results(er)
     return experiment

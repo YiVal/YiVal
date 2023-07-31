@@ -51,6 +51,7 @@ class ExperimentRunner:
             "source_type"
         ] == "dataset" or self.config[  # type: ignore
             "dataset"]["source_type"] == "machine_generated":  # type: ignore
+
             register_custom_readers(
                 self.config.get("custom_readers", {})  # type: ignore
             )
@@ -73,6 +74,7 @@ class ExperimentRunner:
                         results.extend(res)
                         pbar.update(len(res))
             experiment = generate_experiment(results, evaluator)
+
             if display:
                 display_results(experiment)
 
