@@ -53,4 +53,27 @@ class Evaluator:
     def evaluate_based_on_all_results(
         self, experimnet: List[Experiment]
     ) -> None:
-        pass
+
+        for config in self.configs:
+            config_dict = config.asdict(
+            ) if not isinstance(config, dict) else config
+            if config_dict["evaluator_type"] == EvaluatorType.ALL.value:
+
+                evaluator_cls = BaseEvaluator.get_evaluator(
+                    config_dict["name"]
+                )
+
+                if evaluator_cls:
+                    config_cls = BaseEvaluator.get_config_class(
+                        config_dict["name"]
+                    )
+                    if config_cls:
+                        if isinstance(config_dict, dict):
+                            config_data = config_dict
+                        else:
+                            config_data = config_dict.asdict()
+
+                        config_instance = config_cls(**config_data)
+                        evaluator = evaluator_cls(config_instance)
+
+                        evaluator.evaluate_based_on_all_results(experimnet)

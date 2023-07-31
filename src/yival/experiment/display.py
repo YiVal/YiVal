@@ -1,4 +1,5 @@
 import random
+import textwrap
 
 import npyscreen  # type: ignore
 
@@ -111,7 +112,7 @@ class GroupExperimentResultsForm(npyscreen.ActionForm):
 class CombinationAggregatedMetricsForm(npyscreen.ActionForm):
 
     def create(self):
-        terminal_height, _ = self._max_physical()
+        terminal_height, terminal_width = self._max_physical()
         result_display_height = max(5, terminal_height - 10)
         self.nextrely += 1
         self.results_display = self.add(
@@ -130,11 +131,18 @@ class CombinationAggregatedMetricsForm(npyscreen.ActionForm):
         # Populate results_display with metrics from all combos
         metrics_text = ""
         for combo_metrics in self.parentApp.experiment_data.combination_aggregated_metrics:
-            metrics_text += f"\n\n=========================== Combo Key: {combo_metrics.combo_key} ===========================sn\n"
+            wrapped_combo_key = "\n".join(
+                textwrap.wrap(str(combo_metrics.combo_key), terminal_width)
+            )
+            metrics_text += f"\n\n=========================== Combo Key: {wrapped_combo_key} ===========================sn\n"
             for key, metrics in combo_metrics.aggregated_metrics.items():
                 metrics_text += f"{key}: {', '.join([str(m) for m in metrics])}\n"
             metrics_text += f"Average Token Usage: {combo_metrics.average_token_usage}\n"
             metrics_text += f"Average Latency: {combo_metrics.average_latency}\n"
+            if combo_metrics.evaluator_outputs:
+                metrics_text += "Evaluator Outputs:\n"
+                for eval_output in combo_metrics.evaluator_outputs:
+                    metrics_text += f" - {eval_output.name}: {eval_output.result}\n"
         self.results_display.value = metrics_text
 
     def switch_to_groups(self):

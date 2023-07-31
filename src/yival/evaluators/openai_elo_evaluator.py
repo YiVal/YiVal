@@ -1,7 +1,10 @@
 import itertools
+import re
+from math import comb
 from typing import Dict, List, Tuple
 
 import openai
+from tqdm import tqdm
 
 from ..schemas.evaluator_config import EvaluatorType, OpenAIEloEvaluatorConfig
 from ..schemas.experiment_config import (
@@ -45,7 +48,6 @@ class OpenAIEloEvaluator(BaseEvaluator):
     def get_score(
         self, test_case, result1: ExperimentResult, result2: ExperimentResult
     ) -> float:
-
         score = openai.ChatCompletion.create(
             model=self.config.openai_model_name,
             messages=[{
@@ -79,12 +81,27 @@ class OpenAIEloEvaluator(BaseEvaluator):
             combo.combo_key: 1200
             for combo in experimnet[0].combination_aggregated_metrics
         }
+        total_rounds = sum(
+            comb(len(group_experiment_result.experiment_results), 2) for
+            group_experiment_result in experimnet[0].group_experiment_results
+        )
+
+        pbar = tqdm(total=total_rounds, ncols=70)
 
         for group_experiment_result in experimnet[0].group_experiment_results:
             test_case = group_experiment_result.group_key
+            pattern = r'content:\s*(\{.*?\})(?:,|$)'
+            match = re.search(pattern, test_case)
+
+            if match:
+                test_case = match.group(1)
+            else:
+                test_case = ""
+
             for result1, result2 in itertools.combinations(
                 group_experiment_result.experiment_results, 2
             ):
+                pbar.update()
                 formatted_combination1 = str(result1.combination)
                 formatted_combination2 = str(result2.combination)
 
@@ -101,7 +118,7 @@ class OpenAIEloEvaluator(BaseEvaluator):
                 r1, r2 = self.update_elo(r1, r2, score)
                 prompt_ratings[formatted_combination1], prompt_ratings[
                     formatted_combination2] = r1, r2
-
+        pbar.close()
         for index, combo in enumerate(
             experimnet[0].combination_aggregated_metrics
         ):

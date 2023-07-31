@@ -6,7 +6,7 @@ from yival.logger.token_logger import TokenLogger
 from yival.wrappers.string_wrapper import StringWrapper
 
 
-def headline_generation_for_business(tech_startup_business: str) -> str:
+def headline_generation(tech_startup_business: str) -> str:
     logger = TokenLogger()
     logger.reset()
     # Ensure you have your OpenAI API key set up
@@ -20,8 +20,11 @@ def headline_generation_for_business(tech_startup_business: str) -> str:
         "role":
         "user",
         "content":
-        str(StringWrapper("Generate landing page headline for", name="task")) +
-        f'{tech_startup_business}'
+        str(
+            StringWrapper(
+                "Generate landing one page headline for", name="task"
+            )
+        ) + f'{tech_startup_business}'
     }]
     # Use the chat-based completion
     response = openai.ChatCompletion.create(

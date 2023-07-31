@@ -7,6 +7,7 @@ from ..data.csv_reader import CSVReader
 from ..data_generators.openai_prompt_data_generator import (
     OpenAIPromptBasedGeneratorConfig,
 )
+from ..evaluators.openai_elo_evaluator import OpenAIEloEvaluator
 from ..evaluators.string_expected_result_evaluator import (
     StringExpectedResultEvaluator,
 )
@@ -23,6 +24,7 @@ def _prevent_unused_imports():
     _ = CSVReader
     _ = OpenAIPromptBasedGeneratorConfig
     _ = OpenAIPromptBasedVariationGenerator
+    _ = OpenAIEloEvaluator
 
 
 def variation_type(arg: str):
