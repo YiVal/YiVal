@@ -92,8 +92,9 @@ class ExperimentState:
                         if config_cls:
                             if "generator_config" in wrapper_config:  # type: ignore
                                 if isinstance(
-                                    wrapper_config["generator_config"],
-                                    dict  # type: ignore
+                                    wrapper_config["generator_config"
+                                                   ],  # type: ignore
+                                    dict
                                 ):
                                     config_data = wrapper_config[  # type: ignore
                                         "generator_config"]
@@ -113,8 +114,8 @@ class ExperimentState:
                             for var in vars:
                                 vs.append(var.instantiated_value)
                         self.set_variations_for_experiment(
-                            wrapper_config["name"],
-                            vs  # type: ignore
+                            wrapper_config["name"],  # type: ignore
+                            vs
                         )
 
     def set_variations_for_experiment(
