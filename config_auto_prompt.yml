@@ -14,7 +14,7 @@ dataset:
           tech_startup_business: str
       number_of_examples: 10
       openai_model_name: gpt-4
-      output_path: demo/data/generated_examples.pkl
+      output_path: generated_examples.pkl
   source_type: machine_generated
 description: Generated experiment config
 # evaluators: []
@@ -28,8 +28,18 @@ description: Generated experiment config
 # In this config, you would define the variations associated with that name, e.g.
 
 variations:
-  - name: wrapper_name
+  - generator_config:
+      input_description:
+        Given an tech startup business, generate corresponding landing
+        page headlines
+      input_test_cases: ["AI law firm", "AI sales agent"]
+      number_of_variations: 5
+      openai_model_name: gpt-4
+      output_path: generated_prompt.pkl
+    generator_name: openai_prompt_based_variation_generator
+    name: task
     variations:
-      - value_type: str
-        value: "example_variation"
-        instantiated_value: "example_variation"
+      - instantiated_value: Generate landing page headline for
+        value: Generate landing page headline for
+        value_type: str
+        variation_id: null

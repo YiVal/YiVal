@@ -1,8 +1,12 @@
 from collections import defaultdict
 from itertools import product
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Iterator, List, Optional, Union
 
 from ..schemas.experiment_config import ExperimentConfig
+from ..schemas.varation_generator_configs import BaseVariationGeneratorConfig
+from ..variation_generators.base_variation_generator import (
+    BaseVariationGenerator,
+)
 
 
 class ExperimentState:
@@ -68,19 +72,57 @@ class ExperimentState:
         """
         if self.config:
             for wrapper_config in self.config.variations:
-                variations = [
-                    var_variation["instantiated_value"] for var_variation in
-                    wrapper_config["variations"]  # type: ignore
-                ]
-                self.set_variations_for_experiment(
-                    wrapper_config["name"],  # type: ignore
-                    variations
-                )
+                if "variations" in wrapper_config:  # type: ignore
+                    variations = [
+                        var_variation["instantiated_value"] for var_variation
+                        in wrapper_config["variations"]  # type: ignore
+                    ]
+                    self.set_variations_for_experiment(
+                        wrapper_config["name"],  # type: ignore
+                        variations
+                    )
+                if "generator_name" in wrapper_config:  # type: ignore
+                    generator_cls = BaseVariationGenerator.get_variation_generator(
+                        wrapper_config["generator_name"]  # type: ignore
+                    )
+                    config_cls = BaseVariationGenerator.get_config_class(
+                        wrapper_config["generator_name"]  # type: ignore
+                    )
+                    if generator_cls:
+                        if config_cls:
+                            if "generator_config" in wrapper_config:  # type: ignore
+                                if isinstance(
+                                    wrapper_config["generator_config"],
+                                    dict  # type: ignore
+                                ):
+                                    config_data = wrapper_config[  # type: ignore
+                                        "generator_config"]
+                                else:
+                                    config_data = wrapper_config[  # type: ignore
+                                        "generator_config"].asdict()
+                                config_instance = config_cls(**config_data)
+                            else:
+                                config_instance = config_cls()
+                            generator_instance = generator_cls(config_instance)
+                        else:
+                            generator_instance = generator_cls(
+                                BaseVariationGeneratorConfig()
+                            )
+                        vs = []
+                        for vars in generator_instance.generate_variations():
+                            for var in vars:
+                                vs.append(var.instantiated_value)
+                        self.set_variations_for_experiment(
+                            wrapper_config["name"],
+                            vs  # type: ignore
+                        )
 
     def set_variations_for_experiment(
-        self, name: str, variations: List[Any]
+        self, name: str, variations: Union[List[Any], Iterator[Any]]
     ) -> None:
-        self.current_variations[name] = variations
+        existing_variations = self.current_variations.get(name, [])
+        existing_variations.extend(variations)
+        self.current_variations[name] = existing_variations
 
     def set_experiment_config(self, config: Any) -> None:
         if isinstance(config, dict):

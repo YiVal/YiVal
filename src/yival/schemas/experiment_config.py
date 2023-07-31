@@ -173,6 +173,7 @@ class ExperimentConfig:
     - custom_data_generator (Dict[str, Dict[str, Any]]): Custom data generator and configurations.
     - custom_wrappers (Dict[str, Dict[str, Any]]): Custom wrapper and configurations.
     - custom_evaluators (Dict[str, Dict[str, Any]]): Custom evaluator and configurations.
+    - custom_variation_generators (Dict[str, Dict[str, Any]]): Custom variation generators and configurations.
     """
 
     # Required configurations
@@ -195,6 +196,7 @@ class ExperimentConfig:
     custom_data_generators: Optional[Dict[str, Dict[str, Any]]] = None
     custom_wrappers: Optional[Dict[str, Dict[str, Any]]] = None
     custom_evaluators: Optional[Dict[str, Dict[str, Any]]] = None
+    custom_variation_generators: Optional[Dict[str, Dict[str, Any]]] = None
 
     def asdict(self) -> Dict[str, Any]:
         # Convert the dataclass instance to a dictionary
