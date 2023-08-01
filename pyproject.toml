@@ -28,6 +28,8 @@ rich = "^13.4.2"
 types-tqdm = "^4.65.0.2"
 npyscreen = "^4.10.5"
 numpy = "^1.25.1"
+dash = "^2.11.1"
+pandas = "^2.0.3"
 
 
 [tool.poetry.group.test.dependencies]
