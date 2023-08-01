@@ -14,7 +14,17 @@ from .selection_strategy import SelectionStrategy
 
 class AHPSelection(SelectionStrategy):
     config: AHPConfig
-    default_config: AHPConfig
+    default_config: AHPConfig = AHPConfig(
+        criteria=["average_token_usage", "average_latency"],
+        criteria_weights={
+            "average_token_usage": 0.5,
+            "average_latency": 0.5
+        },
+        criteria_maximization={
+            "average_token_usage": False,
+            "average_latency": False
+        }
+    )
 
     def __init__(self, config: AHPConfig):
         super().__init__(config)

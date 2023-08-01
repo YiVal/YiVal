@@ -14,6 +14,7 @@ from .evaluator_config import (
     EvaluatorConfig,
     EvaluatorOutput,
 )
+from .selector_strategies import BaseConfig, SelectionOutput
 from .varation_generator_configs import BaseVariationGeneratorConfig
 from .wrapper_configs import BaseWrapperConfig
 
@@ -149,32 +150,6 @@ class HumanRatingConfig:
 
 @dataclass
 class ExperimentConfig:
-    """
-    Configuration for running an experiment.
-
-    Attributes:
-    - description (str): Description of the experiment.
-    - variations (List[WrapperConfig]): List of variations configurations.
-    - dataset (DatasetConfig): Dataset configuration.
-    - wrapper_configs (List[BaseWrapperConfig]): List of wrapper configurations.
-    - combinations_to_run (Optional[List[Tuple[str, Any]]]): List of combinations to
-      run.
-      Each tuple represents a (group_name, variation) pair.
-    - evaluators (Optional[List[Union[EvaluatorConfig, ComparisonEvaluatorConfig]]]):
-      List of evaluator configurations.
-    - output (Optional[OutputConfig]): Output configuration.
-
-    - existing_experiment_path (Optional[str]): Path to an existing experiment for
-      incremental experiments or comparisons.
-    - version (Optional[str]): Version or timestamp for the experiment.
-    - output_parser (Optional[str]): Class name of the std output parser to use.
-    - metadata (Dict[str, Any]): Additional metadata related to the experiment.
-    - custom_reader (Dict[str, Dict[str, Any]]): Custom reader and configurations.
-    - custom_data_generator (Dict[str, Dict[str, Any]]): Custom data generator and configurations.
-    - custom_wrappers (Dict[str, Dict[str, Any]]): Custom wrapper and configurations.
-    - custom_evaluators (Dict[str, Dict[str, Any]]): Custom evaluator and configurations.
-    - custom_variation_generators (Dict[str, Dict[str, Any]]): Custom variation generators and configurations.
-    """
 
     # Required configurations
     description: str
@@ -182,6 +157,7 @@ class ExperimentConfig:
     dataset: DatasetConfig
     custom_function: str
     # Optional configurations with default values
+    selection_strategy: Optional[Dict[str, BaseConfig]] = None
     wrapper_configs: Optional[Dict[str, BaseWrapperConfig]] = None
     combinations_to_run: Optional[List[Tuple[str, Any]]] = None
     evaluators: Optional[List[Union[EvaluatorConfig,
@@ -197,6 +173,7 @@ class ExperimentConfig:
     custom_wrappers: Optional[Dict[str, Dict[str, Any]]] = None
     custom_evaluators: Optional[Dict[str, Dict[str, Any]]] = None
     custom_variation_generators: Optional[Dict[str, Dict[str, Any]]] = None
+    custom_selection_strategies: Optional[Dict[str, Dict[str, Any]]] = None
 
     def asdict(self) -> Dict[str, Any]:
         # Convert the dataclass instance to a dictionary
@@ -391,6 +368,7 @@ class Experiment:
     """
     group_experiment_results: List[GroupedExperimentResult]
     combination_aggregated_metrics: List[CombinationAggregatedMetrics]
+    selection_output: Optional[SelectionOutput] = None
 
     def asdict(self) -> Dict[str, Any]:
         return {

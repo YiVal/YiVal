@@ -6,6 +6,7 @@ import yaml
 from ..data.base_reader import BaseReader
 from ..data_generators.base_data_generator import BaseDataGenerator
 from ..evaluators.base_evaluator import BaseEvaluator
+from ..result_selectors.selection_strategy import SelectionStrategy
 from ..schemas.experiment_config import WrapperConfig
 from ..variation_generators.base_variation_generator import (
     BaseVariationGenerator,
@@ -33,12 +34,14 @@ def generate_experiment_config_yaml(
     reader_name: Optional[str] = None,
     wrapper_names: Optional[List[str]] = None,
     data_generator_names: Optional[List[str]] = None,
+    selection_strategy_name: Optional[str] = None,
     wrapper_configs: Optional[List[WrapperConfig]] = None,
     custom_reader: Optional[Dict[str, Dict[str, Any]]] = None,
     custom_wrappers: Optional[Dict[str, Dict[str, Any]]] = None,
     custom_evaluators: Optional[Dict[str, Dict[str, Any]]] = None,
     custom_data_generators: Optional[Dict[str, Dict[str, Any]]] = None,
-    custom_variation_generators: Optional[Dict[str, Dict[str, Any]]] = None
+    custom_variation_generators: Optional[Dict[str, Dict[str, Any]]] = None,
+    custom_selection_strategy: Optional[Dict[str, Dict[str, Any]]] = None
 ) -> str:
 
     def get_default_config(
@@ -78,6 +81,18 @@ def generate_experiment_config_yaml(
         "dataset": dataset_section,
     }
 
+    selection_strategy_section = {}
+    if selection_strategy_name:
+        strategy_cls = SelectionStrategy.get_strategy(selection_strategy_name)
+        if strategy_cls:
+            default_config = get_default_config(strategy_cls)
+            if default_config:
+                selection_strategy_section[selection_strategy_name
+                                           ] = default_config
+
+    if selection_strategy_section:
+        experiment_config["selection_strategy"] = selection_strategy_section
+
     if custom_reader:
         experiment_config["custom_reader"] = custom_reader
 
@@ -93,6 +108,10 @@ def generate_experiment_config_yaml(
     if custom_variation_generators:
         experiment_config["custom_variation_generators"
                           ] = custom_variation_generators
+
+    if custom_selection_strategy:
+        experiment_config["custom_selection_strategies"
+                          ] = custom_selection_strategy
 
     evaluators_section = []
     if evaluator_names:
