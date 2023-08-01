@@ -66,8 +66,8 @@ class ExperimentRunner:
                     self.config.get("custom_readers", {})  # type: ignore
                 )
                 processor = DataProcessor(
-                    self.config["dataset"]
-                )  # type: ignore
+                    self.config["dataset"]  # type: ignore
+                )
                 data_points = processor.process_data()
                 for data in data_points:
                     total_combinations = len(all_combinations) * len(data)
