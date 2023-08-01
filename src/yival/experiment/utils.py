@@ -10,6 +10,7 @@ from ..data_generators.base_data_generator import BaseDataGenerator
 from ..evaluators.base_evaluator import BaseEvaluator
 from ..evaluators.openai_elo_evaluator import OpenAIEloEvaluator
 from ..logger.token_logger import TokenLogger
+from ..result_selectors.selection_strategy import SelectionStrategy
 from ..schemas.evaluator_config import MethodCalculationMethod
 from ..schemas.experiment_config import (
     CombinationAggregatedMetrics,
@@ -20,6 +21,7 @@ from ..schemas.experiment_config import (
     InputData,
     Metric,
 )
+from ..schemas.selector_strategies import BaseConfig
 from ..states.experiment_state import ExperimentState
 from .evaluator import Evaluator
 
@@ -74,6 +76,25 @@ def register_custom_readers(custom_readers: Dict[str, Dict[str, Any]]):
         BaseReader.register_reader(name, reader_cls, config_cls)
     from ..data.csv_reader import CSVReader
     _ = CSVReader
+
+
+def register_custom_selection_strategy(
+    custom_strategy: Dict[str, Dict[str, Any]]
+):
+    for name, details in custom_strategy.items():
+        strategy_cls_path = details["class"]
+        module_name, class_name = strategy_cls_path.rsplit(".", 1)
+        strategy_cls = getattr(import_module(module_name), class_name)
+
+        config_cls = None
+        if "config_cls" in details:
+            config_cls_path = details["config_cls"]
+            module_name, class_name = config_cls_path.rsplit(".", 1)
+            config_cls = getattr(import_module(module_name), class_name)
+
+        SelectionStrategy.register_strategy(name, strategy_cls, config_cls)
+    from ..result_selectors.ahp_selection import AHPSelection
+    _ = AHPSelection
 
 
 def register_custom_evaluators(custom_evaulators: Dict[str, Dict[str, Any]]):
@@ -242,6 +263,30 @@ def run_single_input(
                 )
             results.append(result)
     return results
+
+
+def get_selection_strategy(
+    config: ExperimentConfig
+) -> SelectionStrategy | None:
+    if config["selection_strategy"]:  # type: ignore
+        for strategy, strategy_config in config["selection_strategy"
+                                                ].items(  # type: ignore
+                                                ):
+            strategy_cls = SelectionStrategy.get_strategy(strategy)
+            if strategy_cls:
+                config_cls = SelectionStrategy.get_config_class(strategy)
+                if config_cls:
+                    if isinstance(strategy_config, dict):
+                        config_data = strategy_config
+                    else:
+                        config_data = strategy_config.asdict()
+                    config_instance = config_cls(**config_data)
+                    strategy_instance = strategy_cls(config_instance)
+                else:
+                    strategy_instance = strategy_cls(BaseConfig())
+
+                return strategy_instance
+    return None
 
 
 def generate_experiment(

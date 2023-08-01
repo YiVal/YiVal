@@ -6,8 +6,9 @@ dataset:
     openai_prompt_data_generator:
       chunk_size: 1000
       input_function:
-        description: Given an tech startup business, generate corresponding landing
-          page headlines
+        description:
+          Given an tech startup business, generate a corresponding landing
+          page headline
         name: headline_generation_for_business
         parameters:
           tech_startup_business: str
@@ -16,33 +17,39 @@ dataset:
       output_path: null
   source_type: machine_generated
 description: Generated experiment config
-evaluators:
-- evaluator_type: all
-  input_description: This is a description.
-  metric_calculators: []
-  name: openai_elo_evaluator
-  openai_model_name: gpt-4
+selection_strategy:
+  ahp_selection:
+    criteria:
+      - average_token_usage
+      - average_latency
+    criteria_maximization:
+      average_latency: false
+      average_token_usage: false
+    criteria_weights:
+      average_latency: 0.5
+      average_token_usage: 0.5
+
+# evaluators: []
 
 # wrapper_configs: {}
 
 variations:
-- generator_config:
-    input_description: This is a description.
-    input_test_cases: []
-    number_of_variations: 5
-    openai_model_name: gpt-4
-    output_path: null
-  generator_name: openai_prompt_based_variation_generator
-  name: task
-  variations:
-  - instantiated_value: manual test
-    value: manual test
-    value_type: str
-    variation_id: null
+  - generator_config:
+      input_description: This is a description.
+      input_test_cases: []
+      number_of_variations: 5
+      openai_model_name: gpt-4
+      output_path: null
+    generator_name: openai_prompt_based_variation_generator
+    name: task
+    variations:
+      - instantiated_value: manual test
+        value: manual test
+        value_type: str
+        variation_id: null
 
-    # Variations allow for dynamic content during experiments.
-    # They are identified by a globally unique name. For example, in your code,
-    # you might reference a variation by its name, like:
-    # variation = StringWrapper("hello", 'test_experiment')
-    # In this config, you would define the variations associated with that name.
-    
+        # Variations allow for dynamic content during experiments.
+        # They are identified by a globally unique name. For example, in your code,
+        # you might reference a variation by its name, like:
+        # variation = StringWrapper("hello", 'test_experiment')
+        # In this config, you would define the variations associated with that name.
