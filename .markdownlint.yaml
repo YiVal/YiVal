@@ -1,0 +1,7 @@
+---
+default: true
+
+# MD007/ul-indent - Unordered list indentation
+MD007:
+  # Spaces for indent
+  indent: 4

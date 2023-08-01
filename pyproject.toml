@@ -29,6 +29,12 @@ types-tqdm = "^4.65.0.2"
 npyscreen = "^4.10.5"
 numpy = "^1.25.1"
 
+[tool.poetry.group.doc.dependencies]
+mkdocs = "*"
+mkdocs-git-revision-date-localized-plugin = "*"
+mkdocs-macros-plugin = "*"
+mkdocs-material = "*"
+mkdocstrings = {extras = ["python"], version = ">=0.18"}
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.4.0"

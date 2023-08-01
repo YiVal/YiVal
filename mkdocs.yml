@@ -1,0 +1,68 @@
+---
+site_name: YiVal
+nav:
+  - Index: index.md
+  - Contributing Guide: contributing.md
+  - Change Log: changelog.md
+
+theme:
+  name: material
+  palette:
+    cheme: slate
+    primary: lightgreen
+    accent: purple
+  logo: fontawesome/brands/github
+  favicon: fontawesome/brands/github
+  icon:
+    repo: fontawesome/brands/github
+  features:
+    - navigation.top
+    - header.autohide
+  font: false
+repo_url: https://github.com/YiVal/YiVal
+repo_name: YiVal/YiVal
+extra:
+  homepage: https://yival.io
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - extra
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.caret
+  - pymdownx.keys
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+plugins:
+  - search:
+      lang:
+        - en
+        - ja
+  # - mkdocstrings:
+  #     watch:
+  #       - src
+  #     handlers:
+  #       python:
+  #         paths: [src]
+  #         import:
+  #           - https://docs.python.org/3/objects.inv
+  - macros
+  - git-revision-date-localized:
+      type: timeago
+      fallback_to_build_date: true
