@@ -1,0 +1,31 @@
+name: mkdocs
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+          - "3.10"
+        test_type:
+          - "core"
+    name: Deploy mkdocs
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: "./.github/actions/poetry_setup"
+        with:
+          python-version: ${{ matrix.python-version }}
+          poetry-version: "1.4.2"
+          cache-key: "core"
+          install-command: |
+            echo "Running core tests, installing dependencies with poetry..."
+            poetry install
+
+      - name: Deploy
+        run: poetry run mkdocs gh-deploy --force
+        shell: bash
