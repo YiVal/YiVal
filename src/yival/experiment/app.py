@@ -81,8 +81,14 @@ def create_dash_app(experiment_data: Experiment):
         for metric in combo_metrics:
             row = {
                 "Combo Key":
-                "\n".join(textwrap.wrap(str(metric.combo_key), 90))
+                "\n".join(
+                    textwrap.wrap(
+                        str(metric.combo_key).replace('"',
+                                                      "").replace("'", ""), 90
+                    )
+                )
             }
+
             for k, v in metric.aggregated_metrics.items():
                 row[k] = ', '.join([f"{m.name}: {m.value}" for m in v])
             row['Average Token Usage'] = str(metric.average_token_usage)
@@ -120,7 +126,15 @@ def create_dash_app(experiment_data: Experiment):
                     sample_count += 1
 
             data.append(row)
-        return pd.DataFrame(data)
+        df = pd.DataFrame(data)
+        # Convert 'Average Token Usage' and 'Average Latency' columns to numeric
+        df['Average Token Usage'] = pd.to_numeric(
+            df['Average Token Usage'], errors='coerce'
+        )
+        df['Average Latency'] = pd.to_numeric(
+            df['Average Latency'], errors='coerce'
+        )
+        return df
 
     app = dash.Dash(
         __name__,
@@ -238,13 +252,48 @@ def create_dash_app(experiment_data: Experiment):
             'width': '15%'
         } for col in sample_columns]
 
-        styles = generate_heatmap_style(
+        styles = highlight_best_values(
             df, 'Average Token Usage', 'Average Latency'
         )
-        styles += highlight_best_values(
+        styles += generate_heatmap_style(
             df, 'Average Token Usage', 'Average Latency'
         )
         styles += sample_style
+
+        # Highlight the best_combination row
+        best_combination = experiment_data.selection_output.best_combination if experiment_data.selection_output else None
+        tooltip_data = []
+        if best_combination:
+            best_combination_str = "\n".join(
+                textwrap.wrap(
+                    str(best_combination).replace('"', "").replace("'", ""), 90
+                )
+            )
+            styles.append({
+                'if': {
+                    'column_id': 'Combo Key',
+                    'filter_query':
+                    f'{{Combo Key}} eq "{best_combination_str}"',
+                },
+                'backgroundColor': '#DFF0D8',  # Light green color
+                'border': '2px solid #28A745',  # Darker green border
+                'color': '#155724'  # Dark text color for contrast
+            })
+
+            # If selection_reason is available, add it as a tooltip:
+            if experiment_data.selection_output and experiment_data.selection_output.selection_reason:
+                reason_str = ', '.join([
+                    f"{k}: {v}" for k, v in
+                    experiment_data.selection_output.selection_reason.items()
+                ])
+                tooltip_data = [{
+                    'Combo Key': {
+                        'value': reason_str,
+                        'type': 'markdown'
+                    }
+                } if row["Combo Key"] == best_combination_str else {}
+                                for row in df.to_dict('records')]
+
         evaluator_names = [
             col.replace(" Output", "") for col in df.columns if "Output" in col
         ]
@@ -304,13 +353,7 @@ def create_dash_app(experiment_data: Experiment):
             filter_action="native",
             sort_action="native",
             page_size=10,
-            tooltip_data=[{
-                column: {
-                    'value': str(value),
-                    'type': 'markdown'
-                }
-                for column, value in row.items()
-            } for row in df.to_dict('records')],
+            tooltip_data=tooltip_data,
             tooltip_duration=None
         )
 
@@ -414,7 +457,7 @@ def create_dash_app(experiment_data: Experiment):
     def highlight_best_values(df, *cols):
         styles = []
         for col in cols:
-            best_val = df[col].min()  # Now, smaller is better for both columns
+            best_val = df[col].min()
             styles.append({
                 'if': {
                     'filter_query': f'{{{col}}} eq {best_val}',

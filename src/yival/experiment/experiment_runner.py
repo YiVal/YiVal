@@ -6,6 +6,7 @@ from tqdm import tqdm
 
 from ..configs.config_utils import load_and_validate_config
 from ..logger.token_logger import TokenLogger
+from ..result_selectors.selection_context import SelectionContext
 from ..schemas.experiment_config import ExperimentResult
 from ..states.experiment_state import ExperimentState
 from .app import display_results_dash
@@ -14,9 +15,11 @@ from .evaluator import Evaluator
 from .user_input import ExperimentInputApp
 from .utils import (
     generate_experiment,
+    get_selection_strategy,
     register_custom_data_generator,
     register_custom_evaluators,
     register_custom_readers,
+    register_custom_selection_strategy,
     register_custom_wrappers,
     run_single_input,
 )
@@ -42,6 +45,9 @@ class ExperimentRunner:
         )
         register_custom_data_generator(
             self.config.get("custom_data_generators", {})  # type: ignore
+        )
+        register_custom_selection_strategy(
+            self.config.get("custom_selection_strategy", {})  # type: ignore
         )
         evaluator = Evaluator(
             self.config.get("evaluators", [])  # type: ignore
@@ -88,6 +94,12 @@ class ExperimentRunner:
                             results.extend(res)
                             pbar.update(len(res))
                 experiment = generate_experiment(results, evaluator)
+            strategy = get_selection_strategy(self.config)
+            if strategy:
+                context_trade_off = SelectionContext(strategy=strategy)
+                experiment.selection_output = context_trade_off.execute_selection(
+                    experiment=experiment,
+                )
 
             if display:
                 display_results_dash(experiment)

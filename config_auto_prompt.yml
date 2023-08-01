@@ -27,6 +27,21 @@ evaluators:
     name: openai_elo_evaluator
     openai_model_name: gpt-4
 
+selection_strategy:
+  ahp_selection:
+    criteria:
+      - openai_elo_evaluator
+      - average_token_usage
+      - average_latency
+    criteria_maximization:
+      openai_elo_evaluator: true
+      average_latency: false
+      average_token_usage: false
+    criteria_weights:
+      openai_elo_evaluator: 0.6
+      average_latency: 0.2
+      average_token_usage: 0.2
+
 # wrapper_configs: {}
 
 # Variations allow for dynamic content during experiments.

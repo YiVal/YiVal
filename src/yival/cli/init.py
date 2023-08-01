@@ -11,6 +11,7 @@ from ..evaluators.openai_elo_evaluator import OpenAIEloEvaluator
 from ..evaluators.string_expected_result_evaluator import (
     StringExpectedResultEvaluator,
 )
+from ..result_selectors.ahp_selection import AHPSelection
 from ..schemas.experiment_config import WrapperConfig, WrapperVariation
 from ..variation_generators.openai_prompt_based_variation_generator import (
     OpenAIPromptBasedVariationGenerator,
@@ -25,6 +26,7 @@ def _prevent_unused_imports():
     _ = OpenAIPromptBasedGeneratorConfig
     _ = OpenAIPromptBasedVariationGenerator
     _ = OpenAIEloEvaluator
+    _ = AHPSelection
 
 
 def variation_type(arg: str):
@@ -120,6 +122,11 @@ def add_arguments_to(subparser):
         "Specify custom readers in 'name:class_path:config_cls_path' format."
     )
     parser.add_argument(
+        "--selection_strategy",
+        type=str,
+        help="Specify selection strategy name"
+    )
+    parser.add_argument(
         "--custom_wrappers",
         type=str,
         nargs='+',
@@ -146,6 +153,12 @@ def add_arguments_to(subparser):
         nargs='+',
         help=
         "Specify custom variation generators in 'name:class_path:config_cls_path' format."
+    )
+    parser.add_argument(
+        "--custom_selection_strategy",
+        type=str,
+        help=
+        "Specify custom selection strategies in 'name:class_path:config_cls_path' format."
     )
 
 
@@ -218,6 +231,17 @@ def init(args: Namespace):
                 "class_path": variation_generator_class_path,
                 "config_path": variation_generator_config_cls_path
             }
+
+    custom_selection_strategy = {}
+    if args.custom_selection_strategy:
+        strategy_name, strategy_class_path, strategy_config_cls_path = args.custom_selection_strategy.split(
+            ":"
+        )
+        custom_selection_strategy[strategy_name] = {
+            "class_path": strategy_class_path,
+            "config_path": strategy_config_cls_path
+        }
+
     # Generate the configuration template dynamically
     yaml_template = generate_experiment_config_yaml(
         custom_function=args.function,
@@ -226,12 +250,14 @@ def init(args: Namespace):
         reader_name=args.reader_name,
         wrapper_names=args.wrapper_names,
         data_generator_names=args.data_genertaor_names,
+        selection_strategy_name=args.selection_strategy,
         wrapper_configs=wrapper_config_objects,
         custom_reader=custom_reader,
         custom_wrappers=custom_wrappers,
         custom_evaluators=custom_evaluators,
         custom_data_generators=custom_data_generators,
-        custom_variation_generators=custom_variation_generators
+        custom_variation_generators=custom_variation_generators,
+        custom_selection_strategy=custom_selection_strategy
     )
 
     # Save the generated template to the specified config path

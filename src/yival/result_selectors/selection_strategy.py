@@ -42,5 +42,10 @@ class SelectionStrategy(ABC):
             "default_config", None
         ) if "default_config" in strategy_info else None
 
+    @classmethod
+    def get_config_class(cls, name: str) -> Optional[Type[BaseConfig]]:
+        strategy_info = cls._registry.get(name, {})
+        return strategy_info.get("config_cls", None)
+
     def __init__(self, config: BaseConfig):
         self.config = config
