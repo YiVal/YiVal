@@ -269,8 +269,9 @@ def get_selection_strategy(
     config: ExperimentConfig
 ) -> SelectionStrategy | None:
     if config["selection_strategy"]:  # type: ignore
-        for strategy, strategy_config in config["selection_strategy"].items(
-        ):  # type: ignore
+        for strategy, strategy_config in config["selection_strategy"
+                                                ].items(  # type: ignore
+                                                ):
             strategy_cls = SelectionStrategy.get_strategy(strategy)
             if strategy_cls:
                 config_cls = SelectionStrategy.get_config_class(strategy)

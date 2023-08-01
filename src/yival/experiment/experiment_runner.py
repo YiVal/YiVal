@@ -47,8 +47,8 @@ class ExperimentRunner:
             self.config.get("custom_data_generators", {})  # type: ignore
         )
         register_custom_selection_strategy(
-            self.config.get("custom_selection_strategy", {})
-        )  # type: ignore
+            self.config.get("custom_selection_strategy", {})  # type: ignore
+        )
         evaluator = Evaluator(
             self.config.get("evaluators", [])  # type: ignore
         )
