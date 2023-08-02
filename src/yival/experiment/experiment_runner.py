@@ -33,7 +33,7 @@ class ExperimentRunner:
     def run(
         self,
         display: bool = False,
-        output_path: str = "",
+        output_path: str = "tmp1.pkl",
         experimnet_input_path: str = "tmp1.pkl"
     ):
         results: List[ExperimentResult] = []
@@ -94,6 +94,9 @@ class ExperimentRunner:
                             results.extend(res)
                             pbar.update(len(res))
                 experiment = generate_experiment(results, evaluator)
+                if output_path:
+                    with open(output_path, 'wb') as file:
+                        pickle.dump(experiment, file)
             strategy = get_selection_strategy(self.config)
             if strategy:
                 context_trade_off = SelectionContext(strategy=strategy)
@@ -103,11 +106,6 @@ class ExperimentRunner:
 
             if display:
                 display_results_dash(experiment)
-
-            if output_path:
-                import json
-                with open(output_path, "w") as file:
-                    json.dump(experiment.asdict(), file)
 
         elif self.config["dataset"]["source_type"  # type: ignore
                                     ] == "user_input":

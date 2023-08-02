@@ -102,7 +102,8 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
     {dict_to_description(self.config.input_function)}
 
     Please provide a single test case in the form of a dictionary suitable for passing to the function using the ** operator.
-    Ideally the test cases should be concrete and realistic.
+    Parameter only and don't include description and name. 
+    Ideally the test cases should be concrete and realistic. Be attractive. In Chinese
     ### Dictionary only and nothing else ####
     """
                 }],
