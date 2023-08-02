@@ -103,7 +103,7 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
 
     Please provide a single test case in the form of a dictionary suitable for passing to the function using the ** operator.
     Parameter only and don't include description and name. 
-    Ideally the test cases should be concrete and realistic. Be attractive. In Chinese
+    Ideally the test cases should be concrete and realistic. Be attractive.
     ### Dictionary only and nothing else ####
     """
                 }],
