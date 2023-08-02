@@ -16,10 +16,6 @@ the final output produced by their interaction.
 ![2023-08-02 00 01 32](https://github.com/YiVal/YiVal/assets/1544154/116e2387-dc41-4d13-b25d-79e55f25bb71)
 
 
-## Result SxS
-
-![SxS](https://github.com/YiVal/YiVal/assets/1544154/c667a749-8bdc-469e-a2d2-5086f7bac73e)
-
 ## Roadmap
 
 **Qian** (The Creative, Heaven) 🌤️ (乾):
