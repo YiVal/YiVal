@@ -12,6 +12,10 @@ We aim to provide comprehensive insights into not only the individual components
 such as models and prompts but more importantly,
 the final output produced by their interaction.
 
+## Using Yival for auto prompt generation
+![2023-08-02 00 01 32](https://github.com/YiVal/YiVal/assets/1544154/116e2387-dc41-4d13-b25d-79e55f25bb71)
+
+
 ## Result SxS
 
 ![SxS](https://github.com/YiVal/YiVal/assets/1544154/c667a749-8bdc-469e-a2d2-5086f7bac73e)
@@ -25,20 +29,17 @@ the final output produced by their interaction.
     - [x] Set up the BaseWrapper
     - [x] Set up the StringWrapper
 - [x] Setup the config framework
-- [ ] Setup the experiment main function
-- [ ] Setup the evaluator framework to do evaluations
-    - [ ] One auto-evaluator
-    - [ ] Ground truth matching
+- [x] Setup the experiment main function
+- [x] Setup the evaluator framework to do evaluations
+    - [x] One auto-evaluator
+    - [x] Ground truth matching
     - [ ] Human evaluator
-- [ ] Interactive evaluator
-- [ ] Reader framework that be able to process different data
+- [x] Interactive evaluator
+- [x] Reader framework that be able to process different data
     - [ ] One reader from csv
-- [ ] Output formatter
-    - [ ] Output to csv
-    - [ ] Basic Textual UI
 - [x] Output parser - Capture detailed information
 - [ ] Documents
 - [ ] Git setup
-- [ ] Cotribution guid
-- [ ] End2End Examples
+- [ ] Cotribution guide
+- [x] End2End Examples
 - [ ] Release
