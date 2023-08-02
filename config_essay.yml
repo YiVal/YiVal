@@ -1,0 +1,75 @@
+# This is a generated template. Modify the values as needed.
+
+custom_function: /Users/taofeng/YiVal/demo.essay_topic_outline.essay_topic_outline
+dataset:
+  data_generators:
+    openai_prompt_data_generator:
+      chunk_size: 1000
+      input_function:
+        description: 根据主题生成一行小红书标题
+        name: essay_topic_outline
+        parameters:
+          topic: str
+      number_of_examples: 1
+      openai_model_name: gpt-4
+      output_path: generated_xiaohongshu_small.pkl
+  source_type: machine_generated
+description: Generated experiment config
+
+evaluators:
+  - evaluator_type: all
+    input_description: 根据主题生成一行小红书标题
+    metric_calculators: []
+    name: openai_elo_evaluator
+    openai_model_name: gpt-4
+
+selection_strategy:
+  ahp_selection:
+    criteria:
+      - openai_elo_evaluator
+      - average_token_usage
+      - average_latency
+    criteria_maximization:
+      openai_elo_evaluator: true
+      average_latency: false
+      average_token_usage: false
+    criteria_weights:
+      openai_elo_evaluator: 0.6
+      average_latency: 0.2
+      average_token_usage: 0.2
+
+# wrapper_configs: {}
+
+# Variations allow for dynamic content during experiments.
+# They are identified by a globally unique name. For example, in your code,
+# you might reference a variation by its name, like:
+# variation = StringWrapper("hello", 'test_experiment')
+# In this config, you would define the variations associated with that name, e.g.
+
+variations:
+  - generator_config:
+      input_description: 根据主题生成一行小红书标题 used by system prompt
+      input_test_cases: ["美妆", "穿搭"]
+      number_of_variations: 1
+      openai_model_name: gpt-4
+      output_path: generated_xiaohongshu_system_small.pkl
+    generator_name: openai_prompt_based_variation_generator
+    name: system
+    # variations:
+    #   - instantiated_value: 你是一个帮助小红书博主生成标题的助手.
+    #     value: 你是一个帮助小红书博主生成标题的助手.
+    #     value_type: str
+    #     variation_id: null
+  - generator_config:
+      input_description: 根据主题生成一行小红书标题
+      input_test_cases: ["美妆", "穿搭"]
+      number_of_variations: 1
+      openai_model_name: gpt-4
+      output_path: generated_xiaohongshu_user_small.pkl
+    generator_name: openai_prompt_based_variation_generator
+    name: topic
+    # variations:
+    #   - instantiated_value: 根据主题生成小红书标题
+    #     value: 根据主题生成小红书标题
+    #     value_type: str
+    #     variation_id: null
