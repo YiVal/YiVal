@@ -24,8 +24,19 @@ poetry install --sync
 A vscode is recommended.
 There are some configurations in `.vscode/` of this project.
 
+The commands below should be executed inside `poetry shell`,
+or with prefix `poetry run`.
+
 ## Test
 
 ```sh
 pytest
+```
+
+## Mkdocs
+
+Preview the docs locally:
+
+```sh
+mkdocs serve
 ```

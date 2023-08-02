@@ -1,22 +1,6 @@
-# YiVal
+# Change Log
 
-[![PyTest](https://github.com/YiVal/YiVal/actions/workflows/test.yml/badge.svg)](https://github.com/YiVal/YiVal/actions/workflows/pytest.yml)
-[![Code style: yapf](https://img.shields.io/badge/code%20style-yapf-blue)](https://github.com/google/yapf)
-
-## Introduction
-
-YiVal is an innovative open-source project,
-rooted in the principles of the Yijing,
-focused on revolutionizing the end-to-end evaluation process of AI models.
-We aim to provide comprehensive insights into not only the individual components
-such as models and prompts but more importantly,
-the final output produced by their interaction.
-
-## Result SxS
-
-![SxS](https://github.com/YiVal/YiVal/assets/1544154/c667a749-8bdc-469e-a2d2-5086f7bac73e)
-
-## Roadmap
+## 0.1.0
 
 **Qian** (The Creative, Heaven) 🌤️ (乾):
 
