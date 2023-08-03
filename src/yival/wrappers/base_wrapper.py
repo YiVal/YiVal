@@ -8,26 +8,12 @@ class BaseWrapper:
     """
     Base wrapper class for managing experiment variations based on the global
     experiment state.
-
-    This class acts as an interface to manage and retrieve variations associated
-    with a given experiment name. If the global ExperimentState is active, it retrieves
-    the next variation for the associated experiment name. If the ExperimentState is not
-    active or no variation is found, it returns None.
-
-    Attributes:
-        name (str): The name of the experiment associated with this wrapper instance.
-
-    Methods:
-        get_variation() -> Optional[Any]:
-            Depending on the global ExperimentState's activity status, retrieves the
-            next variation for the associated experiment name. If the state is inactive
-            or no variations are found, returns None.
     """
     _registry: Dict[str, Dict[str, Any]] = {}
     default_config: Optional[BaseWrapperConfig] = None
 
     @classmethod
-    def register(cls, name: str):
+    def decorator_register(cls, name: str):
         """Decorator to register new wrappers."""
 
         def inner(subclass: Type[BaseWrapper]):
@@ -53,31 +39,19 @@ class BaseWrapper:
 
     @classmethod
     def get_wrapper(cls, name: str) -> Optional[Type['BaseWrapper']]:
-        """Retrieve wrapper class from registry by its name."""
-        wrapper_info = cls._registry.get(name, {})
-        return wrapper_info.get(
-            "class", None
-        ) if "class" in wrapper_info else None
+        return cls._registry.get(name, {}).get("class")
 
     @classmethod
     def get_default_config(cls, name: str) -> Optional[BaseWrapperConfig]:
-        """Retrieve the default configuration of a wrapper by its name."""
-        wrapper_info = cls._registry.get(name, {})
-        return wrapper_info.get(
-            "default_config", None
-        ) if "default_config" in wrapper_info else None
+        return cls._registry.get(name, {}).get("default_config")
 
     @classmethod
     def get_config_class(cls, name: str) -> Optional[Type[BaseWrapperConfig]]:
-        """Retrieve the configuration class of a reader by its name."""
-        reader_info = cls._registry.get(name, {})
-        return reader_info.get("config_cls", None)
+        return cls._registry.get(name, {}).get("config_cls")
 
     def get_active_config(self, name: str) -> Optional[BaseWrapperConfig]:
         if self.experiment_state.active and self.experiment_state.config.wrapper_configs:
-            config = self.experiment_state.config.wrapper_configs.get(
-                name, None
-            )
+            config = self.experiment_state.config.wrapper_configs.get(name)
             if config:
                 config_cls = BaseWrapper.get_config_class(name)
                 if config_cls:
