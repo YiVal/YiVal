@@ -1,5 +1,5 @@
-from dataclasses import asdict, dataclass, field
-from typing import List, Optional
+from dataclasses import asdict, dataclass
+from typing import Dict, List, Optional, Union
 
 
 @dataclass
@@ -21,8 +21,10 @@ class OpenAIPromptBasedVariationGeneratorConfig(BaseVariationGeneratorConfig):
     Generate variation using chatgpt. Currently only support openai models.
     """
     openai_model_name: str = "gpt-4"
-    input_description: str = "This is a description."
-    input_test_cases: List[str] = field(default_factory=list)
+    prompt: Union[str, List[Dict[str, str]]] = ""
+    diversify: bool = True
+    variables: Optional[List[str]] = None
+    max_tokens: int = 7000
 
     def asdict(self):
         return asdict(self)
