@@ -12,57 +12,42 @@ from .base_data_generator import BaseDataGenerator
 
 
 def dict_to_description(data, indent=0):
-    """Recursively converts a dictionary into a descriptive narrative, handling function parameters."""
-
     narrative = []
-
     for key, value in data.items():
+        prefix = '  ' * indent
         if key == "parameters":
-            # Handle the special 'parameters' key
-            param_descriptions = [
-                f"'{param_name}' of type '{param_type}'"
-                for param_name, param_type in value.items()
-            ]
-            param_str = ', '.join(param_descriptions)
-            narrative.append(
-                f"{'  ' * indent}- It takes parameters: {param_str}."
+            param_str = ', '.join(
+                f"'{k}' of type '{v}'" for k, v in value.items()
             )
+            narrative.append(f"{prefix}- It takes parameters: {param_str}.")
         elif isinstance(value, dict):
+            sub_narrative = dict_to_description(value, indent + 1)
             narrative.append(
-                f"{'  ' * indent}- '{key}' has the following properties:\n{dict_to_description(value, indent + 1)}"
+                f"{prefix}- '{key}' has the following properties:\n{sub_narrative}"
             )
         elif isinstance(value, list):
-            items = ', '.join([str(item) for item in value])
-            narrative.append(
-                f"{'  ' * indent}- '{key}' can have values: {items}."
-            )
+            items = ', '.join(map(str, value))
+            narrative.append(f"{prefix}- '{key}' can have values: {items}.")
         else:
-            narrative.append(
-                f"{'  ' * indent}- '{key}' is described as '{value}'."
-            )
-
+            narrative.append(f"{prefix}- '{key}' is described as '{value}'.")
     return '\n'.join(narrative)
 
 
 def extract_dict_from_gpt_output(output) -> Dict[str, Any] | None:
-    # Regular expression to capture content within curly braces
     pattern = r"\{[^}]+\}"
-
-    # Search for the dictionary pattern in the GPT output
     match = re.search(pattern, output)
     dict_string = match.group(0) if match else None
     if dict_string:
         try:
-            # Convert single quotes to double quotes for JSON parsing and then evaluate
             return ast.literal_eval(dict_string.replace("'", "\""))
         except Exception:
             return None
     return None
 
 
-def join_dicts_to_string(dicts: List[Dict[Any, Any]]) -> str:
-    to_join = dicts[-10:] if len(dicts) > 10 else dicts
-    return '\n'.join(str(d) for d in to_join)
+def join_dicts_to_string(dicts: List[Dict[Any, Any]], last_n=10) -> str:
+    to_join = dicts[-last_n:] if len(dicts) > last_n else dicts
+    return '\n'.join(map(str, to_join))
 
 
 class OpenAIPromptDataGenerator(BaseDataGenerator):
