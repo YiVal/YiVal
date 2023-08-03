@@ -53,11 +53,12 @@ def join_dicts_to_string(dicts: List[Dict[Any, Any]], last_n=10) -> str:
 class OpenAIPromptDataGenerator(BaseDataGenerator):
     config: OpenAIPromptBasedGeneratorConfig
     default_config: OpenAIPromptBasedGeneratorConfig = OpenAIPromptBasedGeneratorConfig(
-        prompt=
-        """ Please provide a single test case in the form of a dictionary suitable for passing to the function using the ** operator.
-    Parameter only and don't include description and name. 
-    Ideally the test cases should be concrete and realistic. Be attractive.
-    ### Dictionary only and nothing else ####""",
+        prompt="""
+            Please provide a concrete and realistic test case as a dictionary for function invocation using the ** operator.
+            Only include parameters, excluding description and name.
+            Ensure it's succinct and well-structured.
+            **Only provide the dictionary.**
+            """,
         input_function={
             "name": "headline_generation_for_business",
             "description":
@@ -66,7 +67,7 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                 "tech_startup_business": "str"
             }
         },
-        number_of_examples=20,
+        number_of_examples=5,
     )
 
     def __init__(self, config: OpenAIPromptBasedGeneratorConfig):
@@ -84,14 +85,15 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
 
         chunk = []
         all_data = []
+        all_data_content: List[Dict[str, Any]] = []
         while len(all_data) < self.config.number_of_examples:
             if isinstance(self.config.prompt, str):
                 content = self.config.prompt + "\n\n Here is the function details \n\n" + dict_to_description(
                     self.config.input_function
                 )
                 if self.config.diversify:
-                    content += "\n\n Here are last 10 examples, try to diversify the results for robust evaluation. \n\n" + join_dicts_to_string(
-                        all_data
+                    content += "\n\n Given the last 10 examples, please generate diverse results to ensure comprehensive evaluation. \n\n" + join_dicts_to_string(
+                        all_data_content
                     )
                 messages = [{"role": "user", "content": content}]
             else:
@@ -101,8 +103,8 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                         "role":
                         "user",
                         "content":
-                        "\n\n Here are last 10 examples, try to diversify the results robust evaluation. \n\n"
-                        + join_dicts_to_string(all_data)
+                        "\n\n Given the last 10 examples, please generate diverse results to ensure comprehensive evaluation. \n\n"
+                        + join_dicts_to_string(all_data_content)
                     })
 
             output = openai.ChatCompletion.create(
@@ -111,6 +113,7 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                 temperature=1.3,
                 presence_penalty=2,
             )
+
             generated_example = extract_dict_from_gpt_output(
                 output.choices[0].message.content
             )
@@ -118,7 +121,7 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
             if not generated_example or generated_example.keys(
             ) != self.config.input_function.get('parameters', {}).keys():
                 continue
-
+            all_data_content.append(generated_example)
             input_data_instance = InputData(
                 example_id=super().generate_example_id(
                     output.choices[0].message.content
