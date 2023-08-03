@@ -69,35 +69,47 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                 "tech_startup_business": "str"
             }
         },
-        number_of_examples=2,
+        number_of_examples=5,
         diversify=True,
     )
 
     def __init__(self, config: OpenAIPromptBasedGeneratorConfig):
         super().__init__(config)
         self.config = config
-        
+
     def prepare_messages(self, all_data_content) -> List[Dict[str, Any]]:
         """Prepare the messages for GPT API based on configurations."""
         if isinstance(self.config.prompt, str):
-            content = self.config.prompt + "\n\n Here is the function details \n\n" + dict_to_description(self.config.input_function)
+            content = self.config.prompt + "\n\n Here is the function details \n\n" + dict_to_description(
+                self.config.input_function
+            )
             if self.config.diversify and all_data_content:
-                content += f"\n\n Given the last {min(len(all_data_content), 10)} examples, please generate diverse results to ensure comprehensive evaluation. \n\n" + join_dicts_to_string(all_data_content)
+                content += f"\n\n Given the last {min(len(all_data_content), 10)} examples, please generate diverse results to ensure comprehensive evaluation. \n\n" + join_dicts_to_string(
+                    all_data_content
+                )
             return [{"role": "user", "content": content}]
         else:
             messages = self.config.prompt
             if self.config.diversify and all_data_content:
                 messages.append({
-                    "role": "user",
-                    "content": f"\n\n Given the last {min(len(all_data_content), 10)} examples, please generate diverse results to ensure comprehensive evaluation. \n\n" + join_dicts_to_string(all_data_content)
+                    "role":
+                    "user",
+                    "content":
+                    f"\n\n Given the last {min(len(all_data_content), 10)} examples, please generate diverse results to ensure comprehensive evaluation. \n\n"
+                    + join_dicts_to_string(all_data_content)
                 })
-            
+
             return messages
-        
-    def process_output(self, output_content: str, all_data: List[InputData], chunk: List[InputData]):
+
+    def process_output(
+        self, output_content: str, all_data: List[InputData],
+        chunk: List[InputData]
+    ):
         """Process the output from GPT API and update data lists."""
         generated_example = extract_dict_from_gpt_output(output_content)
-        if not generated_example or set(generated_example.keys()) != set(self.config.input_function.get('parameters', {}).keys()):
+        if not generated_example or set(generated_example.keys()) != set(
+            self.config.input_function.get('parameters', {}).keys()
+        ):
             return
         input_data_instance = InputData(
             example_id=super().generate_example_id(output_content),
@@ -107,9 +119,8 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
         all_data.append(input_data_instance)
         chunk.append(input_data_instance)
 
-
-
     def generate_examples(self) -> Iterator[List[InputData]]:
+        all_data: List[InputData] = []
         # Loading data from existing path if exists
         if self.config.output_path and os.path.exists(self.config.output_path):
             with open(self.config.output_path, 'rb') as file:
@@ -117,45 +128,48 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                 for i in range(0, len(all_data), self.config.chunk_size):
                     yield all_data[i:i + self.config.chunk_size]
             return
-
-        all_data = []
-        chunk = []
+        chunk: List[InputData] = []
         all_data_content: List[Dict[str, Any]] = []
 
-        if not self.config.diversify:
+        while (len(all_data) < self.config.number_of_examples):
             messages = self.prepare_messages(all_data_content)
-            message_batches = [messages for _ in range(self.config.number_of_examples)]
-            responses = asyncio.run(utils.parallel_completions(message_batches, "gpt-4", 1000))
-            for r in responses:
-                self.process_output(r["choices"][0]["message"]["content"], all_data, chunk)
-                if len(chunk) >= self.config.chunk_size:
-                    yield chunk
-                    chunk = []
-            if chunk:
-                yield chunk
-            return
-
-        # Handling diversified cases separately
-        while len(all_data) < self.config.number_of_examples:
-            messages = self.prepare_messages(all_data_content)
-            output = openai.ChatCompletion.create(
-                model=self.config.openai_model_name,
-                messages=messages,
-                temperature=1.3,
-                presence_penalty=2,
-            )
-            self.process_output(output.choices[0].message.content, all_data, chunk)
-            all_data_content.append(extract_dict_from_gpt_output(output.choices[0].message.content))
-            if len(chunk) >= self.config.chunk_size:
+            if not self.config.diversify:
+                message_batches = [
+                    messages
+                ] * (self.config.number_of_examples - len(all_data))
+                responses = asyncio.run(
+                    utils.parallel_completions(
+                        message_batches, self.config.openai_model_name, 1000
+                    )
+                )
+                for r in responses:
+                    self.process_output(
+                        r["choices"][0]["message"]["content"], all_data, chunk
+                    )
+            else:
+                output = openai.ChatCompletion.create(
+                    model=self.config.openai_model_name,
+                    messages=messages,
+                    temperature=1.3,
+                    presence_penalty=2,
+                )
+                self.process_output(
+                    output.choices[0].message.content, all_data, chunk
+                )
+                c = extract_dict_from_gpt_output(
+                    output.choices[0].message.content
+                )
+                if c:
+                    all_data_content.append(c)
+            if chunk and len(chunk) >= self.config.chunk_size:
                 yield chunk
                 chunk = []
-
-        # Saving to output path
         if self.config.output_path:
             with open(self.config.output_path, 'wb') as file:
                 pickle.dump(all_data, file)
         if chunk:
             yield chunk
+
 
 BaseDataGenerator.register_data_generator(
     "openai_prompt_data_generator", OpenAIPromptDataGenerator,

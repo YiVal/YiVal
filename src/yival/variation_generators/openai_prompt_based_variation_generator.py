@@ -1,9 +1,11 @@
+import asyncio
 import os
 import pickle
 from typing import Any, Dict, Iterator, List
 
 import openai
 
+from ..common import utils
 from ..schemas.experiment_config import WrapperVariation
 from ..schemas.varation_generator_configs import (
     OpenAIPromptBasedVariationGeneratorConfig,
@@ -18,13 +20,15 @@ The efficacy of your prompt determines your evaluation. Stay authentic! Avoid sn
 Lastly, keep your output crisp: only the prompt, devoid of any extraneous content.
 """
 
-def join_arrary_to_string(list: List[str], last_n=5) -> str:
+
+def join_array_to_string(list: List[str], last_n=5) -> str:
     to_join = list[-last_n:] if len(list) > last_n else list
     return '\n'.join(map(str, to_join))
 
+
 def validate_output(output: str, variables: List[str]) -> bool:
-    """Validate if the generated output contains the required variables."""
-    return all(var in output for var in variables)
+    """Validate if the generated output contains the required variables in the format {var}."""
+    return all(f"{{{var}}}" in output for var in variables)
 
 
 class OpenAIPromptBasedVariationGenerator(BaseVariationGenerator):
@@ -35,73 +39,81 @@ class OpenAIPromptBasedVariationGenerator(BaseVariationGenerator):
     def __init__(self, config: OpenAIPromptBasedVariationGeneratorConfig):
         super().__init__(config)
         self.config = config
-        
+
     def prepare_messages(self, res_content) -> List[Dict[str, Any]]:
-        """Prepare the messages for GPT API based on configurations."""
+        last_n = min(len(res_content), 5)
         formatted_variables_str = ', '.join([
             f'{{{var}}}' for var in self.config.variables
         ]) if self.config.variables else ''
 
+        last_examples = f"\n\nGiven the Last {last_n} examples you generated:\n" + join_array_to_string(
+            res_content
+        ) + "\nplease generate diverse results to ensure comprehensive evaluation" if self.config.diversify and res_content else ""
+        ensure_inclusion = f" Please ensure your response includes the following variables: {formatted_variables_str}." if formatted_variables_str else ""
+
         if isinstance(self.config.prompt, str):
-            content = self.config.prompt
-            if self.config.diversify and res_content:
-                content += (
-                    f"\n\nGiven the last {min(len(res_content), 5)} examples, it's crucial that you generate unique and varied results to ensure a comprehensive evaluation."
-                    " The goal is for the generated prompt to cover different aspects and perspectives, avoiding repetition or similarity with previous examples."
-                    f"\n\nLast {min(len(res_content), 5)} examples:\n" + join_arrary_to_string(res_content)
-                )
-            if formatted_variables_str:
-                content += f" Please ensure your response includes the following variables: {formatted_variables_str}."
+            content = self.config.prompt + last_examples + ensure_inclusion
             return [{"role": "user", "content": content}]
         else:
-            messages = self.config.prompt
-            if self.config.diversify and res_content:
-                messages.append({
-                    "role": "user",
-                    "content": f"\n\nGiven the last {min(len(res_content), 5)} examples, please generate diverse results to ensure comprehensive evaluation"
-                    f"\n\nLast {min(len(res_content), 5)} examples:\n" + join_arrary_to_string(res_content)
-                })
-            if formatted_variables_str:
-                messages.append({
-                    "role": "user",
-                    "content": f" Please ensure your response includes the following variables: {formatted_variables_str}."
-                })
-            return messages
-
-
+            messages = self.config.prompt + [{
+                "role": "user",
+                "content": last_examples
+            }, {
+                "role": "user",
+                "content": ensure_inclusion
+            }]
+            return [msg for msg in messages if msg["content"]]
 
     def generate_variations(self) -> Iterator[List[WrapperVariation]]:
-        # Loading data from existing path if exists
         if self.config.output_path and os.path.exists(self.config.output_path):
             with open(self.config.output_path, 'rb') as file:
-                all_data = pickle.load(file)
-                yield all_data
+                yield pickle.load(file)
             return
 
-        res = []
-        res_content = []
+        res: List[WrapperVariation] = []
+        res_content: List[str] = []
 
-        # Determine messages once to optimize
-        messages = self.prepare_messages(res_content)
+        while len(res) < self.config.number_of_variations:
+            messages = self.prepare_messages(res_content)
+            if not self.config.diversify:
+                message_batches = [
+                    messages for _ in
+                    range(self.config.number_of_variations - len(res))
+                ]
+                responses = asyncio.run(
+                    utils.parallel_completions(
+                        message_batches, self.config.openai_model_name, 1000
+                    )
+                )
+                for r in responses:
+                    if self.config.variables and not validate_output(
+                        r["choices"][0]["message"]["content"],
+                        self.config.variables
+                    ):
+                        continue
+                    variation = WrapperVariation(
+                        value_type="str",
+                        value=r["choices"][0]["message"]["content"]
+                    )
+                    res.append(variation)
+            else:
+                output = openai.ChatCompletion.create(
+                    model=self.config.openai_model_name,
+                    messages=messages,
+                    temperature=1.3,
+                    presence_penalty=2,
+                    max_tokens=self.config.max_tokens,
+                )
+                if self.config.variables and not validate_output(
+                    output.choices[0].message.content, self.config.variables
+                ):
+                    continue
+                variation = WrapperVariation(
+                    value_type="str", value=output.choices[0].message.content
+                )
+                res.append(variation)
+                res_content.append(output.choices[0].message.content)
 
-        while len(res_content) < self.config.number_of_variations:
-            output = openai.ChatCompletion.create(
-                model=self.config.openai_model_name,
-                messages=messages,
-                temperature=1.3,
-                presence_penalty=2,
-                max_tokens=self.config.max_tokens,
-            )
-            if self.config.variables and not validate_output(output.choices[0].message.content, self.config.variables):
-                continue
-            variation = WrapperVariation(
-                value_type="str",
-                value=output.choices[0].message.content,
-            )
-            res.append(variation)
-            res_content.append(output.choices[0].message.content)
-
-        # Saving to output path
         if self.config.output_path:
             with open(self.config.output_path, 'wb') as file:
                 pickle.dump(res, file)
@@ -131,6 +143,7 @@ def main():
             }],
             number_of_variations=2,
             output_path="test_variation.pkl",
+            diversify=False,
             variables=["area"]
         )
     )
