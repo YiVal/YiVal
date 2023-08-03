@@ -17,19 +17,13 @@ class BaseDataGenerator(ABC):
     def get_data_generator(cls,
                            name: str) -> Optional[Type['BaseDataGenerator']]:
         """Retrieve data generator class from registry by its name."""
-        generator_info = cls._registry.get(name, {})
-        return generator_info.get(
-            "class", None
-        ) if "class" in generator_info else None
+        return cls._registry.get(name, {}).get("class")
 
     @classmethod
     def get_default_config(cls,
                            name: str) -> Optional[BaseDataGeneratorConfig]:
         """Retrieve the default configuration of a data generator by its name."""
-        generator_info = cls._registry.get(name, {})
-        return generator_info.get(
-            "default_config", None
-        ) if "default_config" in generator_info else None
+        return cls._registry.get(name, {}).get("default_config")
 
     def __init__(self, config: BaseDataGeneratorConfig):
         self.config = config
@@ -38,8 +32,7 @@ class BaseDataGenerator(ABC):
     def get_config_class(cls,
                          name: str) -> Optional[Type[BaseDataGeneratorConfig]]:
         """Retrieve the configuration class of a generator_info by its name."""
-        generator_info = cls._registry.get(name, {})
-        return generator_info.get("config_cls", None)
+        return cls._registry.get(name, {}).get("config_cls")
 
     @classmethod
     def register_data_generator(
@@ -62,5 +55,4 @@ class BaseDataGenerator(ABC):
         """
         Default function to generate an example_id for a given row of data.
         """
-        row_hash = hashlib.md5(str(content).encode()).hexdigest()
-        return row_hash
+        return hashlib.md5(content.encode()).hexdigest()

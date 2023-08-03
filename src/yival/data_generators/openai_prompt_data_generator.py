@@ -2,7 +2,7 @@ import ast
 import os
 import pickle
 import re
-from typing import Iterator, List
+from typing import Any, Dict, Iterator, List
 
 import openai
 
@@ -44,7 +44,7 @@ def dict_to_description(data, indent=0):
     return '\n'.join(narrative)
 
 
-def extract_dict_from_gpt_output(output):
+def extract_dict_from_gpt_output(output) -> Dict[str, Any] | None:
     # Regular expression to capture content within curly braces
     pattern = r"\{[^}]+\}"
 
@@ -52,14 +52,27 @@ def extract_dict_from_gpt_output(output):
     match = re.search(pattern, output)
     dict_string = match.group(0) if match else None
     if dict_string:
-        # Convert single quotes to double quotes for JSON parsing and then evaluate
-        return ast.literal_eval(dict_string.replace("'", "\""))
+        try:
+            # Convert single quotes to double quotes for JSON parsing and then evaluate
+            return ast.literal_eval(dict_string.replace("'", "\""))
+        except Exception:
+            return None
     return None
+
+
+def join_dicts_to_string(dicts: List[Dict[Any, Any]]) -> str:
+    to_join = dicts[-10:] if len(dicts) > 10 else dicts
+    return '\n'.join(str(d) for d in to_join)
 
 
 class OpenAIPromptDataGenerator(BaseDataGenerator):
     config: OpenAIPromptBasedGeneratorConfig
     default_config: OpenAIPromptBasedGeneratorConfig = OpenAIPromptBasedGeneratorConfig(
+        prompt=
+        """ Please provide a single test case in the form of a dictionary suitable for passing to the function using the ** operator.
+    Parameter only and don't include description and name. 
+    Ideally the test cases should be concrete and realistic. Be attractive.
+    ### Dictionary only and nothing else ####""",
         input_function={
             "name": "headline_generation_for_business",
             "description":
@@ -67,7 +80,8 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
             "parameters": {
                 "tech_startup_business": "str"
             }
-        }
+        },
+        number_of_examples=20,
     )
 
     def __init__(self, config: OpenAIPromptBasedGeneratorConfig):
@@ -85,37 +99,46 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
 
         chunk = []
         all_data = []
-        for i in range(self.config.number_of_examples):
+        while len(all_data) < self.config.number_of_examples:
+            if isinstance(self.config.prompt, str):
+                content = self.config.prompt + "\n\n Here is the function details \n\n" + dict_to_description(
+                    self.config.input_function
+                )
+                if self.config.diversify:
+                    content += "\n\n Here are last 10 examples, try to diversify the results for robust evaluation. \n\n" + join_dicts_to_string(
+                        all_data
+                    )
+                messages = [{"role": "user", "content": content}]
+            else:
+                messages = self.config.prompt
+                if self.config.diversify:
+                    messages.append({
+                        "role":
+                        "user",
+                        "content":
+                        "\n\n Here are last 10 examples, try to diversify the results robust evaluation. \n\n"
+                        + join_dicts_to_string(all_data)
+                    })
+
             output = openai.ChatCompletion.create(
                 model=self.config.openai_model_name,
-                messages=[{
-                    "role":
-                    "system",
-                    "content":
-                    "You are a helpful assistant. Parse the following user input and provide a dictionary from the description."
-                }, {
-                    "role":
-                    "user",
-                    "content":
-                    f"""
-    Based on the function details:
-    {dict_to_description(self.config.input_function)}
-
-    Please provide a single test case in the form of a dictionary suitable for passing to the function using the ** operator.
-    Parameter only and don't include description and name. 
-    Ideally the test cases should be concrete and realistic. Be attractive.
-    ### Dictionary only and nothing else ####
-    """
-                }],
-                temperature=0.9,
+                messages=messages,
+                temperature=1.3,
+                presence_penalty=2,
             )
+            generated_example = extract_dict_from_gpt_output(
+                output.choices[0].message.content
+            )
+
+            if not generated_example or generated_example.keys(
+            ) != self.config.input_function.get('parameters', {}).keys():
+                continue
+
             input_data_instance = InputData(
                 example_id=super().generate_example_id(
                     output.choices[0].message.content
                 ),
-                content=extract_dict_from_gpt_output(
-                    output.choices[0].message.content
-                ),
+                content=generated_example,
                 expected_result=None
             )
             all_data.append(input_data_instance)
@@ -138,18 +161,7 @@ BaseDataGenerator.register_data_generator(
 
 def main():
     generator = OpenAIPromptDataGenerator(
-        OpenAIPromptBasedGeneratorConfig(
-            input_function={
-                "name": "headline_generation_for_business",
-                "description":
-                "Given an tech startup business, generate corresponding landing page headlines",
-                "parameters": {
-                    "tech_startup_business": "str"
-                }
-            },
-            number_of_examples=3,
-            output_path="test.pkl"
-        )
+        OpenAIPromptDataGenerator.default_config
     )
     res = generator.generate_examples()
     for d in res:

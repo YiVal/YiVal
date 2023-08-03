@@ -5,23 +5,28 @@ dataset:
   data_generators:
     openai_prompt_data_generator:
       chunk_size: 1000
+      diversify: true
       input_function:
-        description:
-          Given an tech startup business, generate a corresponding landing
+        description: Given an tech startup business, generate a corresponding landing
           page headline
         name: headline_generation_for_business
         parameters:
           tech_startup_business: str
-      number_of_examples: 10
+      number_of_examples: 20
       openai_model_name: gpt-4
       output_path: null
+      prompt: " Please provide a single test case in the form of a dictionary suitable\
+        \ for passing to the function using the ** operator.\n    Parameter only and\
+        \ don't include description and name. \n    Ideally the test cases should\
+        \ be concrete and realistic. Be attractive.\n    ### Dictionary only and nothing\
+        \ else ####"
   source_type: machine_generated
 description: Generated experiment config
 selection_strategy:
   ahp_selection:
     criteria:
-      - average_token_usage
-      - average_latency
+    - average_token_usage
+    - average_latency
     criteria_maximization:
       average_latency: false
       average_token_usage: false
@@ -34,22 +39,23 @@ selection_strategy:
 # wrapper_configs: {}
 
 variations:
-  - generator_config:
-      input_description: This is a description.
-      input_test_cases: []
-      number_of_variations: 5
-      openai_model_name: gpt-4
-      output_path: null
-    generator_name: openai_prompt_based_variation_generator
-    name: task
-    variations:
-      - instantiated_value: manual test
-        value: manual test
-        value_type: str
-        variation_id: null
+- generator_config:
+    input_description: This is a description.
+    input_test_cases: []
+    number_of_variations: 5
+    openai_model_name: gpt-4
+    output_path: null
+  generator_name: openai_prompt_based_variation_generator
+  name: task
+  variations:
+  - instantiated_value: manual test
+    value: manual test
+    value_type: str
+    variation_id: null
 
-        # Variations allow for dynamic content during experiments.
-        # They are identified by a globally unique name. For example, in your code,
-        # you might reference a variation by its name, like:
-        # variation = StringWrapper("hello", 'test_experiment')
-        # In this config, you would define the variations associated with that name.
+    # Variations allow for dynamic content during experiments.
+    # They are identified by a globally unique name. For example, in your code,
+    # you might reference a variation by its name, like:
+    # variation = StringWrapper("hello", 'test_experiment')
+    # In this config, you would define the variations associated with that name.
+    
