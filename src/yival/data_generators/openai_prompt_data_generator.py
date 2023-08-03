@@ -2,7 +2,7 @@ import ast
 import os
 import pickle
 import re
-from typing import Iterator, List
+from typing import Any, Dict, Iterator, List
 
 import openai
 
@@ -12,54 +12,53 @@ from .base_data_generator import BaseDataGenerator
 
 
 def dict_to_description(data, indent=0):
-    """Recursively converts a dictionary into a descriptive narrative, handling function parameters."""
-
     narrative = []
-
     for key, value in data.items():
+        prefix = '  ' * indent
         if key == "parameters":
-            # Handle the special 'parameters' key
-            param_descriptions = [
-                f"'{param_name}' of type '{param_type}'"
-                for param_name, param_type in value.items()
-            ]
-            param_str = ', '.join(param_descriptions)
-            narrative.append(
-                f"{'  ' * indent}- It takes parameters: {param_str}."
+            param_str = ', '.join(
+                f"'{k}' of type '{v}'" for k, v in value.items()
             )
+            narrative.append(f"{prefix}- It takes parameters: {param_str}.")
         elif isinstance(value, dict):
+            sub_narrative = dict_to_description(value, indent + 1)
             narrative.append(
-                f"{'  ' * indent}- '{key}' has the following properties:\n{dict_to_description(value, indent + 1)}"
+                f"{prefix}- '{key}' has the following properties:\n{sub_narrative}"
             )
         elif isinstance(value, list):
-            items = ', '.join([str(item) for item in value])
-            narrative.append(
-                f"{'  ' * indent}- '{key}' can have values: {items}."
-            )
+            items = ', '.join(map(str, value))
+            narrative.append(f"{prefix}- '{key}' can have values: {items}.")
         else:
-            narrative.append(
-                f"{'  ' * indent}- '{key}' is described as '{value}'."
-            )
-
+            narrative.append(f"{prefix}- '{key}' is described as '{value}'.")
     return '\n'.join(narrative)
 
 
-def extract_dict_from_gpt_output(output):
-    # Regular expression to capture content within curly braces
+def extract_dict_from_gpt_output(output) -> Dict[str, Any] | None:
     pattern = r"\{[^}]+\}"
-
-    # Search for the dictionary pattern in the GPT output
     match = re.search(pattern, output)
     dict_string = match.group(0) if match else None
     if dict_string:
-        # Convert single quotes to double quotes for JSON parsing and then evaluate
-        return ast.literal_eval(dict_string.replace("'", "\""))
+        try:
+            return ast.literal_eval(dict_string.replace("'", "\""))
+        except Exception:
+            return None
     return None
+
+
+def join_dicts_to_string(dicts: List[Dict[Any, Any]], last_n=10) -> str:
+    to_join = dicts[-last_n:] if len(dicts) > last_n else dicts
+    return '\n'.join(map(str, to_join))
 
 
 class OpenAIPromptDataGenerator(BaseDataGenerator):
     config: OpenAIPromptBasedGeneratorConfig
     default_config: OpenAIPromptBasedGeneratorConfig = OpenAIPromptBasedGeneratorConfig(
+        prompt="""
+            Please provide a concrete and realistic test case as a dictionary for function invocation using the ** operator.
+            Only include parameters, excluding description and name.
+            Ensure it's succinct and well-structured.
+            **Only provide the dictionary.**
+            """,
         input_function={
             "name": "headline_generation_for_business",
             "description":
@@ -67,7 +66,8 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
             "parameters": {
                 "tech_startup_business": "str"
             }
-        }
+        },
+        number_of_examples=5,
     )
 
     def __init__(self, config: OpenAIPromptBasedGeneratorConfig):
@@ -85,37 +85,48 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
 
         chunk = []
         all_data = []
-        for i in range(self.config.number_of_examples):
+        all_data_content: List[Dict[str, Any]] = []
+        while len(all_data) < self.config.number_of_examples:
+            if isinstance(self.config.prompt, str):
+                content = self.config.prompt + "\n\n Here is the function details \n\n" + dict_to_description(
+                    self.config.input_function
+                )
+                if self.config.diversify:
+                    content += "\n\n Given the last 10 examples, please generate diverse results to ensure comprehensive evaluation. \n\n" + join_dicts_to_string(
+                        all_data_content
+                    )
+                messages = [{"role": "user", "content": content}]
+            else:
+                messages = self.config.prompt
+                if self.config.diversify:
+                    messages.append({
+                        "role":
+                        "user",
+                        "content":
+                        "\n\n Given the last 10 examples, please generate diverse results to ensure comprehensive evaluation. \n\n"
+                        + join_dicts_to_string(all_data_content)
+                    })
+
             output = openai.ChatCompletion.create(
                 model=self.config.openai_model_name,
-                messages=[{
-                    "role":
-                    "system",
-                    "content":
-                    "You are a helpful assistant. Parse the following user input and provide a dictionary from the description."
-                }, {
-                    "role":
-                    "user",
-                    "content":
-                    f"""
-    Based on the function details:
-    {dict_to_description(self.config.input_function)}
-
-    Please provide a single test case in the form of a dictionary suitable for passing to the function using the ** operator.
-    Parameter only and don't include description and name. 
-    Ideally the test cases should be concrete and realistic. Be attractive.
-    ### Dictionary only and nothing else ####
-    """
-                }],
-                temperature=0.9,
+                messages=messages,
+                temperature=1.3,
+                presence_penalty=2,
             )
+
+            generated_example = extract_dict_from_gpt_output(
+                output.choices[0].message.content
+            )
+
+            if not generated_example or generated_example.keys(
+            ) != self.config.input_function.get('parameters', {}).keys():
+                continue
+            all_data_content.append(generated_example)
             input_data_instance = InputData(
                 example_id=super().generate_example_id(
                     output.choices[0].message.content
                 ),
-                content=extract_dict_from_gpt_output(
-                    output.choices[0].message.content
-                ),
+                content=generated_example,
                 expected_result=None
             )
             all_data.append(input_data_instance)
@@ -138,18 +149,7 @@ BaseDataGenerator.register_data_generator(
 
 def main():
     generator = OpenAIPromptDataGenerator(
-        OpenAIPromptBasedGeneratorConfig(
-            input_function={
-                "name": "headline_generation_for_business",
-                "description":
-                "Given an tech startup business, generate corresponding landing page headlines",
-                "parameters": {
-                    "tech_startup_business": "str"
-                }
-            },
-            number_of_examples=3,
-            output_path="test.pkl"
-        )
+        OpenAIPromptDataGenerator.default_config
     )
     res = generator.generate_examples()
     for d in res:
