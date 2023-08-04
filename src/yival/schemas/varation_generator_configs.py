@@ -22,7 +22,7 @@ class OpenAIPromptBasedVariationGeneratorConfig(BaseVariationGeneratorConfig):
     """
     openai_model_name: str = "gpt-4"
     prompt: Union[str, List[Dict[str, str]]] = ""
-    diversify: bool = True
+    diversify: bool = False
     variables: Optional[List[str]] = None
     max_tokens: int = 7000
 

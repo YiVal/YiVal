@@ -1,5 +1,6 @@
 import os
 import pickle
+from concurrent.futures import ThreadPoolExecutor
 from typing import List
 
 from tqdm import tqdm
@@ -30,11 +31,21 @@ class ExperimentRunner:
     def __init__(self, config_path: str):
         self.config = load_and_validate_config(config_path)
 
+    def parallel_task(self, d, all_combinations, state, logger, evaluator):
+        return run_single_input(
+            d,
+            self.config,
+            all_combinations=all_combinations,
+            state=state,
+            logger=logger,
+            evaluator=evaluator
+        )
+
     def run(
         self,
         display: bool = False,
-        output_path: str = "tmp1.pkl",
-        experimnet_input_path: str = "tmp1.pkl"
+        output_path: str = "",
+        experimnet_input_path: str = ""
     ):
         results: List[ExperimentResult] = []
         register_custom_wrappers(
@@ -52,7 +63,6 @@ class ExperimentRunner:
         evaluator = Evaluator(
             self.config.get("evaluators", [])  # type: ignore
         )
-
         logger = TokenLogger()
         # TODO support multi processing in the future
         state = ExperimentState.get_instance()
@@ -82,17 +92,15 @@ class ExperimentRunner:
                         desc="Processing",
                         unit="item"
                     ) as pbar:
-                        for d in data:
-                            res = run_single_input(
-                                d,
-                                self.config,
-                                all_combinations=all_combinations,
-                                state=state,
-                                logger=logger,
-                                evaluator=evaluator
-                            )
-                            results.extend(res)
-                            pbar.update(len(res))
+                        with ThreadPoolExecutor() as executor:
+                            for res in executor.map(
+                                self.parallel_task, data,
+                                [all_combinations] * len(data),
+                                [state] * len(data), [logger] * len(data),
+                                [evaluator] * len(data)
+                            ):
+                                results.extend(res)
+                                pbar.update(len(res))
                 experiment = generate_experiment(results, evaluator)
                 if output_path:
                     with open(output_path, 'wb') as file:
@@ -115,10 +123,9 @@ class ExperimentRunner:
             app.run()
 
 
-def main():
-    runner = ExperimentRunner(config_path="demo/config.yml")
-    runner.run()
+# def main():
+#     runner = ExperimentRunner(config_path="demo/config.yml")
+#     runner.run()
 
-
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()

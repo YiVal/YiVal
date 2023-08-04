@@ -1,6 +1,6 @@
 # This is a generated template. Modify the values as needed.
 
-custom_function: module.test
+custom_function: /Users/taofeng/YiVal/demo.headline_generation.headline_generation
 dataset:
   data_generators:
     openai_prompt_data_generator:
@@ -13,9 +13,9 @@ dataset:
         name: headline_generation_for_business
         parameters:
           tech_startup_business: str
-      number_of_examples: 5
+      number_of_examples: 10
       openai_model_name: gpt-4
-      output_path: null
+      output_path: generated_examples_updated.pkl
       prompt:
         "\n            Please provide a concrete and realistic test case as\
         \ a dictionary for function invocation using the ** operator.\n          \
@@ -46,7 +46,6 @@ variations:
       max_tokens: 7000
       number_of_variations: 5
       openai_model_name: gpt-4
-      output_path: null
       prompt:
         - content: "
 
@@ -72,20 +71,17 @@ variations:
             "
           role: system
         - content:
-            "Here are some test cases: AI, Weapon\n\n Here is the description of\
-            \ the use-case: Given \\{area\\}, write a tech startup headline"
+            "Here are some test cases: AI, Energy\n\n Here is the description of\
+            \ the use-case: Write a tech startup headline for landing page"
           role: user
-      variables: null
+      output_path: generated_prompt_updated.pkl
     generator_name: openai_prompt_based_variation_generator
-    name: task
-    variations:
-      - instantiated_value: manual test
-        value: manual test
-        value_type: str
-        variation_id: null
 
-        # Variations allow for dynamic content during experiments.
-        # They are identified by a globally unique name. For example, in your code,
-        # you might reference a variation by its name, like:
-        # variation = StringWrapper("hello", 'test_experiment')
-        # In this config, you would define the variations associated with that name.
+    name:
+      task
+
+      # Variations allow for dynamic content during experiments.
+      # They are identified by a globally unique name. For example, in your code,
+      # you might reference a variation by its name, like:
+      # variation = StringWrapper("hello", 'test_experiment')
+      # In this config, you would define the variations associated with that name.

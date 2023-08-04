@@ -4,6 +4,7 @@ import pickle
 from typing import Any, Dict, Iterator, List
 
 import openai
+from tqdm import tqdm
 
 from ..common import utils
 from ..schemas.experiment_config import WrapperVariation
@@ -27,6 +28,8 @@ def join_array_to_string(list: List[str], last_n=5) -> str:
 
 
 def validate_output(output: str, variables: List[str]) -> bool:
+    if not variables:
+        return True
     """Validate if the generated output contains the required variables in the format {var}."""
     return all(f"{{{var}}}" in output for var in variables)
 
@@ -34,6 +37,15 @@ def validate_output(output: str, variables: List[str]) -> bool:
 class OpenAIPromptBasedVariationGenerator(BaseVariationGenerator):
     config: OpenAIPromptBasedVariationGeneratorConfig
     default_config: OpenAIPromptBasedVariationGeneratorConfig = OpenAIPromptBasedVariationGeneratorConfig(
+        prompt=[{
+            "role": "system",
+            "content": SYSTEM_PRMPOT
+        }, {
+            "role":
+            "user",
+            "content":
+            "Here are some test cases: AI, Weapon\n\n Here is the description of the use-case: Given \{area\}, write a tech startup headline"
+        }]
     )
 
     def __init__(self, config: OpenAIPromptBasedVariationGeneratorConfig):
@@ -76,43 +88,59 @@ class OpenAIPromptBasedVariationGenerator(BaseVariationGenerator):
         while len(res) < self.config.number_of_variations:
             messages = self.prepare_messages(res_content)
             if not self.config.diversify:
-                message_batches = [
-                    messages for _ in
-                    range(self.config.number_of_variations - len(res))
-                ]
-                responses = asyncio.run(
-                    utils.parallel_completions(
-                        message_batches, self.config.openai_model_name, 1000
+                with tqdm(
+                    total=self.config.number_of_variations,
+                    desc="Generating Variations",
+                    unit="variation"
+                ) as pbar:
+                    message_batches = [
+                        messages for _ in
+                        range(self.config.number_of_variations - len(res))
+                    ]
+                    responses = asyncio.run(
+                        utils.parallel_completions(
+                            message_batches,
+                            self.config.openai_model_name,
+                            self.config.max_tokens,
+                            pbar=pbar
+                        )
                     )
-                )
-                for r in responses:
+                    for r in responses:
+                        if self.config.variables and not validate_output(
+                            r["choices"][0]["message"]["content"],
+                            self.config.variables
+                        ):
+                            continue
+                        variation = WrapperVariation(
+                            value_type="str",
+                            value=r["choices"][0]["message"]["content"]
+                        )
+                        res.append(variation)
+            else:
+                with tqdm(
+                    total=self.config.number_of_variations,
+                    desc="Generating Variations",
+                    unit="variation"
+                ) as pbar:
+                    output = openai.ChatCompletion.create(
+                        model=self.config.openai_model_name,
+                        messages=messages,
+                        temperature=1.3,
+                        presence_penalty=2,
+                        max_tokens=self.config.max_tokens,
+                    )
                     if self.config.variables and not validate_output(
-                        r["choices"][0]["message"]["content"],
+                        output.choices[0].message.content,
                         self.config.variables
                     ):
                         continue
                     variation = WrapperVariation(
                         value_type="str",
-                        value=r["choices"][0]["message"]["content"]
+                        value=output.choices[0].message.content
                     )
                     res.append(variation)
-            else:
-                output = openai.ChatCompletion.create(
-                    model=self.config.openai_model_name,
-                    messages=messages,
-                    temperature=1.3,
-                    presence_penalty=2,
-                    max_tokens=self.config.max_tokens,
-                )
-                if self.config.variables and not validate_output(
-                    output.choices[0].message.content, self.config.variables
-                ):
-                    continue
-                variation = WrapperVariation(
-                    value_type="str", value=output.choices[0].message.content
-                )
-                res.append(variation)
-                res_content.append(output.choices[0].message.content)
+                    res_content.append(output.choices[0].message.content)
+                    pbar.update(1)
 
         if self.config.output_path:
             with open(self.config.output_path, 'wb') as file:
