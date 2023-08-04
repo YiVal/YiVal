@@ -6,6 +6,7 @@ import re
 from typing import Any, Dict, Iterator, List
 
 import openai
+from tqdm import tqdm
 
 from ..common import utils
 from ..schemas.common_structures import InputData
@@ -70,7 +71,7 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
             }
         },
         number_of_examples=5,
-        diversify=True,
+        diversify=False,
     )
 
     def __init__(self, config: OpenAIPromptBasedGeneratorConfig):
@@ -137,30 +138,44 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                 message_batches = [
                     messages
                 ] * (self.config.number_of_examples - len(all_data))
-                responses = asyncio.run(
-                    utils.parallel_completions(
-                        message_batches, self.config.openai_model_name, 1000
+                with tqdm(
+                    total=self.config.number_of_examples,
+                    desc="Generating Examples",
+                    unit="example"
+                ) as pbar:
+                    responses = asyncio.run(
+                        utils.parallel_completions(
+                            message_batches,
+                            self.config.openai_model_name,
+                            self.config.max_token,
+                            pbar=pbar
+                        )
                     )
-                )
                 for r in responses:
                     self.process_output(
                         r["choices"][0]["message"]["content"], all_data, chunk
                     )
             else:
-                output = openai.ChatCompletion.create(
-                    model=self.config.openai_model_name,
-                    messages=messages,
-                    temperature=1.3,
-                    presence_penalty=2,
-                )
-                self.process_output(
-                    output.choices[0].message.content, all_data, chunk
-                )
-                c = extract_dict_from_gpt_output(
-                    output.choices[0].message.content
-                )
-                if c:
-                    all_data_content.append(c)
+                with tqdm(
+                    total=self.config.number_of_examples,
+                    desc="Generating Examples",
+                    unit="example"
+                ) as pbar:
+                    output = openai.ChatCompletion.create(
+                        model=self.config.openai_model_name,
+                        messages=messages,
+                        temperature=1.3,
+                        presence_penalty=2,
+                    )
+                    self.process_output(
+                        output.choices[0].message.content, all_data, chunk
+                    )
+                    c = extract_dict_from_gpt_output(
+                        output.choices[0].message.content
+                    )
+                    if c:
+                        all_data_content.append(c)
+                    pbar.update(1)
             if chunk and len(chunk) >= self.config.chunk_size:
                 yield chunk
                 chunk = []

@@ -1,3 +1,4 @@
+import asyncio
 import itertools
 import re
 from math import comb
@@ -6,6 +7,7 @@ from typing import Dict, List, Tuple
 import openai
 from tqdm import tqdm
 
+from ..common.utils import parallel_completions
 from ..schemas.evaluator_config import EvaluatorType, OpenAIEloEvaluatorConfig
 from ..schemas.experiment_config import (
     CombinationAggregatedMetrics,
@@ -84,9 +86,10 @@ class OpenAIEloEvaluator(BaseEvaluator):
         total_rounds = sum(
             comb(len(group_experiment_result.experiment_results), 2) for
             group_experiment_result in experimnet[0].group_experiment_results
-        )
+        ) * 2
 
         pbar = tqdm(total=total_rounds, ncols=70)
+        message_batches = []
 
         for group_experiment_result in experimnet[0].group_experiment_results:
             test_case = group_experiment_result.group_key
@@ -101,37 +104,83 @@ class OpenAIEloEvaluator(BaseEvaluator):
             for result1, result2 in itertools.combinations(
                 group_experiment_result.experiment_results, 2
             ):
-                pbar.update()
-                formatted_combination1 = str(result1.combination)
-                formatted_combination2 = str(result2.combination)
+                message1 = [{
+                    "role": "system",
+                    "content": RANKING_SYSTEM_PROMPT
+                }, {
+                    "role":
+                    "user",
+                    "content":
+                    f"""Task: {self.config.input_description.strip()}
+                        Prompt: {test_case}
+                        Generation A: {result1.raw_output}
+                        Generation B: {result2.raw_output}"""
+                }]
+                message_batches.append(message1)
 
-                score1 = self.get_score(test_case, result1, result2)
-                score2 = self.get_score(test_case, result2, result1)
+                message2 = [{
+                    "role": "system",
+                    "content": RANKING_SYSTEM_PROMPT
+                }, {
+                    "role":
+                    "user",
+                    "content":
+                    f"""Task: {self.config.input_description.strip()}
+                        Prompt: {test_case}
+                        Generation A: {result2.raw_output}
+                        Generation B: {result1.raw_output}"""
+                }]
+                message_batches.append(message2)
+        # 2. Utilizing parallel_completions:
+        with tqdm(
+            total=total_rounds, desc="Generating Scores", unit="score"
+        ) as pbar:
+            responses = asyncio.run(
+                parallel_completions(
+                    message_batches,
+                    self.config.openai_model_name,
+                    max_tokens=1,
+                    temperature=0.5,
+                    presence_penalty=0,
+                    pbar=pbar
+                )
+            )
 
-                score1 = 1 if score1 == 'A' else 0 if score1 == 'B' else 0.5
-                score2 = 1 if score2 == 'B' else 0 if score2 == 'A' else 0.5
-                score = (score1 + score2) / 2
+            idx = 0
+            for group_experiment_result in experimnet[
+                0].group_experiment_results:
+                for result1, result2 in itertools.combinations(
+                    group_experiment_result.experiment_results, 2
+                ):
+                    pbar.update()
+                    formatted_combination1 = str(result1.combination)
+                    formatted_combination2 = str(result2.combination)
+                    score1 = responses[idx]["choices"][0]["message"]["content"]
+                    score1 = 1 if score1 == 'A' else 0 if score1 == 'B' else 0.5
+                    idx += 1
+                    score2 = responses[idx]["choices"][0]["message"]["content"]
+                    score2 = 1 if score2 == 'A' else 0 if score2 == 'B' else 0.5
+                    idx += 1
+                    r1, r2 = prompt_ratings[formatted_combination1
+                                            ], prompt_ratings[
+                                                formatted_combination2]
+                    r1, r2 = self.update_elo(r1, r2, score1)
+                    prompt_ratings[formatted_combination1], prompt_ratings[
+                        formatted_combination2] = r1, r2
 
-                r1, r2 = prompt_ratings[formatted_combination1
-                                        ], prompt_ratings[
-                                            formatted_combination2]
-                r1, r2 = self.update_elo(r1, r2, score)
-                prompt_ratings[formatted_combination1], prompt_ratings[
-                    formatted_combination2] = r1, r2
-        pbar.close()
+            pbar.close()
         for index, combo in enumerate(
             experimnet[0].combination_aggregated_metrics
         ):
             if not combo.evaluator_outputs:
                 experimnet[0].combination_aggregated_metrics[
                     index].evaluator_outputs = []
-            experimnet[0].combination_aggregated_metrics[
-                index].evaluator_outputs.append( # type: ignore
-                    EvaluatorOutput(
-                        name="openai_elo_evaluator",
-                        result=prompt_ratings[combo.combo_key]
-                    )
+            experimnet[0].combination_aggregated_metrics[index].evaluator_outputs.append( # type: ignore
+                EvaluatorOutput(
+                    name="openai_elo_evaluator",
+                    result=prompt_ratings[combo.combo_key]
                 )
+            )
 
 
 BaseEvaluator.register_evaluator(

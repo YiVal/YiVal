@@ -26,6 +26,7 @@ class OpenAIPromptBasedGeneratorConfig(BaseDataGeneratorConfig):
     input_function: Dict[str, Any] = field(default_factory=dict)
     # Whether to diversify the generated examples.
     diversify: bool = True
+    max_token = 2000
 
     def asdict(self):
         return asdict(self)

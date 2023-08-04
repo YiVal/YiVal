@@ -488,4 +488,4 @@ def create_dash_app(experiment_data: Experiment):
 
 def display_results_dash(experiment_data):
     app = create_dash_app(experiment_data)
-    app.run_server(debug=True, port=8070)
+    app.run(debug=False, port=8070)

@@ -10,20 +10,40 @@ MAX_TOKENS_PER_MINUTE = 600000
 SECONDS_TO_PAUSE_AFTER_RATE_LIMIT_ERROR = 15
 
 
-async def fetch(session, url, headers, payload, available_tokens):
+async def fetch(
+    session,
+    url,
+    headers,
+    payload,
+    available_tokens,
+    pbar=None,
+    logit_bias=None
+):
     if payload['max_tokens'] > available_tokens:
-        return None  # Not enough tokens; you might want to handle this differently
+        return None
+
+    if logit_bias:
+        payload['logit_bias'] = logit_bias
 
     async with session.post(
         url, headers=headers, data=json.dumps(payload)
     ) as response:
         if response.status == 429:  # Rate limit exceeded
             return "rate_limit"
-
+        if pbar:
+            pbar.update(1)
         return await response.json()
 
 
-async def parallel_completions(message_batches, model, max_tokens):
+async def parallel_completions(
+    message_batches,
+    model,
+    max_tokens,
+    temperature=1.3,
+    presence_penalty=2,
+    pbar=None,
+    logit_bias=None
+):
     url = "https://api.openai.com/v1/chat/completions"
     headers = {
         "Authorization": f"Bearer {openai.api_key}",
@@ -54,8 +74,8 @@ async def parallel_completions(message_batches, model, max_tokens):
             payload = {
                 "model": model,
                 "messages": messages,
-                "temperature": 1.3,
-                "presence_penalty": 2,
+                "temperature": temperature,
+                "presence_penalty": presence_penalty,
                 "max_tokens": max_tokens
             }
 
@@ -66,7 +86,7 @@ async def parallel_completions(message_batches, model, max_tokens):
                 task = asyncio.ensure_future(
                     fetch(
                         session, url, headers, payload,
-                        available_token_capacity
+                        available_token_capacity, pbar, logit_bias
                     )
                 )
                 tasks.append(task)
