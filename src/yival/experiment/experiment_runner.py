@@ -1,5 +1,6 @@
 import os
 import pickle
+import time
 from concurrent.futures import ThreadPoolExecutor
 from typing import List
 
@@ -26,12 +27,31 @@ from .utils import (
 )
 
 
+class RateLimiter:
+
+    def __init__(self, max_rate):
+        self.max_rate = max_rate
+        self.start_time = time.time()
+        self.request_count = 0
+
+    def __call__(self):
+        self.request_count += 1
+        elapsed_time = time.time() - self.start_time
+        expected_time = self.request_count / self.max_rate
+        if elapsed_time < expected_time:
+            time.sleep(expected_time - elapsed_time)
+
+
+rate_limiter = RateLimiter(10 / 60)
+
+
 class ExperimentRunner:
 
     def __init__(self, config_path: str):
         self.config = load_and_validate_config(config_path)
 
     def parallel_task(self, d, all_combinations, state, logger, evaluator):
+        rate_limiter()
         return run_single_input(
             d,
             self.config,
@@ -43,9 +63,9 @@ class ExperimentRunner:
 
     def run(
         self,
-        display: bool = False,
-        output_path: str = "",
-        experimnet_input_path: str = ""
+        display: bool = True,
+        output_path: str = "export.pkl",
+        experimnet_input_path: str = "export.pkl"
     ):
         results: List[ExperimentResult] = []
         register_custom_wrappers(

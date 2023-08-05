@@ -5,34 +5,80 @@ import time
 import aiohttp
 import openai
 
-MAX_REQUESTS_PER_MINUTE = 100
-MAX_TOKENS_PER_MINUTE = 600000
 SECONDS_TO_PAUSE_AFTER_RATE_LIMIT_ERROR = 15
+MAX_REQUESTS_PER_MINUTE = 100
+MAX_TOKENS_PER_MINUTE = 35000
+
+from collections import deque
+
+
+class RateLimiter:
+
+    def __init__(self, max_rate, max_tokens_per_minute):
+        self.max_rate = max_rate
+        self.max_tokens_per_minute = max_tokens_per_minute
+        self.start_time = time.time()
+        self.request_count = 0
+        self.token_usage = deque()
+
+    async def wait(self):
+        self.request_count += 1
+        elapsed_time = time.time() - self.start_time
+        expected_time = self.request_count / self.max_rate
+        sleep_time = max(expected_time - elapsed_time, 0)
+        await asyncio.sleep(sleep_time)
+
+        # Check if tokens used more than a minute ago, and remove them
+        while self.token_usage and self.token_usage[0][1] < time.time() - 60:
+            self.token_usage.popleft()
+
+        # Check if the current token count exceeds the limit
+        current_tokens = sum(token for token, _ in self.token_usage)
+        while current_tokens >= self.max_tokens_per_minute:
+            await asyncio.sleep(1)  # Wait a second and check again
+            while self.token_usage and self.token_usage[0][1] < time.time(
+            ) - 60:
+                self.token_usage.popleft()
+            current_tokens = sum(token for token, _ in self.token_usage)
+
+    def add_tokens(self, tokens):
+        self.token_usage.append((tokens, time.time()))
 
 
 async def fetch(
-    session,
-    url,
-    headers,
-    payload,
-    available_tokens,
-    pbar=None,
-    logit_bias=None
+    session, url, headers, payload, rate_limiter, pbar=None, logit_bias=None
 ):
-    if payload['max_tokens'] > available_tokens:
-        return None
+    while True:
+        await rate_limiter.wait()  # Wait for the rate limiter
 
-    if logit_bias:
-        payload['logit_bias'] = logit_bias
+        if logit_bias:
+            payload['logit_bias'] = logit_bias
 
-    async with session.post(
-        url, headers=headers, data=json.dumps(payload)
-    ) as response:
-        if response.status == 429:  # Rate limit exceeded
-            return "rate_limit"
-        if pbar:
-            pbar.update(1)
-        return await response.json()
+        async with session.post(
+            url, headers=headers, data=json.dumps(payload)
+        ) as response:
+            response_data = await response.json()
+            if response.status == 429:  # Rate limit exceeded
+                print("Rate limit exceeded, sleeping...")
+                await asyncio.sleep(SECONDS_TO_PAUSE_AFTER_RATE_LIMIT_ERROR)
+                continue  # Retry the request
+
+            choices = response_data.get('choices')
+            total_tokens = response_data.get('usage',
+                                             {}).get('total_tokens', 0)
+            rate_limiter.add_tokens(
+                total_tokens
+            )  # Add the tokens used to the rate limiter
+
+            if choices and len(choices) > 0 and choices[0]:
+                if pbar:
+                    pbar.update(1)
+                return response_data
+            else:
+                print(f"Invalid choices in response. Choices: {choices}")
+
+        print("Response criteria not met, retrying...")
+        continue
 
 
 async def parallel_completions(
@@ -40,7 +86,7 @@ async def parallel_completions(
     model,
     max_tokens,
     temperature=1.3,
-    presence_penalty=2,
+    presence_penalty=0,
     pbar=None,
     logit_bias=None
 ):
@@ -50,60 +96,25 @@ async def parallel_completions(
         "Content-Type": "application/json"
     }
 
-    available_request_capacity = MAX_REQUESTS_PER_MINUTE
-    available_token_capacity = MAX_TOKENS_PER_MINUTE
-    last_update_time = time.time()
+    rate_limiter = RateLimiter(
+        MAX_REQUESTS_PER_MINUTE / 60, MAX_TOKENS_PER_MINUTE
+    )  # Create a rate limiter
 
     async with aiohttp.ClientSession() as session:
-        tasks = []
-        for messages in message_batches:
-            current_time = time.time()
-            seconds_since_update = current_time - last_update_time
-            available_request_capacity = min(
-                available_request_capacity +
-                MAX_REQUESTS_PER_MINUTE * seconds_since_update / 60.0,
-                MAX_REQUESTS_PER_MINUTE,
-            )
-            available_token_capacity = min(
-                available_token_capacity +
-                MAX_TOKENS_PER_MINUTE * seconds_since_update / 60.0,
-                MAX_TOKENS_PER_MINUTE,
-            )
-            last_update_time = current_time
-
-            payload = {
-                "model": model,
-                "messages": messages,
-                "temperature": temperature,
-                "presence_penalty": presence_penalty,
-                "max_tokens": max_tokens
-            }
-
-            if available_request_capacity > 0 and available_token_capacity >= payload[
-                'max_tokens']:
-                available_request_capacity -= 1
-                available_token_capacity -= payload['max_tokens']
-                task = asyncio.ensure_future(
-                    fetch(
-                        session, url, headers, payload,
-                        available_token_capacity, pbar, logit_bias
-                    )
+        tasks = [
+            asyncio.ensure_future(
+                fetch(
+                    session, url, headers, {
+                        "model": model,
+                        "messages": messages,
+                        "temperature": temperature,
+                        "presence_penalty": presence_penalty,
+                        "max_tokens": max_tokens
+                    }, rate_limiter, pbar, logit_bias
                 )
-                tasks.append(task)
-
-            else:
-                await asyncio.sleep(SECONDS_TO_PAUSE_AFTER_RATE_LIMIT_ERROR)
-                last_update_time = time.time()  # Reset the last update time
+            ) for messages in message_batches
+        ]
 
         responses = await asyncio.gather(*tasks)
-
-        # Handle rate limits and retry if necessary
-        for i, response in enumerate(responses):
-            if response == "rate_limit":
-                await asyncio.sleep(SECONDS_TO_PAUSE_AFTER_RATE_LIMIT_ERROR)
-                responses[i] = await fetch(
-                    session, url, headers, message_batches[i],
-                    available_token_capacity
-                )
 
     return responses

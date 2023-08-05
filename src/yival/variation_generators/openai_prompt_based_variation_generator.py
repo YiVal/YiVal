@@ -89,7 +89,7 @@ class OpenAIPromptBasedVariationGenerator(BaseVariationGenerator):
             messages = self.prepare_messages(res_content)
             if not self.config.diversify:
                 with tqdm(
-                    total=self.config.number_of_variations,
+                    total=self.config.number_of_variations - len(res),
                     desc="Generating Variations",
                     unit="variation"
                 ) as pbar:
@@ -145,7 +145,8 @@ class OpenAIPromptBasedVariationGenerator(BaseVariationGenerator):
         if self.config.output_path:
             with open(self.config.output_path, 'wb') as file:
                 pickle.dump(res, file)
-
+        import pdb
+        pdb.set_trace()
         if res:
             yield res
 
