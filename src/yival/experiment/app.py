@@ -1,4 +1,5 @@
 import textwrap
+import urllib.parse
 from typing import List
 
 import dash  # type: ignore
@@ -33,12 +34,25 @@ def create_dash_app(experiment_data: Experiment):
         ])
 
     def experiment_results_layout():
+        csv_string = df.to_csv(index=False, encoding='utf-8')
+        csv_data_url = 'data:text/csv;charset=utf-8,' + urllib.parse.quote(
+            csv_string
+        )
+
         return html.Div([
             html.H3(
                 "Experiment Results Analysis", style={'textAlign': 'center'}
             ),
             combo_aggregated_metrics_layout(),
             html.Hr(),
+            html.A(
+                'Export to CSV',
+                id='export-link-experiment-results',
+                download="experiment_results.csv",
+                href=csv_data_url,
+                target="_blank"
+            ),
+            html.Br(),
             dcc.Link('Go to Data Analysis', href='/data-analysis'),
             html.Br(),  # Adding a line break
             dcc.Link('Go to Group Key Combination', href='/group-key-combo'),
@@ -64,13 +78,6 @@ def create_dash_app(experiment_data: Experiment):
             html.H3("Combo Page Title", style={'textAlign': 'center'}),
             group_key_combination_layout(),
             html.Hr(),
-            dcc.Link(
-                'Go back to Experiment Results Analysis',
-                href='/experiment-results'
-            ),
-            html.Br(),  # Adding a line break
-            dcc.Link('Go to Data Analysis', href='/data-analysis'),
-            html.Br()  # Adding a line break
         ])
 
     def generate_combo_metrics_data(
@@ -397,38 +404,65 @@ def create_dash_app(experiment_data: Experiment):
     )
 
     def group_key_combination_layout():
-        columns = [{"name": i, "id": i} for i in df_group_key.columns]
-        return dash_table.DataTable(
-            id='group-key-combo-table',
-            columns=columns,
-            data=df_group_key.to_dict('records'),
-            style_cell={
-                'whiteSpace': 'normal',
-                'height': '60px',
-                'textAlign': 'left',
-                'fontSize': 16,
-                'border': '1px solid #eee'
-            },
-            style_table={
-                'width': '100%',
-                'maxHeight': '100vh',
-                'overflowY': 'auto',
-                'border': '1px solid #ddd'
-            },
-            style_header={
-                'backgroundColor': 'rgb(230, 230, 230)',
-                'fontWeight': 'bold'
-            },
-            style_data={
-                'overflow': 'hidden',
-                'textOverflow': 'ellipsis',
-                'backgroundColor': 'rgb(248, 248, 248)'
-            },
-            filter_action="native",
-            sort_action="native",
-            page_size=10,
-            tooltip_duration=None
+        csv_string = df_group_key.to_csv(index=False, encoding='utf-8')
+        csv_data_url = 'data:text/csv;charset=utf-8,' + urllib.parse.quote(
+            csv_string
         )
+
+        columns = [{"name": i, "id": i} for i in df_group_key.columns]
+        return html.Div([
+            html.H3(
+                "Group Key Combination Analysis",
+                style={'textAlign': 'center'}
+            ),
+            html.A(
+                'Export to CSV',
+                id='export-link-group-key-combo',
+                download="group_key_combo.csv",
+                href=csv_data_url,
+                target="_blank"
+            ),
+            html.Br(),
+            dash_table.DataTable(
+                id='group-key-combo-table',
+                columns=columns,
+                data=df_group_key.to_dict('records'),
+                style_cell={
+                    'whiteSpace': 'normal',
+                    'height': '60px',
+                    'textAlign': 'left',
+                    'fontSize': 16,
+                    'border': '1px solid #eee'
+                },
+                style_table={
+                    'width': '100%',
+                    'maxHeight': '100vh',
+                    'overflowY': 'auto',
+                    'border': '1px solid #ddd'
+                },
+                style_header={
+                    'backgroundColor': 'rgb(230, 230, 230)',
+                    'fontWeight': 'bold'
+                },
+                style_data={
+                    'overflow': 'hidden',
+                    'textOverflow': 'ellipsis',
+                    'backgroundColor': 'rgb(248, 248, 248)'
+                },
+                filter_action="native",
+                sort_action="native",
+                page_size=10,
+                tooltip_duration=None
+            ),
+            html.Hr(),
+            dcc.Link(
+                'Go back to Experiment Results Analysis',
+                href='/experiment-results'
+            ),
+            html.Br(),  # Adding a line break
+            dcc.Link('Go to Data Analysis', href='/data-analysis'),
+            html.Br()  # Adding a line break
+        ])
 
     def generate_heatmap_style(df, *cols):
         styles = []

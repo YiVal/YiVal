@@ -1,44 +1,37 @@
 # This is a generated template. Modify the values as needed.
 
-custom_function: /Users/taofeng/YiVal/demo.headline_generation.headline_generation
+custom_function: /Users/taofeng/YiVal/demo/weibo_auto_reply.reply.reply
 dataset:
-  data_generators:
-    openai_prompt_data_generator:
-      chunk_size: 1000
-      diversify: false
-      input_function:
-        description:
-          Given an tech startup business, generate a corresponding landing
-          page headline
-        name: headline_generation_for_business
-        parameters:
-          tech_startup_business: str
-      number_of_examples: 10
-      openai_model_name: gpt-4
-      output_path: generated_examples_updated.pkl
-      prompt:
-        "\n            Please provide a concrete and realistic test case as\
-        \ a dictionary for function invocation using the ** operator.\n          \
-        \  Only include parameters, excluding description and name.\n            Ensure\
-        \ it's succinct and well-structured.\n            **Only provide the dictionary.**\n\
-        \            "
-  source_type: machine_generated
+  file_path: demo/data/test_data.csv
+  reader: csv_reader
+  source_type: dataset
 description: Generated experiment config
-selection_strategy:
-  ahp_selection:
-    criteria:
-      - average_token_usage
-      - average_latency
-    criteria_maximization:
-      average_latency: false
-      average_token_usage: false
-    criteria_weights:
-      average_latency: 0.5
-      average_token_usage: 0.5
 
 # evaluators: []
 
 # wrapper_configs: {}
+
+evaluators:
+  - evaluator_type: all
+    input_description: Guide GPT-4 to role-play as a predefined fantasy character for a Weibo auto-reply chatbot, ensuring responses align with character traits, backstory, and Chinese cultural context.
+    metric_calculators: []
+    name: openai_elo_evaluator
+    openai_model_name: gpt-4
+
+selection_strategy:
+  ahp_selection:
+    criteria:
+      - openai_elo_evaluator
+      - average_token_usage
+      - average_latency
+    criteria_maximization:
+      openai_elo_evaluator: true
+      average_latency: false
+      average_token_usage: false
+    criteria_weights:
+      openai_elo_evaluator: 0.6
+      average_latency: 0.2
+      average_token_usage: 0.2
 
 variations:
   - generator_config:
@@ -47,38 +40,41 @@ variations:
       number_of_variations: 5
       openai_model_name: gpt-4
       prompt:
-        - content: "
+        - content: |-
 
-            Your mission is to craft system prompts tailored for GPT-4. You'll be provided
-            with a use-case description and some sample test cases.
+            Your objective is to construct a concise instruction prompt for GPT-4. This prompt will guide GPT-4 in its interactions as a fantasy character for a Weibo auto-reply chatbot tailored to Chinese audiences. 
 
-            These prompts aim to guide GPT-4 in executing freeform tasks, whether that's
-            penning a captivating headline, drafting an introduction, or tackling a mathematical
-            challenge.
+            Points to emphasize in your instruction:
+            - GPT-4 will be role-playing a fantasy character. The specifics of this character – their name, traits, backstory, and nuances – will be provided via placeholders.
+            - GPT-4's responses should align with Weibo's conversational style and should be mindful of Chinese cultural and linguistic nuances.
+            - At all times, GPT-4 must remain in character, ensuring interactions are genuine, lively, and immersive.
+            - The character's personality should be accentuated, including their interests, desires, emotions, and other traits.
+            - `{query_context}` acts as GPT-4's reservoir of memory, holding essential background about the character.
+            - GPT-4 should not generate or elaborate on the character's story but strictly follow the details provided through placeholders.
 
-            In your designed prompt, delineate the AI's role using lucid English. Highlight
-            its perceptual field and the boundaries of its responses. Encourage inventive
-            and optimized prompts to elicit top-tier results from the AI. Remember, GPT-4
-            is self-aware of its AI nature; no need to reiterate that.
+            Craft your instruction ensuring GPT-4 understands that it will only provide answers in line with the fantasy character's persona and nothing beyond the scope of the placeholders.
+            Craft your instruction ensuring GPT-4 understands that it will only provide answers in line with the Chinese Weibo conversational style, but short
+            keep your output crisp: only the prompt, devoid of any extraneous content.
 
-            The efficacy of your prompt determines your evaluation. Stay authentic! Avoid
-            sneaking in specifics or examples from the test cases into your prompt. Such
-            maneuvers will lead to immediate disqualification.
-
-            Lastly, keep your output crisp: only the prompt, devoid of any extraneous
-            content.
-
-            "
           role: system
-        - content:
-            "Here are some test cases: AI, Energy\n\n Here is the description of\
-            \ the use-case: Write a tech startup headline for landing page"
+        - content: |-
+
+            {CHARACTER_BIO} represent character's shot bio
+            {CHARACTER_NAME} represent character name
+            {CHARACTER_QUOTES} represent the some of the characer's quotes
+            {query_context} represent context about the chracter, given user's reply in the prompt
+
           role: user
-      output_path: generated_prompt_updated.pkl
+      variables:
+        - CHARACTER_BIO
+        - CHARACTER_NAME
+        - CHARACTER_QUOTES
+        - query_context
+      output_path: generated_prompt_chinese.pkl
     generator_name: openai_prompt_based_variation_generator
 
     name:
-      task
+      chatbot_prompt
 
       # Variations allow for dynamic content during experiments.
       # They are identified by a globally unique name. For example, in your code,

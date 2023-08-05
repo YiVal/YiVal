@@ -268,6 +268,8 @@ def run_single_input(
 def get_selection_strategy(
     config: ExperimentConfig
 ) -> SelectionStrategy | None:
+    if "selection_strategy" not in config:  # type: ignore
+        return None
     if config["selection_strategy"]:  # type: ignore
         for strategy, strategy_config in config["selection_strategy"
                                                 ].items(  # type: ignore
@@ -335,6 +337,7 @@ def generate_experiment(
         group_experiment_results=grouped_experiment_results,
         combination_aggregated_metrics=cobo_aggregated_metrics
     )
+
     er = [experiment]
     evaluator.evaluate_based_on_all_results(er)
     return experiment
