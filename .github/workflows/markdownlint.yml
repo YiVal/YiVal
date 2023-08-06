@@ -2,8 +2,12 @@ name: markdownlint
 
 on:
   push:
-    branches: [master, markdownlint]
+    branches: [master]
   pull_request:
+    paths:
+      - README.md
+      - CHANGELOG.md
+      - docs
   workflow_dispatch:
 
 jobs:
