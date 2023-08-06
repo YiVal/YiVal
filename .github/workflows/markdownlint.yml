@@ -1,0 +1,20 @@
+name: markdownlint
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    paths:
+      - README.md
+      - CHANGELOG.md
+      - docs
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: markdownlint
+    steps:
+      - uses: actions/checkout@v3
+      - name: markdown-lint
+        uses: articulate/actions-markdownlint@v1.1.0

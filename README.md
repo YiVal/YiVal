@@ -13,8 +13,8 @@ such as models and prompts but more importantly,
 the final output produced by their interaction.
 
 ## Using Yival for auto prompt generation
-![2023-08-02 00 01 32](https://github.com/YiVal/YiVal/assets/1544154/116e2387-dc41-4d13-b25d-79e55f25bb71)
 
+![2023-08-02 00 01 32](https://github.com/YiVal/YiVal/assets/1544154/116e2387-dc41-4d13-b25d-79e55f25bb71)
 
 ## Roadmap
 

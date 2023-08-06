@@ -3,6 +3,8 @@ site_name: YiVal
 nav:
   - Index: index.md
   - Contributing Guide: contributing.md
+  - Code Reference:
+    - yival.configs.config_utils: code/configs/config_utils.md
   - Change Log: changelog.md
 
 theme:
@@ -54,14 +56,14 @@ plugins:
       lang:
         - en
         - ja
-  # - mkdocstrings:
-  #     watch:
-  #       - src
-  #     handlers:
-  #       python:
-  #         paths: [src]
-  #         import:
-  #           - https://docs.python.org/3/objects.inv
+  - mkdocstrings:
+      watch:
+        - src
+      handlers:
+        python:
+          paths: [src]
+          import:
+            - https://docs.python.org/3/objects.inv
   - macros
   - git-revision-date-localized:
       type: timeago
