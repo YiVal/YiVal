@@ -104,6 +104,9 @@ def create_dash_app(experiment_data: Experiment):
 
             if metric.evaluator_outputs:
                 for e in metric.evaluator_outputs:
+                    column_name = f"{e.name} Output"
+                    if e.display_name:
+                        column_name += f" ({e.display_name})"
                     row[f"{e.name} Output"] = e.result
 
             sample_count = 0
@@ -259,12 +262,8 @@ def create_dash_app(experiment_data: Experiment):
             'width': '15%'
         } for col in sample_columns]
 
-        styles = highlight_best_values(
-            df, 'Average Token Usage', 'Average Latency'
-        )
-        styles += generate_heatmap_style(
-            df, 'Average Token Usage', 'Average Latency'
-        )
+        styles = highlight_best_values(df, *df.columns)
+        styles += generate_heatmap_style(df, *df.columns)
         styles += sample_style
 
         # Highlight the best_combination row
@@ -387,7 +386,17 @@ def create_dash_app(experiment_data: Experiment):
                     str(exp_result.combination).replace("{",
                                                         "").replace("}", "")
                 )
-                row_dict[combo_str] = exp_result.raw_output
+                nested_output = {
+                    "raw_output":
+                    exp_result.raw_output,
+                    "evaluator_outputs":
+                    "\n".join([
+                        f"{e.name} : {e.display_name} = {e.result}"
+                        for e in exp_result.evaluator_outputs
+                    ]) if exp_result.evaluator_outputs else None
+                }
+                formatted_output = f"raw_output: {nested_output['raw_output']}\n{nested_output['evaluator_outputs']}"
+                row_dict[combo_str] = formatted_output
                 all_combos.add(combo_str)
             data_list.append(row_dict)
 
@@ -399,17 +408,40 @@ def create_dash_app(experiment_data: Experiment):
 
         return df
 
-    df_group_key = generate_group_key_combination_data(
-        experiment_data.group_experiment_results
-    )
-
     def group_key_combination_layout():
+        df_group_key = generate_group_key_combination_data(
+            experiment_data.group_experiment_results
+        )
+        # Process each cell to selectively enclose evaluator outputs
+        for col in df_group_key.columns:
+            if col != "Test Data":
+                df_group_key[col] = df_group_key[col].apply(
+                    lambda cell: "\n".join([
+                        "▶ " + line if ":" in line else line
+                        for line in cell.split("\n")
+                    ])
+                )
+
         csv_string = df_group_key.to_csv(index=False, encoding='utf-8')
         csv_data_url = 'data:text/csv;charset=utf-8,' + urllib.parse.quote(
             csv_string
         )
 
         columns = [{"name": i, "id": i} for i in df_group_key.columns]
+
+        # Conditional styling for cells containing evaluator outputs
+        styles_data_conditional = [
+            {
+                'if': {
+                    'filter_query': '{' + col + '} contains "▶"',
+                },
+                'backgroundColor':
+                '#E6F7FF',  # Light blue color for distinction
+                'paddingLeft':
+                15  # Padding to make angle brackets more visible
+            } for col in df_group_key.columns if col != "Test Data"
+        ]
+
         return html.Div([
             html.H3(
                 "Group Key Combination Analysis",
@@ -428,8 +460,9 @@ def create_dash_app(experiment_data: Experiment):
                 columns=columns,
                 data=df_group_key.to_dict('records'),
                 style_cell={
-                    'whiteSpace': 'normal',
-                    'height': '60px',
+                    'whiteSpace':
+                    'pre-line',  # Allows for line breaks within cells
+                    'height': 'auto',
                     'textAlign': 'left',
                     'fontSize': 16,
                     'border': '1px solid #eee'
@@ -449,6 +482,7 @@ def create_dash_app(experiment_data: Experiment):
                     'textOverflow': 'ellipsis',
                     'backgroundColor': 'rgb(248, 248, 248)'
                 },
+                style_data_conditional=styles_data_conditional,
                 filter_action="native",
                 sort_action="native",
                 page_size=10,
@@ -466,19 +500,21 @@ def create_dash_app(experiment_data: Experiment):
 
     def generate_heatmap_style(df, *cols):
         styles = []
-        for col in df.columns:  # Let's loop over all columns
+        for col in df.columns:
             if pd.api.types.is_numeric_dtype(df[col]):
                 min_val = df[col].min()
                 max_val = df[col].max()
                 range_val = max_val - min_val
+
                 for val in df[col].unique():
                     normalized = (val - min_val) / range_val
-                    if col in [
-                        "Average Latency", "Average Token Usage"
-                    ]:  # Smaller is better for these columns
+
+                    # Check if the column is "Average Token Usage" or "Average Latency"
+                    if col in ["Average Token Usage", "Average Latency"]:
                         bg_color = f"rgb({255*normalized}, {255*(1-normalized)}, 150)"
-                    else:  # For other numeric columns, larger is better
+                    else:
                         bg_color = f"rgb({255*(1-normalized)}, {255*normalized}, 150)"
+
                     styles.append({
                         'if': {
                             'filter_query': f'{{{col}}} eq {val}',
@@ -486,19 +522,49 @@ def create_dash_app(experiment_data: Experiment):
                         },
                         'backgroundColor': bg_color
                     })
+            else:  # For aggregated metrics columns and evaluator outputs
+                metrics_values = df[col].str.extractall(r":\s?(\d+\.\d+)"
+                                                        ).astype(float)
+                if not metrics_values.empty:
+                    min_val = metrics_values[0].min()
+                    max_val = metrics_values[0].max()
+                    range_val = max_val - min_val
+                    for _, val in metrics_values[0].items():
+                        normalized = (val - min_val) / range_val
+                        bg_color = f"rgb({255*(1-normalized)}, {255*normalized}, 150)"
+                        styles.append({
+                            'if': {
+                                'filter_query': f'{{{col}}} contains "{val}"',
+                                'column_id': col
+                            },
+                            'backgroundColor': bg_color
+                        })
         return styles
 
     def highlight_best_values(df, *cols):
         styles = []
-        for col in cols:
-            best_val = df[col].min()
-            styles.append({
-                'if': {
-                    'filter_query': f'{{{col}}} eq {best_val}',
-                    'column_id': col
-                },
-                'border': '2px solid red'
-            })
+        for col in df.columns:
+            if pd.api.types.is_numeric_dtype(df[col]):
+                best_val = df[col].min()
+                styles.append({
+                    'if': {
+                        'filter_query': f'{{{col}}} eq {best_val}',
+                        'column_id': col
+                    },
+                    'border': '2px solid red'
+                })
+            else:  # For aggregated metrics columns and evaluator outputs
+                metrics_values = df[col].str.extractall(r":\s?(\d+\.\d+)"
+                                                        ).astype(float)
+                if not metrics_values.empty:
+                    best_val = metrics_values[0].min()
+                    styles.append({
+                        'if': {
+                            'filter_query': f'{{{col}}} contains "{best_val}"',
+                            'column_id': col
+                        },
+                        'border': '2px solid red'
+                    })
         return styles
 
     # Define Dash App Layout

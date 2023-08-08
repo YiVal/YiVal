@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional, Union
 
 
 class MethodCalculationMethod(Enum):
@@ -51,6 +51,7 @@ class BaseEvaluatorConfig:
     """
     name: str
     evaluator_type: EvaluatorType
+    display_name: Optional[str] = None
 
     def asdict(self) -> Dict[str, Any]:
         return {"name": self.name, "evaluator_type": str(self.evaluator_type)}
@@ -115,6 +116,7 @@ class EvaluatorOutput:
 
     name: str
     result: Any
+    display_name: Optional[str] = None
     metric_calculators: List[MetricCalculatorConfig] = field(
         default_factory=list
     )
@@ -125,8 +127,19 @@ class EvaluatorOutput:
             self.name,
             "result":
             self.result,
+            "display_name":
+            self.display_name if self.display_name else self.name,
             "metric_calculators": [
                 mc.asdict() if hasattr(mc, 'asdict') else mc
                 for mc in self.metric_calculators
             ]
         }
+
+
+@dataclass
+class OpenAIPromptBasedEvaluatorConfig(EvaluatorConfig):
+    evaluator_type: EvaluatorType = EvaluatorType.INDIVIDUAL
+    prompt: Union[str, List[Dict[str, str]]] = ""
+    choices: List[str] = field(default_factory=list)
+    openai_model_name: str = "gpt-4"
+    choice_scores: Optional[Dict[str, float]] = None

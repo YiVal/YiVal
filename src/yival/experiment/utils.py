@@ -202,9 +202,12 @@ def calculate_metrics(
                         eo.result for r in results if r.evaluator_outputs
                         for eo in r.evaluator_outputs
                         if eo.name == evaluator_output.name
+                        and eo.display_name == evaluator_output.display_name
                     )
                     average_value = total / len(results)
-                    res[evaluator_output.name].append(
+                    key = evaluator_output.name
+                    key += ": " + evaluator_output.display_name if evaluator_output.display_name else ""
+                    res[key].append(
                         Metric(
                             name=MethodCalculationMethod.AVERAGE.value,
                             value=average_value
@@ -301,7 +304,6 @@ def generate_experiment(
     for item in results:
         key = str(item.input_data)
         grouped_experiment_results[key].append(item)  # type: ignore
-
     grouped_experiment_results = [
         GroupedExperimentResult(group_key=k, experiment_results=v)
         for k, v in grouped_experiment_results.items()  # type: ignore

@@ -8,6 +8,9 @@ from ..data_generators.openai_prompt_data_generator import (
     OpenAIPromptBasedGeneratorConfig,
 )
 from ..evaluators.openai_elo_evaluator import OpenAIEloEvaluator
+from ..evaluators.openai_prompt_based_evaluator import (
+    OpenAIPromptBasedEvaluator,
+)
 from ..evaluators.string_expected_result_evaluator import (
     StringExpectedResultEvaluator,
 )
@@ -27,6 +30,7 @@ def _prevent_unused_imports():
     _ = OpenAIPromptBasedVariationGenerator
     _ = OpenAIEloEvaluator
     _ = AHPSelection
+    _ = OpenAIPromptBasedEvaluator
 
 
 def variation_type(arg: str):
