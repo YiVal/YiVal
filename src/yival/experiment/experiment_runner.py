@@ -9,7 +9,7 @@ from tqdm import tqdm
 from ..configs.config_utils import load_and_validate_config
 from ..logger.token_logger import TokenLogger
 from ..result_selectors.selection_context import SelectionContext
-from ..schemas.experiment_config import ExperimentResult
+from ..schemas.experiment_config import Experiment, ExperimentResult
 from ..states.experiment_state import ExperimentState
 from .app import display_results_dash
 from .data_processor import DataProcessor
@@ -94,9 +94,32 @@ class ExperimentRunner:
             "source_type"
         ] == "dataset" or self.config[  # type: ignore
             "dataset"]["source_type"] == "machine_generated":  # type: ignore
+            res = []
             if experimnet_input_path and os.path.exists(experimnet_input_path):
                 with open(experimnet_input_path, 'rb') as file:
-                    experiment = pickle.load(file)
+                    experiment: Experiment = pickle.load(file)
+                    for group_experiment_result in experiment.group_experiment_results:
+                        for experiment_result in group_experiment_result.experiment_results:
+                            results.append(experiment_result)
+
+                #     with tqdm(total=len(results), desc="Processing", unit="item") as pbar:
+                #         for r in results:
+                #             r.evaluator_outputs.extend(evaluator.evaluate_individual_result(r))
+                #             pbar.update(1)
+                #             res.append(r)
+                # with open("testtest.pkl", 'wb') as file:
+                #     pickle.dump(res, file)
+                experiment = generate_experiment(results, evaluator)
+                with open("tmp1.pkl", 'rb') as file:
+                    old = pickle.load(file)
+                for rr in old.combination_aggregated_metrics:
+                    for qq in experiment.combination_aggregated_metrics:
+                        if rr.combo_key == qq.combo_key:
+                            qq.evaluator_outputs = rr.evaluator_outputs
+                with open(
+                    "auto_prmpot_with_auto_evaluator_new.pkl", 'wb'
+                ) as file:
+                    pickle.dump(experiment, file)
             else:
                 register_custom_readers(
                     self.config.get("custom_readers", {})  # type: ignore

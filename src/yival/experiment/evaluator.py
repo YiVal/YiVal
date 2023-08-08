@@ -25,7 +25,10 @@ class Evaluator:
     ) -> List[EvaluatorOutput]:
         res = []
         for config in self.configs:
-            config_dict = config.asdict()
+            if not isinstance(config, dict):
+                config_dict = config.asdict()
+            else:
+                config_dict = config
             if config_dict["evaluator_type"] == EvaluatorType.INDIVIDUAL.value:
                 evaluator_cls = BaseEvaluator.get_evaluator(
                     config_dict["name"]

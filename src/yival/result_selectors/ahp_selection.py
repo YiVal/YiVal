@@ -103,6 +103,11 @@ class AHPSelection(SelectionStrategy):
             if evaluator_output.name in self.config.criteria:
                 data[evaluator_output.name] = evaluator_output.result
 
+        for metric_name, metric_values in combo.aggregated_metrics.items():
+            if metric_name in self.config.criteria:
+                data[metric_name] = sum([
+                    metric.value for metric in metric_values
+                ]) / len(metric_values)
         return data
 
 
