@@ -1,5 +1,4 @@
-from argparse import ArgumentParser, ArgumentTypeError, Namespace
-from mimetypes import inited
+from argparse import ArgumentTypeError, Namespace
 
 from yival.wrappers.string_wrapper import StringWrapper
 
@@ -34,7 +33,7 @@ def _prevent_unused_imports():
 
 
 def variation_type(arg: str):
-    """Custom argparse type function for variations."""
+    """Parse variations for experiment configuration."""
     try:
         parts = arg.split(';')
 
@@ -63,15 +62,18 @@ def variation_type(arg: str):
 
 
 def add_arguments_to(subparser):
-    """Add arguments to subcommand add."""
-    parser: ArgumentParser = subparser.add_parser("init", help=inited.__doc__)
-    parser.description = init.__doc__
+    """Define the arguments for the 'init' subcommand."""
+    parser = subparser.add_parser(
+        "init", help="Initialize an experiment configuration template."
+    )
+    parser.description = "Generate a configuration template for AI experiments based on provided parameters."
     parser.set_defaults(func=init)
 
+    # Basic configuration arguments
     parser.add_argument(
         "--config_path",
         type=str,
-        help="Path to save the configuration template."
+        help="Path to save the generated configuration template."
     )
     parser.add_argument(
         "--source_type",
@@ -79,37 +81,39 @@ def add_arguments_to(subparser):
         default="dataset",
         choices=["dataset", "user", "machine_generated"],
         help=
-        "Type of source for the experiment. Choices are ['DATASET', 'USER']."
+        "Source type for the experiment. Options: 'dataset', 'machine_generated', or 'user'."
     )
+
+    # Component-specific arguments
     parser.add_argument(
         "--evaluator_names",
         type=str,
         nargs='+',
-        help="Names of evaluators to include in the config."
+        help="List of evaluator names for the config."
     )
     parser.add_argument(
         "--reader_name",
         type=str,
-        help="Name of the reader to include in the config."
+        help="Name of the data reader for the config."
     )
     parser.add_argument(
         "--function",
         type=str,
-        help=
-        "Function that will be used to run the experiment, module_name.function_name."
+        help="Function (module_name.function_name) to run the experiment."
     )
     parser.add_argument(
         "--data_genertaor_names",
         type=str,
         nargs='+',
-        help="Names of data generators to include in the config."
+        help="List of data generator names for the config."
     )
     parser.add_argument(
         "--wrapper_names",
         type=str,
         nargs='+',
-        help="Names of wrappers to include in the config."
+        help="List of wrapper names for the config."
     )
+
     parser.add_argument(
         "--variations",
         type=variation_type,
@@ -167,8 +171,7 @@ def add_arguments_to(subparser):
 
 
 def init(args: Namespace):
-    """Initialize experiment configuration template."""
-    # Convert variations from a list of dictionaries to a list of WrapperConfig objects
+    """Generate and save an experiment configuration template."""
     wrapper_config_objects = []
     if args.variations:
         for wc_dict in args.variations:
