@@ -24,8 +24,13 @@ jobs:
           echo "Running core tests, installing dependencies with poetry..."
           poetry install
 
+    - name: Set up poetry-dynamic-versioning
+      run: poetry self add "poetry-dynamic-versioning[plugin]"
+      shell: bash
+
     - name: Build package
       run: poetry build
+
     - name: Publish package
       uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
       with:
