@@ -1,0 +1,38 @@
+---
+name: Release To PyPI
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: "./.github/actions/poetry_setup"
+      with:
+        python-version: "3.10"
+        poetry-version: "1.4.2"
+        cache-key: "core"
+        install-command: |
+          echo "Running core tests, installing dependencies with poetry..."
+          poetry install
+
+    - name: Set up poetry-dynamic-versioning
+      run: poetry self add "poetry-dynamic-versioning[plugin]"
+      shell: bash
+
+    - name: Build package
+      run: poetry build
+
+    - name: Publish package
+      uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
+      with:
+        user: __token__
+        password: ${{ secrets.PYPI_API_TOKEN }}
