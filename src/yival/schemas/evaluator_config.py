@@ -142,4 +142,6 @@ class OpenAIPromptBasedEvaluatorConfig(EvaluatorConfig):
     prompt: Union[str, List[Dict[str, str]]] = ""
     choices: List[str] = field(default_factory=list)
     openai_model_name: str = "gpt-4"
+    description: str = "This is the description of the evaluator."
+    scale_description: str = "0-4"
     choice_scores: Optional[Dict[str, float]] = None

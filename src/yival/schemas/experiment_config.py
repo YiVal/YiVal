@@ -7,6 +7,7 @@ experiment.
 from dataclasses import asdict, dataclass, field
 from typing import Any, Callable, Dict, List, Optional, Tuple, Type, Union
 
+from .combination_improver_configs import BaseCombinationImproverConfig
 from .common_structures import InputData
 from .dataset_config import DatasetConfig
 from .evaluator_config import (
@@ -153,15 +154,16 @@ class ExperimentConfig:
 
     # Required configurations
     description: str
-    variations: List[WrapperConfig]
     dataset: DatasetConfig
     custom_function: str
     # Optional configurations with default values
+    variations: Optional[List[WrapperConfig]] = None
     selection_strategy: Optional[Dict[str, BaseConfig]] = None
     wrapper_configs: Optional[Dict[str, BaseWrapperConfig]] = None
     combinations_to_run: Optional[List[Tuple[str, Any]]] = None
     evaluators: Optional[List[Union[EvaluatorConfig,
                                     ComparisonEvaluatorConfig]]] = None
+    improver: Optional[BaseCombinationImproverConfig] = None
     output: Optional[OutputConfig] = None
     human_rating_configs: Optional[List[HumanRatingConfig]] = None
     existing_experiment_path: Optional[str] = None
@@ -169,6 +171,7 @@ class ExperimentConfig:
     output_parser: Optional[str] = None
     metadata: Optional[Dict[str, Any]] = None
     custom_reader: Optional[Dict[str, Dict[str, Any]]] = None
+    custom_combination_improver: Optional[Dict[str, Dict[str, Any]]] = None
     custom_data_generators: Optional[Dict[str, Dict[str, Any]]] = None
     custom_wrappers: Optional[Dict[str, Dict[str, Any]]] = None
     custom_evaluators: Optional[Dict[str, Dict[str, Any]]] = None
@@ -361,6 +364,13 @@ class FunctionMetadata:
 
 
 @dataclass
+class ImproverOutput:
+    group_experiment_results: List[GroupedExperimentResult]
+    combination_aggregated_metrics: List[CombinationAggregatedMetrics]
+    original_best_combo_key: str
+
+
+@dataclass
 class Experiment:
     """
     Represents an entire experiment.
@@ -369,6 +379,7 @@ class Experiment:
     group_experiment_results: List[GroupedExperimentResult]
     combination_aggregated_metrics: List[CombinationAggregatedMetrics]
     selection_output: Optional[SelectionOutput] = None
+    improver_output: Optional[ImproverOutput] = None
 
     def asdict(self) -> Dict[str, Any]:
         return {

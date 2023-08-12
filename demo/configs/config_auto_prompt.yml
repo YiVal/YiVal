@@ -46,6 +46,8 @@ evaluators:
       E It meets the criterion exceptionally well, with little to no room for improvement.
     display_name: clarity
     choices: ["A", "B", "C", "D", "E"]
+    description: Does the headline clearly communicate what the startup does or what problem it solves?
+    scale_description: "0-4"
     choice_scores:
       A: 0
       B: 1
@@ -71,6 +73,8 @@ evaluators:
       D It meets the criterion very well.
       E It meets the criterion exceptionally well, with little to no room for improvement.
     display_name: relevance
+    description: Is the headline relevant to the target audience?
+    scale_description: "0-4"
     choices: ["A", "B", "C", "D", "E"]
     choice_scores:
       A: 0
@@ -98,6 +102,8 @@ evaluators:
       D It meets the criterion very well.
       E It meets the criterion exceptionally well, with little to no room for improvement.
     display_name: catchiness
+    description: Is the headline catchy or memorable?
+    scale_description: "0-4"
     choices: ["A", "B", "C", "D", "E"]
     choice_scores:
       A: 0

@@ -1,0 +1,29 @@
+# This is a generated template. Modify the values as needed.
+
+custom_function: null
+dataset:
+  file_path: /path/to/file_path
+  source_type: dataset
+description: Generated experiment config
+improver:
+  openai_prompt_based_combination_improver:
+    max_iterations: 3
+    openai_model_name: gpt-4
+    stop_conditions:
+      "openai_prompt_based_evaluator: catchiness": 3
+      "openai_prompt_based_evaluator: clarity": 2.0
+      "openai_prompt_based_evaluator: relevance": 3
+# evaluators: []
+
+# wrapper_configs: {}
+
+variations:
+  - name: wrapper_name
+    variations:
+      - value_type: str
+        value: "example_variation"
+        instantiated_value: "example_variation"
+    generator_name: example_generator_name
+    generator_config:
+      number_of_variations: 5
+      output_path: /path/to/output

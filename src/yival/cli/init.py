@@ -2,6 +2,9 @@ from argparse import ArgumentTypeError, Namespace
 
 from yival.wrappers.string_wrapper import StringWrapper
 
+from ..combination_improvers.openai_prompt_based_combination_improver import (
+    OpenAIPromptBasedCombinationImprover,
+)
 from ..data.csv_reader import CSVReader
 from ..data_generators.openai_prompt_data_generator import (
     OpenAIPromptBasedGeneratorConfig,
@@ -30,6 +33,7 @@ def _prevent_unused_imports():
     _ = OpenAIEloEvaluator
     _ = AHPSelection
     _ = OpenAIPromptBasedEvaluator
+    _ = OpenAIPromptBasedCombinationImprover
 
 
 def variation_type(arg: str):
@@ -97,6 +101,11 @@ def add_arguments_to(subparser):
         help="Name of the data reader for the config."
     )
     parser.add_argument(
+        "--improver_name",
+        type=str,
+        help="Name of the improver for the config."
+    )
+    parser.add_argument(
         "--function",
         type=str,
         help="Function (module_name.function_name) to run the experiment."
@@ -126,8 +135,13 @@ def add_arguments_to(subparser):
     parser.add_argument(
         "--custom_reader",
         type=str,
+        help="Specify custom reader in 'name:class_path:config_cls_path' format."
+    )
+    parser.add_argument(
+        "--custom_improver",
+        type=str,
         help=
-        "Specify custom readers in 'name:class_path:config_cls_path' format."
+        "Specify custom improver in 'name:class_path:config_cls_path' format."
     )
     parser.add_argument(
         "--selection_strategy",
@@ -198,6 +212,15 @@ def init(args: Namespace):
             "class_path": reader_class_path,
             "config_path": reader_config_cls_path
         }
+    custom_improver = {}
+    if args.custom_improver:
+        improver_name, improver_class_path, improver_config_cls_path = args.custom_improver.split(
+            ":"
+        )
+        custom_improver[improver_name] = {
+            "class_path": improver_class_path,
+            "config_path": improver_config_cls_path
+        }
     custom_wrappers = {}
     if args.custom_wrappers:
         for custom_wrapper in args.custom_wrappers:
@@ -255,6 +278,7 @@ def init(args: Namespace):
         source_type=args.source_type,
         evaluator_names=args.evaluator_names,
         reader_name=args.reader_name,
+        improver_name=args.improver_name,
         wrapper_names=args.wrapper_names,
         data_generator_names=args.data_genertaor_names,
         selection_strategy_name=args.selection_strategy,
@@ -264,7 +288,8 @@ def init(args: Namespace):
         custom_evaluators=custom_evaluators,
         custom_data_generators=custom_data_generators,
         custom_variation_generators=custom_variation_generators,
-        custom_selection_strategy=custom_selection_strategy
+        custom_selection_strategy=custom_selection_strategy,
+        custom_improver=custom_improver
     )
 
     # Save the generated template to the specified config path

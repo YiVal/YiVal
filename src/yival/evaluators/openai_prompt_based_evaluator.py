@@ -16,8 +16,12 @@ from ..schemas.experiment_config import ExperimentResult, InputData
 from .base_evaluator import BaseEvaluator
 
 CLASSIFY_STR = """
-First, write out in a step by step manner your reasoning to be sure that your conclusion is correct. Avoid simply stating the correct answer at the outset. Then print only a single choice from {choices} (without quotes or punctuation) on its own line corresponding to the correct answer. At the end, repeat just the answer by itself on a new line.
-Reasoning:"""
+First, write out in a step by step manner your reasoning to be sure that your conclusion is correct.
+Avoid simply stating the correct answer at the outset.
+Then print only a single choice from {choices} (without quotes or punctuation) on its own line corresponding to the correct answer.
+At the end, repeat just the answer by itself on a new line.
+Reasoning:
+"""
 
 MATCH_FNS = {
     "include": lambda x, y: float(x in y),
@@ -27,39 +31,45 @@ MATCH_FNS = {
 }
 
 
-def get_choice(response: str, choice_strings: Iterable[str]) -> str:
+def extract_choice_from_response(
+    response: str, choice_strings: Iterable[str]
+) -> str:
+    """Extracts the choice from the response string."""
     lines = response.strip().split("\n")
     for line in lines:
-        line = line.strip()
-        line = "".join(c for c in line if c not in string.punctuation)
-        if not line:
+        sanitized_line = "".join(
+            c for c in line if c not in string.punctuation
+        ).strip()
+        if not sanitized_line:
             continue
         for choice in choice_strings:
-            if MATCH_FNS["starts_or_endswith"](line, choice):
+            if MATCH_FNS["starts_or_endswith"](sanitized_line, choice):
                 return choice
     return "invalid response"
 
 
-def get_choice_score(
+def calculate_choice_score(
     choice: str,
-    choice_scores: Optional[Dict[str, float]] = None,
+    choice_scores: Optional[Dict[str, float]] = None
 ) -> Optional[float]:
+    """Calculates the score for the given choice."""
     if choice_scores is None:
         return None
     if choice == "invalid response":
         return min(choice_scores.values())
-    return choice_scores[choice]
+    return choice_scores.get(choice)
 
 
-def format_string(
+def format_template(
     template: Union[str, List[Dict[str, str]]], content: Dict[str, Any]
 ) -> Union[str, List[Dict[str, str]]]:
-
+    """Formats a string or list template with the provided content."""
     if isinstance(template, str):
         try:
             return template.format(**content)
         except KeyError as e:
             raise ValueError(f"Missing key {e} in content dictionary")
+
     res = []
     for t in template:
         formatted_msg = copy.deepcopy(t)
@@ -71,39 +81,48 @@ def format_string(
         except KeyError as e:
             raise ValueError(f"Missing key {e} in content dictionary")
         res.append(formatted_msg)
-
     return res
 
 
-def choice_to_str(choice_strings: Iterable[str]) -> str:
-    """Return a string of choices, e.g. '"Yes" or "No" or "Maybe"'."""
+def choices_to_string(choice_strings: Iterable[str]) -> str:
+    """Converts a list of choices into a formatted string."""
     return " or ".join(f'"{choice}"' for choice in choice_strings)
 
 
 class OpenAIPromptBasedEvaluator(BaseEvaluator):
+    """Evaluator using OpenAI's prompt-based evaluation."""
+
     default_config = OpenAIPromptBasedEvaluatorConfig(
         name="openai_prompt_based_evaluator"
     )
 
     def __init__(self, config: OpenAIPromptBasedEvaluatorConfig):
         super().__init__(config)
-        self.config: OpenAIPromptBasedEvaluatorConfig = config
+        self.config = config
 
     def evaluate(self, experiment_result: ExperimentResult) -> EvaluatorOutput:
+        """Evaluate the experiment result using OpenAI's prompt-based evaluation."""
         openai.api_key = os.getenv("OPENAI_API_KEY")
-        format_dict = experiment_result.input_data.content
+        assert isinstance(self.config, OpenAIPromptBasedEvaluatorConfig)
+        format_dict = copy.deepcopy(experiment_result.input_data.content)
         format_dict["raw_output"] = experiment_result.raw_output
-        prompt = format_string(self.config.prompt, format_dict)
+
+        prompt = format_template(self.config.prompt, format_dict)
         if isinstance(prompt, str):
             prompt = [{"role": "user", "content": prompt}]
-        prompt[-1]["content"] += "\n\n" + CLASSIFY_STR.format(
-            choices=choice_to_str(self.config.choices)
-        )
 
-        response = openai.ChatCompletion.create(model="gpt-4", messages=prompt)
-        response = response['choices'][0]['message']['content']
-        choice = get_choice(response, self.config.choices)
-        score = get_choice_score(choice, self.config.choice_scores)
+        prompt[-1]["content"] += "\n\n" + CLASSIFY_STR.format(
+            choices=choices_to_string(self.config.choices)
+        )
+        response = openai.ChatCompletion.create(
+            model="gpt-4", messages=prompt, temperature=0.0
+        )
+        response_content = response['choices'][0]['message']['content']
+
+        choice = extract_choice_from_response(
+            response_content, self.config.choices
+        )
+        score = calculate_choice_score(choice, self.config.choice_scores)
 
         return EvaluatorOutput(
             name=self.config.name,
@@ -120,6 +139,7 @@ BaseEvaluator.register_evaluator(
 
 
 def main():
+    """Main function to test the OpenAIPromptBasedEvaluator."""
     evaluator_config = OpenAIPromptBasedEvaluatorConfig(
         name="openai_prompt_based_evaluator",
         display_name="math calculator",
@@ -154,9 +174,9 @@ def main():
         token_usage=50
     )
 
-    generator = OpenAIPromptBasedEvaluator(evaluator_config)
-    res = generator.evaluate(experiment_result_example)
-    print(res)
+    evaluator = OpenAIPromptBasedEvaluator(evaluator_config)
+    result = evaluator.evaluate(experiment_result_example)
+    print(result)
 
 
 if __name__ == "__main__":
