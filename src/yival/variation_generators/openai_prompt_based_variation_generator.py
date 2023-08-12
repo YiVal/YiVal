@@ -145,8 +145,6 @@ class OpenAIPromptBasedVariationGenerator(BaseVariationGenerator):
         if self.config.output_path:
             with open(self.config.output_path, 'wb') as file:
                 pickle.dump(res, file)
-        import pdb
-        pdb.set_trace()
         if res:
             yield res
 

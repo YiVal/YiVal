@@ -24,23 +24,17 @@ dataset:
         \            "
   source_type: machine_generated
 description: Generated experiment config
-selection_strategy:
-  ahp_selection:
-    criteria:
-      - average_token_usage
-      - average_latency
-    criteria_maximization:
-      average_latency: false
-      average_token_usage: false
-    criteria_weights:
-      average_latency: 0.5
-      average_token_usage: 0.5
+evaluators:
+  - name: openai_elo_evaluator
+    openai_elo_evaluator:
+      display_name: null
+      evaluator_type: all
+      input_description: This is a description.
+      metric_calculators: []
+      name: openai_elo_evaluator
+      openai_model_name: gpt-4
 
-# evaluators: []
-
-# wrapper_configs: {}
-
-variations:
+  # wrapper_configs: {}
   - generator_config:
       diversify: false
       max_tokens: 7000
@@ -83,9 +77,3 @@ variations:
         value: manual test
         value_type: str
         variation_id: null
-
-        # Variations allow for dynamic content during experiments.
-        # They are identified by a globally unique name. For example, in your code,
-        # you might reference a variation by its name, like:
-        # variation = StringWrapper("hello", 'test_experiment')
-        # In this config, you would define the variations associated with that name.

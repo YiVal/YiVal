@@ -31,7 +31,7 @@ def add_arguments_to(subparser):
     )
 
     parser.add_argument(
-        "--experimnet_input_path",
+        "--experiment_input_path",
         type=str,
         default="export.pkl",
         help="Path to existing experiment results."
@@ -45,7 +45,7 @@ def run_experiment(args: Namespace):
         runner.run(
             display=args.display,
             output_path=args.output_path,
-            experimnet_input_path=args.experimnet_input_path
+            experiment_input_path=args.experiment_input_path
         )
         print("Experiment completed!")
     except Exception as e:

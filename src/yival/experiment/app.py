@@ -1,6 +1,6 @@
 import textwrap
 import urllib.parse
-from typing import List
+from typing import List, Optional
 
 import dash  # type: ignore
 import pandas as pd  # type: ignore
@@ -30,20 +30,35 @@ def create_dash_app(experiment_data: Experiment):
             html.Br(),
             dcc.Link('Go to Data Analysis', href='/data-analysis'),
             html.Br(),
-            dcc.Link('Go to Group Key Combination', href='/group-key-combo')
+            dcc.Link('Go to Group Key Combination', href='/group-key-combo'),
+            html.Br(),
+            dcc.Link(
+                'Go to Improver Experiment Results Analysis',
+                href='/improver-experiment-results'
+            ),
+            html.Br(),
+            dcc.Link(
+                'Go to Improver Group Key Combination',
+                href='/improver-group-key-combo'
+            ),
+            html.Br()
         ])
 
     def experiment_results_layout():
+
+        df = generate_combo_metrics_data(
+            experiment_data.combination_aggregated_metrics,
+            experiment_data.group_experiment_results
+        )
         csv_string = df.to_csv(index=False, encoding='utf-8')
         csv_data_url = 'data:text/csv;charset=utf-8,' + urllib.parse.quote(
             csv_string
         )
-
         return html.Div([
             html.H3(
                 "Experiment Results Analysis", style={'textAlign': 'center'}
             ),
-            combo_aggregated_metrics_layout(),
+            combo_aggregated_metrics_layout(df),
             html.Hr(),
             html.A(
                 'Export to CSV',
@@ -54,9 +69,19 @@ def create_dash_app(experiment_data: Experiment):
             ),
             html.Br(),
             dcc.Link('Go to Data Analysis', href='/data-analysis'),
-            html.Br(),  # Adding a line break
+            html.Br(),
             dcc.Link('Go to Group Key Combination', href='/group-key-combo'),
-            html.Br()  # Adding a line break
+            html.Br(),
+            dcc.Link(
+                'Go to Improver Experiment Results Analysis',
+                href='/improver-experiment-results'
+            ),
+            html.Br(),
+            dcc.Link(
+                'Go to Improver Group Key Combination',
+                href='/improver-group-key-combo'
+            ),
+            html.Br()
         ])
 
     def data_analysis_layout():
@@ -68,16 +93,38 @@ def create_dash_app(experiment_data: Experiment):
                 'Go back to Experiment Results Analysis',
                 href='/experiment-results'
             ),
-            html.Br(),  # Adding a line break
+            html.Br(),
             dcc.Link('Go to Group Key Combination', href='/group-key-combo'),
-            html.Br()  # Adding a line break
+            html.Br(),
+            dcc.Link(
+                'Go to Improver Experiment Results Analysis',
+                href='/improver-experiment-results'
+            ),
+            html.Br(),
+            dcc.Link(
+                'Go to Improver Group Key Combination',
+                href='/improver-group-key-combo'
+            ),
+            html.Br()
         ])
 
     def combo_page_layout():
         return html.Div([
             html.H3("Combo Page Title", style={'textAlign': 'center'}),
-            group_key_combination_layout(),
-            html.Hr(),
+            group_key_combination_layout(
+                experiment_data.group_experiment_results
+            ),
+            dcc.Link(
+                'Go to Improver Experiment Results Analysis',
+                href='/improver-experiment-results'
+            ),
+            html.Br(),
+            dcc.Link(
+                'Go to Improver Group Key Combination',
+                href='/improver-group-key-combo'
+            ),
+            html.Br(),
+            html.Hr()
         ])
 
     def generate_combo_metrics_data(
@@ -168,6 +215,10 @@ def create_dash_app(experiment_data: Experiment):
             return experiment_results_layout()
         elif pathname == '/group-key-combo':
             return combo_page_layout()
+        elif pathname == '/improver-experiment-results':
+            return improver_experiment_results_layout()
+        elif pathname == '/improver-group-key-combo':
+            return improver_combo_page_layout()
         else:
             return index_page()
 
@@ -251,7 +302,66 @@ def create_dash_app(experiment_data: Experiment):
         correlation = df['Average Token Usage'].corr(df[selected_evaluator])
         return f"Correlation between Average Token Usage and {selected_evaluator}: {correlation:.2f}"
 
-    def combo_aggregated_metrics_layout():
+    def improver_experiment_results_layout():
+        if not experiment_data.improver_output:
+            return html.Div([html.H3("No Improver Output data available.")])
+
+        df_improver = generate_combo_metrics_data(
+            experiment_data.improver_output.combination_aggregated_metrics,
+            experiment_data.improver_output.group_experiment_results
+        )
+
+        csv_string = df_improver.to_csv(index=False, encoding='utf-8')
+        csv_data_url = 'data:text/csv;charset=utf-8,' + urllib.parse.quote(
+            csv_string
+        )
+
+        return html.Div([
+            html.H3(
+                "Improver Experiment Results Analysis",
+                style={'textAlign': 'center'}
+            ),
+            combo_aggregated_metrics_layout(df_improver),
+            html.Hr(),
+            html.A(
+                'Export to CSV',
+                id='export-link-improver-experiment-results',
+                download="improver_experiment_results.csv",
+                href=csv_data_url,
+                target="_blank"
+            ),
+            html.Br(),
+            dcc.Link('Go to Data Analysis', href='/data-analysis'),
+            html.Br(),
+            dcc.Link('Go to Group Key Combination', href='/group-key-combo'),
+            html.Br(),
+            dcc.Link(
+                'Go to Improver Group Key Combination',
+                href='/improver-group-key-combo'
+            ),
+            html.Br()
+        ])
+
+    def improver_combo_page_layout():
+        if not experiment_data.improver_output:
+            return html.Div([html.H3("No Improver Output data available.")])
+        return html.Div([
+            html.H3(
+                "Improver Combo Page Title", style={'textAlign': 'center'}
+            ),
+            group_key_combination_layout(
+                experiment_data.improver_output.group_experiment_results,
+                highlight_key=experiment_data.improver_output.
+                original_best_combo_key
+            ),
+            dcc.Link(
+                'Go to Improver Experiment Results Analysis',
+                href='/improver-experiment-results'
+            ),
+            html.Hr(),
+        ])
+
+    def combo_aggregated_metrics_layout(df):
 
         columns = [{"name": i, "id": i} for i in df.columns]
         sample_columns = [col for col in df.columns if "Sample" in col]
@@ -408,9 +518,12 @@ def create_dash_app(experiment_data: Experiment):
 
         return df
 
-    def group_key_combination_layout():
+    def group_key_combination_layout(
+        group_experiment_results: List[GroupedExperimentResult],
+        highlight_key: Optional[str] = None
+    ):
         df_group_key = generate_group_key_combination_data(
-            experiment_data.group_experiment_results
+            group_experiment_results
         )
         # Process each cell to selectively enclose evaluator outputs
         for col in df_group_key.columns:
@@ -441,6 +554,14 @@ def create_dash_app(experiment_data: Experiment):
                 15  # Padding to make angle brackets more visible
             } for col in df_group_key.columns if col != "Test Data"
         ]
+        if highlight_key:
+            styles_data_conditional.append({
+                'if': {
+                    'column_id': 'Combo Key',
+                    'filter_query': f'{{Combo Key}} eq "{highlight_key}"'
+                },
+                'backgroundColor': '#FFCCCC'  # Highlighting with gold color
+            })
 
         return html.Div([
             html.H3(
@@ -588,4 +709,4 @@ def create_dash_app(experiment_data: Experiment):
 
 def display_results_dash(experiment_data):
     app = create_dash_app(experiment_data)
-    app.run(debug=False, port=8070)
+    app.run(debug=False, port=8073)

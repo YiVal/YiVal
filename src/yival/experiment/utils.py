@@ -5,12 +5,18 @@ from collections import defaultdict
 from importlib import import_module
 from typing import Any, Dict, List
 
+from ..combination_improvers.base_combination_improver import (
+    BaseCombinationImprover,
+)
 from ..data.base_reader import BaseReader
 from ..data_generators.base_data_generator import BaseDataGenerator
 from ..evaluators.base_evaluator import BaseEvaluator
 from ..evaluators.openai_elo_evaluator import OpenAIEloEvaluator
 from ..logger.token_logger import TokenLogger
 from ..result_selectors.selection_strategy import SelectionStrategy
+from ..schemas.combination_improver_configs import (
+    BaseCombinationImproverConfig,
+)
 from ..schemas.evaluator_config import MethodCalculationMethod
 from ..schemas.experiment_config import (
     CombinationAggregatedMetrics,
@@ -76,6 +82,27 @@ def register_custom_readers(custom_readers: Dict[str, Dict[str, Any]]):
         BaseReader.register_reader(name, reader_cls, config_cls)
     from ..data.csv_reader import CSVReader
     _ = CSVReader
+
+
+def register_custom_improver(custom_improver: Dict[str, Dict[str, Any]]):
+    for name, details in custom_improver.items():
+        improver_cls_path = details["class"]
+        module_name, class_name = improver_cls_path.rsplit(".", 1)
+        improver_cls = getattr(import_module(module_name), class_name)
+
+        config_cls = None
+        if "config_cls" in details:
+            config_cls_path = details["config_cls"]
+            module_name, class_name = config_cls_path.rsplit(".", 1)
+            config_cls = getattr(import_module(module_name), class_name)
+
+        BaseCombinationImprover.register_combination_improver(
+            name, improver_cls, config_cls
+        )
+    from ..combination_improvers.openai_prompt_based_combination_improver import (
+        OpenAIPromptBasedCombinationImprover,
+    )
+    _ = OpenAIPromptBasedCombinationImprover
 
 
 def register_custom_selection_strategy(
@@ -251,7 +278,6 @@ def run_single_input(
             latency = end_time - start_time  # Time in seconds
 
             tokens_used = logger.get_current_usage()
-
             result = ExperimentResult(
                 input_data=d,
                 combination=combo,
@@ -260,7 +286,7 @@ def run_single_input(
                 token_usage=tokens_used,
                 evaluator_outputs=[]
             )
-            if result.evaluator_outputs:
+            if result.evaluator_outputs is not None:
                 result.evaluator_outputs.extend(
                     evaluator.evaluate_individual_result(result)
                 )
@@ -294,8 +320,38 @@ def get_selection_strategy(
     return None
 
 
+def get_improver(config: ExperimentConfig) -> BaseCombinationImprover | None:
+    if "improver" not in config:  # type: ignore
+        return None
+    if config["improver"]:  # type: ignore
+        improver_config = config["improver"]  # type: ignore
+        improver_cls = BaseCombinationImprover.get_combination_improver(
+            improver_config["name"]
+        )
+        if improver_cls:
+            config_cls = BaseCombinationImprover.get_config_class(
+                improver_config["name"]
+            )
+            if config_cls:
+                if isinstance(improver_config, dict):
+                    config_data = improver_config
+                else:
+                    config_data = improver_config.asdict()
+                config_instance = config_cls(**config_data)
+                improver_instance = improver_cls(config_instance)
+            else:
+                improver_instance = improver_cls(
+                    BaseCombinationImproverConfig()
+                )
+                return improver_instance
+    return None
+
+
 def generate_experiment(
-    results: List[ExperimentResult], evaluator: Evaluator
+    results: List[ExperimentResult],
+    evaluator: Evaluator,
+    evaluate_all: bool = True,
+    evaluate_group: bool = True
 ) -> Experiment:
     grouped_experiment_results: List[GroupedExperimentResult] = defaultdict(
         list
@@ -308,11 +364,11 @@ def generate_experiment(
         GroupedExperimentResult(group_key=k, experiment_results=v)
         for k, v in grouped_experiment_results.items()  # type: ignore
     ]
-
-    for grouped_experiment_result in grouped_experiment_results:
-        grouped_experiment_result.evaluator_outputs = evaluator.evaluate_group_result(
-            grouped_experiment_result.experiment_results
-        )
+    if evaluate_group:
+        for grouped_experiment_result in grouped_experiment_results:
+            grouped_experiment_result.evaluator_outputs = evaluator.evaluate_group_result(
+                grouped_experiment_result.experiment_results
+            )
 
     combo_metrics = defaultdict(list)
     for item in results:
@@ -339,7 +395,7 @@ def generate_experiment(
         group_experiment_results=grouped_experiment_results,
         combination_aggregated_metrics=cobo_aggregated_metrics
     )
-
-    er = [experiment]
-    evaluator.evaluate_based_on_all_results(er)
+    if evaluate_all:
+        er = [experiment]
+        evaluator.evaluate_based_on_all_results(er)
     return experiment

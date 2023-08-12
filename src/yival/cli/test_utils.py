@@ -56,7 +56,6 @@ def test_generate_and_load_config(
     # Basic assertions to check the loaded configuration
     assert loaded_config.description == "Generated experiment config"
 
-    # If wrapper_configs were provided, we should have a "wrappers" section in our config
     if wrapper_configs:
         assert loaded_config.variations is not None
         for wrapper in loaded_config.variations:

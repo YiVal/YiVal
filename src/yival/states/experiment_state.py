@@ -70,8 +70,10 @@ class ExperimentState:
         """
         Initializes the experiment variations using the provided ExperimentConfig.
         """
-        if self.config:
+        if self.config and self.config.variations:
             for wrapper_config in self.config.variations:
+                if not isinstance(wrapper_config, dict):
+                    wrapper_config = wrapper_config.asdict()  # type: ignore
                 if "variations" in wrapper_config:  # type: ignore
                     variations = [
                         var_variation["instantiated_value"] for var_variation
@@ -124,6 +126,9 @@ class ExperimentState:
         existing_variations = self.current_variations.get(name, [])
         existing_variations.extend(variations)
         self.current_variations[name] = existing_variations
+
+    def clear_variations_for_experiment(self) -> None:
+        self.current_variations.clear()
 
     def set_experiment_config(self, config: Any) -> None:
         if isinstance(config, dict):
