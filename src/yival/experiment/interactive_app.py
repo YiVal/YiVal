@@ -1,16 +1,39 @@
 import importlib
 import inspect
+from dataclasses import asdict
+from enum import Enum
+from typing import Union
 
 import dash
 import dash_bootstrap_components as dbc
-from dash import html
-from dash.dependencies import Input, Output, State
+from dash import dcc, html
+from dash.dependencies import MATCH, Input, Output, State
 
+from yival.data.base_reader import BaseReader
+from yival.data.csv_reader import CSVReader
+from yival.data_generators.base_data_generator import BaseDataGenerator
+from yival.data_generators.openai_prompt_data_generator import OpenAIPromptDataGenerator
 from yival.experiment.app import create_dash_app
+from yival.schemas.data_generator_configs import BaseDataGeneratorConfig
+from yival.schemas.dataset_config import DatasetConfig
+from yival.schemas.reader_configs import BaseReaderConfig
 
 # Sample Data
 DATASET_SOURCE_TYPES = ["DATASET", "MACHINE_GENERATED"]
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
+
+_ = CSVReader
+_ = OpenAIPromptDataGenerator
+
+CONFIG_TO_CLASS_MAPPING = {
+    BaseReaderConfig: BaseReader,
+    BaseDataGeneratorConfig: BaseDataGenerator
+}
+
+FIELD_TO_CLASS_MAPPING = {
+    "reader_config": "BaseReader",
+    "data_generators": "BaseDataGenerator"
+}
 
 
 header_styles = {
@@ -61,6 +84,9 @@ demo_switch = dbc.Checklist(
     className="mb-4"
 )
 
+def get_base_class_from_field(field_name):
+    class_name = FIELD_TO_CLASS_MAPPING.get(field_name, None)
+    return globals().get(class_name, None)
 
 def get_function_args(func_string: str):
     import sys
@@ -76,13 +102,12 @@ def get_function_args(func_string: str):
 
 
 def data_input_modal():
-    return dbc.Modal(
+    modal_body_children = generate_fields_for_dataclass(DatasetConfig)
+        
+    modal = dbc.Modal(
         [
             dbc.ModalHeader("Data Input Configuration"),
-            dbc.ModalBody([
-                dbc.Label("Enter custom function:", className='mb-2'),
-                dbc.Input(type="text", id="custom-function-input", placeholder="/path/to/custom_function.py"),
-            ]),
+            dbc.ModalBody(modal_body_children),
             dbc.ModalFooter([
                 dbc.Button("Save", id="save-data-input-button", className="ml-auto"),
                 dbc.Button("Close", id="close-data-input-modal", className="ml-auto")
@@ -91,6 +116,107 @@ def data_input_modal():
         id="data-input-modal",
         centered=True,
     )
+    
+    return modal
+
+
+def get_input_for_field(field_name, field_type, default_value=None):
+    components = []
+
+    if issubclass(field_type, bool) or field_type == bool:
+        components.append(
+            dbc.RadioItems(
+                options=[{'label': 'True', 'value': 'True'}, {'label': 'False', 'value': 'False'}],
+                value='True' if default_value else 'False',
+                inline=True,
+                id=field_name
+            )
+        )
+    elif issubclass(field_type, Enum):
+        options = [{'label': item.name, 'value': item.value} for item in field_type]
+        components.append(
+            dcc.Dropdown(
+                id=field_name,
+                options=options,
+                value=default_value.value if default_value else None,
+                clearable=False
+            )
+        )
+    elif issubclass(field_type, str) or field_type == str:
+        if default_value and len(default_value) > 100:
+            components.append(dbc.Textarea(value=default_value, id=field_name))
+        else:
+            components.append(dbc.Input(type="text", placeholder=f"Enter value for {field_name}", value=default_value if default_value else "", id=field_name))
+    else:  # Default to text input for now
+        components.append(dbc.Input(type="text", placeholder=f"Enter value for {field_name}", value=default_value if default_value else "", id=field_name))
+
+    return components
+
+
+def get_registry_for_base_class(field_type):
+    # Assuming all your Base* classes follow this naming convention for their registry
+    return getattr(field_type, "_registry", {})
+
+
+def generate_fields_for_dataclass(dataclass_obj):
+    components = []
+
+    for field_name, field_type in dataclass_obj.__annotations__.items():
+        is_base_class = False
+        
+        # Handle Optional fields
+        if hasattr(field_type, "__origin__") and field_type.__origin__ == Union:
+            field_type = field_type.__args__[0]
+
+        # Check if the field type is Dict and its value type starts with 'Base'
+        if hasattr(field_type, "__origin__") and field_type.__origin__ == dict:
+            value_type = field_type.__args__[1]
+            if value_type.__name__.startswith("Base"):
+                field_type = value_type
+                is_base_class = True
+
+        # Handle Base* classes
+        if field_type.__name__.startswith("Base"):
+            registry = get_registry_for_base_class(CONFIG_TO_CLASS_MAPPING[field_type])
+            options = [{'label': name, 'value': name} for name in registry.keys()]
+            dropdown = dbc.Select(id={"type": "base-dropdown", "name": field_name}, options=options)
+            components.append(dbc.Label(field_name + (" (Optional)" if "Optional" in str(dataclass_obj.__annotations__[field_name]) else ""), className='mb-2'))
+            components.append(dropdown)
+            # Add a div to contain dynamic fields based on the dropdown selection
+            components.append(html.Div(id={"type": "base-dynamic-fields", "name": field_name}))
+        elif not is_base_class:
+            # For regular fields
+            components.append(dbc.Label(f"{field_name} (Optional)" if "Optional" in str(dataclass_obj.__annotations__[field_name]) else field_name, className='mb-2'))
+            components.extend(get_input_for_field(field_name, field_type))
+            components.append(html.Br())
+
+    return components
+
+def get_base_class_from_name(name):
+    return {
+        "reader_config": BaseReader,
+        "data_generators": BaseDataGenerator
+    }.get(name, None)
+
+@app.callback(
+    Output({'type': 'base-dynamic-fields', 'name': MATCH}, 'children'),
+    Input({'type': 'base-dropdown', 'name': MATCH}, 'value'),
+    State({'type': 'base-dropdown', 'name': MATCH}, 'id'),
+    prevent_initial_call=True
+)
+def generate_dynamic_fields_for_base_class(selected_value, dropdown_id):
+    components = []
+    field_name = dropdown_id['name']
+    base_class = get_base_class_from_name(field_name)
+    default_config = base_class.get_default_config(selected_value)
+    
+    for field_name, field_value in asdict(default_config).items():
+        field_type = type(field_value)
+        components.append(dbc.Label(field_name, className='mb-2'))
+        components.extend(get_input_for_field(field_name, field_type, field_value))
+        components.append(html.Br())
+
+    return components
 
 
 # Modal for Configuration
