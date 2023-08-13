@@ -107,7 +107,7 @@ def data_input_modal():
     modal = dbc.Modal(
         [
             dbc.ModalHeader("Data Input Configuration"),
-            dbc.ModalBody(modal_body_children),
+            dbc.ModalBody(modal_body_children, style={"maxHeight": "60vh", "overflowY": "auto"}), # Added a scroll for long content
             dbc.ModalFooter([
                 dbc.Button("Save", id="save-data-input-button", className="ml-auto"),
                 dbc.Button("Close", id="close-data-input-modal", className="ml-auto")
@@ -115,6 +115,7 @@ def data_input_modal():
         ],
         id="data-input-modal",
         centered=True,
+        size="xl"  # make the modal extra large
     )
     
     return modal

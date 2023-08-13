@@ -209,6 +209,8 @@ def create_dash_app(experiment_data: Experiment):
         [dash.dependencies.Input('url', 'pathname')]
     )
     def display_page(pathname):
+        if not pathname or pathname == "/":
+            return experiment_results_layout()
         if pathname == '/data-analysis':
             return data_analysis_layout()
         elif pathname == '/experiment-results':
@@ -688,6 +690,25 @@ def create_dash_app(experiment_data: Experiment):
                     })
         return styles
 
+    # layouts = {(pathname):
+    #     if pathname == '/data-analysis':
+    #         return data_analysis_layout()
+    #     elif pathname == '/experiment-results':
+    #         return experiment_results_layout()
+    #     elif pathname == '/group-key-combo':
+    #         return combo_page_layout()
+    #     elif pathname == '/improver-experiment-results':
+    #         return improver_experiment_results_layout()
+    #     elif pathname == '/improver-group-key-combo':
+    #         return improver_combo_page_layout()
+    #     else:
+    #         return index_page()
+
+    layouts = {
+        '/data-analysis': data_analysis_layout(),
+        '/experiment-results': experiment_results_layout(),
+        # ... other layouts ...
+    }
     # Define Dash App Layout
     app.layout = html.Div([
         dcc.Location(id='url', refresh=False),
@@ -704,9 +725,11 @@ def create_dash_app(experiment_data: Experiment):
         )
     ])
 
-    return app
+    return app, layouts
 
 
 def display_results_dash(experiment_data):
+    print("CCCCCCCCCCCC")
+    print(experiment_data)
     app = create_dash_app(experiment_data)
-    app.run(debug=False, port=8073)
+    app.run(debug=False, port=8073, host='0.0.0.0')
