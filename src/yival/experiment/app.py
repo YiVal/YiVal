@@ -1,3 +1,4 @@
+import hashlib
 import textwrap
 import urllib.parse
 from typing import List, Optional
@@ -11,11 +12,32 @@ from dash.dependencies import Input, Output  # type: ignore
 from ..schemas.experiment_config import (
     CombinationAggregatedMetrics,
     Experiment,
+    ExperimentConfig,
     GroupedExperimentResult,
 )
 
 
-def create_dash_app(experiment_data: Experiment):
+def create_dash_app(experiment_data: Experiment, experiment_config: ExperimentConfig):
+    
+    def sanitize_group_key(group_key):
+        import re
+        pattern = r'content:\s*\{(.*?)\}'
+        match = re.search(pattern, group_key)
+
+        if match:
+            content = match.group(1).strip()
+            items = content.split(",")
+            group_key = ", ".join([item.strip() for item in items])   
+            return group_key
+        return ""     
+    
+    def get_group_experiment_result_from_hash(hashed_group_key):
+        for group_result in experiment_data.group_experiment_results:
+            group_key = sanitize_group_key(group_result.group_key)
+            if hashlib.sha256(group_key.encode()).hexdigest() == hashed_group_key:
+                return group_result
+        return None
+
 
     def sanitize_column_name(name):
         return name.replace('"', '').replace(':', '')
@@ -205,7 +227,10 @@ def create_dash_app(experiment_data: Experiment):
         [dash.dependencies.Input('url', 'pathname')]
     )
     def display_page(pathname):
-        if pathname == '/data-analysis':
+        if pathname.startswith('/rating-result/'):
+            hashed_group_key = pathname.split('/')[-1]  # Extract the last part of the URL which is the hash
+            return display_group_experiment_result_layout(hashed_group_key, experiment_config)
+        elif pathname == '/data-analysis':
             return data_analysis_layout()
         elif pathname == '/experiment-results':
             return experiment_results_layout()
@@ -476,15 +501,8 @@ def create_dash_app(experiment_data: Experiment):
         all_combos = set()
         for group in group_experiment_results:
             group_key = group.group_key
-            import re
-            pattern = r'content:\s*\{(.*?)\}'
-            match = re.search(pattern, group_key)
-
-            if match:
-                content = match.group(1).strip()
-                items = content.split(",")
-                group_key = ", ".join([item.strip() for item in items])
-            else:
+            group_key = sanitize_group_key(group_key)
+            if group_key == "":
                 pass
             row_dict = {"Test Data": group_key}
             for exp_result in group.experiment_results:
@@ -558,6 +576,16 @@ def create_dash_app(experiment_data: Experiment):
                 },
                 'backgroundColor': '#FFCCCC'  # Highlighting with gold color
             })
+        styles_data_conditional.append({
+                'if': {'column_id': 'Test Data'},
+                'color': '#007BFF',  # Blue color
+                'textDecoration': 'underline',
+                'cursor': 'pointer'
+            }
+        )
+        df_group_key["Hashed Group Key"] = df_group_key["Test Data"].apply(
+            lambda group_key: hashlib.sha256(group_key.encode()).hexdigest()
+        )
 
         return html.Div([
             html.H3(
@@ -614,6 +642,52 @@ def create_dash_app(experiment_data: Experiment):
             dcc.Link('Go to Data Analysis', href='/data-analysis'),
             html.Br()  # Adding a line break
         ])
+        
+    def display_group_experiment_result_layout(hashed_group_key, experiment_config):
+        group_result = get_group_experiment_result_from_hash(hashed_group_key)
+        if not group_result:
+            return html.Div("No data found for this group key.", style={'font-size': '24px', 'color': 'red', 'margin': '40px', 'text-align': 'center'})
+
+        children = [html.H2("Rate experiment results", style={'text-align': 'center', 'margin-bottom': '70px', 'font-weight': 'bold', 'color': '#2E86C1', 'border-bottom': '4px solid #3498DB', 'padding-bottom': '30px', 'font-size': '28px'})]
+        
+        for exp_result in group_result.experiment_results:
+            # Displaying only the raw output
+            children.append(html.Div("Raw Output:", style={'font-weight': 'bold', 'font-size': '26px', 'margin-top': '50px', 'color': '#2C3E50'}))
+            children.append(html.Div(str(exp_result.raw_output), style={'margin': '25px 0', 'border': '2px solid #AED6F1', 'padding': '25px', 'background-color': '#EAF2F8', 'border-radius': '10px', 'box-shadow': '0 4px 12px rgba(0, 0, 0, 0.1)', 'font-size': '22px'}))
+            
+            for rating_config in (experiment_config["human_rating_configs"] or []):
+                # Displaying rating instructions if present in rating_config
+                if "instructions" in rating_config:
+                    children.append(html.Div("Instructions:", style={'font-weight': 'bold', 'font-size': '24px', 'margin-top': '40px', 'color': '#5D6D7E'}))
+                    children.append(html.Div(rating_config["instructions"], style={'margin': '20px 0', 'background-color': '#D5F5E3', 'padding': '20px', 'border-radius': '10px', 'font-size': '22px'}))
+                    
+                # Slider to represent the rating scale
+                children.append(html.Div(rating_config["name"], style={'font-size': '24px', 'margin-top': '40px', 'color': '#5D6D7E'}))
+                scale_bar = dcc.Slider(
+                    min=rating_config["scale"][0],
+                    max=rating_config["scale"][1],
+                    marks={i: str(i) for i in range(int(rating_config["scale"][0]), int(rating_config["scale"][1]) + 1)},
+                    value=(rating_config["scale"][0] + rating_config["scale"][1]) / 2,
+                    disabled=False
+                )
+                children.append(scale_bar)
+
+        return html.Div(children, style={'padding': '80px', 'background-color': '#FCF3CF', 'border-radius': '20px', 'box-shadow': '0 8px 25px rgba(0, 0, 0, 0.1)', 'font-family': 'Arial, sans-serif', 'width': '90%', 'margin': '2% auto'})
+
+
+    @app.callback(
+        dash.dependencies.Output('url', 'pathname'),
+        [dash.dependencies.Input('group-key-combo-table', 'active_cell'),
+        dash.dependencies.Input('group-key-combo-table', 'data')]
+    )
+    def navigate_to_hashed_page(active_cell, table_data):
+        if active_cell:
+            row = active_cell["row"]
+            col_id = active_cell["column_id"]
+            if col_id == "Test Data":
+                hashed_group_key = table_data[row]["Hashed Group Key"]
+                return f'/rating-result/{hashed_group_key}'
+        return dash.no_update
 
     def generate_heatmap_style(df, *cols):
         styles = []
@@ -727,6 +801,6 @@ def create_dash_app(experiment_data: Experiment):
     return app
 
 
-def display_results_dash(experiment_data):
-    app = create_dash_app(experiment_data)
+def display_results_dash(experiment_data, experiment_config):
+    app = create_dash_app(experiment_data, experiment_config)
     app.run(debug=True, port=8073)
