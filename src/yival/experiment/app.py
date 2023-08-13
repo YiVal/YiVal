@@ -22,27 +22,23 @@ def create_dash_app(experiment_data: Experiment):
 
     def index_page():
         return html.Div([
-            html.H3("Dashboard", style={'textAlign': 'center'}),
-            dcc.Link(
-                'Go to Experiment Results Analysis',
-                href='/experiment-results'
-            ),
-            html.Br(),
-            dcc.Link('Go to Data Analysis', href='/data-analysis'),
-            html.Br(),
-            dcc.Link('Go to Group Key Combination', href='/group-key-combo'),
-            html.Br(),
-            dcc.Link(
-                'Go to Improver Experiment Results Analysis',
-                href='/improver-experiment-results'
-            ),
-            html.Br(),
-            dcc.Link(
-                'Go to Improver Group Key Combination',
-                href='/improver-group-key-combo'
-            ),
-            html.Br()
-        ])
+            html.Nav([
+                html.Div([
+                    html.A("Dashboard", href="/", className="navbar-brand"),
+                    html.Ul([
+                        html.Li(html.A("Experiment Results Analysis", href="/experiment-results", className="nav-link"), className="nav-item"),
+                        html.Li(html.A("Data Analysis", href="/data-analysis", className="nav-link"), className="nav-item"),
+                        html.Li(html.A("Group Key Combination", href="/group-key-combo", className="nav-link"), className="nav-item"),
+                        html.Li(html.A("Improver Experiment Results Analysis", href="/improver-experiment-results", className="nav-link"), className="nav-item"),
+                        html.Li(html.A("Improver Group Key Combination", href="/improver-group-key-combo", className="nav-link"), className="nav-item")
+                    ], className="navbar-nav")
+                ], className="container-fluid")
+            ], className="navbar navbar-expand-lg navbar-light bg-light"),
+            html.Div([
+                html.Div("Welcome to the Dashboard!", className="card-title"),
+                html.P("Choose one of the options from the navigation bar to proceed.", className="card-text")
+            ], className="card-body")
+        ], className="container mt-5")
 
     def experiment_results_layout():
 
@@ -688,25 +684,49 @@ def create_dash_app(experiment_data: Experiment):
                     })
         return styles
 
+    def generate_navigation():
+        return html.Div([
+            dcc.Link('Experiment Results Analysis', href='/experiment-results'),
+            html.Span(" | ", className="nav-divider"),
+            dcc.Link('Data Analysis', href='/data-analysis'),
+            html.Span(" | ", className="nav-divider"),
+            dcc.Link('Group Key Combination', href='/group-key-combo'),
+            html.Span(" | ", className="nav-divider"),
+            dcc.Link('Improver Experiment Results Analysis', href='/improver-experiment-results'),
+            html.Span(" | ", className="nav-divider"),
+            dcc.Link('Improver Group Key Combination', href='/improver-group-key-combo')
+        ], className="navigation")
+
+
     # Define Dash App Layout
     app.layout = html.Div([
-        dcc.Location(id='url', refresh=False),
-        html.Div(
-            id='page-content',
-            style={
-                'fontFamily': 'Arial, sans-serif',
-                'margin': '2% 10%',
-                'padding': '2% 3%',
-                'border': '1px solid #ddd',
-                'borderRadius': '5px',
-                'backgroundColor': '#f9f9f9'
-            }
-        )
-    ])
+        # Main Content
+        html.Div([
+            dcc.Location(id='url', refresh=False),
+            generate_navigation(), # Adding the navigation here
+            html.Div(
+                id='page-content',
+                style={
+                    'fontFamily': 'Arial, sans-serif',
+                    'margin': '2% 10%',
+                    'padding': '2% 3%',
+                    'border': '1px solid #ddd',
+                    'borderRadius': '5px',
+                    'backgroundColor': '#f9f9f9',
+                    'fontSize': '18px',
+                    'boxShadow': '0 4px 8px 0 rgba(0, 0, 0, 0.1)', 
+                }
+            )
+        ], className="main-content", style={
+        'backgroundColor': '#f9f9f9', # Light Grey
+        'padding': '20px'
+    }),
+        
+    ], className="main-wrapper")
 
     return app
 
 
 def display_results_dash(experiment_data):
     app = create_dash_app(experiment_data)
-    app.run(debug=False, port=8073)
+    app.run(debug=True, port=8073)
