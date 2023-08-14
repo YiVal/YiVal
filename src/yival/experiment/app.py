@@ -7,18 +7,21 @@ import dash  # type: ignore
 import pandas as pd  # type: ignore
 import plotly.express as px  # type: ignore
 from dash import dash_table, dcc, html  # type: ignore
-from dash.dependencies import Input, Output  # type: ignore
+from dash.dependencies import ALL, Input, Output, State
 
+from ..schemas.evaluator_config import MethodCalculationMethod, MetricCalculatorConfig
 from ..schemas.experiment_config import (
     CombinationAggregatedMetrics,
+    EvaluatorOutput,
     Experiment,
     ExperimentConfig,
     GroupedExperimentResult,
 )
 
-
+sliders = {}
 def create_dash_app(experiment_data: Experiment, experiment_config: ExperimentConfig):
     
+
     def sanitize_group_key(group_key):
         import re
         pattern = r'content:\s*\{(.*?)\}'
@@ -647,32 +650,107 @@ def create_dash_app(experiment_data: Experiment, experiment_config: ExperimentCo
         group_result = get_group_experiment_result_from_hash(hashed_group_key)
         if not group_result:
             return html.Div("No data found for this group key.", style={'font-size': '24px', 'color': 'red', 'margin': '40px', 'text-align': 'center'})
-
-        children = [html.H2("Rate experiment results", style={'text-align': 'center', 'margin-bottom': '70px', 'font-weight': 'bold', 'color': '#2E86C1', 'border-bottom': '4px solid #3498DB', 'padding-bottom': '30px', 'font-size': '28px'})]
-        
-        for exp_result in group_result.experiment_results:
+        initial_slider_data = {}
+        children = [
+            html.H2("Rate experiment results", style={'text-align': 'center', 'margin-bottom': '70px', 'font-weight': 'bold', 'color': '#2E86C1', 'border-bottom': '4px solid #3498DB', 'padding-bottom': '30px', 'font-size': '28px'}),
+            dcc.Input(id='current-group-key', type='hidden', value=hashed_group_key)
+        ]
+        for index, exp_result in enumerate(group_result.experiment_results):
             # Displaying only the raw output
             children.append(html.Div("Raw Output:", style={'font-weight': 'bold', 'font-size': '26px', 'margin-top': '50px', 'color': '#2C3E50'}))
             children.append(html.Div(str(exp_result.raw_output), style={'margin': '25px 0', 'border': '2px solid #AED6F1', 'padding': '25px', 'background-color': '#EAF2F8', 'border-radius': '10px', 'box-shadow': '0 4px 12px rgba(0, 0, 0, 0.1)', 'font-size': '22px'}))
             
-            for rating_config in (experiment_config["human_rating_configs"] or []):
+            for rating_config_index, rating_config in enumerate(experiment_config["human_rating_configs"] or []):
                 # Displaying rating instructions if present in rating_config
                 if "instructions" in rating_config:
                     children.append(html.Div("Instructions:", style={'font-weight': 'bold', 'font-size': '24px', 'margin-top': '40px', 'color': '#5D6D7E'}))
                     children.append(html.Div(rating_config["instructions"], style={'margin': '20px 0', 'background-color': '#D5F5E3', 'padding': '20px', 'border-radius': '10px', 'font-size': '22px'}))
                     
                 # Slider to represent the rating scale
+                slider_id = {"type": "rating-slider", "index": f"{rating_config['name']}-{index}"}
+                slider_key = f"{rating_config['name']}-{index}"
+                default_value = (rating_config["scale"][0] + rating_config["scale"][1]) / 2
+                initial_slider_data[slider_key] = default_value
+                print(slider_id)
                 children.append(html.Div(rating_config["name"], style={'font-size': '24px', 'margin-top': '40px', 'color': '#5D6D7E'}))
                 scale_bar = dcc.Slider(
                     min=rating_config["scale"][0],
                     max=rating_config["scale"][1],
+                    id=slider_id,
                     marks={i: str(i) for i in range(int(rating_config["scale"][0]), int(rating_config["scale"][1]) + 1)},
                     value=(rating_config["scale"][0] + rating_config["scale"][1]) / 2,
                     disabled=False
                 )
                 children.append(scale_bar)
+        children.append(
+            html.Button('Save', id='save-button', style={'display': 'block', 'margin': '40px auto', 'padding': '10px 20px', 'background-color': '#2E86C1', 'color': 'white', 'border': 'none', 'border-radius': '5px', 'cursor': 'pointer'})
+        )
+        
+        # Add the output-div here
+        children.append(html.Div(id='output-div'))
+        children.append(dcc.Store(id='slider-values-store', data=initial_slider_data))
 
         return html.Div(children, style={'padding': '80px', 'background-color': '#FCF3CF', 'border-radius': '20px', 'box-shadow': '0 8px 25px rgba(0, 0, 0, 0.1)', 'font-family': 'Arial, sans-serif', 'width': '90%', 'margin': '2% auto'})
+
+    @app.callback(
+        Output('slider-values-store', 'data'),
+        [Input({'type': 'rating-slider', 'index': ALL}, 'value')],
+        [State('slider-values-store', 'data')],
+        prevent_initial_call=True
+    )
+    def update_slider_store(slider_values, current_data):
+        # The IDs of triggered inputs
+        ctx = dash.callback_context
+        import json
+        slider_ids = [json.loads(input['prop_id'].split('.')[0])['index'] for input in ctx.triggered]
+        current_data[slider_ids[0]] = slider_values[0]
+        return current_data
+
+    @app.callback(
+        Output('output-div', 'children'),
+        [Input('save-button', 'n_clicks'), State('current-group-key', 'value'), State('slider-values-store', 'data')]
+    )  # We'll handle the dynamic State components inside the function itself
+    def update_output(n_clicks, hashed_group_key, slider_values_store):
+        print("TFTF123")
+        if not n_clicks:
+            return dash.no_update
+        
+        # 2. Determine the Current Group
+        group_result = get_group_experiment_result_from_hash(hashed_group_key)
+        if not group_result:
+            return "Error fetching group result."
+        print("dfdfsdfs")
+        print(slider_values_store)
+        # 3. Dynamically Generate expected_slider_ids
+        slider_values = [slider_values_store[f"{rating_config['name']}-{index}"] for index, _ in enumerate(group_result.experiment_results) for rating_config in experiment_config["human_rating_configs"]]
+
+        expected_slider_ids = []
+        for index, exp_result in enumerate(experiment_data.group_experiment_results):
+            for rating_config in experiment_config["human_rating_configs"]:
+                slider_id = f"slider-{rating_config['name']}-{index}"
+                expected_slider_ids.append(slider_id)
+        print(slider_values)
+        # Process the slider values and update experiment_results
+        for index, exp_result in enumerate(group_result.experiment_results):
+            outputs = []
+            for rating_config in experiment_config["human_rating_configs"]:
+                slider_id = f"slider-{rating_config['name']}-{index}"
+                slider_index = expected_slider_ids.index(slider_id)
+                slider_value = slider_values[slider_index]
+                
+                outputs.append(EvaluatorOutput(
+                    name="human_evaluator",
+                    result=slider_value,
+                    display_name=rating_config['name'],
+                    metric_calculators=[
+                        MetricCalculatorConfig(MethodCalculationMethod(MethodCalculationMethod.AVERAGE))
+                    ]
+                ))
+                print(outputs)
+
+            # Attach the EvaluatorOutput list to the experiment_result
+            exp_result.evaluator_outputs = outputs
+        return "Data saved successfully!"
 
 
     @app.callback(
