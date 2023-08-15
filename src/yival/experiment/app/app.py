@@ -1,4 +1,5 @@
 import hashlib
+import random
 import textwrap
 import urllib.parse
 from typing import List, Optional
@@ -8,7 +9,7 @@ import dash_bootstrap_components as dbc
 import pandas as pd  # type: ignore
 import plotly.express as px  # type: ignore
 from dash import dash_table, dcc, html  # type: ignore
-from dash.dependencies import ALL, Input, Output, State
+from dash.dependencies import ALL, MATCH, Input, Output, State
 
 from yival.experiment.utils import generate_experiment
 from yival.schemas.experiment_config import (
@@ -81,6 +82,12 @@ def create_dash_app(
                         id="export-btn",
                         color="primary",
                         className="ml-2"
+                    )
+                ),
+                dbc.NavItem(
+                    dbc.NavLink(
+                        "Interactive Mode",
+                        href="/interactive",
                     )
                 ),
             ],
@@ -578,6 +585,73 @@ def create_dash_app(
             html.Br()  # Adding a line break
         ])
 
+    import numpy as np
+
+    def determine_relative_color(value, values):
+        if not isinstance(value, (int, float)):  # Handle non-numeric values
+            return "black"
+
+        p25, p50, p75 = np.percentile(values, [25, 50, 75])
+        
+        if value <= p25:
+            return "green"
+        elif value <= p50:
+            return "lightgreen"
+        elif value <= p75:
+            return "orange"
+        else:
+            return "red"
+
+    def colorize_metric(combinations):
+        # Extract all metrics from the results dynamically
+        all_metrics = {key: [] for key in combinations[0].keys()}
+        for combo in combinations:
+            for key, value in combo.items():
+                if isinstance(value, (int, float)):
+                    all_metrics[key].append(value)
+
+        colored_combinations = []
+        for combo in combinations:
+            colored_combo = {}
+            for key, value in combo.items():
+                color = determine_relative_color(value, all_metrics.get(key, []))
+                colored_combo[key] = {"value": value, "color": color}
+            colored_combinations.append(colored_combo)
+        
+        return colored_combinations
+
+
+    def input_page_layout():
+        return html.Div([
+            dbc.Row([
+                # Left Side (Input Section)
+                dbc.Col([
+                    dbc.Card([
+                        dbc.CardHeader(html.H4("Parameters", className="text-center"), className="bg-light"),
+                        dbc.CardBody([
+                            html.Div([
+                                dbc.Label(key, className="mr-2 font-weight-bold", width=4),
+                                dbc.Col(dbc.Input(id=f"input-{key}", type=value, placeholder=key), width=8)
+                            ], className="d-flex align-items-center mb-4")
+                            for key, value in input_dict.items()
+                        ], className="p-4"),
+                        dbc.Button("Run", id="interactive-btn", color="primary", className="mt-2 mb-2 w-100")
+                    ], className="m-4 shadow-sm rounded"),
+                ], width=3),
+
+                # Right Side (Results Section)
+                dbc.Col([
+                    dbc.Card([
+                        dbc.CardHeader(html.H4("Results", className="text-center"), className="bg-light"),
+                        html.Div(id="results-section", className="p-4")
+                    ], className="m-4 shadow-sm rounded")
+                ], width=9)
+            ]),
+            dbc.Container(fluid=True, className="p-3")
+        ])
+
+
+
 
     def display_group_experiment_result_layout(
         hashed_group_key, experiment_config, is_from_improver=False
@@ -797,6 +871,8 @@ def create_dash_app(
             return improver_experiment_results_layout()
         elif pathname == '/improver-group-key-combo':
             return improver_combo_page_layout()
+        elif pathname == '/interactive':
+             return input_page_layout()
         else:
             return index_page()
 
@@ -1003,6 +1079,74 @@ def create_dash_app(
                 pickle.dump(experiment_data, f)
             return f"Data would be exported to: {file_path}"
         return dash.no_update
+
+    input_dict = {
+        "Key1": "text",
+        "Key2": "text",
+        # ... add more keys as needed
+    }
+    all_results = []
+
+    @app.callback(
+        Output("results-section", "children"),
+        Input("interactive-btn", "n_clicks"),
+        [State(f"input-{key}", "value") for key in input_dict.keys()],
+        prevent_initial_call=True
+    )
+    def update_results(n_clicks, *input_values):
+        if not n_clicks:
+            return []
+
+        # Mocking ExperimentResult data for demonstration
+        def mock_combination():
+            return {
+                "Raw Output": "Output " + str(random.randint(1, 1000)),
+                "Latency": str(random.uniform(0.1, 10)) + " ms",
+                "Token Usage": random.randint(1, 100)
+            }
+
+        combinations = [mock_combination() for _ in range(3)]
+        colored_combinations = colorize_metric(combinations)
+        current_result = [
+            html.Div([
+                html.H5(f"Combination {i+1}"),
+                html.Ul([
+                    html.Li(f"{key}: {data['value']}", style={"color": data['color']})
+                    for key, data in combo.items()
+                ])
+            ]) for i, combo in enumerate(colored_combinations)
+        ]
+        input_summary = ", ".join([f"{key}: {value}" for key, value in zip(input_dict.keys(), input_values)])
+        toggle_id = {"type": "toggle", "index": n_clicks}
+        collapse_id = {"type": "collapse", "index": n_clicks}
+        
+        current_result_card = html.Div([
+            dbc.Button(
+                input_summary,
+                id=toggle_id,
+                className="mb-2 w-100",
+                color="info"
+            ),
+            dbc.Collapse(
+                [item for sublist in [[res, html.Hr()] for res in current_result] for item in sublist],
+                id=collapse_id,
+                is_open=True
+            )
+        ], className="mb-3")
+
+        all_results.insert(0, current_result_card)
+
+        return all_results
+
+
+    @app.callback(
+        Output({"type": "collapse", "index": MATCH}, "is_open"),
+        Input({"type": "toggle", "index": MATCH}, "n_clicks"),
+        State({"type": "collapse", "index": MATCH}, "is_open"),
+        prevent_initial_call=True
+    )
+    def toggle_collapse(n, is_open):
+        return not is_open
 
     app.layout = html.Div(
         [
