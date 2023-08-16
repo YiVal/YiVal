@@ -1,10 +1,10 @@
 # This is a generated template. Modify the values as needed.
 
-custom_function: demo.translate_to_chinese.translate_to_chinese
+custom_function: /Users/taofeng/YiVal/demo.translate_to_chinese.translate_to_chinese
 dataset:
   file_path: demo/data/yival_expected_results.csv
   reader: csv_reader
-  source_type: machine_generated
+  source_type: user_input
   reader_config:
     expected_result_column: expected_result
 description: Generated experiment config
@@ -16,18 +16,18 @@ evaluators: []
 # you might reference a variation by its name, like:
 # variation = StringWrapper("hello", 'test_experiment')
 # In this config, you would define the variations associated with that name, e.g.
-# variations:
-#   - name: translate
-#     variations:
-#       - instantiated_value: "Translate the following to Chinese:"
-#         value: "Translate the following to Chinese"
-#         value_type: str
-#         variation_id: null
-#       - instantiated_value: "Translate the following to Spanish:"
-#         value: "Translate the following to Spanish"
-#         value_type: str
-#         variation_id: null
-#       - instantiated_value: "Translate the following to German:"
-#         value: "Translate the following to German"
-#         value_type: str
-#         variation_id: null
+variations:
+  - name: translate
+    variations:
+      - instantiated_value: "Translate the following to Chinese:"
+        value: "Translate the following to Chinese"
+        value_type: str
+        variation_id: null
+      - instantiated_value: "Translate the following to Spanish:"
+        value: "Translate the following to Spanish"
+        value_type: str
+        variation_id: null
+      - instantiated_value: "Translate the following to German:"
+        value: "Translate the following to German"
+        value_type: str
+        variation_id: null

@@ -14,7 +14,6 @@ from ..schemas.experiment_config import (
     Experiment,
     ExperimentResult,
     GroupedExperimentResult,
-    HumanRating,
     Metric,
 )
 
@@ -237,10 +236,7 @@ def generate_random_experiment_data():
                         )
                     ],
                 )
-            ],
-            human_rating=HumanRating(
-                aspect="Output Quality", rating=random.uniform(1, 5)
-            ),
+            ]
         )
 
     group_results = [

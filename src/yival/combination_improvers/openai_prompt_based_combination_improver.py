@@ -266,7 +266,10 @@ class OpenAIPromptBasedCombinationImprover(BaseCombinationImprover):
                         current_iteration_results.extend(res)
                         pbar.update(len(res))
             experiment = generate_experiment(
-                current_iteration_results, evaluator
+                current_iteration_results,
+                evaluator,
+                evaluate_group=False,
+                evaluate_all=False
             )
             if self.check_if_done(experiment):
                 break
@@ -280,7 +283,7 @@ class OpenAIPromptBasedCombinationImprover(BaseCombinationImprover):
                     tmp.append(r)
                 results.extend(res.experiment_results)
         experiment = generate_experiment(
-            results, evaluator, evaluate_group=False
+            results, evaluator, evaluate_group=False, evaluate_all=False
         )
         improver_output = ImproverOutput(
             group_experiment_results=experiment.group_experiment_results,

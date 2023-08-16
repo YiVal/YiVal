@@ -33,17 +33,15 @@ from .evaluator import Evaluator
 
 
 def get_function_args(func_string: str):
-    # Split the string into module and function parts
-    module_name, function_name = func_string.rsplit('.', 1)
-
-    # Dynamically import the module
+    import os
+    import sys
+    module_path, module_name, function_name = func_string.rsplit('.', 2)
+    sys.path.append(os.path.abspath(module_path))
     module = importlib.import_module(module_name)
-
-    # Get a reference to the function
     function = getattr(module, function_name)
     signature = inspect.signature(function)
     return {
-        name: param.annotation
+        name: str(param.annotation)
         for name, param in signature.parameters.items()
     }
 
