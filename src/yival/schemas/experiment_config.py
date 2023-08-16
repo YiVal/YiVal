@@ -134,15 +134,8 @@ class HumanRating:
 
 @dataclass
 class HumanRatingConfig:
-    """
-    Configuration for human rating.
-
-    Attributes:
-    - aspects (List[str]): List of aspects to rate.
-    - scale (Tuple[float, float]): Minimum and maximum value of the rating scale.
-    """
-
-    aspects: List[str]
+    name: str
+    instructions: str
     scale: Tuple[float, float] = (1.0, 5.0)
 
     def asdict(self):
@@ -284,7 +277,6 @@ class ExperimentResult:
     latency: float
     token_usage: int
     evaluator_outputs: Optional[List[EvaluatorOutput]] = None
-    human_rating: Optional[HumanRating] = None
     intermediate_logs: Optional[List[str]] = None
 
     def asdict(self) -> Dict[str, Any]:
@@ -302,8 +294,6 @@ class ExperimentResult:
             "evaluator_outputs":
             [eo.asdict() for eo in self.evaluator_outputs]
             if self.evaluator_outputs else None,
-            "human_rating":
-            self.human_rating.asdict() if self.human_rating else None,
             "intermediate_logs":
             self.intermediate_logs
         }

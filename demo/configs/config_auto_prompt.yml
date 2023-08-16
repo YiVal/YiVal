@@ -18,6 +18,15 @@ dataset:
   source_type: machine_generated
 description: Generated experiment config
 
+human_rating_configs:
+  - name: clarity
+    instructions: Rate whether the headline clearly state what the start is doing
+    scale: [1, 5]
+
+  - name: relevance
+    instructions: Rate whether the headline is relevant
+    scale: [1, 5]
+
 evaluators:
   # - evaluator_type: all
   #   input_description:

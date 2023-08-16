@@ -5,16 +5,16 @@ from typing import List, Optional
 
 from tqdm import tqdm
 
+from yival.experiment.app.app import display_results_dash  # type: ignore
+
 from ..configs.config_utils import load_and_validate_config
 from ..logger.token_logger import TokenLogger
 from ..result_selectors.selection_context import SelectionContext
 from ..schemas.experiment_config import Experiment, ExperimentResult
 from ..states.experiment_state import ExperimentState
-from .app import display_results_dash
 from .data_processor import DataProcessor
 from .evaluator import Evaluator
 from .rate_limiter import RateLimiter
-from .user_input import ExperimentInputApp
 from .utils import (
     generate_experiment,
     get_improver,
@@ -141,13 +141,16 @@ class ExperimentRunner:
                     pickle.dump(experiment, file)
 
             if display:
-                display_results_dash(experiment)
+                display_results_dash(
+                    experiment, self.config, all_combinations, state, logger,
+                    evaluator
+                )
 
         elif source_type == "user_input":
-            app = ExperimentInputApp(
-                self.config, all_combinations, state, logger, evaluator
+            display_results_dash(
+                Experiment([], []), self.config, all_combinations, state,
+                logger, evaluator, True
             )
-            app.run()
 
 
 # def main():
