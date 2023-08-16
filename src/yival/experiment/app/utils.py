@@ -1,11 +1,8 @@
-
 from typing import List
 
 import pandas as pd  # type: ignore
 
-from yival.schemas.experiment_config import (
-    GroupedExperimentResult,
-)
+from yival.schemas.experiment_config import GroupedExperimentResult
 
 
 def sanitize_group_key(group_key):
@@ -16,12 +13,14 @@ def sanitize_group_key(group_key):
     if match:
         content = match.group(1).strip()
         items = content.split(",")
-        group_key = ", ".join([item.strip() for item in items])   
+        group_key = ", ".join([item.strip() for item in items])
         return group_key
-    return ""  
+    return ""
+
 
 def sanitize_column_name(name):
     return name.replace('"', '').replace(':', '')
+
 
 import pandas as pd
 
@@ -41,7 +40,8 @@ def highlight_best_values(df: pd.DataFrame, *cols) -> list:
 
     def non_numeric_col_best_value_style(col: str) -> dict:
         """Return style for best value in a non-numeric column containing metrics."""
-        metrics_values = df[col].str.extractall(r":\s?(\d+\.\d+)").astype(float)
+        metrics_values = df[col].str.extractall(r":\s?(\d+\.\d+)"
+                                                ).astype(float)
         if not metrics_values.empty:
             best_val = metrics_values[0].min()
             return {
@@ -78,8 +78,7 @@ def generate_group_key_combination_data(
         row_dict = {"Test Data": group_key}
         for exp_result in group.experiment_results:
             combo_str = sanitize_column_name(
-                str(exp_result.combination).replace("{",
-                                                    "").replace("}", "")
+                str(exp_result.combination).replace("{", "").replace("}", "")
             )
             nested_output = {
                 "raw_output":
@@ -102,6 +101,7 @@ def generate_group_key_combination_data(
             df[combo] = None
 
     return df
+
 
 def generate_heatmap_style(df, *cols):
     styles = []
