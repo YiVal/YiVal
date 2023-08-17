@@ -85,7 +85,7 @@ def create_dash_app(
                 ),
                 dbc.NavItem(
                     dbc.NavLink(
-                        "Group Key Combination", href="/group-key-combo"
+                        "Detailed Test Results", href="/group-key-combo"
                     )
                 ),
                 dbc.NavItem(
@@ -96,7 +96,7 @@ def create_dash_app(
                 ),
                 dbc.NavItem(
                     dbc.NavLink(
-                        "Improver Group Key Combination",
+                        "Improver Detailed Test Results",
                         href="/improver-group-key-combo"
                     )
                 ),
@@ -219,7 +219,7 @@ def create_dash_app(
             html.Br(),
             dcc.Link('Go to Data Analysis', href='/data-analysis'),
             html.Br(),
-            dcc.Link('Go to Group Key Combination', href='/group-key-combo'),
+            dcc.Link('Go to Detailed Test Results', href='/group-key-combo'),
             html.Br(),
             dcc.Link(
                 'Go to Improver Experiment Results Analysis',
@@ -227,7 +227,7 @@ def create_dash_app(
             ),
             html.Br(),
             dcc.Link(
-                'Go to Improver Group Key Combination',
+                'Go to Improver Detailed Test Results',
                 href='/improver-group-key-combo'
             ),
             html.Br()
@@ -243,7 +243,7 @@ def create_dash_app(
                 href='/experiment-results'
             ),
             html.Br(),
-            dcc.Link('Go to Group Key Combination', href='/group-key-combo'),
+            dcc.Link('Go to Detailed Test Results', href='/group-key-combo'),
             html.Br(),
             dcc.Link(
                 'Go to Improver Experiment Results Analysis',
@@ -251,7 +251,7 @@ def create_dash_app(
             ),
             html.Br(),
             dcc.Link(
-                'Go to Improver Group Key Combination',
+                'Go to Improver Detailed Test Results',
                 href='/improver-group-key-combo'
             ),
             html.Br()
@@ -259,7 +259,7 @@ def create_dash_app(
 
     def combo_page_layout():
         return html.Div([
-            html.H3("Combo Page Title", style={'textAlign': 'center'}),
+            html.H3("Detailed Test Results", style={'textAlign': 'center'}),
             group_key_combination_layout(
                 experiment_data.group_experiment_results
             ),
@@ -269,7 +269,7 @@ def create_dash_app(
             ),
             html.Br(),
             dcc.Link(
-                'Go to Improver Group Key Combination',
+                'Go to Improver Detailed Test Results',
                 href='/improver-group-key-combo'
             ),
             html.Br(),
@@ -312,10 +312,10 @@ def create_dash_app(
             html.Br(),
             dcc.Link('Go to Data Analysis', href='/data-analysis'),
             html.Br(),
-            dcc.Link('Go to Group Key Combination', href='/group-key-combo'),
+            dcc.Link('Go to Detailed Test Results', href='/group-key-combo'),
             html.Br(),
             dcc.Link(
-                'Go to Improver Group Key Combination',
+                'Go to Improver Detailed Test Results',
                 href='/improver-group-key-combo'
             ),
             html.Br()
@@ -361,7 +361,8 @@ def create_dash_app(
             return html.Div([html.H3("No Improver Output data available.")])
         return html.Div([
             html.H3(
-                "Improver Combo Page Title", style={'textAlign': 'center'}
+                "Improver Detailed Test Results",
+                style={'textAlign': 'center'}
             ),
             group_key_combination_layout(
                 experiment_data.improver_output.group_experiment_results,
@@ -549,10 +550,6 @@ def create_dash_app(
             )
 
         return html.Div([
-            html.H3(
-                "Group Key Combination Analysis",
-                style={'textAlign': 'center'}
-            ),
             html.A(
                 'Export to CSV',
                 id='export-link-group-key-combo',
