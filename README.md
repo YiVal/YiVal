@@ -5,18 +5,21 @@ YiVal stands at the intersection of flexibility and adaptability in the AI devel
 ## Table of Contents
 
 - [YiVal: Adaptable AI Development Framework](#yival-adaptable-ai-development-framework)
-  - [Table of Contents](#table-of-contents)
-  - [Overview](#overview)
-    - [Fun Cast Fortune Telling](#fun-cast-fortune-telling)
-    - [Experimentation](#experimentation)
-    - [Additional Features](#additional-features)
-  - [Architecture](#architecture)
-    - [Data Generation](#data-generation)
-    - [Combination Creation](#combination-creation)
-    - [Analysis](#analysis)
-    - [Evaluation](#evaluation)
-    - [Selection](#selection)
-    - [Improvement](#improvement)
+    - [Table of Contents](#table-of-contents)
+    - [Overview](#overview)
+        - [Fun Cast Fortune Telling](#fun-cast-fortune-telling)
+        - [Experimentation](#experimentation)
+        - [Additional Features](#additional-features)
+    - [Architecture](#architecture)
+        - [Data Generation](#data-generation)
+        - [Combination Creation](#combination-creation)
+        - [Analysis](#analysis)
+        - [Evaluation](#evaluation)
+        - [Selection](#selection)
+        - [Improvement](#improvement)
+    - [Installation](#installation)
+    - [Demo](#demo)
+        - [Basic Interactive Mode](#basic-interactive-mode)
 
 ## Overview
 
@@ -138,3 +141,30 @@ flowchart TD
     style D fill:#b2b1cf,stroke:#f96e5b
     style E fill:#f9efaa,stroke:#f96e5b
     style F fill:#f2a3b3,stroke:#f96e5b
+```
+
+## Installation
+
+```
+pip install yival
+```
+
+## Demo
+
+### Basic Interactive Mode
+
+To get started with a demo of YiVal, run the following command:
+
+```
+yival demo --basic_interactive
+```
+
+Once started, navigate to the following address in your web browser:
+
+<http://127.0.0.1:8073/interactive>
+<details>
+  <summary>Click to view the screenshot</summary>
+  
+  ![Screenshot 2023-08-17 at 10 55 31 PM](https://github.com/YiVal/YiVal/assets/1544154/a720c3ad-1288-4830-8a3d-377d9827f46e)
+  
+</details>
