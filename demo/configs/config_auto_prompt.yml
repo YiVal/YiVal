@@ -150,22 +150,22 @@ selection_strategy:
 # variation = StringWrapper("hello", 'test_experiment')
 # In this config, you would define the variations associated with that name, e.g.
 
-# variations:
-# - generator_config:
-#     input_description:
-#       Given an tech startup business, generate one corresponding landing
-#       page headline
-#     input_test_cases: ["AI law firm", "AI sales agent"]
-#     number_of_variations: 5
-#     openai_model_name: gpt-4
-#     output_path: generated_prompt.pkl
-#   generator_name: openai_prompt_based_variation_generator
-# name: task
-# variations:
-#   - instantiated_value: Generate landing page headline for
-#     value: Generate landing page headline for
-#     value_type: str
-#     variation_id: null
+variations:
+- generator_config:
+    input_description:
+      Given an tech startup business, generate one corresponding landing
+      page headline
+    input_test_cases: ["AI law firm", "AI sales agent"]
+    number_of_variations: 5
+    openai_model_name: gpt-4
+    output_path: generated_prompt.pkl
+  generator_name: openai_prompt_based_variation_generator
+name: task
+variations:
+  - instantiated_value: Generate landing page headline for
+    value: Generate landing page headline for
+    value_type: str
+    variation_id: null
 
 variations:
   - name: task

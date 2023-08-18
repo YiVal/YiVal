@@ -6,6 +6,7 @@ from ..schemas.evaluator_config import (
     EvaluatorConfig,
     EvaluatorOutput,
     EvaluatorType,
+    GlobalEvaluatorConfig,
 )
 from ..schemas.experiment_config import Experiment, ExperimentResult
 
@@ -16,7 +17,8 @@ class Evaluator:
     """
 
     def __init__(
-        self, configs: List[Union[EvaluatorConfig, ComparisonEvaluatorConfig]]
+        self, configs: List[Union[EvaluatorConfig, ComparisonEvaluatorConfig,
+                                  GlobalEvaluatorConfig]]
     ):
         self.configs = configs
 

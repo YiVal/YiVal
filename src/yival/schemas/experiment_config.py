@@ -14,6 +14,7 @@ from .evaluator_config import (
     ComparisonEvaluatorConfig,
     EvaluatorConfig,
     EvaluatorOutput,
+    GlobalEvaluatorConfig,
 )
 from .selector_strategies import BaseConfig, SelectionOutput
 from .varation_generator_configs import BaseVariationGeneratorConfig
@@ -154,8 +155,8 @@ class ExperimentConfig:
     selection_strategy: Optional[Dict[str, BaseConfig]] = None
     wrapper_configs: Optional[Dict[str, BaseWrapperConfig]] = None
     combinations_to_run: Optional[List[Tuple[str, Any]]] = None
-    evaluators: Optional[List[Union[EvaluatorConfig,
-                                    ComparisonEvaluatorConfig]]] = None
+    evaluators: Optional[List[Union[EvaluatorConfig, ComparisonEvaluatorConfig,
+                                    GlobalEvaluatorConfig]]] = None
     improver: Optional[BaseCombinationImproverConfig] = None
     output: Optional[OutputConfig] = None
     human_rating_configs: Optional[List[HumanRatingConfig]] = None

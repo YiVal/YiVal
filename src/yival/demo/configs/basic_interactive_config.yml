@@ -1,0 +1,27 @@
+custom_function: yival.demo.translation.translate
+dataset:
+  source_type: user_input
+description: Basic config for interactive mode
+evaluators: []
+# wrapper_configs: {}
+
+# Variations allow for dynamic content during experiments.
+# They are identified by a globally unique name. For example, in your code,
+# you might reference a variation by its name, like:
+# variation = StringWrapper("hello", 'test_experiment')
+# In this config, you would define the variations associated with that name, e.g.
+variations:
+  - name: translate
+    variations:
+      - instantiated_value: "Translate the following to Chinese:"
+        value: "Translate the following to Chinese"
+        value_type: str
+        variation_id: null
+      - instantiated_value: "Translate the following to Spanish:"
+        value: "Translate the following to Spanish"
+        value_type: str
+        variation_id: null
+      - instantiated_value: "Translate the following to German:"
+        value: "Translate the following to German"
+        value_type: str
+        variation_id: null
