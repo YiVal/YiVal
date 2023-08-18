@@ -1,5 +1,7 @@
 import importlib
 import inspect
+import os
+import sys
 import time
 from collections import defaultdict
 from importlib import import_module
@@ -32,13 +34,28 @@ from ..states.experiment_state import ExperimentState
 from .evaluator import Evaluator
 
 
-def get_function_args(func_string: str):
-    import os
-    import sys
-    module_path, module_name, function_name = func_string.rsplit('.', 2)
-    sys.path.append(os.path.abspath(module_path))
-    module = importlib.import_module(module_name)
+def import_function_from_string(func_string: str):
+    """Helper function to import a function from a string."""
+    try:
+        # Direct import for built-in functions
+        module_name, function_name = func_string.rsplit('.', 1)
+        module = importlib.import_module(module_name)
+    except ImportError as e:
+        print("TFTF-1")
+        print(str(e))
+        print("TFTF-2")
+        # Dynamic import for user-specified functions
+        module_path, module_name, function_name = func_string.rsplit('.', 2)
+        sys.path.append(os.path.abspath(module_path))
+        module = importlib.import_module(module_name)
+
     function = getattr(module, function_name)
+    return function
+
+
+def get_function_args(func_string: str):
+    """Get argument types of a function."""
+    function = import_function_from_string(func_string)
     signature = inspect.signature(function)
     return {
         name: str(param.annotation)
@@ -47,21 +64,8 @@ def get_function_args(func_string: str):
 
 
 def call_function_from_string(func_string: str, **kwargs) -> Any:
-    import os
-    import sys
-
-    # Split the string into module and function parts
-    module_path, module_name, function_name = func_string.rsplit('.', 2)
-
-    # Dynamically import the module
-    sys.path.append(os.path.abspath(module_path))
-
-    module = importlib.import_module(module_name)
-
-    # Get a reference to the function
-    function = getattr(module, function_name)
-
-    # Call and return the result of the function with the input arguments
+    """Call a function specified by a string."""
+    function = import_function_from_string(func_string)
     return function(**kwargs)
 
 

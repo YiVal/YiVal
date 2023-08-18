@@ -2,6 +2,7 @@
 
 from argparse import ArgumentParser
 
+from .demo import add_arguments_to as DEMO
 from .init import add_arguments_to as INIT
 from .run import add_arguments_to as RUN
 from .validate import add_arguments_to as VALIDATE
@@ -15,5 +16,6 @@ def add_subcommands_to(parser: ArgumentParser):
         INIT,
         VALIDATE,
         RUN,
+        DEMO,
     ):
         func(subparser)
