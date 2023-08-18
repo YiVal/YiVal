@@ -1,5 +1,6 @@
 import asyncio
 import json
+import os
 import time
 
 import aiohttp
@@ -10,6 +11,8 @@ MAX_REQUESTS_PER_MINUTE = 100
 MAX_TOKENS_PER_MINUTE = 35000
 
 from collections import deque
+
+from aiohttp_socks import ProxyConnector  # type: ignore
 
 
 class RateLimiter:
@@ -100,7 +103,13 @@ async def parallel_completions(
         MAX_REQUESTS_PER_MINUTE / 60, MAX_TOKENS_PER_MINUTE
     )  # Create a rate limiter
 
-    async with aiohttp.ClientSession() as session:
+    proxy = os.environ.get("all_proxy")
+    if proxy:
+        connector = ProxyConnector.from_url(proxy)
+    else:
+        connector = None
+
+    async with aiohttp.ClientSession(connector=connector) as session:
         tasks = [
             asyncio.ensure_future(
                 fetch(
