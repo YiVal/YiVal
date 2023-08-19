@@ -141,8 +141,10 @@ Once started, navigate to the following address in your web browser:
  <img width="1288" alt="Screenshot 2023-08-18 at 1 11 44 AM" src="https://github.com/YiVal/YiVal/assets/1544154/4e9a182f-07ba-413e-9160-f38bfdc743ce">
 
 </details>
+
 For more details on this demo, check out the [Question Answering with expected result evaluator](https://github.com/YiVal/YiVal/blob/master/docs/docs/qa_expected_results.md#demo).
 
 ## Architecture
 
 For detailed information about Yival's architecutre, refer to this [doc](https://github.com/YiVal/YiVal/blob/master/docs/docs/architecture.md#demo).
+
