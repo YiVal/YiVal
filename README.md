@@ -10,17 +10,12 @@ YiVal stands at the intersection of flexibility and adaptability in the AI devel
         - [Fun Cast Fortune Telling](#fun-cast-fortune-telling)
         - [Experimentation](#experimentation)
         - [Additional Features](#additional-features)
-    - [Architecture](#architecture)
-        - [Data Generation](#data-generation)
-        - [Combination Creation](#combination-creation)
-        - [Analysis](#analysis)
-        - [Evaluation](#evaluation)
-        - [Selection](#selection)
-        - [Improvement](#improvement)
+    - [AIGC app development flow](#aigc-app-development-flow)
     - [Installation](#installation)
     - [Demo](#demo)
         - [Basic Interactive Mode](#basic-interactive-mode)
         - [Question Answering with expected result evaluator](#question-answering-with-expected-result-evaluator)
+    - [Architecture](#architecture)
 
 ## Overview
 
@@ -64,84 +59,44 @@ Dive into the world of YiChing and discover your fortune on our index page. A fu
 
 </details>
 
-## Architecture
+## AIGC app development flow
 
-### Data Generation
-
-The process starts with the generation of a dataset which can come from multiple sources:
-
-- **Specific Data Generator**: A defined method or algorithm that automatically churns out data.
-- **Data Reader**: A component that reads data from external places.
-- **Manual Input**: As straightforward as it sounds, data can be added manually.
-
-### Combination Creation
-
-Once we have our dataset, we form combinations that are pivotal for the subsequent analysis:
-
-- Formed using specific combination creators.
-- Defined manually.
-
-### Analysis
-
-This is the heart of the Yival framework. A custom function provided by the user takes in the dataset and combination list to produce valuable insights.
-
-### Evaluation
-
-After analysis, the results are subjected to evaluation. Several methodologies can be applied to grasp and gauge the data's behavior deeply.
-
-### Selection
-
-From the evaluations, the most promising results are selected. This process ensures only the most vital insights are pushed forward.
-
-### Improvement
-
-The selected results are then fine-tuned in this phase. An "Improver" is applied to enhance these results. This stage can loop back to the analysis stage, indicating an ongoing, iterative process of refinement.
+The flowchart below depicts the core flow of ideal AI Generated Content (AIGC) app development That Yival tries to support. This emphasis on iteration ensures a continuous cycle of improvement, allowing developers to hone their applications to perfection.
 
 ```mermaid
 flowchart TD
 
-    %% Data Generation Stage
-    A[Start]
-    A --> |Data Generation| A1[Dataset]
-    A1 --> A2[DataGenerator]
-    A2 --> A3[Specific Generator]
-    A1 --> A4[DataReader]
-    A4 --> A5[Specific Reader]
-    A1 --> A6[Manual Input]
+A{Test Data}
+B[Core App Development]
+C[Evaluation]
+D[Refinement]
 
-    %% Create Combinations Stage
-    A1 --> |Create Combinations| B
-    B --> B1[Specific Combination Creator]
-    B --> B2[Set Combinations Manually]
-    B --> B3[List of Combinations]
+A --> B
+B --> C
+C -->|Check| D
+D -->|YiVal Supports Iteration| B
 
-    %% Evaluate Stage
-    B3 --> |Analysis| C
-    C --> C1[User's Function]
-    C --> C2[Results from Function]
-    A1 --> C1
+subgraph "Core App Development"
+    B1[Retrieve Data]
+    B2[Collaborate with Models]
+    B3[Select Best Model]
+    B4[Prompt Development]
+end
 
-    %% Evaluator Stage
-    C2 --> |Evaluation| D
-    D --> D1[Method 1]
-    D --> D2[Method 2]
-    D --> D3[Method 3]
+subgraph Evaluation
+    C1[Human Evaluator]
+    C2[Auto Evaluator]
+    C --> C1
+    C --> C2
+end
 
-    %% Select Stage
-    D --> |Selection| E
+subgraph Refinement
+    D1[Human Improver]
+    D2[Auto Improver]
+    D --> D1
+    D --> D2
+end
 
-    %% Improver Stage
-    E --> |Improvement| F
-    F --> F1[Improver]
-    F1 --> C
-
-    %% Styling
-    style A fill:#f9d77e,stroke:#f96e5b
-    style B fill:#a1d4c6,stroke:#f96e5b
-    style C fill:#f6c3d5,stroke:#f96e5b
-    style D fill:#b2b1cf,stroke:#f96e5b
-    style E fill:#f9efaa,stroke:#f96e5b
-    style F fill:#f2a3b3,stroke:#f96e5b
 ```
 
 ## Installation
@@ -170,7 +125,6 @@ Once started, navigate to the following address in your web browser:
   
 </details>
 
-
 For more details on this demo, check out the [Basic Interactive Mode Demo](https://github.com/YiVal/YiVal/blob/master/docs/docs/basic_interactive_mode.md#demo).
 
 ### Question Answering with expected result evaluator
@@ -188,4 +142,9 @@ Once started, navigate to the following address in your web browser:
 
 </details>
 
-For more details, check out the [Question Answering with expected result evaluator](https://github.com/YiVal/YiVal/blob/master/docs/qa_expected_results.md#demo).
+For more details on this demo, check out the [Question Answering with expected result evaluator](https://github.com/YiVal/YiVal/blob/master/docs/docs/qa_expected_results.md#demo).
+
+## Architecture
+
+For detailed information about Yival's architecutre, refer to this [doc](https://github.com/YiVal/YiVal/blob/master/docs/docs/architecture.md#demo).
+
