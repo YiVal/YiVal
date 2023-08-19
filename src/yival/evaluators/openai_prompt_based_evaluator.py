@@ -43,7 +43,7 @@ def extract_choice_from_response(
         if not sanitized_line:
             continue
         for choice in choice_strings:
-            if MATCH_FNS["starts_or_endswith"](sanitized_line, choice):
+            if MATCH_FNS["exact"](sanitized_line, choice):
                 return choice
     return "invalid response"
 
