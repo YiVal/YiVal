@@ -1,10 +1,26 @@
 import csv
 import logging
+import os
+from pathlib import Path
 from typing import Iterator, List
 
 from ..schemas.common_structures import InputData
 from ..schemas.reader_configs import CSVReaderConfig
 from .base_reader import BaseReader
+
+
+def get_valid_path(user_specified_path):
+    current_file_path = Path(__file__)
+    yival_root_path = current_file_path.parent.parent
+    if not user_specified_path.startswith('/'):
+        combined_path = os.path.join(yival_root_path, user_specified_path)
+        if os.path.exists(combined_path):
+            return combined_path
+
+    if os.path.exists(user_specified_path):
+        return user_specified_path
+
+    raise FileNotFoundError(f"File not found at '{user_specified_path}'")
 
 
 class CSVReader(BaseReader):
@@ -46,7 +62,8 @@ class CSVReader(BaseReader):
         chunk = []
         issues = []
         chunk_size = self.config.chunk_size
-        with open(path, mode="r", encoding="utf-8") as file:
+        file_path = get_valid_path("demo/data/yival_expected_results.csv")
+        with open(file_path, mode="r", encoding="utf-8") as file:
             # Check for header
             header = file.readline().strip().split(",")
             if not header or header[0] == "":

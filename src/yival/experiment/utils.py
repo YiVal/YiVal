@@ -40,10 +40,7 @@ def import_function_from_string(func_string: str):
         # Direct import for built-in functions
         module_name, function_name = func_string.rsplit('.', 1)
         module = importlib.import_module(module_name)
-    except ImportError as e:
-        print("TFTF-1")
-        print(str(e))
-        print("TFTF-2")
+    except ImportError:
         # Dynamic import for user-specified functions
         module_path, module_name, function_name = func_string.rsplit('.', 2)
         sys.path.append(os.path.abspath(module_path))
