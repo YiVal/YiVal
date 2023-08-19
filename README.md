@@ -170,6 +170,7 @@ Once started, navigate to the following address in your web browser:
   
 </details>
 
+
 For more details on this demo, check out the [Basic Interactive Mode Demo](https://github.com/YiVal/YiVal/blob/master/docs/docs/basic_interactive_mode.md#demo).
 
 ### Question Answering with expected result evaluator

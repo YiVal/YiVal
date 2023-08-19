@@ -109,6 +109,21 @@ yarl = ">=1.0,<2.0"
 speedups = ["Brotli", "aiodns", "cchardet"]
 
 [[package]]
+name = "aiohttp-socks"
+version = "0.8.0"
+description = "Proxy connector for aiohttp"
+optional = false
+python-versions = "*"
+files = [
+    {file = "aiohttp_socks-0.8.0-py3-none-any.whl", hash = "sha256:bb662f50bb5d234f72e2b9ac85b655cb1aed806dce4fec71398b5a9ac0480c17"},
+    {file = "aiohttp_socks-0.8.0.tar.gz", hash = "sha256:927b1d3b347448f86ff5245c9ca19e40f397eb93906682be592790678c982f37"},
+]
+
+[package.dependencies]
+aiohttp = ">=2.3.2"
+python-socks = {version = ">=2.0.0,<3.0.0", extras = ["asyncio"]}
+
+[[package]]
 name = "aiosignal"
 version = "1.3.1"
 description = "aiosignal: a list of registered asynchronous callbacks"
@@ -1845,6 +1860,26 @@ files = [
 Levenshtein = "0.21.1"
 
 [[package]]
+name = "python-socks"
+version = "2.3.0"
+description = "Core proxy (SOCKS4, SOCKS5, HTTP tunneling) functionality for Python"
+optional = false
+python-versions = "*"
+files = [
+    {file = "python-socks-2.3.0.tar.gz", hash = "sha256:2002f20f32366861bec90e6b520e4696671587b3dd56e476477e5a07ec49a094"},
+    {file = "python_socks-2.3.0-py3-none-any.whl", hash = "sha256:eb385a33bcc3909401aa29fc0a277cdd0c2ce586a99b61be1ddd1a4939f23061"},
+]
+
+[package.dependencies]
+async-timeout = {version = ">=3.0.1", optional = true, markers = "extra == \"asyncio\""}
+
+[package.extras]
+anyio = ["anyio (>=3.3.4)"]
+asyncio = ["async-timeout (>=3.0.1)"]
+curio = ["curio (>=1.4)"]
+trio = ["trio (>=0.16.0)"]
+
+[[package]]
 name = "pytz"
 version = "2023.3"
 description = "World timezone definitions, modern and historical"
@@ -2597,4 +2632,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<4"
-content-hash = "d55122731b69052adcfd12ba8e125e89bf1627560878688a5efe50011869044d"
+content-hash = "6cde0dc1f1da9616856f59411b06b29acdc353bfa2ca29c947937b22e965c7ff"
