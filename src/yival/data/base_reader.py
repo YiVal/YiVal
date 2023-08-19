@@ -9,6 +9,13 @@ from ..schemas.reader_configs import BaseReaderConfig
 class BaseReader(ABC):
     """
     Abstract base class for all data readers.
+
+    This class provides a blueprint for data readers and offers methods to register new readers,
+    retrieve registered readers, and fetch their configurations.
+
+    Attributes:
+        _registry (Dict[str, Dict[str, Any]]): A registry to keep track of data readers.
+        default_config (Optional[BaseReaderConfig]): Default configuration for the reader.
     """
     _registry: Dict[str, Dict[str, Any]] = {}
     default_config: Optional[BaseReaderConfig] = None
@@ -69,6 +76,18 @@ class BaseReader(ABC):
 
     @abstractmethod
     def read(self, path: str) -> Iterator[List[InputData]]:
+        """
+        Read data from the given file path and return an iterator of lists containing InputData.
+        
+        This method is designed to read data in chunks for efficient parallel processing. The chunk size
+        is determined by the reader's configuration.
+        
+        Args:
+            path (str): The path to the file containing data to be read.
+
+        Returns:
+            Iterator[List[InputData]]: An iterator yielding lists of InputData objects.
+        """
         pass
 
     def generate_example_id(self, row_data: Dict[str, Any], path: str) -> str:

@@ -14,9 +14,6 @@ class BaseEvaluator(ABC):
     This class provides the basic structure and methods for evaluators.
     Specific evaluators should inherit from this class and implement the necessary methods.
 
-    Attributes:
-        config (BaseEvaluatorConfig): The configuration for the evaluator.
-
     """
     _registry: Dict[str, Dict[str, Any]] = {}
     default_config: Optional[BaseEvaluatorConfig] = None
@@ -82,15 +79,13 @@ class BaseEvaluator(ABC):
 
     def evaluate(self, experiment_result: ExperimentResult) -> EvaluatorOutput:
         """
-        Evaluate the input data and produce an evaluator output.
+        Evaluate the experiment result and produce an evaluator output.
 
         Args:
-            input_data (InputData): The input data to be evaluated.
-            raw_output (str): The raw output produced by the custom function.
+            experiment_result (ExperimentResult): The result of an experiment to be evaluated.
 
         Returns:
             EvaluatorOutput: The result of the evaluation.
-
         """
         return EvaluatorOutput("evaluate", "evaluate")
 
@@ -107,7 +102,8 @@ class BaseEvaluator(ABC):
         Args:
             group_data (List[ExperimentResult]): A list of experiment results to be evaluated together.
 
-        EvaluatorOutput: The result of the evaluation.
+        Returns:
+            EvaluatorOutput: The result of the evaluation.
         
         Note:
             Implementations of this method in subclasses should handle the specifics 
@@ -118,4 +114,17 @@ class BaseEvaluator(ABC):
     def evaluate_based_on_all_results(
         self, experiment: List[Experiment]
     ) -> None:
+        """
+        Evaluate based on the entirety of experiment results.
+        
+        This method evaluates an entire list of experiments, potentially taking 
+        into account all available data to produce a comprehensive evaluation.
+        
+        Args:
+            experiment (List[Experiment]): A list of all experiments to be evaluated.
+
+        Note:
+            Implementations of this method in subclasses should determine how to 
+            best utilize all available experiment data for evaluation.
+        """
         pass

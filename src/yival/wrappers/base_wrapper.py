@@ -6,8 +6,15 @@ from ..states.experiment_state import ExperimentState
 
 class BaseWrapper:
     """
-    Base wrapper class for managing experiment variations based on the global
-    experiment state.
+    Base class for wrappers that manage experiment variations based on the global experiment state.
+    
+    This class provides the fundamental structure and methods for wrappers.
+    Specific wrappers should inherit from this class and implement the necessary methods.
+    
+    Attributes:
+        name (str): The name of the wrapper.
+        experiment_state (ExperimentState): The global state of the experiment.
+        config (BaseWrapperConfig): The configuration for the wrapper.
     """
     _registry: Dict[str, Dict[str, Any]] = {}
     default_config: Optional[BaseWrapperConfig] = None
@@ -33,6 +40,12 @@ class BaseWrapper:
         self.config = config
 
     def get_variation(self) -> Optional[Any]:
+        """
+        Retrieve the next variation for the experiment based on the wrapper's name.
+
+        Returns:
+            Optional[Any]: The next variation if the experiment is active, otherwise None.
+        """
         if self.experiment_state.active:
             return self.experiment_state.get_next_variation(self.name)
         return None
