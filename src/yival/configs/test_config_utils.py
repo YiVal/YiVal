@@ -25,9 +25,6 @@ def test_load_and_validate_config(tmpdir):
     # Load and validate the configuration using the function
     config = load_and_validate_config(config_filepath=str(config_file))
 
-    f = open(config_file, "r")
-    print(f.read())
-
     # Assertions to verify that the configuration is loaded and parsed correctly
     assert config["description"] == "Test experiment"
     assert config["wrappers"][0]["name"] == "wrapper1"

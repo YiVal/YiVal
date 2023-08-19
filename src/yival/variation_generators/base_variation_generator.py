@@ -58,4 +58,16 @@ class BaseVariationGenerator(ABC):
 
     @abstractmethod
     def generate_variations(self) -> Iterator[List[WrapperVariation]]:
+        """
+        Generate a sequence of variations to be used in experiments.
+        
+        This method should yield lists of variations, with each list typically representing a set
+        or batch of variations to be used in a single experiment or iteration.
+        
+        Returns:
+            Iterator[List[WrapperVariation]]: An iterator yielding lists of WrapperVariation objects.
+            
+        Note:
+            The specific logic for generating variations should be implemented by subclasses.
+        """
         pass

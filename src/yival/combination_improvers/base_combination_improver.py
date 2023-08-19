@@ -16,7 +16,12 @@ from ..schemas.experiment_config import (
 class BaseCombinationImprover(ABC):
     """
     Abstract base class for all combination improvers.
+    
+    Attributes:
+        _registry (Dict[str, Dict[str, Any]]): A registry to keep track of combination improvers.
+        default_config (Optional[BaseCombinationImproverConfig]): Default configuration for the combination improver.
     """
+
     _registry: Dict[str, Dict[str, Any]] = {}
     default_config: Optional[BaseCombinationImproverConfig] = None
 
@@ -51,6 +56,7 @@ class BaseCombinationImprover(ABC):
         combination_improver_cls: Type['BaseCombinationImprover'],
         config_cls: Optional[Type[BaseCombinationImproverConfig]] = None
     ):
+        """Register a new combination improver along with its default configuration and configuration class."""
         cls._registry[name] = {
             "class": combination_improver_cls,
             "default_config": combination_improver_cls.default_config,
@@ -62,4 +68,16 @@ class BaseCombinationImprover(ABC):
         self, experiment: Experiment, config: ExperimentConfig,
         evaluator: Evaluator, token_logger: TokenLogger
     ) -> ImproverOutput:
+        """
+        Improve the experiment based on its results.
+
+        Args:
+            experiment (Experiment): The experiment with its results.
+            config (ExperimentConfig): The original experiment configuration.
+            evaluator (Evaluator): A utility class to evaluate the ExperimentResult.
+            token_logger (TokenLogger): Logs the token usage.
+
+        Returns:
+            ImproverOutput
+        """
         pass
