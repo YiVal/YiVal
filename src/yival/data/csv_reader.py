@@ -12,7 +12,7 @@ from .base_reader import BaseReader
 def get_valid_path(user_specified_path):
     current_file_path = Path(__file__)
     yival_root_path = current_file_path.parent.parent
-    if not user_specified_path.startswith('/'):
+    if not str(user_specified_path).startswith('/'):
         combined_path = os.path.join(yival_root_path, user_specified_path)
         if os.path.exists(combined_path):
             return combined_path
@@ -62,7 +62,7 @@ class CSVReader(BaseReader):
         chunk = []
         issues = []
         chunk_size = self.config.chunk_size
-        file_path = get_valid_path("demo/data/yival_expected_results.csv")
+        file_path = get_valid_path(path)
         with open(file_path, mode="r", encoding="utf-8") as file:
             # Check for header
             header = file.readline().strip().split(",")
