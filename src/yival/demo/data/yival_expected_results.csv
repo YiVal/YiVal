@@ -1,0 +1,10 @@
+input,expected_result
+"""Question: Rs. 5600 is divided into three parts A, B and C. How much A is more than C if their ratio is 1/7:1/7:1/14?\nOptions:\n(A) 300\n(B) 992\n(C) 1120\n(D) 552\n(E) 312""",(C)
+"""The edge of a cube is 7a cm. Find its surface?\nOptions:\n(A) 24a8\n(B) 24a4\n(C) 24a1\n(D) 24a2\n(E) 294a2""",(E)
+"""A board 7ft. 9 inches long is divided into 3 equal parts . What is the length of each part?\nOptions:\n(A) 31 inches\n(B) 32 inches\n(C) 33 inches\n(D) 34 inches\n(E) 35 inches""",(A)
+"""If rupee one produces rupees nine over a period of 40 years, find the rate of simple interest?\nOptions:\n(A) 22 1/8 %\n(B) 22 3/2 %\n(C) 28 1/2 %\n(D) 22 1/2 %\n(E) 32 1/2 %""",(D)
+"""Student: There are different 15 circles. What is the number of the greatest possible points with which the circles intersect?\nOptions:\n(A) 390\n(B) 100\n(C) 110\n(D) 180\n(E) 210.""",(E)
+"""If x is the product of the integers from 1 to 150, inclusive, and 5^y is a factor of x, what is the greatest possible value of y ?\nOptions:\n(A) 30\n(B) 34\n(C) 36\n(D) 37\n(E) 39""",(D)
+"""Company Z spent 1/4 of its revenues last year on marketing and 1/7 of the remainder on maintenance of its facilities. What fraction of last year’s original revenues did company Z have left after its marketing and maintenance expenditures?\nOptions:\n(A) 5/14\n(B) 1/2\n(C) 17/28\n(D) 9/14\n(E) 9/11""",(D)
+"""A train 360 m long is running at a speed of 45 km/hr. In what time will it pass a bridge 140 m long?\nOptions:\n(A) 40 sec\n(B) 42 sec\n(C) 45 sec\n(D) 48 sec\n(E) 58 sec""",(A)
+"""The average height in a group of 4 people is 175 cm. If the average height increased when 2 more people were added to the group, which of the following cannot be the heights of the two new people?\nOptions:\n(A) 179 cm and 172 cm\n(B) 181 cm and 169 cm\n(C) 173 cm and 178 cm\n(D) 176 cm and 176 cm\n(E) 174 cm and 177 cm""",(B)

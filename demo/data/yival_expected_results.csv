@@ -1,6 +1,0 @@
-input,expected_result
-"""Question: Rs. 5600 is divided into three parts A, B and C. How much A is more than C if their ratio is 1/7:1/7:1/14?\nOptions:\n(A) 300\n(B) 992\n(C) 1120\n(D) 552\n(E) 312""",(C)
-"""The edge of a cube is 7a cm. Find its surface?\nOptions:\n(A) 24a8\n(B) 24a4\n(C) 24a1\n(D) 24a2\n(E) 294a2""",(E)
-"""A board 7ft. 9 inches long is divided into 3 equal parts . What is the length of each part?\nOptions:\n(A) 31 inches\n(B) 32 inches\n(C) 33 inches\n(D) 34 inches\n(E) 35 inches""",(A)
-"""Give stream of consciousness and then the final answer. If rupee one produces rupees nine over a period of 40 years, find the rate of simple interest?\nOptions:\n(A) 22 1/8 %\n(B) 22 3/2 %\n(C) 28 1/2 %\n(D) 22 1/2 %\n(E) 32 1/2 %""",(D)
-"""Student: There are different 15 circles. What is the number of the greatest possible points with which the circles intersect?\nOptions:\n(A) 390\n(B) 100\n(C) 110\n(D) 180\n(E) 210.""",(E)

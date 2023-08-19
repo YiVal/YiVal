@@ -20,6 +20,7 @@ YiVal stands at the intersection of flexibility and adaptability in the AI devel
     - [Installation](#installation)
     - [Demo](#demo)
         - [Basic Interactive Mode](#basic-interactive-mode)
+        - [Question Answering with expected result evaluator](#question-answering-with-expected-result-evaluator)
 
 ## Overview
 
@@ -153,7 +154,7 @@ pip install yival
 
 ### Basic Interactive Mode
 
-To get started with a demo of YiVal, run the following command:
+To get started with a demo for basic interactive mode of YiVal, run the following command:
 
 ```
 yival demo --basic_interactive
@@ -169,4 +170,21 @@ Once started, navigate to the following address in your web browser:
   
 </details>
 
-For more details on our demo, check out the [Basic Interactive Mode Demo](https://github.com/YiVal/YiVal/blob/master/docs/basic_interactive_mode.md#demo).
+
+For more details on this demo, check out the [Basic Interactive Mode Demo](https://github.com/YiVal/YiVal/blob/master/docs/docs/basic_interactive_mode.md#demo).
+
+### Question Answering with expected result evaluator
+
+```
+yival demo --qa_expected_results
+```
+
+Once started, navigate to the following address in your web browser:
+<http://127.0.0.1:8073/>
+<details>
+  <summary>Click to view the screenshot</summary>
+  
+ <img width="1288" alt="Screenshot 2023-08-18 at 1 11 44 AM" src="https://github.com/YiVal/YiVal/assets/1544154/4e9a182f-07ba-413e-9160-f38bfdc743ce">
+
+</details>
+For more details on this demo, check out the [Question Answering with expected result evaluator](https://github.com/YiVal/YiVal/blob/master/docs/docs/qa_expected_results.md#demo).

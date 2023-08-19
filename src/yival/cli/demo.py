@@ -14,8 +14,16 @@ def add_arguments_to(subparser):
     parser.add_argument(
         "--basic_interactive",
         action="store_true",
-        default=True,
+        default=False,
         help="Use the translation example to demo the interactive mode"
+    )
+
+    parser.add_argument(
+        "--qa_expected_results",
+        action="store_true",
+        default=False,
+        help=
+        "Use the question asnwering to demo the input from data set and use expected_results_evaluators."
     )
 
 
@@ -35,4 +43,17 @@ def demo(args: Namespace):
             output_path="",
             experiment_input_path=""
         )
-        run_experiment(run_args)
+    elif args.qa_expected_results:
+        src_path = os.path.join(
+            base_dir, '../demo/configs/qa_expected_results_config.yml'
+        )
+        dest_path = './basic_interactive_config.yml'
+        shutil.copy(src_path, dest_path)
+        print(f"Copied {src_path} to {dest_path}")
+        run_args = Namespace(
+            config_path=dest_path,
+            display=True,
+            output_path="",
+            experiment_input_path=""
+        )
+    run_experiment(run_args)

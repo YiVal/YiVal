@@ -1480,4 +1480,4 @@ def display_results_dash(
         experiment_data, experiment_config, function_args, all_combinations,
         state, logger, evaluator, interactive
     )
-    app.run(debug=True, port=8073)
+    app.run(debug=False, port=8073)

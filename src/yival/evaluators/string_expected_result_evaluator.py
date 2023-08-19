@@ -86,7 +86,6 @@ class StringExpectedResultEvaluator(BaseEvaluator):
         input_data = experiment_result.input_data
         raw_output = experiment_result.raw_output
         expected_result = input_data.expected_result
-
         is_match = False
         technique = MatchingTechnique(self.config.matching_technique)
         if technique == MatchingTechnique.FUZZY_MATCH:
@@ -110,6 +109,7 @@ class StringExpectedResultEvaluator(BaseEvaluator):
         result = 1 if is_match else 0
         return EvaluatorOutput(
             name=self.config.name,
+            display_name="matching",
             result=result,
             metric_calculators=self.config.metric_calculators
         )
