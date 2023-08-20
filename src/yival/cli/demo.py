@@ -26,6 +26,14 @@ def add_arguments_to(subparser):
         "Use the question asnwering to demo the input from data set and use expected_results_evaluators."
     )
 
+    parser.add_argument(
+        "--auto_prompts",
+        action="store_true",
+        default=False,
+        help=
+        "Automatically generate prompts and test data for tech startup landing page headline."
+    )
+
 
 def demo(args: Namespace):
     """Demo usage of YiVal"""
@@ -48,6 +56,19 @@ def demo(args: Namespace):
             base_dir, '../demo/configs/qa_expected_results_config.yml'
         )
         dest_path = './basic_interactive_config.yml'
+        shutil.copy(src_path, dest_path)
+        print(f"Copied {src_path} to {dest_path}")
+        run_args = Namespace(
+            config_path=dest_path,
+            display=True,
+            output_path="",
+            experiment_input_path=""
+        )
+    elif args.auto_prompts:
+        src_path = os.path.join(
+            base_dir, '../demo/configs/auto_prompts_config.yml'
+        )
+        dest_path = './auto_prompts_config.yml'
         shutil.copy(src_path, dest_path)
         print(f"Copied {src_path} to {dest_path}")
         run_args = Namespace(
