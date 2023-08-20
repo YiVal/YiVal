@@ -146,5 +146,5 @@ For more details on this demo, check out the [Question Answering with expected r
 
 ## Architecture
 
-For detailed information about Yival's architecutre, refer to this [doc](https://github.com/YiVal/YiVal/blob/master/docs/docs/architecture.md#demo).
+For detailed information about Yival's architecutre, refer to this [doc](https://github.com/YiVal/YiVal/blob/master/docs/architecture.md#demo).
 
