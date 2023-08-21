@@ -1,22 +1,78 @@
 # This is a generated template. Modify the values as needed.
+description: Config for auto prompt demo
 
-custom_function: /Users/taofeng/YiVal/demo.headline_generation.headline_generation
+custom_function: yival.demo.headline_generation.headline_generation
 dataset:
   data_generators:
     openai_prompt_data_generator:
       chunk_size: 1000
+      diversify: false
       input_function:
         description:
-          Given an tech startup business, generate one corresponding landing
+          Given an tech startup business, generate a corresponding landing
           page headline
-        name: headline_generation_for_business
+        name: headline_generation_for_tech_startup_business
         parameters:
           tech_startup_business: str
-      number_of_examples: 10
+      number_of_examples: 2
       openai_model_name: gpt-4
-      output_path: generated_examples.pkl
+      output_path: test_demo_generated_examples.pkl
+      prompt: |-
+        Please provide a concrete and realistic test case as
+        a dictionary for function invocation using the ** operator.
+        Only include parameters, excluding description and name and ensure
+        it's succinct and well-structured.
+
+        **Only provide the dictionary.**
+
   source_type: machine_generated
-description: Generated experiment config
+
+variations:
+  - name: task
+    generator_name: openai_prompt_based_variation_generator
+    generator_config:
+      diversify: false
+      max_tokens: 7000
+      number_of_variations: 2
+      openai_model_name: gpt-4
+      output_path: test_demo_generated_prompt.pkl
+      prompt:
+        - content: |-
+
+            Your mission is to craft prompts tailored for GPT-4. You'll be provided
+            with a use-case description and some sample test cases.
+
+            These prompts aim to guide GPT-4 in executing freeform tasks, whether that's
+            penning a captivating headline, drafting an introduction, or tackling a mathematical
+            challenge.
+
+            In your designed prompt, delineate the AI's role using lucid English. Highlight
+            its perceptual field and the boundaries of its responses. Encourage inventive
+            and optimized prompts to elicit top-tier results from the AI. Remember, GPT-4
+            is self-aware of its AI nature; no need to reiterate that.
+
+            The efficacy of your prompt determines your evaluation. Stay authentic! Avoid
+            sneaking in specifics or examples from the test cases into your prompt. Such
+            maneuvers will lead to immediate disqualification.
+
+            Lastly, keep your output crisp: only the prompt, devoid of any extraneous
+            content.
+
+          role: system
+        - content: |-
+            Use cae description: Given an tech startup business, generate a corresponding landing page headline
+            Test Cases: Food Delivery, AI Developer tools.
+          role: user
+        - content: |-
+            {tech_startup_business} represent the specific test cases.
+          role: user
+      variables:
+        - tech_startup_business
+    variations:
+      - instantiated_value: Generate landing page headline for {tech_startup_business}
+        value: Generate landing page headline for {tech_startup_business}
+        value_type: str
+        variation_id: null
 
 human_rating_configs:
   - name: clarity
@@ -28,13 +84,12 @@ human_rating_configs:
     scale: [1, 5]
 
 evaluators:
-  # - evaluator_type: all
-  #   input_description:
-  #     Given an tech startup business, generate one corresponding landing
-  #     page headline
-  #   metric_calculators: []
-  #   name: openai_elo_evaluator
-  #   openai_model_name: gpt-4
+  - evaluator_type: all
+    input_description:
+      Given an tech startup business, generate one corresponding landing
+      page headline
+    name: openai_elo_evaluator
+    openai_model_name: gpt-4
   - evaluator_type: individual
     metric_calculators:
       - method: AVERAGE
@@ -142,35 +197,11 @@ selection_strategy:
       "openai_prompt_based_evaluator: relevance": 0.1
       "openai_prompt_based_evaluator: catchiness": 0.1
 
-# wrapper_configs: {}
-
-# Variations allow for dynamic content during experiments.
-# They are identified by a globally unique name. For example, in your code,
-# you might reference a variation by its name, like:
-# variation = StringWrapper("hello", 'test_experiment')
-# In this config, you would define the variations associated with that name, e.g.
-
-variations:
-- generator_config:
-    input_description:
-      Given an tech startup business, generate one corresponding landing
-      page headline
-    input_test_cases: ["AI law firm", "AI sales agent"]
-    number_of_variations: 5
-    openai_model_name: gpt-4
-    output_path: generated_prompt.pkl
-  generator_name: openai_prompt_based_variation_generator
-name: task
-variations:
-  - instantiated_value: Generate landing page headline for
-    value: Generate landing page headline for
-    value_type: str
-    variation_id: null
-
-variations:
-  - name: task
-    variations:
-      - instantiated_value: Generate landing page headline for
-        value: Generate landing page headline for
-        value_type: str
-        variation_id: null
+improver:
+  name: openai_prompt_based_combination_improver
+  max_iterations: 2
+  openai_model_name: gpt-4
+  stop_conditions:
+    "openai_prompt_based_evaluator: catchiness": 3
+    "openai_prompt_based_evaluator: clarity": 3
+    "openai_prompt_based_evaluator: relevance": 3

@@ -74,7 +74,7 @@ def demo(args: Namespace):
         run_args = Namespace(
             config_path=dest_path,
             display=True,
-            output_path="",
-            experiment_input_path=""
+            output_path="test_demo_results.pkl",
+            experiment_input_path="test_demo_results.pkl"
         )
     run_experiment(run_args)

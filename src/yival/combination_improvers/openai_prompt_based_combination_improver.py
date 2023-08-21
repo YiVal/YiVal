@@ -12,6 +12,7 @@ import copy
 from concurrent.futures import ThreadPoolExecutor
 from typing import List, Optional
 
+import openai
 from tqdm import tqdm
 
 from ..experiment.evaluator import Evaluator
@@ -176,6 +177,7 @@ class OpenAIPromptBasedCombinationImprover(BaseCombinationImprover):
     Combination improver that uses OpenAI's model to improve the combination.
     """
     default_config = OpenAIPromptBasedCombinationImproverConfig(
+        name="openai_prompt_based_combination_improver",
         openai_model_name="gpt-4",
         max_iterations=3,
         stop_conditions={
@@ -215,20 +217,19 @@ class OpenAIPromptBasedCombinationImprover(BaseCombinationImprover):
         condition_met = []
         average_value: float = 0.0
         for k, value in combo[0].aggregated_metrics.items():
-            if "stop_conditions" in self.config and k in self.config[  # type: ignore
-                "stop_conditions"]:
+            if self.config.stop_conditions and k in self.config.stop_conditions:  # type: ignore
                 average_value += value[
                     0].value  # Assume we only have one metrics calculation.
-                if self.config["stop_conditions"][k] <= value[  # type: ignore
+                if self.config.stop_conditions[k] <= value[  # type: ignore
                     0].value:
                     condition_met.append(True)
         if len(condition_met) > 0 and len(condition_met) == len(
-            self.config["stop_conditions"]  # type: ignore
+            self.config.stop_conditions  # type: ignore
         ):
             return True
-        if "average_score" in self.config and self.config[  # type: ignore
-            "average_score"
-        ] <= average_value / len(combo[0].aggregated_metrics):
+        if self.config.average_score and self.config.average_score <= average_value / len( # type: ignore
+            combo[0].aggregated_metrics
+        ):
             return True
         return False
 
@@ -243,7 +244,7 @@ class OpenAIPromptBasedCombinationImprover(BaseCombinationImprover):
         results: List[ExperimentResult] = []
         data: List[InputData] = []
         self.updated_config["variations"] = []  # type: ignore
-        for i in range(self.config["max_iterations"]):  # type: ignore
+        for i in range(self.config.max_iterations):  # type: ignore
             print(f"Start iteration {i}...")
             current_iteration_results: List[ExperimentResult] = []
             configs = get_evaluator_config(config)
@@ -268,7 +269,7 @@ class OpenAIPromptBasedCombinationImprover(BaseCombinationImprover):
             prior_iterations.append(combo.combo_key)
             while True:
                 try:
-                    import openai
+
                     response = openai.ChatCompletion.create(
                         model="gpt-4", messages=message, max_tokens=5000
                     )
@@ -321,9 +322,9 @@ class OpenAIPromptBasedCombinationImprover(BaseCombinationImprover):
                 evaluate_group=False,
                 evaluate_all=False
             )
+            experiments.append(experiment)
             if self.check_if_done(experiment):
                 break
-            experiments.append(experiment)
 
         for exp in experiments:
             for res in exp.combination_aggregated_metrics:
