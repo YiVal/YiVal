@@ -1,3 +1,7 @@
+"""
+Demo code for headline generation using GPT-3.
+"""
+
 import os
 
 import openai
@@ -7,6 +11,9 @@ from yival.wrappers.string_wrapper import StringWrapper
 
 
 def headline_generation(tech_startup_business: str) -> str:
+    """
+    Demo code for headline generation using GPT-3.
+    """
     logger = TokenLogger()
     logger.reset()
     # Ensure you have your OpenAI API key set up

@@ -1,3 +1,11 @@
+"""
+This module defines the base class for combination improvers.
+
+Combination improvers are responsible for improving the combination of
+experiments based on their experiment results.
+
+"""
+
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Optional, Type
 
@@ -16,10 +24,11 @@ from ..schemas.experiment_config import (
 class BaseCombinationImprover(ABC):
     """
     Abstract base class for all combination improvers.
-    
     Attributes:
-        _registry (Dict[str, Dict[str, Any]]): A registry to keep track of combination improvers.
-        default_config (Optional[BaseCombinationImproverConfig]): Default configuration for the combination improver.
+        _registry (Dict[str, Dict[str, Any]]): A registry to keep track of
+        combination improvers.
+        default_config (Optional[BaseCombinationImproverConfig]): Default
+        configuration for the combination improver.
     """
 
     _registry: Dict[str, Dict[str, Any]] = {}
@@ -36,7 +45,8 @@ class BaseCombinationImprover(ABC):
     def get_default_config(
         cls, name: str
     ) -> Optional[BaseCombinationImproverConfig]:
-        """Retrieve the default configuration of a combination improver by its name."""
+        """Retrieve the default configuration of a combination improver by its
+           name."""
         return cls._registry.get(name, {}).get("default_config")
 
     def __init__(self, config: BaseCombinationImproverConfig):
@@ -46,7 +56,8 @@ class BaseCombinationImprover(ABC):
     def get_config_class(
         cls, name: str
     ) -> Optional[Type[BaseCombinationImproverConfig]]:
-        """Retrieve the configuration class of a combination imporver by its name."""
+        """Retrieve the configuration class of a combination imporver by its
+           name."""
         return cls._registry.get(name, {}).get("config_cls")
 
     @classmethod
@@ -56,7 +67,8 @@ class BaseCombinationImprover(ABC):
         combination_improver_cls: Type['BaseCombinationImprover'],
         config_cls: Optional[Type[BaseCombinationImproverConfig]] = None
     ):
-        """Register a new combination improver along with its default configuration and configuration class."""
+        """Register a new combination improver along with its default
+           configuration and configuration class."""
         cls._registry[name] = {
             "class": combination_improver_cls,
             "default_config": combination_improver_cls.default_config,
@@ -74,10 +86,9 @@ class BaseCombinationImprover(ABC):
         Args:
             experiment (Experiment): The experiment with its results.
             config (ExperimentConfig): The original experiment configuration.
-            evaluator (Evaluator): A utility class to evaluate the ExperimentResult.
-            token_logger (TokenLogger): Logs the token usage.
+            evaluator (Evaluator): A utility class to evaluate the
+            ExperimentResult. token_logger (TokenLogger): Logs the token usage.
 
         Returns:
             ImproverOutput
         """
-        pass

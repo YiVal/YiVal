@@ -1,3 +1,6 @@
+"""
+Demo code to translate text from English to Chinese using GPT-3.
+"""
 import os
 
 import openai
@@ -7,6 +10,9 @@ from yival.wrappers.string_wrapper import StringWrapper
 
 
 def translate(input: str) -> str:
+    """
+    Demo code to translate text from English to Chinese using GPT-3.
+    """
     logger = TokenLogger()
     logger.reset()
     # Ensure you have your OpenAI API key set up

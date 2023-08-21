@@ -39,7 +39,8 @@ def highlight_best_values(df: pd.DataFrame, *cols) -> list:
         }
 
     def non_numeric_col_best_value_style(col: str) -> dict:
-        """Return style for best value in a non-numeric column containing metrics."""
+        """Return style for best value in a non-numeric column containing
+           metrics."""
         metrics_values = df[col].str.extractall(r":\s?(\d+\.\d+)"
                                                 ).astype(float)
         if not metrics_values.empty:

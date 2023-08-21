@@ -18,7 +18,8 @@ class DataProcessor:
 
     def process_data(self) -> Iterator[List[InputData]]:
         """
-        Processes data based on the DatasetConfig and returns the processed data.
+        Processes data based on the DatasetConfig and returns the processed
+        data.
         """
 
         # If the source type is a dataset, use a reader to process it

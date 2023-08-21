@@ -1,23 +1,25 @@
+"""
+Common util funtions.
+"""
 import asyncio
 import json
 import os
 import time
+from collections import deque
 
 import aiohttp
 import openai
+from aiohttp_socks import ProxyConnector  # type: ignore
 
 SECONDS_TO_PAUSE_AFTER_RATE_LIMIT_ERROR = 15
 MAX_REQUESTS_PER_MINUTE = 100
 MAX_TOKENS_PER_MINUTE = 35000
 
-from collections import deque
-
-from aiohttp_socks import ProxyConnector  # type: ignore
-
 
 class RateLimiter:
     """
-    A rate limiter that ensures requests don't exceed a given rate and token usage.
+    A rate limiter that ensures requests don't exceed a given rate and token
+    usage.
 
     The rate limiter checks two conditions:
     1. The rate at which requests are being made.
@@ -25,10 +27,14 @@ class RateLimiter:
 
     Attributes:
         max_rate (int): Maximum number of requests allowed per second.
-        max_tokens_per_minute (int): Maximum number of tokens allowed to be used per minute.
-        start_time (float): The start time when the rate limiter was initialized.
-        request_count (int): Number of requests made since the rate limiter was initialized.
-        token_usage (deque): A deque containing tuples of tokens used and the time they were used at.
+        max_tokens_per_minute (int): Maximum number of tokens allowed to be
+                                    used per minute.
+        start_time (float): The start time when the rate limiter was
+                            initialized.
+        request_count (int): Number of requests made since the rate limiter
+                            was initialized.
+        token_usage (deque): A deque containing tuples of tokens used and the
+                            time they were used at.
     """
 
     def __init__(self, max_rate, max_tokens_per_minute):
@@ -37,7 +43,8 @@ class RateLimiter:
 
         Args:
             max_rate (int): Maximum number of requests allowed per second.
-            max_tokens_per_minute (int): Maximum number of tokens allowed to be used per minute.
+            max_tokens_per_minute (int): Maximum number of tokens allowed to
+                                        be used per minute.
         """
         self.max_rate = max_rate
         self.max_tokens_per_minute = max_tokens_per_minute
@@ -47,10 +54,13 @@ class RateLimiter:
 
     async def wait(self):
         """
-        Wait until it's safe to make another request based on the rate and token limits.
-        
-        This method calculates the expected time for the next request and waits if necessary.
-        It also ensures that the token usage does not exceed the specified limit.
+        Wait until it's safe to make another request based on the rate and
+        token limits.
+
+        This method calculates the expected time for the next request and
+        waits if necessary.
+        It also ensures that the token usage does not exceed the specified
+        limit.
         """
         self.request_count += 1
         elapsed_time = time.time() - self.start_time
@@ -85,15 +95,18 @@ async def fetch(
     session, url, headers, payload, rate_limiter, pbar=None, logit_bias=None
 ):
     """
-    Asynchronous function to fetch data using POST request with retries for rate limits.
+    Asynchronous function to fetch data using POST request with retries for
+    rate limits.
 
     Args:
         session (aiohttp.ClientSession): The session to make the request.
         url (str): The URL endpoint to fetch from.
         headers (dict): Headers to include in the request.
         payload (dict): Data payload to send with the request.
-        rate_limiter (RateLimiter): An instance of RateLimiter to control the request rate.
-        pbar (optional): A progress bar instance to show progress. Defaults to None.
+        rate_limiter (RateLimiter): An instance of RateLimiter to control the
+                                    request rate.
+        pbar (optional): A progress bar instance to show progress. Defaults to
+                        None.
         logit_bias (optional): Bias for the logit. Defaults to None.
 
     Returns:
@@ -125,8 +138,8 @@ async def fetch(
                 if pbar:
                     pbar.update(1)
                 return response_data
-            else:
-                print(f"Invalid choices in response. Choices: {choices}")
+
+            print(f"Invalid choices in response. Choices: {choices}")
 
         print("Response criteria not met, retrying...")
         continue
@@ -145,16 +158,20 @@ async def parallel_completions(
     Asynchronous function to perform parallel completions using OpenAI's API.
 
     Args:
-        message_batches (list): A list containing batches of messages for completion.
+        message_batches (list): A list containing batches of messages for
+                                completion.
         model (str): The model to be used for completion.
         max_tokens (int): Maximum tokens to be used for completion.
         temperature (float, optional): Sampling temperature. Defaults to 1.3.
-        presence_penalty (float, optional): Presence penalty for completion. Defaults to 0.
-        pbar (optional): A progress bar instance to show progress. Defaults to None.
+        presence_penalty (float, optional): Presence penalty for completion.
+                                            Defaults to 0.
+        pbar (optional): A progress bar instance to show progress. Defaults to
+                        None.
         logit_bias (optional): Bias for the logit. Defaults to None.
 
     Returns:
-        list: A list of responses containing completions for each message batch.
+        list: A list of responses containing completions for each message
+            batch.
     """
     url = "https://api.openai.com/v1/chat/completions"
     headers = {

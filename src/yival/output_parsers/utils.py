@@ -7,11 +7,12 @@ from .base_parser import BaseParserWithRegistry
 
 def capture_and_parse_with_base_registry(config=None):
     """
-    Decorator to capture stdout of a function and parse it using a specified parser.
+    Decorator to capture stdout of a function and parse it using a specified
+    parser.
 
-    The parser is determined based on the provided configuration. If the specified
-    parser is not found in the BaseParserWithRegistry's registry, the function's
-    output will not be captured or parsed.
+    The parser is determined based on the provided configuration. If the
+    specified parser is not found in the BaseParserWithRegistry's registry,
+    the function's output will not be captured or parsed.
 
     Args:
     - config (dict, optional): Configuration dict with 'parser' key specifying

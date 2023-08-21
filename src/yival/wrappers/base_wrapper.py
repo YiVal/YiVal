@@ -1,3 +1,13 @@
+"""
+Wrapper Base Module.
+
+This module introduces the `BaseWrapper` class, which serves as the
+fundamental structure for wrappers in the experimental framework. Wrappers
+manage experiment variations based on the global experiment state. They are
+crucial components to control and monitor different variations during an
+experiment's lifecycle.
+"""
+
 from typing import Any, Dict, Optional, Type
 
 from ..schemas.wrapper_configs import BaseWrapperConfig
@@ -6,10 +16,12 @@ from ..states.experiment_state import ExperimentState
 
 class BaseWrapper:
     """
-    Base class for wrappers that manage experiment variations based on the global experiment state.
+    Base class for wrappers that manage experiment variations based on the
+    global experiment state.
     
     This class provides the fundamental structure and methods for wrappers.
-    Specific wrappers should inherit from this class and implement the necessary methods.
+    Specific wrappers should inherit from this class and implement the
+    necessary methods.
     
     Attributes:
         name (str): The name of the wrapper.
@@ -41,10 +53,12 @@ class BaseWrapper:
 
     def get_variation(self) -> Optional[Any]:
         """
-        Retrieve the next variation for the experiment based on the wrapper's name.
+        Retrieve the next variation for the experiment based on the wrapper's
+        name.
 
         Returns:
-            Optional[Any]: The next variation if the experiment is active, otherwise None.
+            Optional[Any]: The next variation if the experiment is active,
+            otherwise None.
         """
         if self.experiment_state.active:
             return self.experiment_state.get_next_variation(self.name)

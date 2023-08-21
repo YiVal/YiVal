@@ -15,7 +15,6 @@ YiVal stands at the intersection of flexibility and adaptability in the AI devel
     - [Demo](#demo)
         - [Basic Interactive Mode](#basic-interactive-mode)
         - [Question Answering with expected result evaluator](#question-answering-with-expected-result-evaluator)
-    - [Architecture](#architecture)
 
 ## Overview
 

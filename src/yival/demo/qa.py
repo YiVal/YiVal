@@ -1,3 +1,6 @@
+"""
+Demo code for question answering using GPT-3.
+"""
 import os
 
 import openai
@@ -6,7 +9,10 @@ from yival.logger.token_logger import TokenLogger
 from yival.wrappers.string_wrapper import StringWrapper
 
 
-def qa(input: str) -> str:
+def qa(question: str) -> str:
+    """
+    Demo code for question answering using GPT-3.
+    """
     logger = TokenLogger()
     logger.reset()
     # Ensure you have your OpenAI API key set up
@@ -20,7 +26,7 @@ def qa(input: str) -> str:
         "You are a helpful assistant that will answer the question with only option."
     }, {
         "role": "user",
-        "content": f'{input} ' + str(StringWrapper("", name="qa"))
+        "content": f'{question} ' + str(StringWrapper("", name="qa"))
     }]
     # Use the chat-based completion
     response = openai.ChatCompletion.create(

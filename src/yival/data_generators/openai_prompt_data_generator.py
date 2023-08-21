@@ -1,3 +1,14 @@
+"""
+This module provides an implementation for data generation using OpenAI's
+model.
+
+The primary goal of this module is to programmatically generate data examples
+based on a given prompt and configuration. It employs OpenAI's models to
+produce
+these examples, and offers utility functions for transforming and processing
+the generated data.
+"""
+
 import ast
 import asyncio
 import os
@@ -54,6 +65,16 @@ def join_dicts_to_string(dicts: List[Dict[Any, Any]], last_n=10) -> str:
 
 
 class OpenAIPromptDataGenerator(BaseDataGenerator):
+    """
+    Data generator using OpenAI's model based on provided prompts and
+    configurations.
+
+    This class is responsible for the generation of data examples using
+    OpenAI's models.
+    The generated data can be used for various purposes, including testing,
+    simulations, and more. The nature and number of generated examples are
+    determined by the provided configuration.
+    """
     config: OpenAIPromptBasedGeneratorConfig
     default_config: OpenAIPromptBasedGeneratorConfig = OpenAIPromptBasedGeneratorConfig(
         prompt="""
@@ -89,18 +110,18 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                     all_data_content
                 )
             return [{"role": "user", "content": content}]
-        else:
-            messages = self.config.prompt
-            if self.config.diversify and all_data_content:
-                messages.append({
-                    "role":
-                    "user",
-                    "content":
-                    f"\n\n Given the last {min(len(all_data_content), 10)} examples, please generate diverse results to ensure comprehensive evaluation. \n\n"
-                    + join_dicts_to_string(all_data_content)
-                })
 
-            return messages
+        messages = self.config.prompt
+        if self.config.diversify and all_data_content:
+            messages.append({
+                "role":
+                "user",
+                "content":
+                f"\n\n Given the last {min(len(all_data_content), 10)} examples, please generate diverse results to ensure comprehensive evaluation. \n\n"
+                + join_dicts_to_string(all_data_content)
+            })
+
+        return messages
 
     def process_output(
         self, output_content: str, all_data: List[InputData],
@@ -132,7 +153,7 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
         chunk: List[InputData] = []
         all_data_content: List[Dict[str, Any]] = []
 
-        while (len(all_data) < self.config.number_of_examples):
+        while len(all_data) < self.config.number_of_examples:
             messages = self.prepare_messages(all_data_content)
             if not self.config.diversify:
                 message_batches = [

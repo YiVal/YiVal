@@ -51,7 +51,8 @@ class AHPSelection(SelectionStrategy):
         ])
         weighted_matrix = matrix * weights
 
-        # If the criterion should be minimized, invert the corresponding column in the matrix
+        # If the criterion should be minimized, invert the corresponding
+        # column in the matrix
         for i, criterion in enumerate(self.config.criteria):
             if not self.config.criteria_maximization.get(criterion, True):
                 weighted_matrix[:, i] = 1 / (weighted_matrix[:, i] + 1e-10)
@@ -66,7 +67,8 @@ class AHPSelection(SelectionStrategy):
         # Select the combination with the highest aggregate score
         best_combination = max(scores, key=lambda k: scores[k])
 
-        # Calculate the contribution of each criterion to the final score based on the original data and weights
+        # Calculate the contribution of each criterion to the final score
+        # based on the original data and weights
         contributions = {
             criterion:
             self.config.criteria_weights[criterion] *
@@ -84,7 +86,8 @@ class AHPSelection(SelectionStrategy):
         )
 
     def _get_criteria_vector(self, data: Dict[str, float]) -> np.ndarray:
-        """Converts data dictionary into a vector based on the criteria order in config."""
+        """Converts data dictionary into a vector based on the criteria order
+        in config."""
         return np.array([
             data.get(criterion, 0) for criterion in self.config.criteria
         ])
@@ -124,7 +127,8 @@ def main():
         evaluator_outputs=[EvaluatorOutput(name="elo", result=1500)]
     )
 
-    # Combination B has a lower elo, but also much lower token usage and latency
+    # Combination B has a lower elo, but also much lower token usage and
+    # latency
     combination_B = CombinationAggregatedMetrics(
         combo_key=str({"name": "B"}),
         experiment_results=[],
