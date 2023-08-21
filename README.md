@@ -125,7 +125,7 @@ Once started, navigate to the following address in your web browser:
   
 </details>
 
-For more details on this demo, check out the [Basic Interactive Mode Demo](https://github.com/YiVal/YiVal/blob/master/docs/docs/basic_interactive_mode.md#demo).
+For more details on this demo, check out the [Basic Interactive Mode Demo](https://github.com/YiVal/YiVal/blob/master/docs/basic_interactive_mode.md#demo).
 
 ### Question Answering with expected result evaluator
 
@@ -142,9 +142,4 @@ Once started, navigate to the following address in your web browser:
 
 </details>
 
-For more details on this demo, check out the [Question Answering with expected result evaluator](https://github.com/YiVal/YiVal/blob/master/docs/docs/qa_expected_results.md#demo).
-
-## Architecture
-
-For detailed information about Yival's architecutre, refer to this [doc](https://github.com/YiVal/YiVal/blob/master/docs/architecture.md#demo).
-
+For more details on this demo, check out the [Question Answering with expected result evaluator](https://github.com/YiVal/YiVal/blob/master/docs/qa_expected_results.md#demo).
