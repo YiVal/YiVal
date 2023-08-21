@@ -149,8 +149,8 @@ def create_dash_app(
             row['Average Token Usage'] = str(metric.average_token_usage)
             row['Average Latency'] = str(metric.average_latency)
 
-            if metric.evaluator_outputs:
-                for e in metric.evaluator_outputs:
+            if metric.combine_evaluator_outputs:
+                for e in metric.combine_evaluator_outputs:
                     column_name = f"{e.name} Output"
                     if e.display_name:
                         column_name += f" ({e.display_name})"

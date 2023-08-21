@@ -304,7 +304,7 @@ class ExperimentResult:
 class GroupedExperimentResult:
     group_key: str
     experiment_results: List[ExperimentResult]
-    evaluator_outputs: Optional[List[EvaluatorOutput]] = None
+    grouped_evaluator_outputs: Optional[List[EvaluatorOutput]] = None
 
     def asdict(self) -> Dict[str, Any]:
         return {
@@ -313,8 +313,8 @@ class GroupedExperimentResult:
             "experiment_results":
             [er.asdict() for er in self.experiment_results],
             "evaluator_outputs":
-            [eo.asdict() for eo in self.evaluator_outputs]
-            if self.evaluator_outputs else None
+            [eo.asdict() for eo in self.grouped_evaluator_outputs]
+            if self.grouped_evaluator_outputs else None
         }
 
 
@@ -325,7 +325,7 @@ class CombinationAggregatedMetrics:
     aggregated_metrics: Dict[str, List[Metric]]
     average_token_usage: Optional[float] = None
     average_latency: Optional[float] = None
-    evaluator_outputs: Optional[List[EvaluatorOutput]] = None
+    combine_evaluator_outputs: Optional[List[EvaluatorOutput]] = None
 
     def asdict(self) -> Dict[str, Any]:
         return {
@@ -342,8 +342,8 @@ class CombinationAggregatedMetrics:
             "average_latency":
             self.average_latency,
             "evaluator_outputs":
-            [eo.asdict() for eo in self.evaluator_outputs]
-            if self.evaluator_outputs else None
+            [eo.asdict() for eo in self.combine_evaluator_outputs]
+            if self.combine_evaluator_outputs else None
         }
 
 
