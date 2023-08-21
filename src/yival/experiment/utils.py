@@ -371,12 +371,18 @@ def generate_experiment(
             )
 
     combo_metrics = defaultdict(list)
+    combo_evaluator_outputs = defaultdict(list)
     for item in results:
         combo_metrics[str(item.combination)].append(item)
+        combo_evaluator_outputs[str(item.combination
+                                    )].extend(item.evaluator_outputs)
 
     cobo_aggregated_metrics = [
         CombinationAggregatedMetrics(
-            combo_key=k, experiment_results=v, aggregated_metrics={}
+            combo_key=k,
+            experiment_results=v,
+            aggregated_metrics={},
+            evaluator_outputs=combo_evaluator_outputs[k]
         ) for k, v in combo_metrics.items()
     ]
 
