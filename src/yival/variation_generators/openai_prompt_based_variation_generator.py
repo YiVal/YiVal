@@ -134,8 +134,8 @@ class OpenAIPromptBasedVariationGenerator(BaseVariationGenerator):
                     output = openai.ChatCompletion.create(
                         model=self.config.openai_model_name,
                         messages=messages,
-                        temperature=1.3,
-                        presence_penalty=2,
+                        temperature=1,
+                        presence_penalty=1,
                         max_tokens=self.config.max_tokens,
                     )
                     if self.config.variables and not validate_output(

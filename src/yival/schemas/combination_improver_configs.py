@@ -9,7 +9,7 @@ class BaseCombinationImproverConfig:
     """
     Base configuration class for all combination improvers.
     """
-    pass
+    name: str
 
     def asdict(self):
         return asdict(self)
@@ -19,7 +19,6 @@ class BaseCombinationImproverConfig:
 class OpenAIPromptBasedCombinationImproverConfig(
     BaseCombinationImproverConfig
 ):
-    name = "openai_prompt_based_combination_improver"
     openai_model_name: str = "gpt-4"
     max_iterations: int = 3
     stop_conditions: Optional[Dict[str, float]] = None

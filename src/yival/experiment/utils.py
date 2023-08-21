@@ -338,9 +338,10 @@ def get_improver(config: ExperimentConfig) -> BaseCombinationImprover | None:
                     config_data = improver_config.asdict()
                 config_instance = config_cls(**config_data)
                 improver_instance = improver_cls(config_instance)
+                return improver_instance
             else:
                 improver_instance = improver_cls(
-                    BaseCombinationImproverConfig()
+                    BaseCombinationImproverConfig(name="")
                 )
                 return improver_instance
     return None

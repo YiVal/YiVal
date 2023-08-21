@@ -29,9 +29,15 @@ def headline_generation(tech_startup_business: str) -> str:
         "content":
         str(
             StringWrapper(
-                "Generate landing one page headline for", name="task"
+                template="""
+                Generate landing one page headline for {tech_startup_business}
+                """,
+                variables={
+                    "tech_startup_business": tech_startup_business,
+                },
+                name="task"
             )
-        ) + f'{tech_startup_business}'
+        )
     }]
     # Use the chat-based completion
     response = openai.ChatCompletion.create(
