@@ -13,6 +13,7 @@ class AHPConfig(BaseConfig):
     criteria: List[str]
     criteria_weights: Dict[str, float]
     criteria_maximization: Dict[str, bool]
+    normalize_func: Optional[str] = None
 
 
 @dataclass
