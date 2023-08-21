@@ -194,10 +194,10 @@ class OpenAIEloEvaluator(BaseEvaluator):
         for index, combo in enumerate(
             experiment[0].combination_aggregated_metrics
         ):
-            if not combo.evaluator_outputs:
+            if not combo.combine_evaluator_outputs:
                 experiment[0].combination_aggregated_metrics[
-                    index].evaluator_outputs = []
-            experiment[0].combination_aggregated_metrics[index].evaluator_outputs.append( # type: ignore
+                    index].combine_evaluator_outputs = []
+            experiment[0].combination_aggregated_metrics[index].combine_evaluator_outputs.append( # type: ignore
                 EvaluatorOutput(
                     name="openai_elo_evaluator",
                     result=prompt_ratings[combo.combo_key]

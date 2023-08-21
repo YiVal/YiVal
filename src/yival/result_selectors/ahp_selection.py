@@ -108,7 +108,7 @@ class AHPSelection(SelectionStrategy):
             data["average_latency"] = combo.average_latency or 0
 
         # Extract data from evaluator_outputs
-        for evaluator_output in (combo.evaluator_outputs or []):
+        for evaluator_output in (combo.combine_evaluator_outputs or []):
             if evaluator_output.name in self.config.criteria:
                 data[evaluator_output.name] = evaluator_output.result
 
@@ -130,7 +130,7 @@ def main():
         aggregated_metrics={},
         average_token_usage=120,
         average_latency=200,
-        evaluator_outputs=[EvaluatorOutput(name="elo", result=1500)]
+        combine_evaluator_outputs=[EvaluatorOutput(name="elo", result=1500)]
     )
 
     # Combination B has a lower elo, but also much lower token usage and
@@ -141,7 +141,7 @@ def main():
         aggregated_metrics={},
         average_token_usage=50,
         average_latency=50,
-        evaluator_outputs=[EvaluatorOutput(name="elo", result=1300)]
+        combine_evaluator_outputs=[EvaluatorOutput(name="elo", result=1300)]
     )
 
     #Combination C has highest elo with highest token usage and latency
@@ -151,7 +151,7 @@ def main():
         aggregated_metrics={},
         average_token_usage=300,
         average_latency=300,
-        evaluator_outputs=[EvaluatorOutput(name="elo", result=1600)]
+        combine_evaluator_outputs=[EvaluatorOutput(name="elo", result=1600)]
     )
 
     # The experiment data

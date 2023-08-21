@@ -366,7 +366,7 @@ def generate_experiment(
     ]
     if evaluate_group:
         for grouped_experiment_result in grouped_experiment_results:
-            grouped_experiment_result.evaluator_outputs = evaluator.evaluate_group_result(
+            grouped_experiment_result.grouped_evaluator_outputs = evaluator.evaluate_group_result(
                 grouped_experiment_result.experiment_results
             )
 
