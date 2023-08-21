@@ -15,6 +15,7 @@ YiVal stands at the intersection of flexibility and adaptability in the AI devel
     - [Demo](#demo)
         - [Basic Interactive Mode](#basic-interactive-mode)
         - [Question Answering with expected result evaluator](#question-answering-with-expected-result-evaluator)
+        - [Auto prompts generation](#auto-prompts-generation)
 
 ## Overview
 
@@ -142,3 +143,17 @@ Once started, navigate to the following address in your web browser:
 </details>
 
 For more details on this demo, check out the [Question Answering with expected result evaluator](https://github.com/YiVal/YiVal/blob/master/docs/qa_expected_results.md#demo).
+
+### Auto prompts generation
+
+```
+yival demo --auto_prompts
+```
+
+<details>
+  <summary>Click to view the screenshot</summary>
+  
+<img width="1331" alt="Screenshot 2023-08-20 at 10 53 36 PM" src="https://github.com/YiVal/YiVal/assets/1544154/85f5c08f-3e14-42e7-85c6-47dcdd4a4121">
+
+</details>
+For more details on this demo, check out the [Auto prompts generation](https://github.com/YiVal/YiVal/blob/master/docs/auto_prompts_generation.md#demo).
