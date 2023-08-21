@@ -1,3 +1,14 @@
+"""
+Evaluators Module.
+
+This module contains the base class and common methods for evaluators used in
+experiments.
+Evaluators are essential components in the system that interpret the results
+of experiments and provide quantitative or qualitative feedback. Specific
+evaluators are expected to inherit from the base class and implement custom
+evaluation logic as needed.
+
+"""
 from abc import ABC
 from typing import Any, Dict, List, Optional, Type, TypeVar
 
@@ -12,7 +23,8 @@ class BaseEvaluator(ABC):
     Base class for all evaluators.
 
     This class provides the basic structure and methods for evaluators.
-    Specific evaluators should inherit from this class and implement the necessary methods.
+    Specific evaluators should inherit from this class and implement the
+    necessary methods.
 
     """
     _registry: Dict[str, Dict[str, Any]] = {}
@@ -82,7 +94,8 @@ class BaseEvaluator(ABC):
         Evaluate the experiment result and produce an evaluator output.
 
         Args:
-            experiment_result (ExperimentResult): The result of an experiment to be evaluated.
+            experiment_result (ExperimentResult): The result of an experiment
+            to be evaluated.
 
         Returns:
             EvaluatorOutput: The result of the evaluation.
@@ -94,20 +107,20 @@ class BaseEvaluator(ABC):
     ) -> EvaluatorOutput:
         """
         Evaluate and compare a list of experiment results.
-        
-        This method is designed to evaluate multiple experiment results together, 
-        allowing for comparisons and potentially identifying trends, anomalies, 
-        or other patterns in the set of results.
-        
-        Args:
-            group_data (List[ExperimentResult]): A list of experiment results to be evaluated together.
 
+        This method is designed to evaluate multiple experiment results
+        together, allowing for comparisons and potentially identifying trends,
+        anomalies, or other patterns in the set of results.
+
+        Args:
+            group_data (List[ExperimentResult]): A list of experiment results
+            to be evaluated together.
         Returns:
             EvaluatorOutput: The result of the evaluation.
-        
+
         Note:
-            Implementations of this method in subclasses should handle the specifics 
-            of how multiple experiments are evaluated and compared.
+            Implementations of this method in subclasses should handle the
+            specifics of how multiple experiments are evaluated and compared.
         """
         return EvaluatorOutput("evaluate", "evaluate")
 
@@ -121,10 +134,10 @@ class BaseEvaluator(ABC):
         into account all available data to produce a comprehensive evaluation.
         
         Args:
-            experiment (List[Experiment]): A list of all experiments to be evaluated.
+            experiment (List[Experiment]): A list of all experiments to be
+            evaluated.
 
         Note:
-            Implementations of this method in subclasses should determine how to 
-            best utilize all available experiment data for evaluation.
+            Implementations of this method in subclasses should determine how
+            to best utilize all available experiment data for evaluation.
         """
-        pass

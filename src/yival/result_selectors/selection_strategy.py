@@ -1,3 +1,12 @@
+"""
+Selection Strategy Module.
+
+This module defines an abstract base class for selection strategies.
+A selection strategy 
+determines how to select or prioritize specific experiments, scenarios, or
+configurations based on certain criteria.
+
+"""
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Optional, Type
 
@@ -6,6 +15,9 @@ from ..schemas.selector_strategies import BaseConfig, SelectionOutput
 
 
 class SelectionStrategy(ABC):
+    """
+    Abstract base class for selection strategies.
+    """
     _registry: Dict[str, Dict[str, Any]] = {}
     default_config: Optional[BaseConfig] = None
 

@@ -14,11 +14,19 @@ from ..schemas.varation_generator_configs import (
 from .base_variation_generator import BaseVariationGenerator
 
 SYSTEM_PRMPOT = """
-Your mission is to craft system prompts tailored for GPT-4. You'll be provided with a use-case description and some sample test cases.
-These prompts aim to guide GPT-4 in executing freeform tasks, whether that's penning a captivating headline, drafting an introduction, or tackling a mathematical challenge.
-In your designed prompt, delineate the AI's role using lucid English. Highlight its perceptual field and the boundaries of its responses. Encourage inventive and optimized prompts to elicit top-tier results from the AI. Remember, GPT-4 is self-aware of its AI nature; no need to reiterate that.
-The efficacy of your prompt determines your evaluation. Stay authentic! Avoid sneaking in specifics or examples from the test cases into your prompt. Such maneuvers will lead to immediate disqualification.
-Lastly, keep your output crisp: only the prompt, devoid of any extraneous content.
+Your mission is to craft system prompts tailored for GPT-4. You'll be provided
+with a use-case description and some sample test cases.
+These prompts aim to guide GPT-4 in executing freeform tasks, whether that's
+penning a captivating headline, drafting an introduction, or tackling a
+mathematical challenge. In your designed prompt, delineate the AI's role using
+lucid English. Highlight its perceptual field and the boundaries of its
+responses. Encourage inventive and optimized prompts to elicit top-tier
+results from the AI. Remember, GPT-4 is self-aware of its AI nature; no need
+to reiterate that. The efficacy of your prompt determines your evaluation.
+Stay authentic! Avoid sneaking in specifics or examples from the test cases
+into your prompt. Such maneuvers will lead to immediate disqualification.
+Lastly, keep your output crisp: only the prompt, devoid of any extraneous
+content.
 """
 
 
@@ -30,13 +38,14 @@ def join_array_to_string(list: List[str], last_n=5) -> str:
 def validate_output(output: str, variables: List[str]) -> bool:
     if not variables:
         return True
-    """Validate if the generated output contains the required variables in the format {var}."""
+    """Validate if the generated output contains the required variables in the
+    format {var}."""
     return all(f"{{{var}}}" in output for var in variables)
 
 
 class OpenAIPromptBasedVariationGenerator(BaseVariationGenerator):
     config: OpenAIPromptBasedVariationGeneratorConfig
-    default_config: OpenAIPromptBasedVariationGeneratorConfig = OpenAIPromptBasedVariationGeneratorConfig(
+    default_config = OpenAIPromptBasedVariationGeneratorConfig(
         prompt=[{
             "role": "system",
             "content": SYSTEM_PRMPOT

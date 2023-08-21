@@ -21,6 +21,7 @@ class BaseParserWithRegistry:
     def parse(self, output: str) -> List[str]:
         """
         Parse the provided output.
-        This method should be overridden by subclasses to provide custom parsing logic.
+        This method should be overridden by subclasses to provide custom
+        parsing logic.
         """
         raise NotImplementedError("Subclasses must override the parse method.")

@@ -1,3 +1,13 @@
+"""
+This module provides an implementation of a combination improver using OpenAI's
+model to suggest improvements.
+The primary goal of this module is to leverage the capabilities of OpenAI's
+language model to analyze the results of an experiment and provide suggestions
+on how to improve the combination of parameters. This module offers a
+prompt-based mechanism, where the language model is prompted with structured
+information about the experiment and its results, and the model responds with
+potential improvements.
+"""
 import copy
 from concurrent.futures import ThreadPoolExecutor
 from typing import List, Optional
@@ -26,25 +36,35 @@ from ..states.experiment_state import ExperimentState
 from .base_combination_improver import BaseCombinationImprover
 
 PROMPT = """
-Given the evaluator results, scales, and descriptions, please analyze and suggest improvements to the provided combinations.
-The combinations are presented in the format {key: value}, where 'value' can represent prompts or other parameters. You
-can define the specifics of the value as needed.
-After your analysis, the combination will be re-evaluated by the evaluators, and feedback will be provided. For context,
-we will supply the prior combinations if available. Keey the original {key: value} and keep the original key,
-only update the value if needed (keep the orignal value if no update is needed). The value will be of the same types
-For example: {"keyA" : "ValueA", "KeyB": 1} if you think keyB should be and not KeyA output 
-format should be {"keyA" : "ValueA", "KeyB": 2}, make the outptu so that it can be pared with pyhon directly using eval
+Given the evaluator results, scales, and descriptions, please analyze and
+suggest improvements to the provided combinations. The combinations are
+presented in the format {key: value}, where 'value' can represent prompts or
+other parameters. You can define the specifics of the value as needed.
+After your analysis, the combination will be re-evaluated by the evaluators,
+and feedback will be provided. For context, we will supply the prior
+combinations if available. Keey the original {key: value} and keep the
+original key, only update the value if needed (keep the orignal value if no
+update is needed). The value will be of the same types For example:
+{"keyA" : "ValueA", "KeyB": 1} if you think keyB should be and not KeyA output
+format should be {"keyA" : "ValueA", "KeyB": 2}, make the outptu so that it
+can be pared with pyhon directly using eval
 """
 
 COT = """
-First, write out in a step by step manner your reasoning to be sure that your conclusion is correct. 
-Avoid simply stating the correct answer at the outset. Reasoning:
+First, write out in a step by step manner your reasoning to be sure that your
+conclusion is correct. Avoid simply stating the correct answer at the outset.
+Reasoning:
 """
 
 
 def find_best_combination(
     experiment: Experiment
 ) -> CombinationAggregatedMetrics | None:
+    """
+    Find the best combination metrics from an experiment. If the experiment
+    has selection output, use the best combination from the selection output.
+    Otheriwise, use the first combination from the experiment.
+    """
     if not experiment.combination_aggregated_metrics or len(
         experiment.combination_aggregated_metrics
     ) == 0:
@@ -64,6 +84,10 @@ def find_best_combination(
 def get_evaluator_config(
     config: ExperimentConfig
 ) -> List[OpenAIPromptBasedEvaluatorConfig]:
+    """
+    Retrieve OpenAI prompt-based evaluator resulsts from an experiment
+    configuration. Thhis imporver only use the openai_prompt_based_evaluator.
+    """
     return [
         c for c in config["evaluators"]  # type: ignore
         if c["name"] == "openai_prompt_based_evaluator"
@@ -74,10 +98,21 @@ def find_evaluator_results(
     configs: List[OpenAIPromptBasedEvaluatorConfig],
     metrics: CombinationAggregatedMetrics | None
 ) -> str:
+    """
+    Extract evaluator results as a string from metrics based on provided
+    evaluator configurations.
+    Args:
+        configs (List[OpenAIPromptBasedEvaluatorConfig]):
+        Evaluator configurations.
+        metrics (CombinationAggregatedMetrics or None): Aggregated metrics of
+        a combination.
+    Returns:
+        str: A string representation of evaluator results.
+    """
     res: str = ""
     if not metrics:
         return res
-    for k, v in metrics.aggregated_metrics.items():
+    for k, value in metrics.aggregated_metrics.items():
         for evaluator_config in configs:
             key = evaluator_config["name"]  # type: ignore
             key += ": " + evaluator_config[
@@ -85,7 +120,7 @@ def find_evaluator_results(
                     "display_name"] else ""  # type: ignore
             if k == key:
                 metric_results = [
-                    f"{metric.name},{metric.value}" for metric in v
+                    f"{metric.name},{metric.value}" for metric in value
                 ]
                 metric_results_string = ', '.join(metric_results)
                 res += "\n\n"
@@ -102,6 +137,10 @@ def construct_prompt(
     current_combination: str,
     prior_iterations: Optional[List[str]] = None
 ) -> str:
+    """
+    Construct a prompt for OpenAI's model based on evaluator outputs and
+    combination history.
+    """
     prompt = PROMPT + "\n\n" + evaluator_outputs + "\n\n"
     prompt += "Current Combination: " + current_combination + "\n\n"
     if prior_iterations and len(prior_iterations) > 0:
@@ -112,19 +151,20 @@ def construct_prompt(
     return prompt
 
 
-def extract_dict_from_string(s: str) -> str | None:
+def extract_dict_from_string(input: str) -> str | None:
     """
-    Extract the outermost dictionary from a string, handling nested dictionaries.
+    Extract the outermost dictionary from a string, handling nested
+    dictionaries.
     """
     open_braces = 0
-    dict_start = s.find('{')
-    for i in range(dict_start, len(s)):
-        if s[i] == '{':
+    dict_start = input.find('{')
+    for i in range(dict_start, len(input)):
+        if input[i] == '{':
             open_braces += 1
-        elif s[i] == '}':
+        elif input[i] == '}':
             open_braces -= 1
         if open_braces == 0:
-            return s[dict_start:i + 1]
+            return input[dict_start:i + 1]
     return None  # Return None if no matching dictionary found
 
 
@@ -135,7 +175,7 @@ class OpenAIPromptBasedCombinationImprover(BaseCombinationImprover):
     """
     Combination improver that uses OpenAI's model to improve the combination.
     """
-    default_config: OpenAIPromptBasedCombinationImproverConfig = OpenAIPromptBasedCombinationImproverConfig(
+    default_config = OpenAIPromptBasedCombinationImproverConfig(
         openai_model_name="gpt-4",
         max_iterations=3,
         stop_conditions={
@@ -149,10 +189,13 @@ class OpenAIPromptBasedCombinationImprover(BaseCombinationImprover):
         super().__init__(config)
         self.config = config
 
-    def parallel_task(self, d, all_combinations, state, logger, evaluator):
+    def parallel_task(self, data, all_combinations, state, logger, evaluator):
+        """
+        Execute a single input run in parallel.
+        """
         rate_limiter()
         return run_single_input(
-            d,
+            data,
             self.updated_config,
             all_combinations=all_combinations,
             state=state,
@@ -161,15 +204,22 @@ class OpenAIPromptBasedCombinationImprover(BaseCombinationImprover):
         )
 
     def check_if_done(self, experiment: Experiment) -> bool:
+        """
+        Check if the iterative improvement process should stop.
+
+        Evaluates predefined stop conditions or average score thresholds to
+        determine if the iterative process should halt.
+        """
+
         combo = experiment.combination_aggregated_metrics
         condition_met = []
         average_value: float = 0.0
-        for k, v in combo[0].aggregated_metrics.items():
+        for k, value in combo[0].aggregated_metrics.items():
             if "stop_conditions" in self.config and k in self.config[  # type: ignore
                 "stop_conditions"]:
-                average_value += v[
+                average_value += value[
                     0].value  # Assume we only have one metrics calculation.
-                if self.config["stop_conditions"][k] <= v[  # type: ignore
+                if self.config["stop_conditions"][k] <= value[  # type: ignore
                     0].value:
                     condition_met.append(True)
         if len(condition_met) > 0 and len(condition_met) == len(
@@ -184,7 +234,7 @@ class OpenAIPromptBasedCombinationImprover(BaseCombinationImprover):
 
     def improve(
         self, experiment: Experiment, config: ExperimentConfig,
-        evaluator: Evaluator, logger: TokenLogger
+        evaluator: Evaluator, token_logger: TokenLogger
     ) -> ImproverOutput:
         experiments: List[Experiment] = []
         prior_iterations: List[str] = []
@@ -261,7 +311,7 @@ class OpenAIPromptBasedCombinationImprover(BaseCombinationImprover):
                     for res in executor.map(
                         self.parallel_task, data,
                         [all_combinations] * len(data), [state] * len(data),
-                        [logger] * len(data), [evaluator] * len(data)
+                        [token_logger] * len(data), [evaluator] * len(data)
                     ):
                         current_iteration_results.extend(res)
                         pbar.update(len(res))

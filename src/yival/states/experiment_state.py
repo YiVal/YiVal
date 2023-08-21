@@ -1,3 +1,12 @@
+"""
+Experiment State Module.
+
+This module defines the `ExperimentState` class to manage the state of active
+experiments and their variations. The state facilitates the retrieval and
+management of variations associated with different experiments, providing a
+mechanism to cycle through the variations and track the experiment's state.
+"""
+
 from collections import defaultdict
 from itertools import product
 from typing import Any, Dict, Iterator, List, Optional, Union
@@ -19,14 +28,14 @@ class ExperimentState:
         active (bool): Indicates if the experiment is currently active.
         current_variations (Dict[str, List[Any]]): A dictionary where keys are
         experiment names and values are lists of variations.
-        counters (Dict[str, int]): A counter for each experiment name to rotate through
-        its variations.
+        counters (Dict[str, int]): A counter for each experiment name to
+        rotate through its variations.
 
     Methods:
         get_next_variation(name: str) -> Optional[Any]:
-            Depending on the global ExperimentState's activity status, retrieves the
-            next variation for the associated experiment name. If the state is inactive
-            or no variations are found, returns None.
+            Depending on the global ExperimentState's activity status,
+            retrieves the next variation for the associated experiment name.
+            If the state is inactive or no variations are found, returns None.
     """
 
     _shared_instance = None
@@ -68,7 +77,8 @@ class ExperimentState:
 
     def initialize_variations_from_config(self) -> None:
         """
-        Initializes the experiment variations using the provided ExperimentConfig.
+        Initializes the experiment variations using the provided
+        ExperimentConfig.
         """
         if self.config and self.config.variations:
             for wrapper_config in self.config.variations:
@@ -139,7 +149,8 @@ class ExperimentState:
 
     def set_specific_variation(self, name: str, variation: Any) -> None:
         """
-        Sets a specific variation for an experiment without cycling through the variations.
+        Sets a specific variation for an experiment without cycling through
+        the variations.
         """
         self.current_variations[name] = [variation]
         self.counters[name] = 0

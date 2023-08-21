@@ -1341,16 +1341,6 @@ files = [
 ]
 
 [[package]]
-name = "npyscreen"
-version = "4.10.5"
-description = "Writing user interfaces without all that ugly mucking about in hyperspace"
-optional = false
-python-versions = "*"
-files = [
-    {file = "npyscreen-4.10.5.tar.gz", hash = "sha256:622ee0f9a5dae946e635b7c6e0f6d65e1ed3c9ea0d20b89dab7f58d580e5126e"},
-]
-
-[[package]]
 name = "numpy"
 version = "1.25.2"
 description = "Fundamental package for array computing in Python"
@@ -2632,4 +2622,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<4"
-content-hash = "6cde0dc1f1da9616856f59411b06b29acdc353bfa2ca29c947937b22e965c7ff"
+content-hash = "58afd9d5c86330dd8c8ab3eeefad381a20056a2ac41b7bd1fc0d73d6f0e9a78a"

@@ -1,10 +1,12 @@
 """
 Module: string_expected_result_evaluator.py
 
-This module defines the StringExpectedResultEvaluator class, which is used for evaluating string expected results.
+This module defines the StringExpectedResultEvaluator class, which is used for
+evaluating string expected results.
 
 Classes:
-    StringExpectedResultEvaluator: Class for evaluating string expected results.
+    StringExpectedResultEvaluator: Class for evaluating string expected
+    results.
 
 """
 
@@ -50,7 +52,8 @@ class StringExpectedResultEvaluator(BaseEvaluator):
     for evaluating string expected results using different matching techniques.
 
     Attributes:
-        config (ExpectedResultEvaluatorConfig): Configuration object for the evaluator.
+        config (ExpectedResultEvaluatorConfig): Configuration object for the
+                                                evaluator.
 
     """
     default_config = ExpectedResultEvaluatorConfig(
@@ -66,10 +69,12 @@ class StringExpectedResultEvaluator(BaseEvaluator):
 
     def __init__(self, config: ExpectedResultEvaluatorConfig):
         """
-        Initialize the StringExpectedResultEvaluator with the provided configuration.
+        Initialize the StringExpectedResultEvaluator with the provided
+        configuration.
 
         Args:
-            config (ExpectedResultEvaluatorConfig): Configuration object for the evaluator.
+            config (ExpectedResultEvaluatorConfig): Configuration object for
+            the evaluator.
 
         """
         super().__init__(config)
@@ -77,10 +82,12 @@ class StringExpectedResultEvaluator(BaseEvaluator):
 
     def evaluate(self, experiment_result: ExperimentResult) -> EvaluatorOutput:
         """
-        Evaluate the expected result against the actual result using the specified matching technique.
+        Evaluate the expected result against the actual result using the
+        specified matching technique.
 
         Returns:
-            EvaluatorOutput: An EvaluatorOutput object containing the evaluation result.
+            EvaluatorOutput: An EvaluatorOutput object containing the
+            evaluation result.
 
         """
         input_data = experiment_result.input_data

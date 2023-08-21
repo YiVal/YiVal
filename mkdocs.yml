@@ -2,9 +2,19 @@
 site_name: YiVal
 nav:
   - Index: index.md
+  - Eng Spec:
+      - Arctitecture: architecture.md
   - Contributing Guide: contributing.md
   - Code Reference:
-    - yival.configs.config_utils: code/configs/config_utils.md
+      - yival.configs.config_utils: code/configs/config_utils.md
+      - yival.data_generators.base_data_generator: code/data_generators/base_data_generator.md
+      - yival.combination_improvers.base_combination_improver: code/combination_improvers/base_combination_improver.md
+      - yival.data.base_reader: code/data/base_reader.md
+      - yival.evaluators.base_evaluator: code/evaluators/base_evaluator.md
+      - yival.result_selectors.selection_strategy: code/result_selectors/selection_strategy.md
+      - yival.states.experiment_state: code/states/experiment_state.md
+      - yival.variation_generators.base_variation_generator: code/variation_generators/base_variation_generator.md
+      - yival.wrappers.base_wrapper: code/wrappers/base_wrapper.md
   - Change Log: changelog.md
 
 theme:
@@ -13,7 +23,7 @@ theme:
     cheme: slate
     primary: lightgreen
     accent: purple
-  logo: fontawesome/brands/github
+  logo: https://avatars.githubusercontent.com/u/134003593?s=400&u=34efa0d11568c1b5956f2e48dec7d15d95252a73&v=4
   favicon: fontawesome/brands/github
   icon:
     repo: fontawesome/brands/github

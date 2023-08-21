@@ -1,3 +1,11 @@
+"""
+OpenAIPromptBasedEvaluator is an evaluator that uses OpenAI's prompt-based
+system for evaluations.
+
+The evaluator interfaces with the OpenAI API to present tasks and interpret
+the model's responses to determine the quality or correctness of a given
+experiment result.
+"""
 import copy
 import os
 import string
@@ -16,9 +24,11 @@ from ..schemas.experiment_config import ExperimentResult, InputData
 from .base_evaluator import BaseEvaluator
 
 CLASSIFY_STR = """
-First, write out in a step by step manner your reasoning to be sure that your conclusion is correct.
+First, write out in a step by step manner your reasoning to be sure that your
+conclusion is correct.
 Avoid simply stating the correct answer at the outset.
-Then print only a single choice from {choices} (without quotes or punctuation) on its own line corresponding to the correct answer.
+Then print only a single choice from {choices} (without quotes or punctuation)
+on its own line corresponding to the correct answer.
 At the end, repeat just the answer by itself on a new line.
 Reasoning:
 """

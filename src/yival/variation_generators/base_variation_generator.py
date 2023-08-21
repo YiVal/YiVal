@@ -1,3 +1,15 @@
+"""
+Variation Generator Base Module.
+
+This module defines the `BaseVariationGenerator` class, an abstract base class
+for all variation generators. A variation generator is responsible for
+producing a sequence of variations to be used in experiments. The variations
+could represent different configurations, parameter settings, or other factors
+that should be tested in the context of an experiment. Subclasses of this base
+class should implement the specific logic for generating the desired
+variations.
+"""
+
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Iterator, List, Optional, Type
 
@@ -26,7 +38,8 @@ class BaseVariationGenerator(ABC):
     def get_default_config(
         cls, name: str
     ) -> Optional[BaseVariationGeneratorConfig]:
-        """Retrieve the default configuration of a variation generator by its name."""
+        """Retrieve the default configuration of a variation generator by its
+        name."""
         generator_info = cls._registry.get(name, {})
         return generator_info.get(
             "default_config", None
@@ -61,13 +74,15 @@ class BaseVariationGenerator(ABC):
         """
         Generate a sequence of variations to be used in experiments.
         
-        This method should yield lists of variations, with each list typically representing a set
-        or batch of variations to be used in a single experiment or iteration.
+        This method should yield lists of variations, with each list typically
+        representing a set or batch of variations to be used in a single
+        experiment or iteration.
         
         Returns:
-            Iterator[List[WrapperVariation]]: An iterator yielding lists of WrapperVariation objects.
+            Iterator[List[WrapperVariation]]: An iterator yielding lists of
+            WrapperVariation objects.
             
         Note:
-            The specific logic for generating variations should be implemented by subclasses.
+            The specific logic for generating variations should be implemented
+            by subclasses.
         """
-        pass
