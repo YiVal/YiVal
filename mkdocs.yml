@@ -4,6 +4,10 @@ nav:
   - Index: index.md
   - Eng Spec:
       - Arctitecture: architecture.md
+      - Demo:
+          - Basic Interactive Mode: basic_interactive_mode.md
+          - Question Answering with Expected Results: qa_expected_results.md
+          - Auto Prompts Generation: auto_prompts_generation.md
   - Contributing Guide: contributing.md
   - Code Reference:
       - yival.configs.config_utils: code/configs/config_utils.md
@@ -15,7 +19,6 @@ nav:
       - yival.states.experiment_state: code/states/experiment_state.md
       - yival.variation_generators.base_variation_generator: code/variation_generators/base_variation_generator.md
       - yival.wrappers.base_wrapper: code/wrappers/base_wrapper.md
-  - Change Log: changelog.md
 
 theme:
   name: material
