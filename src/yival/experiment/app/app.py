@@ -2,6 +2,7 @@
 
 import ast
 import hashlib
+import os
 import textwrap
 import urllib.parse
 from concurrent.futures import ThreadPoolExecutor
@@ -13,6 +14,7 @@ import pandas as pd  # type: ignore
 import plotly.express as px  # type: ignore
 from dash import dash_table, dcc, html  # type: ignore
 from dash.dependencies import ALL, MATCH, Input, Output, State
+from pyngrok import ngrok
 
 from yival.experiment.rate_limiter import RateLimiter
 from yival.experiment.utils import (
@@ -1480,4 +1482,15 @@ def display_results_dash(
         experiment_data, experiment_config, function_args, all_combinations,
         state, logger, evaluator, interactive
     )
-    app.run(debug=False, port=8073)
+
+    if os.environ.get("ngrok", False):
+        public_url = ngrok.connect(8073)
+        print(f"[app] public_url now :{public_url}")
+        app.run(debug=False, port=8073)
+    else:
+        app.run(debug=False, port=8073)
+
+    # public_url = ngrok.connect(8073)
+    # print(f"[app][display_result_dash] public_url now :{public_url}")
+    # print("[DEBUG] inline mode 456")
+    # app.run_server(mode='inline', port=8050, debug=False)
