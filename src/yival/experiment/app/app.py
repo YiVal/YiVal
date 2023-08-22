@@ -1485,12 +1485,7 @@ def display_results_dash(
 
     if os.environ.get("ngrok", False):
         public_url = ngrok.connect(8073)
-        print(f"[app] public_url now :{public_url}")
+        print(f"Access Yival from this public URL :{public_url}")
         app.run(debug=False, port=8073)
     else:
         app.run(debug=False, port=8073)
-
-    # public_url = ngrok.connect(8073)
-    # print(f"[app][display_result_dash] public_url now :{public_url}")
-    # print("[DEBUG] inline mode 456")
-    # app.run_server(mode='inline', port=8050, debug=False)
