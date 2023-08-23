@@ -8,6 +8,7 @@ from ..schemas.experiment_config import (
     Experiment,
 )
 from ..schemas.selector_strategies import AHPConfig, SelectionOutput
+from .normalize_func import NORMALIZATION_FUNCS
 from .selection_context import SelectionContext
 from .selection_strategy import SelectionStrategy
 
@@ -23,7 +24,8 @@ class AHPSelection(SelectionStrategy):
         criteria_maximization={
             "average_token_usage": False,
             "average_latency": False
-        }
+        },
+        normalize_func=None,
     )
 
     def __init__(self, config: AHPConfig):
@@ -44,6 +46,10 @@ class AHPSelection(SelectionStrategy):
         # Create a matrix of alternatives data
         matrix: np.ndarray = np.array(alternatives_data)
 
+        # Normalize matrix data
+        if self.config.normalize_func:
+            matrix = NORMALIZATION_FUNCS[self.config.normalize_func](matrix)
+
         # Apply criteria weights
         weights = np.array([
             self.config.criteria_weights[criterion]
@@ -55,7 +61,7 @@ class AHPSelection(SelectionStrategy):
         # column in the matrix
         for i, criterion in enumerate(self.config.criteria):
             if not self.config.criteria_maximization.get(criterion, True):
-                weighted_matrix[:, i] = 1 / (weighted_matrix[:, i] + 1e-10)
+                weighted_matrix[:, i] *= -1
 
         # Aggregate the scores
         aggregate_scores = np.sum(weighted_matrix, axis=1)
@@ -102,7 +108,7 @@ class AHPSelection(SelectionStrategy):
             data["average_latency"] = combo.average_latency or 0
 
         # Extract data from evaluator_outputs
-        for evaluator_output in (combo.evaluator_outputs or []):
+        for evaluator_output in (combo.combine_evaluator_outputs or []):
             if evaluator_output.name in self.config.criteria:
                 data[evaluator_output.name] = evaluator_output.result
 
@@ -124,7 +130,7 @@ def main():
         aggregated_metrics={},
         average_token_usage=120,
         average_latency=200,
-        evaluator_outputs=[EvaluatorOutput(name="elo", result=1500)]
+        combine_evaluator_outputs=[EvaluatorOutput(name="elo", result=1500)]
     )
 
     # Combination B has a lower elo, but also much lower token usage and
@@ -135,12 +141,24 @@ def main():
         aggregated_metrics={},
         average_token_usage=50,
         average_latency=50,
-        evaluator_outputs=[EvaluatorOutput(name="elo", result=1300)]
+        combine_evaluator_outputs=[EvaluatorOutput(name="elo", result=1300)]
+    )
+
+    #Combination C has highest elo with highest token usage and latency
+    combination_C = CombinationAggregatedMetrics(
+        combo_key=str({"name": "C"}),
+        experiment_results=[],
+        aggregated_metrics={},
+        average_token_usage=300,
+        average_latency=300,
+        combine_evaluator_outputs=[EvaluatorOutput(name="elo", result=1600)]
     )
 
     # The experiment data
     trade_off_test_data = Experiment(
-        combination_aggregated_metrics=[combination_A, combination_B],
+        combination_aggregated_metrics=[
+            combination_A, combination_B, combination_C
+        ],
         group_experiment_results=[]
     )
 
@@ -155,7 +173,8 @@ def main():
             "elo": True,
             "average_token_usage": False,
             "average_latency": False
-        }
+        },
+        normalize_func='z-score'
     )
     context_trade_off = SelectionContext(
         strategy=AHPSelection(config=config_trade_off)

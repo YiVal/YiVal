@@ -156,4 +156,6 @@ yival demo --auto_prompts
 <img width="1331" alt="Screenshot 2023-08-20 at 10 53 36 PM" src="https://github.com/YiVal/YiVal/assets/1544154/85f5c08f-3e14-42e7-85c6-47dcdd4a4121">
 
 </details>
+
+
 For more details on this demo, check out the [Auto prompts generation](https://github.com/YiVal/YiVal/blob/master/docs/auto_prompts_generation.md#demo).
