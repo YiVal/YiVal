@@ -15,7 +15,7 @@ flowchart TD
     A --> |Data Generation| A1[Dataset]
     A1 --> A2[DataGenerator]
     A2 --> A3[OpenAI Prompt Data Generator]
-    
+
     %% Create Combinations Stage
     A1 --> |Create Combinations| B
     B --> B1[OpenAI Prompt Based Variation Generator]
@@ -60,7 +60,7 @@ flowchart TD
 
 We use open ai to help us generate test cases
 
-```yml
+```yaml
 dataset:
   data_generators:
     openai_prompt_data_generator:
@@ -97,7 +97,8 @@ dataset:
 
 ### Custom Function
 
-The custom function for this mode is hosted on GitHub. You can find and review it [here](https://github.com/YiVal/YiVal/blob/master/src/yival/demo/headline_generation.py)
+The custom function for this mode is hosted on GitHub.
+You can find and review it [here](https://github.com/YiVal/YiVal/blob/master/src/yival/demo/headline_generation.py).
 
 In this function, we take in an input that represents tech startup business, and
 will otuput headline for the landing page.
@@ -126,9 +127,10 @@ within `{}` braces. In the example provided, the variable is `tech_startup_busin
 
 ### Variations Generation
 
-We have configured variations using both ChatGPT and manual settings. Here's the configuration for ChatGPT:
+We have configured variations using both ChatGPT and manual settings.
+Here's the configuration for ChatGPT:
 
-```yml
+```yaml
 variations:
   - name: task
     generator_name: openai_prompt_based_variation_generator
@@ -151,7 +153,7 @@ variations:
 
 For manual variations, the configuration is as follows:
 
-```yml
+```yaml
     variations:
       - instantiated_value: Generate landing page headline for {tech_startup_business}
         value: Generate landing page headline for {tech_startup_business}
@@ -165,7 +167,8 @@ This manual setup defines a specific way the variation will be presented.
 
 Below is the configuration for human ratings:
 
-```yml
+<!-- markdownlint-disable MD013 -->
+```yaml
 human_rating_configs:
 
 - name: clarity
@@ -176,6 +179,7 @@ human_rating_configs:
     instructions: Assess the relevance of the headline: Is it pertinent to the subject matter?
     scale: [1, 5]
 ```
+<!-- markdownlint-enable MD013 -->
 
 **Explanation:**
 
@@ -196,7 +200,8 @@ Certainly! Here's the revised description taking into account the context you pr
 
 Below is the setup for automated evaluations:
 
-```yml
+<!-- markdownlint-disable MD013 -->
+```yaml
 evaluators:
   - evaluator_type: all
     input_description:
@@ -232,28 +237,22 @@ evaluators:
       D: 3
       E: 4
 ```
+<!-- markdownlint-enable MD013 -->
 
 **Explanation:**
 
 - **evaluator_type**: Designates the type of evaluation.
     - `all`: The evaluator considers all experiment results across all variations.
-             It uses the elo algorithm and employs GPT-4 as the judge.
+        It uses the elo algorithm and employs GPT-4 as the judge.
     - `individual`: The evaluator focuses solely on the current variation's results.
-
 - **input_description**: Describes the type of input the model expects.
-
 - **name**: Represents the evaluator's name or identifier.
-
-- **prompt**: Provides the template and context for the automated evaluator to assess a given result.
-
+- **prompt**: Provides the template and context for the automated evaluator
+    to assess a given result.
 - **display_name**: Specifies the displayed criterion name on the user interface.
-
 - **choices**: Lists all possible rating options for the evaluator.
-
 - **description**: Offers a brief description of the evaluation criterion.
-
 - **scale_description**: Details the numeric scoring scale.
-
 - **choice_scores**: Maps each choice to its respective numeric score.
 
 Certainly! Here's the polished description for the selection configuration:
@@ -264,7 +263,7 @@ Certainly! Here's the polished description for the selection configuration:
 
 Below is the setup detailing the selection strategy:
 
-```yml
+```yaml
 selection_strategy:
   ahp_selection:
     criteria:
@@ -290,14 +289,19 @@ selection_strategy:
 **Explanation:**
 
 - **selection_strategy**: Represents the overarching approach for making selections.
-  
-- **ahp_selection**: Specifies that the Analytic Hierarchy Process (AHP) algorithm is employed for the selection strategy.
-  
-- **criteria**: Lists the evaluators and metrics that are considered during the selection process.
-  
-- **criteria_maximization**: Indicates whether each criterion should be maximized. For instance, while a high score from the `openai_elo_evaluator` is desirable (`true`), a lower `average_latency` or `average_token_usage` is preferred (`false`).
-  
-- **criteria_weights**: Assigns a weight to each criterion, determining its importance in the overall evaluation. The weights sum up to 1, indicating the relative significance of each criterion in the final decision-making process.
+- **ahp_selection**: Specifies that the Analytic Hierarchy Process (AHP) algorithm
+    is employed for the selection strategy.
+- **criteria**: Lists the evaluators and metrics that are considered during
+    the selection process.
+- **criteria_maximization**: Indicates whether each criterion should be maximized.
+    For instance,
+    while a high score from the `openai_elo_evaluator` is desirable (`true`),
+    a lower `average_latency` or `average_token_usage` is preferred (`false`).
+- **criteria_weights**:
+    Assigns a weight to each criterion,
+    determining its importance in the overall evaluation.
+    The weights sum up to 1, indicating the relative significance of each criterion
+    in the final decision-making process.
 
 ---
 
@@ -311,7 +315,7 @@ Certainly! Here's the enhanced description, incorporating the additional informa
 
 Below is the setup detailing the auto improver strategy:
 
-```yml
+```yaml
 improver:
   name: openai_prompt_based_combination_improver
   max_iterations: 2
@@ -324,13 +328,18 @@ improver:
 
 **Explanation:**
 
-- **name**: Specifies the identifier or the class of the improver. In this instance, `openai_prompt_based_combination_improver` is utilized.
-
-- **max_iterations**: Designates the upper limit for the number of improvement cycles. The process will not exceed 2 iterations, irrespective of other conditions.
-
-- **openai_model_name**: Indicates the model to be utilized for the improvement process, which here is `gpt-4`.
-
-- **stop_conditions**: Outlines conditions under which the improver should halt its operations before reaching the maximum iteration count. The improvement process will terminate if the average score from any of the specified evaluators surpasses 3.
+- **name**: Specifies the identifier or the class of the improver.
+    In this instance, `openai_prompt_based_combination_improver` is utilized.
+- **max_iterations**: Designates the upper limit for the number of improvement cycles.
+    The process will not exceed 2 iterations, irrespective of other conditions.
+- **openai_model_name**:
+    Indicates the model to be utilized for the improvement process,
+    which here is `gpt-4`.
+- **stop_conditions**:
+    Outlines conditions under which the improver should halt its operations
+    before reaching the maximum iteration count.
+    The improvement process will terminate if the average score
+    from any of the specified evaluators surpasses 3.
 
 Additionally, it's important to note that during the improvement process, only
 the best result from the previous selection step will be taken into consideration.
@@ -338,4 +347,5 @@ The idea is to refine and optimize this top-performing result further.
 
 ### Full Configuration
 
-For a comprehensive view of all configurations related to the basic interactive mode, you can review the full configuration file hosted [here](https://github.com/YiVal/YiVal/blob/master/src/yival/demo/configs/auto_prompts_config.yml).
+For a comprehensive view of all configurations related to the basic interactive mode,
+you can review the full configuration file hosted [here](https://github.com/YiVal/YiVal/blob/master/src/yival/demo/configs/auto_prompts_config.yml).

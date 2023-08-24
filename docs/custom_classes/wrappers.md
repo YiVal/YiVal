@@ -107,5 +107,6 @@ And you should be able to use the wrapper in your code like string wrapper.
 ## Conclusion
 
 By following this guide, you've successfully created and registered a custom wrapper
-named `NumberWrapper` in the experimental framework. This flexibility allows you to
+named `NumberWrapper` in the experimental framework.
+This flexibility allows you to
 tailor experiments to specific needs, ensuring accurate and efficient results.
