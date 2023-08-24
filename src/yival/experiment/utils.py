@@ -11,10 +11,15 @@ from ..combination_improvers.base_combination_improver import (
     BaseCombinationImprover,
 )
 from ..data.base_reader import BaseReader
+from ..data.csv_reader import CSVReader
 from ..data_generators.base_data_generator import BaseDataGenerator
 from ..evaluators.base_evaluator import BaseEvaluator
 from ..evaluators.openai_elo_evaluator import OpenAIEloEvaluator
+from ..evaluators.string_expected_result_evaluator import (
+    StringExpectedResultEvaluator,
+)
 from ..logger.token_logger import TokenLogger
+from ..result_selectors.ahp_selection import AHPSelection
 from ..result_selectors.selection_strategy import SelectionStrategy
 from ..schemas.combination_improver_configs import (
     BaseCombinationImproverConfig,
@@ -31,6 +36,14 @@ from ..schemas.experiment_config import (
 )
 from ..schemas.selector_strategies import BaseConfig
 from ..states.experiment_state import ExperimentState
+from ..variation_generators.base_variation_generator import (
+    BaseVariationGenerator,
+)
+from ..variation_generators.openai_prompt_based_variation_generator import (
+    OpenAIPromptBasedVariationGenerator,
+)
+from ..wrappers.base_wrapper import BaseWrapper
+from ..wrappers.string_wrapper import StringWrapper
 from .evaluator import Evaluator
 
 
@@ -66,34 +79,41 @@ def call_function_from_string(func_string: str, **kwargs) -> Any:
     return function(**kwargs)
 
 
+def _add_to_sys_path_if_not_present(directory: str):
+    """Add directory to sys.path if not already present."""
+    if directory not in sys.path:
+        sys.path.append(directory)
+
+
+def _get_class_from_path(cls_path: str):
+    """Retrieve a class from a module using its full path."""
+    module_path, class_name = cls_path.rsplit(".", 1)
+    directory, base_module_name = os.path.split(module_path)
+
+    _add_to_sys_path_if_not_present(directory)
+    return getattr(import_module(base_module_name), class_name)
+
+
 def register_custom_readers(custom_readers: Dict[str, Dict[str, Any]]):
     for name, details in custom_readers.items():
-        reader_cls_path = details["class"]
-        module_name, class_name = reader_cls_path.rsplit(".", 1)
-        reader_cls = getattr(import_module(module_name), class_name)
+        reader_cls = _get_class_from_path(details["class"])
 
         config_cls = None
         if "config_cls" in details:
-            config_cls_path = details["config_cls"]
-            module_name, class_name = config_cls_path.rsplit(".", 1)
-            config_cls = getattr(import_module(module_name), class_name)
+            config_cls = _get_class_from_path(details["config_cls"])
 
         BaseReader.register_reader(name, reader_cls, config_cls)
-    from ..data.csv_reader import CSVReader
+
     _ = CSVReader
 
 
 def register_custom_improver(custom_improver: Dict[str, Dict[str, Any]]):
     for name, details in custom_improver.items():
-        improver_cls_path = details["class"]
-        module_name, class_name = improver_cls_path.rsplit(".", 1)
-        improver_cls = getattr(import_module(module_name), class_name)
+        improver_cls = _get_class_from_path(details["class"])
 
         config_cls = None
         if "config_cls" in details:
-            config_cls_path = details["config_cls"]
-            module_name, class_name = config_cls_path.rsplit(".", 1)
-            config_cls = getattr(import_module(module_name), class_name)
+            config_cls = _get_class_from_path(details["config_cls"])
 
         BaseCombinationImprover.register_combination_improver(
             name, improver_cls, config_cls
@@ -108,55 +128,39 @@ def register_custom_selection_strategy(
     custom_strategy: Dict[str, Dict[str, Any]]
 ):
     for name, details in custom_strategy.items():
-        strategy_cls_path = details["class"]
-        module_name, class_name = strategy_cls_path.rsplit(".", 1)
-        strategy_cls = getattr(import_module(module_name), class_name)
+        strategy_cls = _get_class_from_path(details["class"])
 
         config_cls = None
         if "config_cls" in details:
-            config_cls_path = details["config_cls"]
-            module_name, class_name = config_cls_path.rsplit(".", 1)
-            config_cls = getattr(import_module(module_name), class_name)
+            config_cls = _get_class_from_path(details["config_cls"])
 
         SelectionStrategy.register_strategy(name, strategy_cls, config_cls)
-    from ..result_selectors.ahp_selection import AHPSelection
     _ = AHPSelection
 
 
 def register_custom_evaluators(custom_evaulators: Dict[str, Dict[str, Any]]):
     for name, details in custom_evaulators.items():
-        evaluator_cls_path = details["class"]
-        module_name, class_name = evaluator_cls_path.rsplit(".", 1)
-        evaluator_cls = getattr(import_module(module_name), class_name)
+        evaluator_cls = _get_class_from_path(details["class"])
 
         config_cls = None
         if "config_cls" in details:
-            config_cls_path = details["config_cls"]
-            module_name, class_name = config_cls_path.rsplit(".", 1)
-            config_cls = getattr(import_module(module_name), class_name)
+            config_cls = _get_class_from_path(details["config_cls"])
 
         BaseEvaluator.register_evaluator(name, evaluator_cls, config_cls)
-    from ..evaluators.string_expected_result_evaluator import (
-        StringExpectedResultEvaluator,
-    )
     _ = StringExpectedResultEvaluator
     _ = OpenAIEloEvaluator
 
 
 def register_custom_wrappers(custom_wrappers: Dict[str, Dict[str, Any]]):
     for name, details in custom_wrappers.items():
-        wrapper_cls_path = details["class"]
-        module_name, class_name = wrapper_cls_path.rsplit(".", 1)
-        wrapper_cls = getattr(import_module(module_name), class_name)
+        wrapper_cls = _get_class_from_path(details["class"])
 
         config_cls = None
         if "config_cls" in details:
-            config_cls_path = details["config_cls"]
-            module_name, class_name = config_cls_path.rsplit(".", 1)
-            config_cls = getattr(import_module(module_name), class_name)
+            config_cls = _get_class_from_path(details["config_cls"])
 
-        BaseEvaluator.register_evaluator(name, wrapper_cls, config_cls)
-    from ..wrappers.string_wrapper import StringWrapper
+        BaseWrapper.register_wrapper(name, wrapper_cls, config_cls)
+
     _ = StringWrapper
 
 
@@ -164,15 +168,11 @@ def register_custom_data_generator(
     custom_data_generators: Dict[str, Dict[str, Any]]
 ):
     for name, details in custom_data_generators.items():
-        data_generator_cls_path = details["class"]
-        module_name, class_name = data_generator_cls_path.rsplit(".", 1)
-        data_generator_cls = getattr(import_module(module_name), class_name)
+        data_generator_cls = _get_class_from_path(details["class"])
 
         config_cls = None
         if "config_cls" in details:
-            config_cls_path = details["config_cls"]
-            module_name, class_name = config_cls_path.rsplit(".", 1)
-            config_cls = getattr(import_module(module_name), class_name)
+            config_cls = _get_class_from_path(details["config_cls"])
 
         BaseDataGenerator.register_data_generator(
             name, data_generator_cls, config_cls
@@ -183,27 +183,20 @@ def register_custom_data_generator(
     _ = OpenAIPromptDataGenerator
 
 
-def register_variation_generator(
-    custom_data_generators: Dict[str, Dict[str, Any]]
+def register_custom_variation_generators(
+    custom_variation_generators: Dict[str, Dict[str, Any]]
 ):
-    for name, details in custom_data_generators.items():
-        data_generator_cls_path = details["class"]
-        module_name, class_name = data_generator_cls_path.rsplit(".", 1)
-        data_generator_cls = getattr(import_module(module_name), class_name)
+    for name, details in custom_variation_generators.items():
+        variation_generator_cls = _get_class_from_path(details["class"])
 
         config_cls = None
         if "config_cls" in details:
-            config_cls_path = details["config_cls"]
-            module_name, class_name = config_cls_path.rsplit(".", 1)
-            config_cls = getattr(import_module(module_name), class_name)
+            config_cls = _get_class_from_path(details["config_cls"])
 
-        BaseDataGenerator.register_data_generator(
-            name, data_generator_cls, config_cls
+        BaseVariationGenerator.register_variation_generator(
+            name, variation_generator_cls, config_cls
         )
-    from ..data_generators.openai_prompt_data_generator import (
-        OpenAIPromptDataGenerator,
-    )
-    _ = OpenAIPromptDataGenerator
+    _ = OpenAIPromptBasedVariationGenerator
 
 
 def calculate_metrics(

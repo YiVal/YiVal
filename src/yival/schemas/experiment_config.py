@@ -171,6 +171,7 @@ class ExperimentConfig:
     custom_evaluators: Optional[Dict[str, Dict[str, Any]]] = None
     custom_variation_generators: Optional[Dict[str, Dict[str, Any]]] = None
     custom_selection_strategies: Optional[Dict[str, Dict[str, Any]]] = None
+    custom_improvers: Optional[Dict[str, Dict[str, Any]]] = None
 
     def asdict(self) -> Dict[str, Any]:
         # Convert the dataclass instance to a dictionary

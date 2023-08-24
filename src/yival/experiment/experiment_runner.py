@@ -24,6 +24,7 @@ from .utils import (
     register_custom_improver,
     register_custom_readers,
     register_custom_selection_strategy,
+    register_custom_variation_generators,
     register_custom_wrappers,
     run_single_input,
 )
@@ -47,6 +48,9 @@ class ExperimentRunner:
             self.config.get("custom_selection_strategy", {})
         )
         register_custom_improver(self.config.get("custom_improvers", {}))
+        register_custom_variation_generators(
+            self.config.get("custom_variation_generators", {})
+        )
 
     def _process_dataset(self, all_combinations, state, logger,
                          evaluator) -> List[ExperimentResult]:
@@ -89,8 +93,8 @@ class ExperimentRunner:
     def run(
         self,
         display: bool = True,
-        output_path: Optional[str] = "export.pkl",
-        experiment_input_path: Optional[str] = "export.pkl"
+        output_path: Optional[str] = "abc.pkl",
+        experiment_input_path: Optional[str] = "abc.pkl"
     ):
         """Run the experiment based on the source type and provided configuration."""
         self._register_custom_components()
@@ -107,14 +111,14 @@ class ExperimentRunner:
         all_combinations = state.get_all_variation_combinations()
 
         source_type = self.config["dataset"]["source_type"]  # type: ignore
-
+        experiment_input_path = ""
         if source_type in ["dataset", "machine_generated"]:  # type: ignore
             if experiment_input_path and os.path.exists(experiment_input_path):
                 with open(experiment_input_path, 'rb') as file:
                     experiment: Experiment = pickle.load(file)
             else:
                 register_custom_readers(
-                    self.config.get("custom_readers", {})  # type: ignore
+                    self.config.get("custom_reader", {})  # type: ignore
                 )  # type: ignore
                 results = self._process_dataset(
                     all_combinations, state, logger, evaluator
