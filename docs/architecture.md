@@ -1,5 +1,4 @@
 # Architecture
-
 ```mermaid
 flowchart TD
 
@@ -47,6 +46,7 @@ flowchart TD
     style F fill:#f2a3b3,stroke:#f96e5b
 ```
 
+
 ## Data Generation
 
 The process starts with the generation of a dataset which can come from multiple sources:
@@ -81,3 +81,4 @@ ensures only the most vital insights are pushed forward.
 
 The selected results are then fine-tuned in this phase. An "Improver" is applied
 to enhance these results. This stage can loop back to the analysis stage, indicating an ongoing, iterative process of refinement.
+

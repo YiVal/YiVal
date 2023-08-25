@@ -14,7 +14,7 @@ method to define the logic for producing variations.
 Let's design a generator that simply returns variations based on the configurations
 provided.
 
-#### 2.1 Define the Configuration Class
+### 2.1 Define the Configuration Class
 
 Firstly, you'll need a configuration class specific to your generator:
 
@@ -30,7 +30,7 @@ class SimpleVariationGeneratorConfig(BaseVariationGeneratorConfig):
 This configuration class inherits from `BaseVariationGeneratorConfig` and has an
 additional attribute, `variations`, which is a list of variation strings.
 
-#### 2.2 Implement the Variation Generator
+### 2.2 Implement the Variation Generator
 
 Now, let's create the custom variation generator:
 
@@ -55,12 +55,12 @@ Here, the `generate_variations` method simply converts the list of variation
 strings from the configuration into a list of `WrapperVariation` objects and yields
 it.
 
-### 3. Using the Custom Variation Generator in Configuration
+## 3. Using the Custom Variation Generator in Configuration
 
 In your configuration (YAML), you can now specify the use of this variation
 generator:
 
-```yml
+```yaml
 custom_variation_generators:
   simple_variation_generator:
     class: /path/to/simple_variation_generator.SimpleVariationGenerator

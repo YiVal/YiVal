@@ -2,8 +2,8 @@
 
 ## Overview
 
-This documentation provides an insight into the basic reader and evaluator
-components within the Yival framework.
+This documentation provides an insight into the basic reader
+and evaluator components within the Yival framework.
 
 ## Flow Diagram
 
@@ -43,10 +43,11 @@ flowchart TD
 
 ### Data Source
 
-The data for this example is sourced from a CSV file that includes an `expected_result`
-column. Here's the configuration for the data source:
+The data for this example is sourced from a CSV file
+that includes an `expected_result` column.
+Here's the configuration for the data source:
 
-```yml
+```yaml
 dataset:
   file_path: demo/data/yival_expected_results.csv
   reader: csv_reader
@@ -57,23 +58,25 @@ dataset:
 
 ### Custom Function
 
-Our custom function tailored for this mode is hosted on GitHub. To delve into its
-details, please [click here](https://github.com/YiVal/YiVal/blob/master/src/yival/demo/qa.py).
+Our custom function tailored for this mode is hosted on GitHub.
+To delve into its details, please [click here](https://github.com/YiVal/YiVal/blob/master/src/yival/demo/qa.py).
 
-In this function, the `StringWrapper` is employed to encapsulate parts of the string
-that will be substituted based on the variations configuration. This encapsulated
-string serves as a namespace:
+In this function,
+the `StringWrapper` is employed to encapsulate parts of the string
+that will be substituted based on the variations configuration.
+This encapsulated string serves as a namespace:
 
 ```python
- "content": f'{input} ' + str(StringWrapper("", name="qa"))
+    "content": f'{input} ' + str(StringWrapper("", name="qa"))
 ```
 
 ### Variations Configuration
 
-Variations are articulated in a dedicated configuration. This particular setup
-allows retaining the original empty suffix or appends a "Chain of Thought" suffix:
+Variations are articulated in a dedicated configuration.
+This particular setup allows retaining the original empty suffix
+or appends a "Chain of Thought" suffix:
 
-```yml
+```yaml
 variations:
   - name: qa
     variations:
@@ -89,6 +92,6 @@ variations:
 
 ### Full Configuration
 
-For those seeking an in-depth exploration of all configurations pertinent to the
-QA expected results demonstration, we recommend perusing the comprehensive configuration
-file available [here](https://github.com/YiVal/YiVal/blob/master/src/yival/demo/configs/qa_expected_results_config.yml).
+For those seeking an in-depth exploration of all configurations
+pertinent to the QA expected results demonstration,
+we recommend perusing the comprehensive configuration file available [here](https://github.com/YiVal/YiVal/blob/master/src/yival/demo/configs/qa_expected_results_config.yml).

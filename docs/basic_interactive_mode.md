@@ -2,7 +2,8 @@
 
 ## Overview
 
-This document describes the engineering specification for the basic interactive mode in the YiVal framework.
+This document describes the engineering specification
+for the basic interactive mode in the YiVal framework.
 
 ## Flow Diagram
 
@@ -34,18 +35,22 @@ flowchart TD
 
 ### Data Source
 
-The data for this mode comes directly from the user input. The configuration for this data source is as follows:
+The data for this mode comes directly from the user input.
+The configuration for this data source is as follows:
 
-```yml
+```yaml
 dataset:
   source_type: user_input
 ```
 
 ### Custom Function
 
-The custom function for this mode is hosted on GitHub. You can find and review it [here](https://github.com/YiVal/YiVal/blob/master/src/yival/demo/translation.py).
+The custom function for this mode is hosted on GitHub.
+You can find and review it [here](https://github.com/YiVal/YiVal/blob/master/src/yival/demo/translation.py).
 
-Within this function, we utilize the `StringWrapper` to wrap places that will be replaced based on the variations configuration. The wrapped string acts as a namespace:
+Within this function, we utilize the `StringWrapper` to wrap places
+that will be replaced based on the variations configuration.
+The wrapped string acts as a namespace:
 
 ```python
 str(
@@ -57,9 +62,12 @@ str(
 
 ### Variations Configuration
 
-The variations are defined in a configuration that provides multiple instantiated values, each corresponding to a different language. Here's a snapshot:
+The variations are defined in a configuration
+that provides multiple instantiated values,
+each corresponding to a different language.
+Here's a snapshot:
 
-```yml
+```yaml
 variations:
   - name: translate
     variations:
@@ -77,8 +85,10 @@ variations:
         variation_id: null
 ```
 
-This configuration provides three variations, allowing the text to be set in different languages.
+This configuration provides three variations,
+allowing the text to be set in different languages.
 
 ### Full Configuration
 
-For a comprehensive view of all configurations related to the basic interactive mode, you can review the full configuration file hosted [here](https://github.com/YiVal/YiVal/blob/master/src/yival/demo/configs/basic_interactive_config.yml).
+For a comprehensive view of all configurations related to the basic interactive mode,
+you can review the full configuration file hosted [here](https://github.com/YiVal/YiVal/blob/master/src/yival/demo/configs/basic_interactive_config.yml).

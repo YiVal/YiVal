@@ -1,4 +1,4 @@
-s# Custom Combination Improver Creation Guide
+# Custom Combination Improver Creation Guide
 
 ## Introduction
 
@@ -60,7 +60,7 @@ class CustomCombinationImprover(BaseCombinationImprover):
 
 ## Config
 
-```yml
+```yaml
 custom_improvers:
     class: /path/to/custom_improver.CustomImprover
     config_cls: /path/to/custom_improver_config.CustomImproverConfig
@@ -68,7 +68,7 @@ custom_improvers:
 
 To use it
 
-```yml
+```yaml
 improver:
   name: custom_improver
 ```
