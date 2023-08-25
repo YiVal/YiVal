@@ -2,9 +2,9 @@ from typing import Iterator, List
 
 import pytest
 
-from ..schemas.common_structures import InputData
-from ..schemas.reader_configs import BaseReaderConfig
-from .base_reader import BaseReader
+from yival.data.base_reader import BaseReader
+from yival.schemas.common_structures import InputData
+from yival.schemas.reader_configs import BaseReaderConfig
 
 
 # Mocking a concrete implementation of BaseReader for testing purposes

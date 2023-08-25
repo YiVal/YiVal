@@ -2,13 +2,13 @@ import tempfile
 
 import pytest
 
-from ..configs.config_utils import load_and_validate_config
-from ..schemas.experiment_config import (
+from yival.cli.utils import generate_experiment_config_yaml
+from yival.configs.config_utils import load_and_validate_config
+from yival.schemas.experiment_config import (
     ExperimentConfig,
     WrapperConfig,
     WrapperVariation,
 )
-from .utils import generate_experiment_config_yaml
 
 
 @pytest.mark.parametrize(

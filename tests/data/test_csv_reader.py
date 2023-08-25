@@ -1,8 +1,8 @@
 import logging
 
-from ..schemas.common_structures import InputData
-from ..schemas.reader_configs import CSVReaderConfig
-from .csv_reader import CSVReader
+from yival.data.csv_reader import CSVReader
+from yival.schemas.common_structures import InputData
+from yival.schemas.reader_configs import CSVReaderConfig
 
 
 def test_basic_csv_reading(tmp_path):

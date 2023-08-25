@@ -1,4 +1,4 @@
-from .config_utils import load_and_validate_config
+from yival.configs.config_utils import load_and_validate_config
 
 # Sample configuration for mocking
 sample_config_content = """

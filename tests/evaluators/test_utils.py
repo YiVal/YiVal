@@ -1,6 +1,6 @@
 import pytest
 
-from .utils import fuzzy_match_util
+from yival.evaluators.utils import fuzzy_match_util
 
 
 @pytest.mark.parametrize(

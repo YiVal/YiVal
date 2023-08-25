@@ -1,14 +1,16 @@
 # test_string_expected_result_evaluator.py
 import pytest
 
-from ..schemas.common_structures import InputData
-from ..schemas.evaluator_config import (
+from yival.evaluators.string_expected_result_evaluator import (
+    StringExpectedResultEvaluator,
+)
+from yival.schemas.common_structures import InputData
+from yival.schemas.evaluator_config import (
     EvaluatorType,
     ExpectedResultEvaluatorConfig,
     MatchingTechnique,
 )
-from ..schemas.experiment_config import EvaluatorOutput, ExperimentResult
-from .string_expected_result_evaluator import StringExpectedResultEvaluator
+from yival.schemas.experiment_config import EvaluatorOutput, ExperimentResult
 
 
 @pytest.fixture

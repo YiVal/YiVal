@@ -1,6 +1,5 @@
 from yival.cli.utils import generate_experiment_config_yaml
-
-from ..schemas.experiment_config import WrapperConfig, WrapperVariation
+from yival.schemas.experiment_config import WrapperConfig, WrapperVariation
 
 
 # Mocking the required classes and methods
