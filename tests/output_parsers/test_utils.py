@@ -1,5 +1,5 @@
-from .base_parser import BaseParserWithRegistry
-from .utils import capture_and_parse_with_base_registry
+from yival.output_parsers.base_parser import BaseParserWithRegistry
+from yival.output_parsers.utils import capture_and_parse_with_base_registry
 
 
 class TestParser(BaseParserWithRegistry):

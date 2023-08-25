@@ -1,0 +1,15 @@
+[MASTER]
+ignore=tests
+
+[MISCELLANEOUS]
+notes=XXX
+
+[BASIC]
+good-names=i,
+           j,
+           k,
+           ex,
+           x,
+           y,
+           z,
+           _

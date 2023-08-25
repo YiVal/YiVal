@@ -1,5 +1,5 @@
-from ..states.experiment_state import ExperimentState
-from .string_wrapper import StringWrapper
+from yival.states.experiment_state import ExperimentState
+from yival.wrappers.string_wrapper import StringWrapper
 
 
 def setup_function():

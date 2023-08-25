@@ -1,4 +1,4 @@
-from .experiment_state import ExperimentState
+from yival.states.experiment_state import ExperimentState
 
 
 class CustomType:
