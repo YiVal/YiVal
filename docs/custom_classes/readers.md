@@ -57,8 +57,8 @@ class TXTReaderConfig(BaseReaderConfig):
 
 Now, create the `TXTReader` class, subclassing the `BaseReader`:
 
+<!-- markdownlint-disable MD013 -->
 ```python
-
 from typing import Iterator, List
 
 from txt_reader_config import TXTReaderConfig
@@ -90,11 +90,11 @@ class TXTReader(BaseReader):
     def read(self, path: str) -> Iterator[List[InputData]]:
         chunk = []
         chunk_size = self.config.chunk_size
-        
+
         with open(path, mode="r", encoding="utf-8") as file:
             for line in file:
                 line_content = line.strip().split(self.config.delimiter)
-                
+
                 # Each line in the TXT file is treated as a separate data point.
                 example_id = self.generate_example_id({"content": line_content}, path)
                 input_data_instance = InputData(
@@ -110,12 +110,13 @@ class TXTReader(BaseReader):
             if chunk:
                 yield chunk
 ```
+<!-- markdownlint-enable MD013 -->
 
 ### 3.3. Config
 
 After defining the config and reader sublass, we can define the yml config:
 
-```yml
+```yaml
 custom_reader:
   txt_reader:
     class: /path/to/text_reader.TXTReader
