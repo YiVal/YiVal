@@ -2,8 +2,7 @@
 
 ## Overview
 
-This document describes the engineering specification for the basic interactive
-mode in the YiVal framework.
+This document describes the engineering specification auto prompt generation demo
 
 ## Flow Diagram
 
