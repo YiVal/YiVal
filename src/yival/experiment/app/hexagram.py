@@ -264,6 +264,66 @@ HEXAGRAMS = [{
     "Approach. Understanding the best way to tackle situations or challenges.",
     "figure": "坤兌",
     "reading": "Approach challenges with wisdom and clarity."
+}, {
+    "name":
+    "同人 (Tóngrén)",
+    "description":
+    "Fellowship or Companionship. The power of unity and working harmoniously with others.",
+    "figure":
+    "乾離",
+    "reading":
+    "Harmony with others amplifies strength. Seek unity in actions."
+}, {
+    "name": "革 (Gé)",
+    "description":
+    "Revolution or Change. The necessity of major transformations for progress.",
+    "figure": "兌離",
+    "reading": "Embrace change as a pathway to progress."
+}, {
+    "name":
+    "豐 (Fēng)",
+    "description":
+    "Abundance or Fullness. Celebrating growth, prosperity, and the fruition of efforts.",
+    "figure":
+    "震離",
+    "reading":
+    "Reap the rewards of hard work and enjoy the abundance that comes your way."
+}, {
+    "name":
+    "家人 (Jiārén)",
+    "description":
+    "The Family. The significance of familial bonds and responsibilities.",
+    "figure":
+    "巽離",
+    "reading":
+    "Cherish and nurture family ties, recognizing the strength in unity."
+}, {
+    "name":
+    "既濟 (Jìjì)",
+    "description":
+    "Completion or After Completion. Recognizing the culmination of a process and preparing for the next phase.",
+    "figure":
+    "坎離",
+    "reading":
+    "Celebrate achievements, but remain vigilant for the next challenge."
+}, {
+    "name":
+    "賁 (Bì)",
+    "description":
+    "Grace or Elegance. The beauty of expressing oneself gracefully.",
+    "figure":
+    "艮離",
+    "reading":
+    "Elegance in action and thought leads to admiration and respect."
+}, {
+    "name":
+    "明夷 (Míng Yí)",
+    "description":
+    "The Darkening of the Light. Maintaining inner integrity during challenging times.",
+    "figure":
+    "坤離",
+    "reading":
+    "Preserve your inner light, even when external circumstances seem dark."
 }]
 
 
