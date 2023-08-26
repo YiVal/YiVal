@@ -30,7 +30,7 @@ based). [Check out our quickstart guide!]() →
 %%{init: { 'theme': 'default', 'flowchart': { 'htmlLabels': false, 'width': '50px', 'height': '50px' } }}%%
 graph TD
     A[Define your AI/ML task] --> B[Test dataset generation]
-    B --> C[Evaluation]
+    B --> C[Evaluate]
     C --> D[Improve]
     D --> C
     D --> E[Ideal settings for inference]
