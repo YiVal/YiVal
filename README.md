@@ -144,12 +144,21 @@ pip install yival
 
 ## Demo
 
-### Google colab demo
+With just the creation of a configuration file, you can easily use yival to evaluate different experiment environments, fitting unique experimentation needs. For example , we can define a pipeline that XX as follow :
 
-we provide Google Colab demo for you to experience YiVal's functionality without
-any setup required, which is a great way to get a hands-on feel for what is Yival!
+```
+# yaml
+```
 
-- Headline Generation [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](<https://colab.research.google.com/github/weiji14/deepbedmap/>]
+### Write landing page headlines for statups
+
+<!-- we provide Google Colab demo for you to experience YiVal's functionality without any setup required, which is a great way to get a hands-on feel for what is Yival!
+
+#### Write landing page headlines for statups -->
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1EiWUL8rE_kfNLXVPowCWCh6hwHFagvs_?usp=sharing)
+
+In this demo, we aim to find the optimal prompt that allows GPT-4 to generate landing page headlines based on company names. In this demo, LLM not only generates the prompt and test data, but also evaluates the results and selects the optimal prompt.
 
 ### Basic Interactive Mode
 
