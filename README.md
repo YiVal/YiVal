@@ -144,6 +144,13 @@ pip install yival
 
 ## Demo
 
+### Google colab demo
+
+we provide Google Colab demo for you to experience YiVal's functionality without
+any setup required, which is a great way to get a hands-on feel for what is Yival!
+
+- Headline Generation [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](<https://colab.research.google.com/github/weiji14/deepbedmap/>]
+
 ### Basic Interactive Mode
 
 To get started with a demo for basic interactive mode of YiVal,
