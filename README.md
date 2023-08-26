@@ -4,20 +4,20 @@
 
 Check our main website [here]().
 
+👉 Follow us: [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/YiValai.svg?style=social&label=Follow%20%40YiVal)](https://twitter.com/yivalloveaigc) | 
+[![](https://dcbadge.vercel.app/api/server/UBWW23E3?compact=true&style=flat)](https://discord.gg/UBWW23E3)
+
 [![Downloads](https://static.pepy.tech/badge/YiVal/month)](https://pepy.tech/project/YiVal)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Twitter](https://img.shields.io/twitter/url/https/twitter.com/YiValai.svg?style=social&label=Follow%20%40YiVal)](https://twitter.com/yivalloveaigc)
-[![](https://dcbadge.vercel.app/api/server/UBWW23E3?compact=true&style=flat)](https://discord.gg/UBWW23E3)
-[![Open in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/YiVal/YiVal)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/YiVal/YiVal)
 [![GitHub star chart](https://img.shields.io/github/stars/YiVal/YiVal?style=social)](https://star-history.com/#YiVal/YiVal)
 [![Dependency Status](https://img.shields.io/librariesio/github/YiVal/YiVal)](https://libraries.io/github/YiVal/YiVal)
 [![Open Issues](https://img.shields.io/github/issues-raw/YiVal/YiVal)](https://github.com/YiVal/YiVal/issues)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/YiVal/YiVal)
 
 **Production Support:** As you move your YiVal into production, we'd love to offer more hands-on support.
 Fill out [this form]() to share more about your use cases, and our team try our best to support !
 
-## What is YiVal
+## 🤔 What is YiVal?
 
 YiVal is an AIGC-Ops framework that allows you to iteratively tune your **AIGC model metadata, prompts and retrieval
 configs** all at once with your preferred choices of test dataset generation, evaluation algorithms and improvement strategies(RLHF
@@ -27,7 +27,8 @@ based). [Check out our quickstart guide!]() →
 🔧 Experiment Mode:
 
 ```mermaid
-flowchart TD
+%%{init: { 'theme': 'default', 'flowchart': { 'htmlLabels': false, 'width': '50px', 'height': '50px' } }}%%
+graph TD
     A[Define your AI/ML task] --> B[Test dataset generation]
     B --> C[Evaluation]
     C --> D[Improve]
@@ -38,7 +39,8 @@ flowchart TD
 🤖 Agent Mode (Auto-prompting):
 
 ```mermaid
-flowchart TD
+%%{init: { 'theme': 'default', 'flowchart': { 'htmlLabels': false, 'width': '50px', 'height': '50px' } }}%%
+graph TD
     A[Define your AI/ML task] --> B[Automated prompting]
     B --> C[Ideal settings for inference]
 ```
