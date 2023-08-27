@@ -1,3 +1,6 @@
+<!-- markdownlint-disable MD033 -->
+<!-- markdownlint-disable MD041 -->
+
 <p align="center">
     <h1 align="center">🧚🏻‍️ YiVal</h1>
 </p>
@@ -18,12 +21,13 @@
 </p>
 
 <p align="center">
-    <h5 align="center">⚡ Build any Generative AI application with evaluation and improvement ⚡</h5>
+    <h5 align="center">⚡ Build any Generative AI application with evaluation
+        and improvement ⚡</h5>
 </p>
 
-👉 Follow
-us: [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/YiValai.svg?style=social&label=Follow%20%40YiVal)](https://twitter.com/yivalloveaigc) |
-[![](https://dcbadge.vercel.app/api/server/4V4jyt2K?compact=true&style=flat)](https://discord.gg/4V4jyt2K)
+<!-- markdownlint-disable-next-line MD013 -->
+👉 Follow us: [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/YiValai.svg?style=social&label=Follow%20%40YiVal)](https://twitter.com/yivalloveaigc) |
+[![Discord](https://dcbadge.vercel.app/api/server/4V4jyt2K?compact=true&style=flat)](https://discord.gg/4V4jyt2K)
 
 [![Downloads](https://static.pepy.tech/badge/YiVal/month)](https://pepy.tech/project/YiVal)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -33,14 +37,15 @@ us: [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/YiValai.svg
 
 ## 🤔 What is YiVal?
 
-YiVal is an GenAI-Ops framework that allows you to iteratively tune your **Generative AI model metadata, params, prompts and
-retrieval
-configs** all at once with your preferred choices of test dataset generation, evaluation algorithms and improvement
-strategies. [Check out our quickstart guide!]() →
+YiVal is an GenAI-Ops framework that allows you to iteratively tune your **Generative
+ AI model metadata, params, prompts and retrieval configs** all at once with your
+ preferred choices of test dataset generation, evaluation algorithms and improvement
+ <!-- markdownlint-disable-next-line MD013 -->
+strategies. [Check out our quickstart guide!](https://github.com/YiVal/YiVal/blob/master/demo/tutorial_notebook/tutorial.md>) →
 
 ## 📣 What's Next?
 
-#### Expected Features in Sep
+### Expected Features in Sep
 
 - Add ROUGE and BERTScore evaluators
 - Add support to midjourney
