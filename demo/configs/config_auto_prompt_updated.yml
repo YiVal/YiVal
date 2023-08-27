@@ -1,6 +1,6 @@
 # This is a generated template. Modify the values as needed.
 
-custom_function: /Users/taofeng/YiVal/demo/weibo_auto_reply.reply.reply
+custom_function: /Users/taofeng/YiVal/demo/auto_reply.reply.reply
 dataset:
   file_path: demo/data/test_data.csv
   reader: csv_reader
