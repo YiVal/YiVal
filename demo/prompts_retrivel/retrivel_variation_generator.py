@@ -7,6 +7,7 @@ from langchain.docstore import InMemoryDocstore
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.schema import Document
 from langchain.vectorstores import FAISS
+
 from yival.evaluators.openai_prompt_based_evaluator import (
     CLASSIFY_STR,
     choices_to_string,
@@ -106,8 +107,8 @@ class RetrivelVariationGenerator(BaseVariationGenerator):
 
     def generate_variations(self) -> Iterator[List[WrapperVariation]]:
         documents = self.retriever.get_relevant_documents(
-            self.config.use_case
-        )  # type: ignore
+            self.config.use_case  # type: ignore
+        )
         options = [doc.page_content for doc in documents]
         choices, choices_strings = assign_labels_formatted(options)
         prompt_generation_message = [{
