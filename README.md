@@ -21,10 +21,6 @@
     <h5 align="center">⚡ Build any Generative AI application with evaluation and improvement ⚡</h5>
 </p>
 
-
-
-
-
 👉 Follow
 us: [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/YiValai.svg?style=social&label=Follow%20%40YiVal)](https://twitter.com/yivalloveaigc) |
 [![](https://dcbadge.vercel.app/api/server/4V4jyt2K?compact=true&style=flat)](https://discord.gg/4V4jyt2K)
@@ -33,7 +29,7 @@ us: [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/YiValai.svg
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub star chart](https://img.shields.io/github/stars/YiVal/YiVal?style=social)](https://star-history.com/#YiVal/YiVal)
 [![Dependency Status](https://img.shields.io/librariesio/github/YiVal/YiVal)](https://libraries.io/github/YiVal/YiVal)
-[![Open Issues](https://img.shields.io/github/issues-raw/YiVal/YiVal)](Issues · YiVal/YiVal)
+[![Open Issues](https://img.shields.io/github/issues-raw/YiVal/YiVal)](https://github.com/YiVal/YiVal/issues)
 
 ## 🤔 What is YiVal?
 
