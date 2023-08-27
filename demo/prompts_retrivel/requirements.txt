@@ -1,0 +1,12 @@
+faiss-cpu
+langchain
+loguru
+openai
+streamlit_chat
+tiktoken
+tqdm
+guidance
+pydantic
+lark
+pinecone-client
+pypdf
