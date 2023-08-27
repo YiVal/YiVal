@@ -89,7 +89,7 @@ the moment we receive a use-case to generating the perfect prompt.
 
 ### **Results in Real-Time**
 
-[Insert Screenshot of the Output Here]
+![Output Screenshot](https://github.com/YiVal/YiVal/assets/1544154/35216786-ac3c-4884-8818-68647511228d)
 
 Here's an example of what the system's output looks like in action. This gives
 you an idea of the kind of prompts it can generate and how ChatGPT might respond.
@@ -100,3 +100,5 @@ The world of AI is vast and sometimes complex. But tools like Yival and FAISS,
 when combined with LLMs like ChatGPT, can make tasks like prompt generation much
 simpler. By automating this process, we're taking a step towards more efficient
 and context-aware AI interactions.
+
+You can review the full code [here](https://github.com/YiVal/YiVal/tree/master/demo/prompts_retrivel)
