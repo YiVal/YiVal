@@ -1046,20 +1046,34 @@ def create_dash_app(
         [Input('evaluator-dropdown-token', 'value')]
     )
     def display_correlation_coefficient(selected_evaluator):
-        if df[selected_evaluator].dtype == 'object':
-            temp_evaluator_data = df[selected_evaluator].str.extract(
-                '(\d+\.\d+)'
-            ).astype(float)
-        else:
-            temp_evaluator_data = df[selected_evaluator]
+        try:
+            # Create a temporary variable to hold numerical data
+            if df[selected_evaluator
+                  ].dtype == 'object':  # if it's a string type
+                # Extract the numerical part from each entry
+                temp_evaluator_data = df[selected_evaluator].str.extract(
+                    '(\d+\.\d+)'
+                ).astype(float)
+            else:
+                # If it's already numerical, use it as is
+                temp_evaluator_data = df[selected_evaluator]
 
-        temp_avg_token_usage = pd.to_numeric(
-            df['Average Token Usage'], errors='coerce'
-        )
+            # Ensure 'Average Token Usage' is also numerical
+            temp_avg_token_usage = pd.to_numeric(
+                df['Average Token Usage'], errors='coerce'
+            )
 
-        if temp_avg_token_usage is not None and temp_evaluator_data is not None:
-            correlation = temp_avg_token_usage.corr(temp_evaluator_data)
-            return f"Correlation between Average Token Usage and {selected_evaluator}: {correlation:.2f}"
+            # Check if the columns exist and are not null, and if their lengths match
+            if temp_avg_token_usage is not None and temp_evaluator_data is not None and len(
+                temp_avg_token_usage
+            ) == len(temp_evaluator_data):
+                correlation = temp_avg_token_usage.corr(temp_evaluator_data)
+                return f"Correlation between Average Token Usage and {selected_evaluator}: {correlation:.2f}"
+            else:
+                return "Data not available for correlation calculation."
+
+        except Exception as e:
+            return f"An error occurred: {str(e)}"
 
     @app.callback(
         Output('slider-values-store', 'data'),
