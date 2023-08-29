@@ -40,8 +40,9 @@
 YiVal is an GenAI-Ops framework that allows you to iteratively tune your **Generative
  AI model metadata, params, prompts and retrieval configs** all at once with your
  preferred choices of test dataset generation, evaluation algorithms and improvement
- <!-- markdownlint-disable-next-line MD013 -->
-strategies. [Check out our quickstart guide!](https://github.com/YiVal/YiVal/blob/master/demo/tutorial_notebook/tutorial.md>) →
+strategies.
+  <!-- markdownlint-disable-next-line MD013 -->
+[Check out our quickstart guide!](https://github.com/YiVal/YiVal/blob/master/demo/tutorial_notebook/tutorial.md) →
 
 ## 📣 What's Next?
 
@@ -65,6 +66,45 @@ strategies. [Check out our quickstart guide!](https://github.com/YiVal/YiVal/blo
 ```sh
 pip install yival
 ```
+
+## Demo
+
+### Basic Interactive Mode
+
+To get started with a demo for basic interactive mode of YiVal, run the following command:
+
+```python
+yival demo --basic_interactive
+```
+
+Once started, navigate to the following address in your web browser:
+
+<http://127.0.0.1:8073/interactive>
+<details>
+  <summary>Click to view the screenshot</summary>
+  
+  ![Screenshot 2023-08-17 at 10 55 31 PM](https://github.com/YiVal/YiVal/assets/1544154/a720c3ad-1288-4830-8a3d-377d9827f46e)
+  
+</details>
+
+For more details on this demo, check out the [Basic Interactive Mode Demo](https://github.com/YiVal/YiVal/blob/master/docs/docs/basic_interactive_mode.md#demo).
+
+### Question Answering with expected result evaluator
+
+```python
+yival demo --qa_expected_results
+```
+
+Once started, navigate to the following address in your web browser:
+<http://127.0.0.1:8073/>
+<details>
+  <summary>Click to view the screenshot</summary>
+  
+ <img width="1288" alt="Screenshot 2023-08-18 at 1 11 44 AM" src="https://github.com/YiVal/YiVal/assets/1544154/4e9a182f-07ba-413e-9160-f38bfdc743ce">
+
+</details>
+
+For more details, check out the [Question Answering with expected result evaluator](https://github.com/YiVal/YiVal/blob/master/docs/qa_expected_results.md#demo).
 
 ### Fun Cast Fortune Telling
 
