@@ -322,8 +322,10 @@ def create_dash_app(
         ])
 
     def analysis_layout(df):
-        evaluator_outputs = [col for col in df.columns if "Output" in col]
-
+        evaluator_outputs = [
+            col for col in df.columns
+            if (col != 'Combo Key' and 'Sample' not in col)
+        ]
         return html.Div([
             html.Div([
                 dcc.Dropdown(
@@ -1044,10 +1046,19 @@ def create_dash_app(
         [Input('evaluator-dropdown-token', 'value')]
     )
     def display_correlation_coefficient(selected_evaluator):
-        if 'Average Token Usage' in df:
-            correlation = df['Average Token Usage'].corr(
-                df[selected_evaluator]
-            )
+        if df[selected_evaluator].dtype == 'object':
+            temp_evaluator_data = df[selected_evaluator].str.extract(
+                '(\d+\.\d+)'
+            ).astype(float)
+        else:
+            temp_evaluator_data = df[selected_evaluator]
+
+        temp_avg_token_usage = pd.to_numeric(
+            df['Average Token Usage'], errors='coerce'
+        )
+
+        if temp_avg_token_usage is not None and temp_evaluator_data is not None:
+            correlation = temp_avg_token_usage.corr(temp_evaluator_data)
             return f"Correlation between Average Token Usage and {selected_evaluator}: {correlation:.2f}"
 
     @app.callback(
@@ -1480,4 +1491,4 @@ def display_results_dash(
         experiment_data, experiment_config, function_args, all_combinations,
         state, logger, evaluator, interactive
     )
-    app.run(debug=False, port=8073)
+    app.run(debug=True, port=8073)

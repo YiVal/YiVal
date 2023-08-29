@@ -111,7 +111,6 @@ class ExperimentRunner:
         all_combinations = state.get_all_variation_combinations()
 
         source_type = self.config["dataset"]["source_type"]  # type: ignore
-        experiment_input_path = ""
         if source_type in ["dataset", "machine_generated"]:  # type: ignore
             if experiment_input_path and os.path.exists(experiment_input_path):
                 with open(experiment_input_path, 'rb') as file:
@@ -127,18 +126,18 @@ class ExperimentRunner:
                     results, evaluator
                 )  # type: ignore
 
-            strategy = get_selection_strategy(self.config)
-            if strategy:
-                context_trade_off = SelectionContext(strategy=strategy)
-                experiment.selection_output = context_trade_off.execute_selection( # type: ignore
-                    experiment=experiment
-                )
+                strategy = get_selection_strategy(self.config)
+                if strategy:
+                    context_trade_off = SelectionContext(strategy=strategy)
+                    experiment.selection_output = context_trade_off.execute_selection( # type: ignore
+                        experiment=experiment
+                    )
 
-            improver = get_improver(self.config)
-            if improver:
-                experiment.improver_output = improver.improve(
-                    experiment, self.config, evaluator, logger
-                )
+                improver = get_improver(self.config)
+                if improver:
+                    experiment.improver_output = improver.improve(
+                        experiment, self.config, evaluator, logger
+                    )
 
             if output_path:
                 with open(output_path, 'wb') as file:
