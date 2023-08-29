@@ -62,7 +62,7 @@ class Reply:
     def __init__(self):
         self.summaries = get_corpus_summaries(
             [],
-            cache_dir="demo/weibo_auto_reply/heiyueguang/summaries",
+            cache_dir="demo/auto_reply/heiyueguang/summaries",
             language="Chinese",
         )
         documents = []
