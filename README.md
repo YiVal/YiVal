@@ -71,7 +71,8 @@ pip install yival
 
 ### Basic Interactive Mode
 
-To get started with a demo for basic interactive mode of YiVal, run the following command:
+To get started with a demo for basic interactive mode of YiVal, run the
+following command:
 
 ```python
 yival demo --basic_interactive
