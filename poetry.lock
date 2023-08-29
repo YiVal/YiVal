@@ -1734,6 +1734,19 @@ markdown = ">=3.2"
 pyyaml = "*"
 
 [[package]]
+name = "pyngrok"
+version = "6.0.0"
+description = "A Python wrapper for ngrok."
+optional = false
+python-versions = ">=3.5"
+files = [
+    {file = "pyngrok-6.0.0.tar.gz", hash = "sha256:dd8a87944b8e28572e3d126bfb2c81a2948594575f5237eefd3651ae0b487155"},
+]
+
+[package.dependencies]
+PyYAML = "*"
+
+[[package]]
 name = "pytest"
 version = "7.4.0"
 description = "pytest: simple powerful testing with Python"
@@ -2622,4 +2635,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<4"
-content-hash = "58afd9d5c86330dd8c8ab3eeefad381a20056a2ac41b7bd1fc0d73d6f0e9a78a"
+content-hash = "23281f6cdf87130be9ded89d9b161072d754ee431aab5c216a8ff2043969c1e0"

@@ -100,3 +100,5 @@ The world of AI is vast and sometimes complex. But tools like Yival and FAISS,
 when combined with LLMs like ChatGPT, can make tasks like prompt generation much
 simpler. By automating this process, we're taking a step towards more efficient
 and context-aware AI interactions.
+
+You can review the full code [here](https://github.com/YiVal/YiVal/tree/master/demo/prompts_retrivel)
