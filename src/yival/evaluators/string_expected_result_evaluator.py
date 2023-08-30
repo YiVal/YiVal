@@ -11,8 +11,6 @@ Classes:
 """
 
 import json
-from typing import List, Union
-from PIL.PngImagePlugin import PngImageFile
 
 from ..schemas.evaluator_config import (
     EvaluatorOutput,
@@ -27,7 +25,7 @@ from .base_evaluator import BaseEvaluator
 from .utils import fuzzy_match_util
 
 
-def is_valid_json(s: Union[str, List[PngImageFile]]) -> bool:
+def is_valid_json(s: str) -> bool:
     """
     Check if the given string is a valid JSON.
 
@@ -38,16 +36,13 @@ def is_valid_json(s: Union[str, List[PngImageFile]]) -> bool:
         bool: True if the input string is a valid JSON, False otherwise.
 
     """
-    if isinstance(s, str):
-        try:
-            json.loads(s)
-            return True
-        except ValueError:
-            return False
-    elif isinstance(s, list):
+
+    try:
+        json.loads(s)
+        return True
+    except ValueError:
         return False
-    else:
-        return False
+
 
 class StringExpectedResultEvaluator(BaseEvaluator):
     """
