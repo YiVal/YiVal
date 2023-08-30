@@ -66,7 +66,7 @@ def logo_generation(tech_startup_business):
       "msg":
         str(
             StringWrapper(
-                "Design a single image logo for a tech startup company. Visually appealing and memorable. No text in graphic. Company names ", name="task"
+                "Design a single image logo for a tech startup company. The logo should represent cutting-edge technology, forward-thinking, high-quality solutions. It should be visually appealing and memorable, incorporating the company's name or its initials. No text in graphic. Company names ", name="task"
             )
         ) + f'{tech_startup_business}',
       "ref": "",
@@ -78,7 +78,7 @@ def logo_generation(tech_startup_business):
         total=3,
         backoff_factor=1,
         status_forcelist=[429, 500, 502, 503, 504],
-        allowed_methods=["HEAD", "GET", "OPTIONS", "POST"]
+        allowed_methods=["HEAD", "GET", "OPTIONS", "POST"],
     )
 
     adapter = HTTPAdapter(max_retries=retry_strategy)
@@ -87,7 +87,7 @@ def logo_generation(tech_startup_business):
     s.mount("https://", adapter)
 
     post_response = post_request(payload)
-    messageid = post_response.get("messageid")
+    messageid = post_response.get("messageId")
     response = get_request(messageid)
     logo_res=load_image(response)
     return logo_res

@@ -38,13 +38,16 @@ def is_valid_json(s: Union[str, List[PngImageFile]]) -> bool:
         bool: True if the input string is a valid JSON, False otherwise.
 
     """
-
-    try:
-        json.loads(s)
-        return True
-    except ValueError:
+    if isinstance(s, str):
+        try:
+            json.loads(s)
+            return True
+        except ValueError:
+            return False
+    elif isinstance(s, list):
         return False
-
+    else:
+        return False
 
 class StringExpectedResultEvaluator(BaseEvaluator):
     """
