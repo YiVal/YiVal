@@ -32,6 +32,9 @@ pandas = "^2.0.3"
 dash-bootstrap-components = "^1.4.2"
 aiohttp-socks = "^0.8.0"
 pyngrok = "^6.0.0"
+faiss-cpu = "^1.7.4"
+langchain = "^0.0.275"
+tiktoken = "^0.4.0"
 
 [tool.poetry.group.doc.dependencies]
 mkdocs = "*"
