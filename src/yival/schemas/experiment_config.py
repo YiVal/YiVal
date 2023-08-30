@@ -6,6 +6,7 @@ experiment.
 """
 from dataclasses import asdict, dataclass, field
 from typing import Any, Callable, Dict, List, Optional, Tuple, Type, Union
+from PIL.PngImagePlugin import PngImageFile
 
 from .combination_improver_configs import BaseCombinationImproverConfig
 from .common_structures import InputData
@@ -264,7 +265,7 @@ class ExperimentResult:
     Attributes:
     - combination (Dict[str, str]): The combination of wrapper names and their active
       variation_ids for this example.
-    - raw_output (str): Raw output for this example.
+    - raw_output (Unoin[str, List[PngImageFile]): Raw output for this example.
     - latency (float): Latency for producing the output for this example
       (in milliseconds or appropriate unit).
     - token_usage (int): Number of tokens used for this example.
@@ -275,7 +276,7 @@ class ExperimentResult:
 
     input_data: InputData
     combination: Dict[str, str]
-    raw_output: str
+    raw_output: Union[str, List[PngImageFile]]
     latency: float
     token_usage: int
     evaluator_outputs: Optional[List[EvaluatorOutput]] = None
