@@ -35,6 +35,7 @@ pyngrok = "^6.0.0"
 faiss-cpu = "^1.7.4"
 langchain = "^0.0.275"
 tiktoken = "^0.4.0"
+pillow = "9.4.0"
 
 [tool.poetry.group.doc.dependencies]
 mkdocs = "*"

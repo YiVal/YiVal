@@ -25,7 +25,7 @@ dataset:
 variations:
   - name: task
     variations:
-      - instantiated_value: Generate landing page logo image for
+      - instantiated_value: Generate logo image for
         value: Generate landing page logo image for
         value_type: str
         variation_id: null
