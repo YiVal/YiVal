@@ -1,0 +1,50 @@
+custom_function: demo.logo_generation.logo_generation
+description: Generated experiment config
+dataset:
+  data_generators:
+    openai_prompt_data_generator:
+      chunk_size: 1
+      diversify: true
+      prompt:
+          "Please provide a concrete and realistic test case as a dictionary for function invocation using the ** operator.
+          Only include parameters, excluding description and name.
+          Ensure it's succinct and well-structured.
+          **Only provide the dictionary.**"
+      input_function:
+        description:
+          Given the species of an animal and its character, generate a corresponding story
+        name: headline_generation_for_business
+        parameters:
+          species: str
+          character: str
+      number_of_examples: 5
+      openai_model_name: gpt-4
+      output_path: null
+  source_type: machine_generated
+
+variations:
+  - name: task
+    generator_name: openai_prompt_based_variation_generator
+    generator_config:
+      openai_model_name: gpt-4
+      number_of_variations: 3
+      diversify: true
+      variables: null
+      prompt: 
+        - content: |-
+            Your object is to construct a concise instruction prompt for GPT-4. This prompt will instruct GPT-4 as a gentle, imaginative children's writer to write all kinds of cute, kid-friendly stories based on animal species and personalities for an audience of YOUNG ADULTS and TEENAGERS.
+            Points to emphasize in your instruction:
+              -  GPT4 Answers should have a short storyline and should be sufficiently imaginative, answers should focus on the location in which the story takes place with its style of drawing, the location and style of drawing can be contrary to the laws of reality, dream-like or realistic.
+              -   The story must be kept lively and as short, short, short, short, short as possible. The story should have a variety of backgrounds + drawing styles and fully emphasize the location where the story takes place; it can be dreamlike and generally bizarre.
+              -  Be sure to use words that are as easy to understand as possible so TEENAGERS can easily understand the story.
+              -   Please limit the output to within 300 words
+            - {animal_species} represent the specs of the animal
+            - {animal_character} represent the character of the animal
+            - At all times, GPT-4 must give a response as an animal story
+
+            Craft your instruction Ensure that GPT-4 is able to fully understand the types and personalities of small animals and write engaging and fully pictorial stories.
+            keep your output crisp: only the prompt, devoid of any extraneous content.
+
+          role: system
+
+evaluators: []
