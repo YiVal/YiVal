@@ -7,8 +7,8 @@ import time
 import requests
 from PIL import Image
 
-from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
+from requests.adapters import HTTPAdapter #type: ignore
+from requests.packages.urllib3.util.retry import Retry #type: ignore
 
 from yival.wrappers.string_wrapper import StringWrapper
 
