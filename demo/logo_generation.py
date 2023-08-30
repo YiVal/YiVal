@@ -92,5 +92,5 @@ def logo_generation(tech_startup_business):
     logo_res=load_image(response)
     return logo_res
 
-# if __name__ == "__main__":
-#     logo_generation('Innovatech Solutions')
+if __name__ == "__main__":
+    logo_generation('Innovatech Solutions')

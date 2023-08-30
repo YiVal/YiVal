@@ -1,6 +1,6 @@
-from fuzzywuzzy import fuzz
 from typing import List, Union
 from PIL.PngImagePlugin import PngImageFile
+from fuzzywuzzy import fuzz
 
 def fuzzy_match_util(
     generated: str, expected: Union[str, List[PngImageFile]], threshold: int = 80
@@ -19,6 +19,11 @@ def fuzzy_match_util(
     Returns:
         int: Returns 1 if there's a match, 0 otherwise.
     """
-    if fuzz.ratio(generated, expected) > threshold:
-        return True
-    return False
+    if isinstance(expected, str):
+        if fuzz.ratio(generated, expected) > threshold:
+            return True
+    elif isinstance(expected, list):
+        return False
+    else:
+        return False
+        
