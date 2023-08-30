@@ -145,3 +145,8 @@ class OpenAIPromptBasedEvaluatorConfig(EvaluatorConfig):
     description: str = "This is the description of the evaluator."
     scale_description: str = "0-4"
     choice_scores: Optional[Dict[str, float]] = None
+
+
+@dataclass
+class BertScoreEvaluatorConfig(EvaluatorConfig):
+    evaluator_type: EvaluatorType = EvaluatorType.INDIVIDUAL
