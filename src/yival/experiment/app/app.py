@@ -2,6 +2,7 @@
 
 import ast
 import base64
+from email.mime import image
 import hashlib
 import io
 import os
@@ -65,6 +66,11 @@ def handle_output(output):
     else:
         return html.P(str(output))
 
+def df_to_table(df):
+    return html.Table(
+        [html.Tr([html.Th(col) for col in df.columns])] +
+        [html.Tr([html.Td(row[col]) for col in df.columns]) for index, row in df.iterrows()]
+    )
 
 def create_dash_app(
     experiment_data: Experiment, experiment_config: ExperimentConfig,
@@ -225,16 +231,17 @@ def create_dash_app(
             experiment_data.combination_aggregated_metrics,
             experiment_data.group_experiment_results
         )
-        print(f"[DEBUG][experiment_result_layout] df: {df}")
         csv_string = df.to_csv(index=False, encoding='utf-8')
         csv_data_url = 'data:text/csv;charset=utf-8,' + urllib.parse.quote(
             csv_string
         )
+        sample_columns = [col for col in df.columns if "Sample" in col]
+        contains_lists = any(df[col].apply(lambda x: isinstance(x, list)).any() for col in sample_columns)
         return html.Div([
             html.H3(
                 "Experiment Results Analysis", style={'textAlign': 'center'}
             ),
-            combo_aggregated_metrics_layout(df),
+            image_combo_aggregated_metrics_layout(df) if contains_lists else combo_aggregated_metrics_layout(df),
             html.Hr(),
             html.A(
                 'Export to CSV',
@@ -409,12 +416,8 @@ def create_dash_app(
                 children='improver'
             )
         ])
-
     def combo_aggregated_metrics_layout(df):
-        print(f"[DEBUG][combo_aggregated_metrics_layout] df: {df}")
         columns = [{"name": i, "id": i} for i in df.columns]
-        print(f"[DEBUG][combo_aggregated_metrics_layout] columns: {columns}")
-
         sample_columns = [col for col in df.columns if "Sample" in col]
         sample_style = [{
             'if': {
@@ -426,32 +429,8 @@ def create_dash_app(
         styles = highlight_best_values(df, *df.columns)
         styles += generate_heatmap_style(df, *df.columns)
         styles += sample_style
-
-        # Highlight the best_combination row
         best_combination = experiment_data.selection_output.best_combination if experiment_data.selection_output else None
-        data = df.to_dict('records')
         tooltip_data = []
-
-        for col in sample_columns:
-            df[col] = df[col].apply(
-                lambda x: pil_image_to_base64(x[0]) if isinstance(x, list) and
-                len(x) > 0 and isinstance(x[0], Image.Image) else x
-            )
-
-        for row in data:
-            tooltip_row = {}
-            for col in df.columns:
-                if isinstance(row[col], Image.Image):
-                    img_str = pil_image_to_base64(row[col])
-                    tooltip_row[col] = {
-                        'value':
-                        f'<img src="{img_str}" width="200" height="200" />',
-                        'type': 'html'
-                    }
-                    row[
-                        col
-                    ] = "Image (hover to view)"  # Replace the image in the cell with a placeholder text
-            tooltip_data.append(tooltip_row)
         if best_combination:
             best_combination_str = "\n".join(
                 textwrap.wrap(
@@ -464,9 +443,9 @@ def create_dash_app(
                     'filter_query':
                     f'{{Combo Key}} eq "{best_combination_str}"',
                 },
-                'backgroundColor': '#DFF0D8',  # Light green color
-                'border': '2px solid #28A745',  # Darker green border
-                'color': '#155724'  # Dark text color for contrast
+                'backgroundColor': '#DFF0D8', 
+                'border': '2px solid #28A745', 
+                'color': '#155724' 
             })
 
             # If selection_reason is available, add it as a tooltip:
@@ -491,7 +470,7 @@ def create_dash_app(
         return dash_table.DataTable(
             id='combo-metrics-table',
             columns=columns,
-            data=data,
+            data=df.to_dict('records'),
             style_data_conditional=styles,
             style_cell={
                 'whiteSpace': 'normal',
@@ -545,6 +524,31 @@ def create_dash_app(
             tooltip_data=tooltip_data,
             tooltip_duration=None
         )
+    def image_combo_aggregated_metrics_layout(df):
+        print(f"[DEBUG][combo_aggregated_metrics_layout] df: {df}")
+        columns = [{"name": i, "id": i} for i in df.columns]
+        print(f"[DEBUG][combo_aggregated_metrics_layout] columns: {columns}")
+
+        sample_columns = [col for col in df.columns if "Sample" in col]
+
+        # Convert PIL Image to base64 image string and wrap with html.Img
+        # Set image height and width to 30% of original size
+        for col in sample_columns:
+            df[col] = df[col].apply(
+                lambda x: html.Img(src=pil_image_to_base64(x[0]), style={'height':'30%', 'width':'30%'}) if isinstance(x, list) and
+                len(x) > 0 and isinstance(x[0], Image.Image) else x
+            )
+
+        # Create html.Table
+        table = html.Table(
+            # Header
+            [html.Tr([html.Th(col) for col in df.columns])] +
+
+            # Body
+            [html.Tr([html.Td(row[col]) for col in df.columns]) for index, row in df.iterrows()]
+        )
+
+        return table
 
     def group_key_combination_layout(
         group_experiment_results: List[GroupedExperimentResult],
