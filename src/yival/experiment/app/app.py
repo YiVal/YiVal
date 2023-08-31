@@ -195,6 +195,7 @@ def create_dash_app(
             )
         return df
 
+    #fix here
     def experiment_results_layout():
 
         df = generate_combo_metrics_data(
@@ -387,6 +388,8 @@ def create_dash_app(
 
     def combo_aggregated_metrics_layout(df):
 
+        print(f"[DEBUG] df:{df}")
+
         columns = [{"name": i, "id": i} for i in df.columns]
         sample_columns = [col for col in df.columns if "Sample" in col]
         sample_style = [{
@@ -400,7 +403,36 @@ def create_dash_app(
         styles += generate_heatmap_style(df, *df.columns)
         styles += sample_style
 
+        print("hello world")
+
+        print(f"[DEBUG] sample_columns:{sample_columns}")
+
+        def pil_to_dash_img(image):
+            return html.Img(src=image, style={'width': '100px'})
+
+        for col in sample_columns:
+            df[col] = df[col].apply(pil_to_dash_img)
+        # for col in sample_columns:
+        #     for pic_list in df[col]:
+        #         for pic in pic_list:
+        #             pic.show()
+        # print(pic)
+        # print(f"[DEBUG] pic_list {pic_list}")
+
+        # print(f"[DEBUG] pic:{pic}")
+        # for col in sample_columns:
+        #     df[col] = df[col].apply(
+        #         lambda img_list: [
+        #             html.Img(
+        #                 src=
+        #                 f"data:image/png;base64,{base64.b64encode(img.tobytes()).decode()}"
+        #             ) for img in img_list
+        #         ]
+        #     )
+
         # Highlight the best_combination row
+
+        print(f"[DEBUG] df:{df}")
         best_combination = experiment_data.selection_output.best_combination if experiment_data.selection_output else None
         tooltip_data = []
         if best_combination:

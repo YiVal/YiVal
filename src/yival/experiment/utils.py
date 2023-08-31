@@ -262,6 +262,7 @@ def run_single_input(
         for name, variation in combo.items():
             state.set_specific_variation(name, variation)
             start_time = time.time()
+            print(f"[DEBUG] **d.content:{d.content}")
             res = call_function_from_string(
                 config["custom_function"],  # type: ignore
                 **d.content

@@ -75,6 +75,7 @@ def load_image(response):
         if response.status_code == 200:
             image_data = response.content
             image = Image.open(io.BytesIO(image_data))
+            # image.show()
             logo_list.append(image)
         else:
             print(

@@ -110,6 +110,8 @@ class ExperimentRunner:
 
         all_combinations = state.get_all_variation_combinations()
 
+        print(f"[DEBUG] all_combinations:{all_combinations}")
+
         source_type = self.config["dataset"]["source_type"]  # type: ignore
         if source_type in ["dataset", "machine_generated"]:  # type: ignore
             if experiment_input_path and os.path.exists(experiment_input_path):
@@ -122,6 +124,12 @@ class ExperimentRunner:
                 results = self._process_dataset(
                     all_combinations, state, logger, evaluator
                 )
+
+                # for result in results:
+                #     print(f"[DEBUG] raw_output: {result.raw_output}")
+                #     for pic in result.raw_output:
+                #         pic.show()
+
                 experiment = generate_experiment(
                     results, evaluator
                 )  # type: ignore
