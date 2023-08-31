@@ -24,6 +24,7 @@ HEADERS = {
 s = requests.Session()
 
 def prompt_generation(prompt: str) -> str:
+    '''generate prompt for chatgpt based on the input'''
     print(f"[DEBUG] chatgpt input:{prompt}")
     openai.api_key = os.getenv("OPENAI_API_KEY")
     messages = [{"role": "user", "content": prompt}]
@@ -37,13 +38,13 @@ def prompt_generation(prompt: str) -> str:
     print(f"[DEBUG] chatgpt output:{res}")
     return res
 
-def post_request(payload: str) -> dict():
+def post_request(payload) :
     '''post request to get messageid'''
     url = f"{BASE_URL}/v2/imagine"
     response = s.post(url, headers=HEADERS, data=payload)
     return response.json()
 
-def get_request(messageId: str) -> dict():
+def get_request(messageId):
     '''get response from messageId'''
     url = f"{BASE_URL}/v2/message/{messageId}?expireMins=2"
     while True:
@@ -51,15 +52,14 @@ def get_request(messageId: str) -> dict():
         response = s.get(url, headers=HEADERS)
         print(f"[DEBUG] response: {response}, reponse_text:{response.text}")
         response_json = response.json()
-        '''if get response, then break'''
         if response_json.get('progress') == 100:
             break
     print(
-        f"[INFO][logl_generation] Successfully get response from messageId: {messageId}"
+        f"[INFO][logo_generation] Successfully get response from messageId: {messageId}"
     )
     return response.json()
 
-def load_image(response: dict()):
+def load_image(response):
     '''load image from response'''
     url = f"{BASE_URL}/getImage"
     image_urls = response['response']['imageUrls']
@@ -75,11 +75,12 @@ def load_image(response: dict()):
             print(
                 f"[Error][logo_generation] Failed to load image from {image_url}. Response code: {response.status_code}"
             )
-    print(f"[INFO][logo_generation] Successfully load images.")
+    print("[INFO][logo_generation] Successfully load images.")
 
     return logo_list
 
-def logo_generation(species: str, character: str) -> list():
+def logo_generation(species, character):
+    '''generate logo for a tech startup company.'''
     payload = json.dumps({
         "msg":
         prompt_generation(
