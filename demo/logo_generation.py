@@ -1,20 +1,20 @@
 '''This script is used to generate logo for a tech startup company.'''
 
-import os
 import io
 import json
+import os
 import time
-import requests
-import openai
-from PIL import Image
 
-from requests.adapters import HTTPAdapter #type: ignore
-from requests.packages.urllib3.util.retry import Retry #type: ignore
+import openai
+import requests
+from PIL import Image
+from requests.adapters import HTTPAdapter  # type: ignore
+from requests.packages.urllib3.util.retry import Retry  # type: ignore
 
 from yival.wrappers.string_wrapper import StringWrapper
 
 TOKEN = os.getenv('MIDJOURNEY_TOKEN')
-BASE_URL = "https://api.thenextleg.io" #Add MIDJOURNEY_TOKEN to the environment variables
+BASE_URL = "https://api.thenextleg.io"  #Add MIDJOURNEY_TOKEN to the environment variables
 
 HEADERS = {
     'Authorization': f'Bearer {TOKEN}',
@@ -22,6 +22,7 @@ HEADERS = {
 }
 
 s = requests.Session()
+
 
 def prompt_generation(prompt: str) -> str:
     '''generate prompt for chatgpt based on the input'''
@@ -38,11 +39,13 @@ def prompt_generation(prompt: str) -> str:
     print(f"[DEBUG] chatgpt output:{res}")
     return res
 
-def post_request(payload) :
+
+def post_request(payload):
     '''post request to get messageid'''
     url = f"{BASE_URL}/v2/imagine"
     response = s.post(url, headers=HEADERS, data=payload)
     return response.json()
+
 
 def get_request(messageId):
     '''get response from messageId'''
@@ -58,6 +61,7 @@ def get_request(messageId):
         f"[INFO][logo_generation] Successfully get response from messageId: {messageId}"
     )
     return response.json()
+
 
 def load_image(response):
     '''load image from response'''
@@ -78,6 +82,7 @@ def load_image(response):
     print("[INFO][logo_generation] Successfully load images.")
 
     return logo_list
+
 
 def logo_generation(species, character):
     '''generate logo for a tech startup company.'''
@@ -127,8 +132,9 @@ def logo_generation(species, character):
     post_response = post_request(payload)
     messageid = post_response.get("messageId")
     response = get_request(messageid)
-    logo_res=load_image(response)
+    logo_res = load_image(response)
     return logo_res
+
 
 if __name__ == "__main__":
     logo_generation('duck', 'cute')
