@@ -5,6 +5,7 @@ import io
 import json
 import time
 import requests
+import openai
 from PIL import Image
 
 from requests.adapters import HTTPAdapter #type: ignore
@@ -22,58 +23,94 @@ HEADERS = {
 
 s = requests.Session()
 
-def post_request(payload):
+def prompt_generation(prompt: str) -> str:
+    print(f"[DEBUG] chatgpt input:{prompt}")
+    openai.api_key = os.getenv("OPENAI_API_KEY")
+    messages = [{"role": "user", "content": prompt}]
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=messages,
+        temperature=1.0,
+        max_tokens=300
+    )
+    res = response['choices'][0]['message']['content'][:1000]
+    print(f"[DEBUG] chatgpt output:{res}")
+    return res
+
+def post_request(payload: str) -> dict():
     '''post request to get messageid'''
     url = f"{BASE_URL}/v2/imagine"
     response = s.post(url, headers=HEADERS, data=payload)
     return response.json()
 
-def get_request(messageid):
-    '''get response from messageid'''
-    url = f"{BASE_URL}/v2/message/{messageid}?expireMins=2"
+def get_request(messageId: str) -> dict():
+    '''get response from messageId'''
+    url = f"{BASE_URL}/v2/message/{messageId}?expireMins=2"
     while True:
+        time.sleep(2)
         response = s.get(url, headers=HEADERS)
+        print(f"[DEBUG] response: {response}, reponse_text:{response.text}")
         response_json = response.json()
+        '''if get response, then break'''
         if response_json.get('progress') == 100:
             break
-        else:
-            time.sleep(2)
-    print(f"Successfully get response from messageid: {messageid}")
+    print(
+        f"[INFO][logl_generation] Successfully get response from messageId: {messageId}"
+    )
     return response.json()
 
-def load_image(response):
+def load_image(response: dict()):
     '''load image from response'''
     url = f"{BASE_URL}/getImage"
     image_urls = response['response']['imageUrls']
-    logo_list=[]
+    logo_list = []
     for image_url in image_urls:
-        payload = json.dumps({
-            "imgUrl": image_url
-        })
+        payload = json.dumps({"imgUrl": image_url})
         response = s.post(url, headers=HEADERS, data=payload)
         if response.status_code == 200:
             image_data = response.content
             image = Image.open(io.BytesIO(image_data))
             logo_list.append(image)
         else:
-            print(f"Failed to load image from {image_url}. Response code: {response.status_code}")
-    print("Successfully load images.")
+            print(
+                f"[Error][logo_generation] Failed to load image from {image_url}. Response code: {response.status_code}"
+            )
+    print(f"[INFO][logo_generation] Successfully load images.")
 
     return logo_list
 
-def logo_generation(tech_startup_business):
+def logo_generation(species: str, character: str) -> list():
     payload = json.dumps({
-      "msg":
-        str(
-            StringWrapper(
-                "Design a single image logo for a tech startup company. The logo should represent cutting-edge technology, forward-thinking, high-quality solutions. It should be visually appealing and memorable, incorporating the company's name or its initials. No text in graphic. Company names ", name="task"
+        "msg":
+        prompt_generation(
+            str(
+                StringWrapper(
+                    "Error",
+                    name="task",
+                    variables={
+                        "animal_species": species,
+                        "animal_character": character,
+                    }
+                )
             )
-        ) + f'{tech_startup_business}',
-      "ref": "",
-      "webhookOverride": "", 
-      "ignorePrefilter": "false"
+        ),
+        # str(
+        #     StringWrapper(
+        #         "Design a single image logo for a tech startup company. The logo should represent cutting-edge technology, forward-thinking, high-quality solutions. It should be visually appealing and memorable, incorporating the company's name or its initials. No text in graphic. Company names ",
+        #         name="task",
+        #         variables={
+        #             "animal_species": species,
+        #             "animal_character": character,
+        #         }
+        #     )
+        # ) + f'{tech_startup_business}',
+        "ref":
+        "",
+        "webhookOverride":
+        "",
+        "ignorePrefilter":
+        "false"
     })
-
     retry_strategy = Retry(
         total=3,
         backoff_factor=1,
@@ -93,4 +130,4 @@ def logo_generation(tech_startup_business):
     return logo_res
 
 if __name__ == "__main__":
-    logo_generation('Innovatech Solutions')
+    logo_generation('duck', 'cute')

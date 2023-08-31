@@ -265,7 +265,7 @@ class ExperimentResult:
     Attributes:
     - combination (Dict[str, str]): The combination of wrapper names and their active
       variation_ids for this example.
-    - raw_output (Unoin[str, List[PngImageFile]): Raw output for this example.
+    - raw_output (Any): Raw output for this example. Support str and PILimage
     - latency (float): Latency for producing the output for this example
       (in milliseconds or appropriate unit).
     - token_usage (int): Number of tokens used for this example.
@@ -276,7 +276,7 @@ class ExperimentResult:
 
     input_data: InputData
     combination: Dict[str, str]
-    raw_output: Union[str, List[PngImageFile]]
+    raw_output: Any
     latency: float
     token_usage: int
     evaluator_outputs: Optional[List[EvaluatorOutput]] = None

@@ -17,7 +17,7 @@ dataset:
         name: headline_generation_for_business
         parameters:
           tech_startup_business: str
-      number_of_examples: 2
+      number_of_examples: 1
       openai_model_name: gpt-4
       output_path: null
   source_type: machine_generated
@@ -32,7 +32,7 @@ variations:
     generator_name: openai_prompt_based_variation_generator
     generator_config:
       openai_model_name: gpt-4
-      number_of_variations: 2
+      number_of_variations: 1
       diversify: true
       variables: null
       prompt: 

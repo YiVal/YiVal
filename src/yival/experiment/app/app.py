@@ -2,9 +2,13 @@
 
 import ast
 import hashlib
+from math import exp
 import os
 import textwrap
 import urllib.parse
+import io
+import base64
+from PIL import Image
 from concurrent.futures import ThreadPoolExecutor
 from typing import Any, Dict, List, Optional
 
@@ -40,6 +44,20 @@ from .utils import (
     sanitize_column_name,
     sanitize_group_key,
 )
+def pil_image_to_base64(image: Image, format: str = "PNG") -> str:
+    """将 PIL Image 对象转换为 base64 编码的字符串"""
+    buffered = io.BytesIO()
+    image.save(buffered, format=format)
+    img_str = base64.b64encode(buffered.getvalue())
+    return "data:image/png;base64," + img_str.decode()
+def handle_output(output):
+    if isinstance(output, list):
+        if all(isinstance(item, Image.Image) for item in output):
+            return [html.Img(src=pil_image_to_base64(img), className="image") for img in output]
+        else:
+            return [html.P(str(item)) for item in output]
+    else:
+        return html.P(str(output))
 
 
 def create_dash_app(
@@ -201,6 +219,7 @@ def create_dash_app(
             experiment_data.combination_aggregated_metrics,
             experiment_data.group_experiment_results
         )
+        print(f"[DEBUG][experiment_result_layout] df: {df}")
         csv_string = df.to_csv(index=False, encoding='utf-8')
         csv_data_url = 'data:text/csv;charset=utf-8,' + urllib.parse.quote(
             csv_string
@@ -386,8 +405,10 @@ def create_dash_app(
         ])
 
     def combo_aggregated_metrics_layout(df):
-
+        print(f"[DEBUG][combo_aggregated_metrics_layout] df: {df}")
         columns = [{"name": i, "id": i} for i in df.columns]
+        print(f"[DEBUG][combo_aggregated_metrics_layout] columns: {columns}")
+
         sample_columns = [col for col in df.columns if "Sample" in col]
         sample_style = [{
             'if': {
@@ -402,7 +423,24 @@ def create_dash_app(
 
         # Highlight the best_combination row
         best_combination = experiment_data.selection_output.best_combination if experiment_data.selection_output else None
+        data = df.to_dict('records')
         tooltip_data = []
+
+        for col in sample_columns:
+            df[col] = df[col].apply(lambda x: pil_image_to_base64(x[0]) if isinstance(x, list) and len(x) > 0 and isinstance(x[0], Image.Image) else x)
+
+
+        for row in data:
+            tooltip_row = {}
+            for col in df.columns:
+                if isinstance(row[col], Image.Image):
+                    img_str = pil_image_to_base64(row[col])
+                    tooltip_row[col] = {
+                        'value': f'<img src="{img_str}" width="200" height="200" />',
+                        'type': 'html'
+                    }
+                    row[col] = "Image (hover to view)"  # Replace the image in the cell with a placeholder text
+            tooltip_data.append(tooltip_row)
         if best_combination:
             best_combination_str = "\n".join(
                 textwrap.wrap(
@@ -442,7 +480,7 @@ def create_dash_app(
         return dash_table.DataTable(
             id='combo-metrics-table',
             columns=columns,
-            data=df.to_dict('records'),
+            data=data,
             style_data_conditional=styles,
             style_cell={
                 'whiteSpace': 'normal',
@@ -1232,6 +1270,8 @@ def create_dash_app(
         ],
         prevent_initial_call=True
     )
+
+    
     def update_results(n_clicks, *input_values_and_combinations_and_toggle):
         if not n_clicks:
             return []
@@ -1308,7 +1348,15 @@ def create_dash_app(
                 html.H5(f"Result {i+1}"),
                 html.Ul([
                     html.Li(f"Combination: {result.combination}"),
-                    html.Li(f"Raw Output: {result.raw_output}"),
+                    # html.Div(
+                    #     handle_output(result.raw_output),
+                    #     className="raw-output"
+                    # ),可以用
+                    html.Li("Raw Output:"),
+                    html.Div(
+                        handle_output(result.raw_output),
+                        className="raw-output"
+                    ),              
                     html.Li(
                         f"Latency: {result.latency} s",
                         style={
