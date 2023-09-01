@@ -38,6 +38,7 @@ tiktoken = "^0.4.0"
 pillow = "9.4.0"
 types-requests = "^2.31.0.2"
 types-pillow = "^10.0.0.2"
+dash-dangerously-set-inner-html = "^0.0.2"
 
 [tool.poetry.group.doc.dependencies]
 mkdocs = "*"

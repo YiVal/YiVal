@@ -8,8 +8,6 @@ import os
 import textwrap
 import urllib.parse
 from concurrent.futures import ThreadPoolExecutor
-from email.mime import image
-from math import exp
 from typing import Any, Dict, List, Optional
 
 import dash  # type: ignore
@@ -18,6 +16,7 @@ import pandas as pd  # type: ignore
 import plotly.express as px  # type: ignore
 from dash import dash_table, dcc, html  # type: ignore
 from dash.dependencies import ALL, MATCH, Input, Output, State
+from dash_dangerously_set_inner_html import DangerouslySetInnerHTML
 from PIL import Image
 from pyngrok import ngrok
 
@@ -543,11 +542,22 @@ def create_dash_app(
         # Convert PIL Image to base64 image string and wrap with html.Img
         for col in sample_columns:
             df[col] = df[col].apply(
-                lambda x: html.Img(
-                    src=pil_image_to_base64(x[0]),
+                lambda x: html.Div(
+                    html.Img(
+                        src=pil_image_to_base64(x[0]),
+                        style={
+                            'maxHeight': '100%',
+                            'maxWidth': '100%',
+                            'objectFit': 'contain'
+                        }
+                    ),
                     style={
-                        'height': '100%',
-                        'width': '100%'
+                        'height': '200px',
+                        'width': '200px',
+                        'display': 'flex',
+                        'justifyContent': 'center',
+                        'alignItems': 'center',
+                        'overflow': 'hidden'
                     }
                 ) if isinstance(x, list) and len(x) > 0 and
                 isinstance(x[0], Image.Image) else x
@@ -560,8 +570,12 @@ def create_dash_app(
 
             # Body
             [
-                html.Tr([html.Td(row[col]) for col in df.columns])
-                for index, row in df.iterrows()
+                html.Tr([
+                    DangerouslySetInnerHTML(
+                        f'<details><summary>{row[col][:250]}...</summary>{row[col]}</details>'
+                    ) if col_index == 0 else html.Td(row[col])
+                    for col_index, col in enumerate(df.columns)
+                ]) for index, row in df.iterrows()
             ]
         )
 
@@ -1590,4 +1604,4 @@ def display_results_dash(
         print(f"Access Yival from this public URL :{public_url}")
         app.run(debug=False, port=8073)
     else:
-        app.run(debug=False, port=8073)
+        app.run(debug=True, port=8073)
