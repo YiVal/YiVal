@@ -1392,10 +1392,6 @@ def create_dash_app(
                 html.H5(f"Result {i+1}"),
                 html.Ul([
                     html.Li(f"Combination: {result.combination}"),
-                    # html.Div(
-                    #     handle_output(result.raw_output),
-                    #     className="raw-output"
-                    # ),可以用
                     html.Li("Raw Output:"),
                     html.Div(
                         handle_output(result.raw_output),

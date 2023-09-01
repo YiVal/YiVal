@@ -26,7 +26,6 @@ s = requests.Session()
 
 def prompt_generation(prompt: str) -> str:
     '''generate prompt for chatgpt based on the input'''
-    print(f"[DEBUG] chatgpt input:{prompt}")
     openai.api_key = os.getenv("OPENAI_API_KEY")
     messages = [{"role": "user", "content": prompt}]
     response = openai.ChatCompletion.create(
@@ -36,7 +35,6 @@ def prompt_generation(prompt: str) -> str:
         max_tokens=300
     )
     res = response['choices'][0]['message']['content'][:1000]
-    print(f"[DEBUG] chatgpt output:{res}")
     return res
 
 
@@ -53,7 +51,6 @@ def get_request(messageId):
     while True:
         time.sleep(2)
         response = s.get(url, headers=HEADERS)
-        print(f"[DEBUG] response: {response}, reponse_text:{response.text}")
         response_json = response.json()
         if response_json.get('progress') == 100:
             break
