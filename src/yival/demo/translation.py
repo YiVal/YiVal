@@ -4,6 +4,7 @@ Demo code to translate text from English to Chinese using GPT-3.
 import os
 
 import openai
+from litellm import completion
 
 from yival.logger.token_logger import TokenLogger
 from yival.wrappers.string_wrapper import StringWrapper
@@ -34,7 +35,7 @@ def translate(input: str) -> str:
             )
         ) + f'{input}'
     }]
-    response = openai.ChatCompletion.create(
+    response = completion(
         model="gpt-3.5-turbo", messages=messages
     )
 

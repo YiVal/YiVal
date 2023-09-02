@@ -1,6 +1,7 @@
 import os
 
 import openai
+from litellm import completion
 
 from yival.logger.token_logger import TokenLogger
 from yival.wrappers.string_wrapper import StringWrapper
@@ -23,7 +24,7 @@ def qa(input: str) -> str:
         "content": f'{input}' + str(StringWrapper("", name="qa"))
     }]
     # Use the chat-based completion
-    response = openai.ChatCompletion.create(
+    response = completion(
         model="gpt-3.5-turbo", messages=messages
     )
 

@@ -5,6 +5,7 @@ import uuid
 
 import faiss
 import openai
+from litellm import completion
 from langchain.docstore import InMemoryDocstore
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.schema import Document
@@ -140,7 +141,7 @@ class Reply:
         # Create a chat message sequence
         messages = [{"role": "user", "content": message}]
         # Use the chat-based completion
-        response = openai.ChatCompletion.create(
+        response = completion(
             model="gpt-3.5-turbo", messages=messages
         )
 

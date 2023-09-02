@@ -6,6 +6,7 @@ import os
 import time
 
 import openai
+from litellm import completion
 import requests
 from PIL import Image
 from requests.adapters import HTTPAdapter  # type: ignore
@@ -28,7 +29,7 @@ def prompt_generation(prompt: str) -> str:
     '''generate prompt for chatgpt based on the input'''
     openai.api_key = os.getenv("OPENAI_API_KEY")
     messages = [{"role": "user", "content": prompt}]
-    response = openai.ChatCompletion.create(
+    response = completion(
         model="gpt-3.5-turbo",
         messages=messages,
         temperature=1.0,

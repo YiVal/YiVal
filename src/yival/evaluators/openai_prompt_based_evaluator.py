@@ -12,6 +12,7 @@ import string
 from typing import Any, Dict, Iterable, List, Optional, Union
 
 import openai
+from litellm import completion
 
 from ..schemas.evaluator_config import (
     EvaluatorOutput,
@@ -124,7 +125,7 @@ class OpenAIPromptBasedEvaluator(BaseEvaluator):
         prompt[-1]["content"] += "\n\n" + CLASSIFY_STR.format(
             choices=choices_to_string(self.config.choices)
         )
-        response = openai.ChatCompletion.create(
+        response = completion(
             model="gpt-4", messages=prompt, temperature=0.0
         )
         response_content = response['choices'][0]['message']['content']

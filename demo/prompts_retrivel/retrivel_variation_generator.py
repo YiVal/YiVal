@@ -2,7 +2,7 @@ import csv
 from typing import Iterator, List
 
 import faiss  # pylint: disable=import-error
-import openai
+from litellm import completion
 from langchain.docstore import InMemoryDocstore
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.schema import Document
@@ -122,7 +122,7 @@ class RetrivelVariationGenerator(BaseVariationGenerator):
             f"use case: {self.config.use_case}"  # type: ignore
         })
         if len(documents) == 0:
-            response = openai.ChatCompletion.create(
+            response = completion(
                 model="gpt-4",
                 messages=prompt_generation_message,
                 temperature=0.0
@@ -141,7 +141,7 @@ class RetrivelVariationGenerator(BaseVariationGenerator):
             choices=choices_to_string(choices_strings)
         )
         messages = [{"role": "user", "content": prompt}]
-        response = openai.ChatCompletion.create(
+        response = completion(
             model="gpt-4", messages=messages, temperature=0.0
         )
         response_content = response['choices'][0]['message']['content']
@@ -150,7 +150,7 @@ class RetrivelVariationGenerator(BaseVariationGenerator):
         )
 
         if choice == choices_strings[-1]:
-            response = openai.ChatCompletion.create(
+            response = completion(
                 model="gpt-4-32k",
                 messages=prompt_generation_message,
                 temperature=0.5

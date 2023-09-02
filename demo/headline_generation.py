@@ -1,6 +1,7 @@
 import os
 
 import openai
+from litellm import completion
 
 from yival.logger.token_logger import TokenLogger
 from yival.wrappers.string_wrapper import StringWrapper
@@ -27,7 +28,7 @@ def headline_generation(tech_startup_business: str) -> str:
         ) + f'{tech_startup_business}'
     }]
     # Use the chat-based completion
-    response = openai.ChatCompletion.create(
+    response = completion(
         model="gpt-3.5-turbo", messages=messages
     )
     res = response['choices'][0]['message']['content']
