@@ -1,6 +1,7 @@
 .hexagram {
     width: 120px;
-    height: 150px; /* 6 lines x 25px per line */
+    height: 150px;
+    /* 6 lines x 25px per line */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -10,7 +11,7 @@
 
 .yang-line {
     background-color: black;
-    height: 20px; 
+    height: 20px;
     width: 100%;
 }
 
@@ -25,5 +26,12 @@
 .yin-line-part {
     background-color: black;
     height: 20px;
-    width: 40%; /* each part takes up 40% of the width */
+    width: 40%;
+    /* each part takes up 40% of the width */
+}
+
+
+.image {
+    width: 50%;
+    height: auto;
 }

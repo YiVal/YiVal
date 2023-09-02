@@ -1,7 +1,9 @@
 # type: ignore
 
 import ast
+import base64
 import hashlib
+import io
 import os
 import textwrap
 import urllib.parse
@@ -14,6 +16,8 @@ import pandas as pd  # type: ignore
 import plotly.express as px  # type: ignore
 from dash import dash_table, dcc, html  # type: ignore
 from dash.dependencies import ALL, MATCH, Input, Output, State
+from dash_dangerously_set_inner_html import DangerouslySetInnerHTML
+from PIL import Image
 from pyngrok import ngrok
 
 from yival.experiment.rate_limiter import RateLimiter
@@ -40,6 +44,33 @@ from .utils import (
     sanitize_column_name,
     sanitize_group_key,
 )
+
+
+def pil_image_to_base64(image: Image, format: str = "PNG") -> str:
+    buffered = io.BytesIO()
+    image.save(buffered, format=format)
+    img_str = base64.b64encode(buffered.getvalue())
+    return "data:image/png;base64," + img_str.decode()
+
+
+def handle_output(output):
+    if isinstance(output, list):
+        if all(isinstance(item, Image.Image) for item in output):
+            return [
+                html.Img(src=pil_image_to_base64(img), className="image")
+                for img in output
+            ]
+        else:
+            return [html.P(str(item)) for item in output]
+    else:
+        return html.P(str(output))
+
+
+def df_to_table(df):
+    return html.Table([html.Tr([html.Th(col) for col in df.columns])] + [
+        html.Tr([html.Td(row[col]) for col in df.columns])
+        for index, row in df.iterrows()
+    ])
 
 
 def create_dash_app(
@@ -205,11 +236,18 @@ def create_dash_app(
         csv_data_url = 'data:text/csv;charset=utf-8,' + urllib.parse.quote(
             csv_string
         )
+        sample_columns = [col for col in df.columns if "Sample" in col]
+        contains_lists = any(
+            df[col].apply(lambda x: isinstance(x, list)).any()
+            for col in sample_columns
+        )
+
         return html.Div([
             html.H3(
                 "Experiment Results Analysis", style={'textAlign': 'center'}
             ),
-            combo_aggregated_metrics_layout(df),
+            image_combo_aggregated_metrics_layout(df)
+            if contains_lists else combo_aggregated_metrics_layout(df),
             html.Hr(),
             html.A(
                 'Export to CSV',
@@ -496,6 +534,52 @@ def create_dash_app(
             tooltip_data=tooltip_data,
             tooltip_duration=None
         )
+
+    def image_combo_aggregated_metrics_layout(df):
+
+        sample_columns = [col for col in df.columns if "Sample" in col]
+
+        # Convert PIL Image to base64 image string and wrap with html.Img
+        for col in sample_columns:
+            df[col] = df[col].apply(
+                lambda x: html.Div(
+                    html.Img(
+                        src=pil_image_to_base64(x[0]),
+                        style={
+                            'maxHeight': '100%',
+                            'maxWidth': '100%',
+                            'objectFit': 'contain'
+                        }
+                    ),
+                    style={
+                        'height': '200px',
+                        'width': '200px',
+                        'display': 'flex',
+                        'justifyContent': 'center',
+                        'alignItems': 'center',
+                        'overflow': 'hidden'
+                    }
+                ) if isinstance(x, list) and len(x) > 0 and
+                isinstance(x[0], Image.Image) else x
+            )
+
+        # Create html.Table
+        table = html.Table(
+            # Header
+            [html.Tr([html.Th(col) for col in df.columns])] +
+
+            # Body
+            [
+                html.Tr([
+                    DangerouslySetInnerHTML(
+                        f'<details><summary>{row[col][:250]}...</summary>{row[col]}</details>'
+                    ) if col_index == 0 else html.Td(row[col])
+                    for col_index, col in enumerate(df.columns)
+                ]) for index, row in df.iterrows()
+            ]
+        )
+
+        return table
 
     def group_key_combination_layout(
         group_experiment_results: List[GroupedExperimentResult],
@@ -1308,7 +1392,11 @@ def create_dash_app(
                 html.H5(f"Result {i+1}"),
                 html.Ul([
                     html.Li(f"Combination: {result.combination}"),
-                    html.Li(f"Raw Output: {result.raw_output}"),
+                    html.Li("Raw Output:"),
+                    html.Div(
+                        handle_output(result.raw_output),
+                        className="raw-output"
+                    ),
                     html.Li(
                         f"Latency: {result.latency} s",
                         style={
@@ -1512,4 +1600,4 @@ def display_results_dash(
         print(f"Access Yival from this public URL :{public_url}")
         app.run(debug=False, port=8073)
     else:
-        app.run(debug=False, port=8073)
+        app.run(debug=True, port=8073)
