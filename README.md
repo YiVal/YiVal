@@ -61,6 +61,14 @@ strategies.
 | Features   | 🌟 Streamlined prompt development process<br/> 🌟 Support for multimedia and multimodel<br/> 🌟 Support CSV upload and GPT4 generated test data<br/>🌟 Dashboard tracking latency, price and evaluator results<br/> 🌟 Human(RLHF) and algorithm based improvers <br/>🌟 Service with detailed web view<br/>🌟 Customizable evaluators and improvers | 🌟 Non-code experience of Gen-AI application build<br/>  🌟 Witness your Gen-AI application born and improve with just one click                                                                                  |
 | Demos      |                                                                                                                                                                                                                                                                                                                                                      | - Startup Company Headline Generation Bot🔥 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1EiWUL8rE_kfNLXVPowCWCh6hwHFagvs_?usp=sharing) |
 
+## Model Support matrix
+
+| Model        | Evaluate |variation generate|custom func|
+|--------------| ---- | ---- | ---- |
+| GPT-4        | ✅  | ✅  | ✅  |
+| GPT-3.5-turbo        | ✅  | ✅  | ✅  |
+| MidJourney          |   |   | ✅  |
+
 ## Installation
 
 ```sh
