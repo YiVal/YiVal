@@ -11,6 +11,7 @@ from PIL import Image
 from requests.adapters import HTTPAdapter  # type: ignore
 from requests.packages.urllib3.util.retry import Retry  # type: ignore
 
+from yival.logger.token_logger import TokenLogger
 from yival.wrappers.string_wrapper import StringWrapper
 
 TOKEN = os.getenv('MIDJOURNEY_TOKEN')
@@ -26,6 +27,8 @@ s = requests.Session()
 
 def prompt_generation(prompt: str) -> str:
     '''generate prompt for chatgpt based on the input'''
+    logger = TokenLogger()
+    logger.reset()
     openai.api_key = os.getenv("OPENAI_API_KEY")
     messages = [{"role": "user", "content": prompt}]
     response = openai.ChatCompletion.create(
@@ -35,6 +38,8 @@ def prompt_generation(prompt: str) -> str:
         max_tokens=300
     )
     res = response['choices'][0]['message']['content'][:1000]
+    token_usage = response['usage']['total_tokens']
+    logger.log(token_usage)
     return res
 
 
@@ -62,6 +67,7 @@ def get_request(messageId):
 
 def load_image(response):
     '''load image from response'''
+    print("[INFO][logl_generation] start load images")
     url = f"{BASE_URL}/getImage"
     image_urls = response['response']['imageUrls']
     logo_list = []
