@@ -247,10 +247,11 @@ def create_dash_app(
             html.Div([
                 image_combo_aggregated_metrics_layout(df)
                 if contains_lists else combo_aggregated_metrics_layout(df)
-            ], style={
-                'overflowY': 'auto', 
-                'overflowX': 'auto'
-            }),
+            ],
+                     style={
+                         'overflowY': 'auto',
+                         'overflowX': 'auto'
+                     }),
             html.Hr(),
             html.A(
                 'Export to CSV',
