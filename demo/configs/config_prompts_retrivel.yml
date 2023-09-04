@@ -1,4 +1,4 @@
-custom_function: /Users/taofeng/YiVal/demo.auto_prompt_bot.reply
+custom_function: demo.auto_prompt_bot.reply
 dataset:
   source_type: user_input
 description: Basic config for interactive mode
@@ -6,8 +6,8 @@ evaluators: []
 
 custom_variation_generators:
   retrivel_variation_generator:
-    class: /Users/taofeng/YiVal/demo/prompts_retrivel/retrivel_variation_generator.RetrivelVariationGenerator
-    config_cls: /Users/taofeng/YiVal/demo/prompts_retrivel/retrivel_variation_generator_config.RetrivelVariationGeneratorConfig
+    class: demo.prompts_retrivel.retrivel_variation_generator.RetrivelVariationGenerator
+    config_cls: demo.prompts_retrivel.retrivel_variation_generator_config.RetrivelVariationGeneratorConfig
 
 variations:
   - name: prompt

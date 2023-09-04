@@ -191,8 +191,6 @@ def create_dash_app(
 
             sample_count = 0
             for group in group_experiment_results:
-                if sample_count >= 3:
-                    break
                 matching_results = [
                     exp_result.raw_output
                     for exp_result in group.experiment_results
@@ -246,8 +244,14 @@ def create_dash_app(
             html.H3(
                 "Experiment Results Analysis", style={'textAlign': 'center'}
             ),
-            image_combo_aggregated_metrics_layout(df)
-            if contains_lists else combo_aggregated_metrics_layout(df),
+            html.Div([
+                image_combo_aggregated_metrics_layout(df)
+                if contains_lists else combo_aggregated_metrics_layout(df)
+            ],
+                     style={
+                         'overflowY': 'auto',
+                         'overflowX': 'auto'
+                     }),
             html.Hr(),
             html.A(
                 'Export to CSV',
@@ -1600,4 +1604,4 @@ def display_results_dash(
         print(f"Access Yival from this public URL :{public_url}")
         app.run(debug=False, port=8073)
     else:
-        app.run(debug=True, port=8073)
+        app.run(debug=False, port=8073)
