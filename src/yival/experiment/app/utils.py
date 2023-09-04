@@ -110,8 +110,7 @@ def generate_heatmap_style(df, *cols):
         if pd.api.types.is_numeric_dtype(df[col]):
             min_val = df[col].min()
             max_val = df[col].max()
-            range_val = max_val - min_val
-
+            range_val = max_val - min_val if min_val!=max_val else 1
             for val in df[col].unique():
                 normalized = (val - min_val) / range_val
 
@@ -134,7 +133,7 @@ def generate_heatmap_style(df, *cols):
             if not metrics_values.empty:
                 min_val = metrics_values[0].min()
                 max_val = metrics_values[0].max()
-                range_val = max_val - min_val
+                range_val = max_val - min_val if min_val!=max_val else 1
                 for _, val in metrics_values[0].items():
                     normalized = (val - min_val) / range_val
                     bg_color = f"rgb({255*(1-normalized)}, {255*normalized}, 150)"
