@@ -1,0 +1,34 @@
+custom_function: demo.model_compare.model_compare
+dataset:
+  file_path: demo/data/model_compare.csv
+  reader: csv_reader
+  source_type: dataset
+  reader_config:
+    expected_result_column: expected_result
+description: Configuration fo question answering with expected results.
+evaluators:
+  - evaluator_type: individual
+    matching_technique: includes
+    metric_calculators:
+      - method: AVERAGE
+    name: string_expected_result
+
+variations:
+  - name: model_name
+    variations:
+      - instantiated_value: "gpt-3.5-turbo"
+        value: "gpt-3.5-turbo"
+        value_type: str
+        variation_id: null
+      - instantiated_value: "a16z-infra/llama-2-13b-chat:9dff94b1bed5af738655d4a7cbcdcde2bd503aa85c94334fe1f42af7f3dd5ee3"
+        value: "a16z-infra/llama-2-13b-chat:9dff94b1bed5af738655d4a7cbcdcde2bd503aa85c94334fe1f42af7f3dd5ee3"
+        value_type: str
+        variation_id: null
+      - instantiated_value: "replicate/llama-2-70b-chat:2796ee9483c3fd7aa2e171d38f4ca12251a30609463dcfd4cd76703f22e96cdf"
+        value: "replicate/llama-2-70b-chat:2796ee9483c3fd7aa2e171d38f4ca12251a30609463dcfd4cd76703f22e96cdf"
+        value_type: str
+        variation_id: null
+      - instantiated_value: "replicate/vicuna-13b:6282abe6a492de4145d7bb601023762212f9ddbbe78278bd6771c8b3b2f2a13b"
+        value: "replicate/vicuna-13b:6282abe6a492de4145d7bb601023762212f9ddbbe78278bd6771c8b3b2f2a13b"
+        value_type: str
+        variation_id: null

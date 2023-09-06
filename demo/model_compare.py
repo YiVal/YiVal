@@ -1,0 +1,33 @@
+from yival.common.model_utils import llm_completion
+from yival.logger.token_logger import TokenLogger
+from yival.schemas.model_configs import Request
+from yival.wrappers.string_wrapper import StringWrapper
+
+
+def model_compare(input: str) -> str:
+    logger = TokenLogger()
+    logger.reset()
+
+    response = llm_completion(
+        Request(
+            model_name=str(StringWrapper("gpt-3.5-turbo", name="model_name")),
+            prompt=input
+        )
+    ).output
+
+    res = response['choices'][0]['message']['content']
+    token_usage = response['usage']['total_tokens']
+    logger.log(token_usage)
+    return res
+
+
+def main():
+    print(
+        model_compare(
+            "Generate one landing page headline for AI startup company, headline only and nothing else"
+        )
+    )
+
+
+if __name__ == "__main__":
+    main()
