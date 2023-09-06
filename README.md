@@ -73,6 +73,10 @@ strategies.
 | Anthropic | ✅ | ✅ | ✅ |✅|
 | MidJourney | | ✅ |  |✅|
 
+To support different models in custom func(e.g. Model Comparison) , [follow our example](https://github.com/YiVal/YiVal/blob/litellm_complete/demo/configs/model_compare.yml)
+
+To support different models in evaluators and generators , [check our config](https://github.com/YiVal/YiVal/blob/litellm_complete/demo/configs/headline_generation.yml)
+
 ## Installation
 
 ```sh
