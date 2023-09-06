@@ -63,11 +63,15 @@ strategies.
 
 ## Model Support matrix
 
-| Model        | Evaluate |variation generate|custom func|
-|--------------| ---- | ---- | ---- |
-| GPT-4        | ✅  | ✅  | ✅  |
-| GPT-3.5-turbo        | ✅  | ✅  | ✅  |
-| MidJourney          |   |   | ✅  |
+| Model        | llm-Evaluate |Human-Evaluate|Variation Generate|Custom func|
+|--------------| ---- | ---- | ---- |--------------|
+| OpenAI  | ✅  | ✅  | ✅  |✅|
+| Azure   | ✅  | ✅  | ✅  |✅|
+| TogetherAI | ✅ | ✅ | ✅  |✅|
+| Cohere | ✅ | ✅ | ✅ |✅|
+| Huggingface | ✅ | ✅ | ✅ |✅|
+| Anthropic | ✅ | ✅ | ✅ |✅|
+| MidJourney | | ✅ |  |✅|
 
 ## Installation
 
