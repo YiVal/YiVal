@@ -21,7 +21,7 @@ class OpenAIPromptBasedGeneratorConfig(BaseDataGeneratorConfig):
     """
     Generate test cases from prompt. Currently only support openai models.
     """
-    openai_model_name: str = "gpt-4"
+    model_name: str = "gpt-4"
     prompt: Union[str, List[Dict[str, str]]] = ""
     input_function: Dict[str, Any] = field(default_factory=dict)
     # Whether to diversify the generated examples.
