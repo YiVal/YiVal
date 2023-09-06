@@ -16,12 +16,14 @@ import pickle
 import re
 from typing import Any, Dict, Iterator, List
 
-import openai
+from flask import Request
 from tqdm import tqdm
 
 from ..common import utils
+from ..common.model_utils import llm_completion
 from ..schemas.common_structures import InputData
 from ..schemas.data_generator_configs import OpenAIPromptBasedGeneratorConfig
+from ..schemas.model_configs import Request
 from .base_data_generator import BaseDataGenerator
 
 
@@ -167,7 +169,7 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                     responses = asyncio.run(
                         utils.parallel_completions(
                             message_batches,
-                            self.config.openai_model_name,
+                            self.config.model_name,
                             self.config.max_token,
                             pbar=pbar
                         )
@@ -182,12 +184,16 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                     desc="Generating Examples",
                     unit="example"
                 ) as pbar:
-                    output = openai.ChatCompletion.create(
-                        model=self.config.openai_model_name,
-                        messages=messages,
-                        temperature=1.3,
-                        presence_penalty=2,
-                    )
+                    output = llm_completion(
+                        Request(
+                            model_name=self.config.model_name,
+                            prompt=messages,
+                            params={
+                                "temperature": 1.3,
+                                "presence_penalty": 2
+                            }
+                        )
+                    ).output
                     self.process_output(
                         output.choices[0].message.content, all_data, chunk
                     )
