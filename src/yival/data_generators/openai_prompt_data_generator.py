@@ -16,7 +16,6 @@ import pickle
 import re
 from typing import Any, Dict, Iterator, List
 
-from flask import Request
 from tqdm import tqdm
 
 from ..common import utils
