@@ -1,6 +1,9 @@
+import base64
+import io
 from typing import List
 
 import pandas as pd  # type: ignore
+from PIL import Image
 
 from yival.schemas.experiment_config import GroupedExperimentResult
 
@@ -66,6 +69,23 @@ def highlight_best_values(df: pd.DataFrame, *cols) -> list:
     return styles
 
 
+def image_to_base64(image: Image.Image) -> str:
+    '''Converts an image to base64 string.'''
+    buffered = io.BytesIO()
+    image.save(buffered, format="PNG")
+    img_str = base64.b64encode(buffered.getvalue()).decode()
+    return img_str
+
+
+def process_raw_output(raw_output):
+    if isinstance(raw_output, list) and all(
+        isinstance(item, Image.Image) for item in raw_output
+    ):
+        return [image_to_base64(image) for image in raw_output]
+    else:
+        return raw_output
+
+
 def generate_group_key_combination_data(
     group_experiment_results: List[GroupedExperimentResult]
 ) -> pd.DataFrame:
@@ -83,7 +103,7 @@ def generate_group_key_combination_data(
             )
             nested_output = {
                 "raw_output":
-                exp_result.raw_output,
+                process_raw_output(exp_result.raw_output),
                 "evaluator_outputs":
                 "\n".join([
                     f"{e.name} : {e.display_name} = {e.result}"
