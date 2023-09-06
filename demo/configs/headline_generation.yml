@@ -5,6 +5,7 @@ dataset:
     openai_prompt_data_generator:
       chunk_size: 100000
       diversify: true
+      # model_name specify the llm model , e.g. a16z-infra/llama-2-13b-chat:9dff94b1bed5af738655d4a7cbcdcde2bd503aa85c94334fe1f42af7f3dd5ee3
       model_name: gpt-4
       prompt:
           "Please provide a concrete and realistic test case as a dictionary for function invocation using the ** operator.
@@ -18,7 +19,7 @@ dataset:
         name: headline_generation_for_business
         parameters:
           tech_startup_business: str
-      number_of_examples: 1
+      number_of_examples: 2
       output_path: null
   source_type: machine_generated
 
@@ -31,8 +32,9 @@ variations:
         variation_id: null
     generator_name: openai_prompt_based_variation_generator
     generator_config:
-      openai_model_name: gpt-4
-      number_of_variations: 1
+     #model_name specify the llm model , e.g. a16z-infra/llama-2-13b-chat:9dff94b1bed5af738655d4a7cbcdcde2bd503aa85c94334fe1f42af7f3dd5ee3
+      model_name: gpt-4
+      number_of_variations: 2
       diversify: true
       variables: null
       prompt: 
@@ -65,6 +67,7 @@ evaluators:
       D It meets the criterion very well.
       E It meets the criterion exceptionally well, with little to no room for improvement.
     choices: ["A", "B", "C", "D", "E"]
+    # model_name specify the llm model , e.g. a16z-infra/llama-2-13b-chat:9dff94b1bed5af738655d4a7cbcdcde2bd503aa85c94334fe1f42af7f3dd5ee3
     model_name: gpt-4
     description: "evaluate the quality of the landing page headline"
     scale_description: "0-4"
