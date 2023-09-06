@@ -39,6 +39,10 @@ pillow = "9.4.0"
 types-requests = "^2.31.0.2"
 types-pillow = "^10.0.0.2"
 dash-dangerously-set-inner-html = "^0.0.2"
+litellm = "^0.1.531"
+torch = "^2.0.1"
+transformers = "^4.33.0"
+psutil = "^5.9.5"
 
 [tool.poetry.group.doc.dependencies]
 mkdocs = "*"
