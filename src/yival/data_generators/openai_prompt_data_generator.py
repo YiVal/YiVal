@@ -131,6 +131,16 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
     ):
         """Process the output from GPT API and update data lists."""
         generated_example = extract_dict_from_gpt_output(output_content)
+
+        # cut the generated_example keys
+        if generated_example:
+            keys_to_keep = self.config.input_function.get('parameters',
+                                                          {}).keys()
+            generated_example = {
+                k: generated_example[k]
+                for k in keys_to_keep if k in generated_example
+            }
+
         if not generated_example or set(generated_example.keys()) != set(
             self.config.input_function.get('parameters', {}).keys()
         ):
