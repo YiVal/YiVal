@@ -4,7 +4,9 @@ import ast
 import base64
 import hashlib
 import io
+import json
 import os
+import re
 import textwrap
 import urllib.parse
 from concurrent.futures import ThreadPoolExecutor
@@ -44,6 +46,117 @@ from .utils import (
     sanitize_column_name,
     sanitize_group_key,
 )
+
+
+def include_image_base64(data_dict):
+    """Check if a string include a base64 encoded image."""
+    pattern = r'iVBORw.+'
+    # Remove the prefix
+    prefix = "▶ raw_output: ['"
+    for item in data_dict:
+        for record in item:
+            for value in record.values():
+                if value.startswith(prefix):
+                    value = value[len(prefix):]
+                    return re.match(pattern, value)
+    return False
+
+
+def is_base64_image(value):
+    """Check if a string is a base64 encoded image."""
+    pattern = r'iVBORw.+'
+    return bool(re.match(pattern, value))
+
+
+def base64_to_img(base64_string):
+    """Convert a base64 string into a PIL Image."""
+    decoded = base64.b64decode(base64_string)
+    image = Image.open(io.BytesIO(decoded))
+    return image
+
+
+def extract_and_decode_image_from_string(data_string):
+    """Extract and decode the first image from a string include base64 encoded and return a dictionary."""
+    # Remove the prefix
+    prefix = "▶ raw_output: ["
+    if data_string.startswith(prefix):
+        data_string = data_string[len(prefix):]
+
+    # Find the first occurrence of "]"
+    end_index = data_string.find("]")
+    if end_index != -1:
+        evaluate_string = data_string[end_index +
+                                      1:].strip()  # Get the string after "]"
+        data_string = data_string[:end_index]
+
+    # Split the string into a list
+    image_list = data_string.split(',')
+
+    # Find the first base64 image in the list
+    for image_string in image_list:
+        image_string = image_string.strip("'\" ")  # Remove quotes and spaces
+        if is_base64_image(image_string):
+            return {
+                "raw_output": base64_to_img(image_string),
+                "evaluate": evaluate_string
+            }
+
+    # If no base64 image was found, return None
+    return None
+
+
+def extract_and_decode_image(data_dict):
+    """Extract and decode image from a dictionary include base64 encoded."""
+    new_data_dict = []
+    for item in data_dict:
+        for record in item:
+            new_record = {}
+            for key, value in record.items():
+                if isinstance(value, str):
+                    image = extract_and_decode_image_from_string(value)
+                    if image is not None:
+                        new_record[key] = image
+                    else:
+                        new_record[key] = value
+                else:
+                    new_record[key] = value
+            new_data_dict.append(new_record)
+    return new_data_dict
+
+
+def create_table(data):
+    """Create an HTML table from a list of dictionaries, where the values can be strings or PIL images."""
+    # Create the header row
+    header_row = [
+        html.Th(key if key != "Hashed Group Key" else "Human Rating")
+        for key in data[0].keys()
+    ]
+    table_rows = [html.Tr(header_row)]
+
+    # Create the data rows
+    for record in data:
+        row = []
+        for key, value in record.items():
+            if key == "Hashed Group Key":
+                # Convert the hashed group key to a hyperlink
+                href = f"/rating-result/{value}"
+                cell = html.Td(
+                    dcc.Link("Link", href=href)
+                )  # Replace "Link text" with the text you want to display
+            elif isinstance(value, dict):
+                img = html.Img(
+                    src=pil_image_to_base64(value["raw_output"]),
+                    style={
+                        'width': '200px',
+                        'height': '200px'
+                    }
+                )
+                cell = html.Td([img, html.Br(), value["evaluate"]])
+            else:
+                cell = html.Td(value)
+            row.append(cell)
+        table_rows.append(html.Tr(row))
+    return table_rows
 
 
 def pil_image_to_base64(image: Image, format: str = "PNG") -> str:
@@ -640,58 +753,83 @@ def create_dash_app(
                 lambda group_key: hashlib.sha256(group_key.encode()).hexdigest(
                 )
             )
+        data_dict = df_group_key.to_dict('records'),
 
-        return html.Div([
-            html.A(
-                'Export to CSV',
-                id='export-link-group-key-combo',
-                download="group_key_combo.csv",
-                href=csv_data_url,
-                target="_blank"
-            ),
-            html.Br(),
-            dash_table.DataTable(
-                id='group-key-combo-table',
-                columns=columns,
-                data=df_group_key.to_dict('records'),
-                style_cell={
-                    'whiteSpace':
-                    'pre-line',  # Allows for line breaks within cells
-                    'height': 'auto',
-                    'textAlign': 'left',
-                    'fontSize': 16,
-                    'border': '1px solid #eee'
-                },
-                style_table={
-                    'width': '100%',
-                    'maxHeight': '100vh',
-                    'overflowY': 'auto',
-                    'border': '1px solid #ddd'
-                },
-                style_header={
-                    'backgroundColor': 'rgb(230, 230, 230)',
-                    'fontWeight': 'bold'
-                },
-                style_data={
-                    'overflow': 'hidden',
-                    'textOverflow': 'ellipsis',
-                    'backgroundColor': 'rgb(248, 248, 248)'
-                },
-                style_data_conditional=styles_data_conditional,
-                filter_action="native",
-                sort_action="native",
-                page_size=10,
-                tooltip_duration=None
-            ),
-            html.Hr(),
-            dcc.Link(
-                'Go back to Experiment Results Analysis',
-                href='/experiment-results'
-            ),
-            html.Br(),
-            dcc.Link('Go to Data Analysis', href='/data-analysis'),
-            html.Br()
-        ])
+        if include_image_base64(data_dict):
+            new_data_dict = extract_and_decode_image(data_dict)
+            return html.Div([
+                html.A(
+                    'Export to CSV',
+                    id='export-link-group-key-combo',
+                    download="group_key_combo.csv",
+                    href=csv_data_url,
+                    target="_blank"
+                ),
+                html.Br(),
+                html.Table(
+                    create_table(new_data_dict), id='group-key-combo-table'
+                ),
+                html.Hr(),
+                dcc.Link(
+                    'Go back to Experiment Results Analysis',
+                    href='/experiment-results'
+                ),
+                html.Br(),
+                dcc.Link('Go to Data Analysis', href='/data-analysis'),
+                html.Br()
+            ])
+        else:
+            return html.Div([
+                html.A(
+                    'Export to CSV',
+                    id='export-link-group-key-combo',
+                    download="group_key_combo.csv",
+                    href=csv_data_url,
+                    target="_blank"
+                ),
+                html.Br(),
+                dash_table.DataTable(
+                    id='group-key-combo-table',
+                    columns=columns,
+                    data=df_group_key.to_dict('records'),
+                    style_cell={
+                        'whiteSpace':
+                        'pre-line',  # Allows for line breaks within cells
+                        'height': 'auto',
+                        'textAlign': 'left',
+                        'fontSize': 16,
+                        'border': '1px solid #eee'
+                    },
+                    style_table={
+                        'width': '100%',
+                        'maxHeight': '100vh',
+                        'overflowY': 'auto',
+                        'border': '1px solid #ddd'
+                    },
+                    style_header={
+                        'backgroundColor': 'rgb(230, 230, 230)',
+                        'fontWeight': 'bold'
+                    },
+                    style_data={
+                        'overflow': 'hidden',
+                        'textOverflow': 'ellipsis',
+                        'backgroundColor': 'rgb(248, 248, 248)'
+                    },
+                    style_data_conditional=styles_data_conditional,
+                    filter_action="native",
+                    sort_action="native",
+                    page_size=10,
+                    tooltip_duration=None
+                ),
+                html.Hr(),
+                dcc.Link(
+                    'Go back to Experiment Results Analysis',
+                    href='/experiment-results'
+                ),
+                html.Br(),
+                dcc.Link('Go to Data Analysis', href='/data-analysis'),
+                html.Br()
+            ])
 
     import numpy as np
 
@@ -912,9 +1050,34 @@ def create_dash_app(
                     }
                 )
             )
+            if isinstance(exp_result.raw_output, list):
+                images = []
+                for image in exp_result.raw_output:
+                    img_str = pil_image_to_base64(image)
+                    img = html.Img(
+                        src=img_str,
+                        style={
+                            'width': '200px',
+                            'height': '200px',
+                            'margin': 'auto'
+                        }
+                    )
+                    images.append(img)
+                content = html.Div(
+                    images,
+                    style={
+                        'display': 'grid',
+                        'grid-template-columns': 'repeat(2, 1fr)',
+                        'justify-content': 'center',
+                        'align-items': 'center'
+                    }
+                )
+            else:
+                content = str(exp_result.raw_output)
+
             children.append(
                 html.Div(
-                    str(exp_result.raw_output),
+                    content,
                     style={
                         'margin': '25px 0',
                         'border': '2px solid #AED6F1',
@@ -1176,7 +1339,6 @@ def create_dash_app(
     def update_slider_store(slider_values, current_data):
         # The IDs of triggered inputs
         ctx = dash.callback_context
-        import json
 
         triggered_slider_ids = [
             json.loads(t['prop_id'].split('.')[0])['index']
