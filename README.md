@@ -55,11 +55,11 @@ strategies.
 
 ## 🚀 Features
 
-|            | 🔧 Experiment Mode:                                                                                                                                                                                                                                                                                                                                  | 🤖 Agent Mode (Auto-prompting):                                                                                                                                                                                |
-|------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Workflow   | Define your AI/ML application ➡️ Define test dataset ➡️ Evaluate 🔄 Improve ➡️ Prompt related artifacts built ✅                                                                                                                                                                                                                                      | Define your AI/ML application ➡️ Auto-prompting ➡️ Prompt related artifacts built ✅                                                                                                                            |
-| Features   | 🌟 Streamlined prompt development process<br/> 🌟 Support for multimedia and multimodel<br/> 🌟 Support CSV upload and GPT4 generated test data<br/>🌟 Dashboard tracking latency, price and evaluator results<br/> 🌟 Human(RLHF) and algorithm based improvers <br/>🌟 Service with detailed web view<br/>🌟 Customizable evaluators and improvers | 🌟 Non-code experience of Gen-AI application build<br/>  🌟 Witness your Gen-AI application born and improve with just one click                                                                                  |
-| Demos      |                                                                                                                                                                                                                                                                                                                                                      | - Startup Company Headline Generation Bot🔥 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1EiWUL8rE_kfNLXVPowCWCh6hwHFagvs_?usp=sharing) |
+|          | 🔧 Experiment Mode:                                           | 🤖 Agent Mode (Auto-prompting):                               |
+| -------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Workflow | Define your AI/ML application ➡️ Define test dataset ➡️ Evaluate 🔄 Improve ➡️ Prompt related artifacts built ✅ | Define your AI/ML application ➡️ Auto-prompting ➡️ Prompt related artifacts built ✅ |
+| Features | 🌟 Streamlined prompt development process<br/> 🌟 Support for multimedia and multimodel<br/> 🌟 Support CSV upload and GPT4 generated test data<br/>🌟 Dashboard tracking latency, price and evaluator results<br/> 🌟 Human(RLHF) and algorithm based improvers <br/>🌟 Service with detailed web view<br/>🌟 Customizable evaluators and improvers | 🌟 Non-code experience of Gen-AI application build<br/>  🌟 Witness your Gen-AI application born and improve with just one click |
+| Demos    |                                                              | - Startup Company Headline Generation Bot🔥 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1EiWUL8rE_kfNLXVPowCWCh6hwHFagvs_?usp=sharing)<br /> - Animal story with MidJourney 🐯 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1DgtDZghleiLEaaNF7f4vSGJ4ChDVls2X?usp=sharing)  |
 
 ## Model Support matrix
 
@@ -76,6 +76,19 @@ pip install yival
 ```
 
 ## Demo
+
+### Multi-model Mode
+
+Yival has multimodal capabilities and can handle generated images in AIGC really
+well.
+
+Find more information in the Animal story demo we provided.
+
+```bash
+yival run demo/configs/animal_story.yml
+```
+
+![MidJourney](https://uninaruto.oss-cn-shanghai.aliyuncs.com/img/816211693805398_.pic_hd.jpg)
 
 ### Basic Interactive Mode
 
@@ -121,3 +134,25 @@ Dive into the world of YiChing and discover your fortune on our index page.
 A fun and interactive way to get started with Yival.
 
 ![Screenshot 2023-08-16 at 10 50 57 PM](https://github.com/YiVal/YiVal/assets/1544154/b5c04295-7809-4331-8cce-cc4a1ceea73c)
+
+```mermaid
+sequenceDiagram
+    box  
+    participant V as Variation Prompt
+    participant D as Dataset Generate Prompt
+    participant AS as Animal Story Generate Prompt
+    end
+    box
+    participant AC as Animal Charatized Story
+    participant AP as Animal Charatized Story
+    participant R as Result
+    
+    end
+    
+
+    V->>AS: Generate story tell prompt template
+    D->>AS: Generate variation instance
+    AS->>AC: GPT-4 generation
+    AC->>AP: Midjourney API generation
+    AP->>R: Human evaluator
+```
