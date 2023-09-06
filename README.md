@@ -69,6 +69,19 @@ pip install yival
 
 ## Demo
 
+### Multi-model Mode
+
+Yival has multimodal capabilities and can handle generated images in AIGC really
+well.
+
+Find more information in the Animal story demo we provided.
+
+```bash
+yival run demo/configs/animal_story.yml
+```
+
+![MidJourney](https://uninaruto.oss-cn-shanghai.aliyuncs.com/img/816211693805398_.pic_hd.jpg)
+
 ### Basic Interactive Mode
 
 To get started with a demo for basic interactive mode of YiVal, run the
@@ -113,8 +126,6 @@ Dive into the world of YiChing and discover your fortune on our index page.
 A fun and interactive way to get started with Yival.
 
 ![Screenshot 2023-08-16 at 10 50 57 PM](https://github.com/YiVal/YiVal/assets/1544154/b5c04295-7809-4331-8cce-cc4a1ceea73c)
-
-![MidJourney](https://uninaruto.oss-cn-shanghai.aliyuncs.com/img/816211693805398_.pic_hd.jpg)
 
 ```mermaid
 sequenceDiagram

@@ -1600,4 +1600,4 @@ def display_results_dash(
         print(f"Access Yival from this public URL :{public_url}")
         app.run(debug=False, port=8073)
     else:
-        app.run(debug=True, port=8073)
+        app.run(debug=False, port=8073)
