@@ -63,11 +63,19 @@ strategies.
 
 ## Model Support matrix
 
-| Model        | Evaluate |variation generate|custom func|
-|--------------| ---- | ---- | ---- |
-| GPT-4        | ✅  | ✅  | ✅  |
-| GPT-3.5-turbo        | ✅  | ✅  | ✅  |
-| MidJourney          |   |   | ✅  |
+| Model        | llm-Evaluate |Human-Evaluate|Variation Generate|Custom func|
+|--------------| ---- | ---- | ---- |--------------|
+| OpenAI  | ✅  | ✅  | ✅  |✅|
+| Azure   | ✅  | ✅  | ✅  |✅|
+| TogetherAI | ✅ | ✅ | ✅  |✅|
+| Cohere | ✅ | ✅ | ✅ |✅|
+| Huggingface | ✅ | ✅ | ✅ |✅|
+| Anthropic | ✅ | ✅ | ✅ |✅|
+| MidJourney | | ✅ |  |✅|
+
+To support different models in custom func(e.g. Model Comparison) , [follow our example](https://github.com/YiVal/YiVal/blob/litellm_complete/demo/configs/model_compare.yml)
+
+To support different models in evaluators and generators , [check our config](https://github.com/YiVal/YiVal/blob/litellm_complete/demo/configs/headline_generation.yml)
 
 ## Installation
 
@@ -132,5 +140,3 @@ For more details, check out the [Question Answering with expected result evaluat
 
 Dive into the world of YiChing and discover your fortune on our index page.
 A fun and interactive way to get started with Yival.
-
-![Screenshot 2023-08-16 at 10 50 57 PM](https://github.com/YiVal/YiVal/assets/1544154/b5c04295-7809-4331-8cce-cc4a1ceea73c)

@@ -16,12 +16,13 @@ import pickle
 import re
 from typing import Any, Dict, Iterator, List
 
-import openai
 from tqdm import tqdm
 
 from ..common import utils
+from ..common.model_utils import llm_completion
 from ..schemas.common_structures import InputData
 from ..schemas.data_generator_configs import OpenAIPromptBasedGeneratorConfig
+from ..schemas.model_configs import Request
 from .base_data_generator import BaseDataGenerator
 
 
@@ -129,6 +130,16 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
     ):
         """Process the output from GPT API and update data lists."""
         generated_example = extract_dict_from_gpt_output(output_content)
+
+        # cut the generated_example keys
+        if generated_example:
+            keys_to_keep = self.config.input_function.get('parameters',
+                                                          {}).keys()
+            generated_example = {
+                k: generated_example[k]
+                for k in keys_to_keep if k in generated_example
+            }
+
         if not generated_example or set(generated_example.keys()) != set(
             self.config.input_function.get('parameters', {}).keys()
         ):
@@ -167,7 +178,7 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                     responses = asyncio.run(
                         utils.parallel_completions(
                             message_batches,
-                            self.config.openai_model_name,
+                            self.config.model_name,
                             self.config.max_token,
                             pbar=pbar
                         )
@@ -182,12 +193,16 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                     desc="Generating Examples",
                     unit="example"
                 ) as pbar:
-                    output = openai.ChatCompletion.create(
-                        model=self.config.openai_model_name,
-                        messages=messages,
-                        temperature=1.3,
-                        presence_penalty=2,
-                    )
+                    output = llm_completion(
+                        Request(
+                            model_name=self.config.model_name,
+                            prompt=messages,
+                            params={
+                                "temperature": 1.3,
+                                "presence_penalty": 2
+                            }
+                        )
+                    ).output
                     self.process_output(
                         output.choices[0].message.content, all_data, chunk
                     )

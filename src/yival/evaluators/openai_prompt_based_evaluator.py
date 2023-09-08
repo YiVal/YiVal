@@ -7,12 +7,10 @@ the model's responses to determine the quality or correctness of a given
 experiment result.
 """
 import copy
-import os
 import string
 from typing import Any, Dict, Iterable, List, Optional, Union
 
-import openai
-
+from ..common.model_utils import llm_completion
 from ..schemas.evaluator_config import (
     EvaluatorOutput,
     EvaluatorType,
@@ -21,6 +19,7 @@ from ..schemas.evaluator_config import (
     OpenAIPromptBasedEvaluatorConfig,
 )
 from ..schemas.experiment_config import ExperimentResult, InputData
+from ..schemas.model_configs import Request
 from .base_evaluator import BaseEvaluator
 
 CLASSIFY_STR = """
@@ -112,7 +111,6 @@ class OpenAIPromptBasedEvaluator(BaseEvaluator):
 
     def evaluate(self, experiment_result: ExperimentResult) -> EvaluatorOutput:
         """Evaluate the experiment result using OpenAI's prompt-based evaluation."""
-        openai.api_key = os.getenv("OPENAI_API_KEY")
         assert isinstance(self.config, OpenAIPromptBasedEvaluatorConfig)
         format_dict = copy.deepcopy(experiment_result.input_data.content)
         format_dict["raw_output"] = experiment_result.raw_output
@@ -124,9 +122,14 @@ class OpenAIPromptBasedEvaluator(BaseEvaluator):
         prompt[-1]["content"] += "\n\n" + CLASSIFY_STR.format(
             choices=choices_to_string(self.config.choices)
         )
-        response = openai.ChatCompletion.create(
-            model="gpt-4", messages=prompt, temperature=0.0
-        )
+
+        response = llm_completion(
+            Request(
+                model_name=self.config.model_name,
+                prompt=prompt,
+                params={"temperature": 0.0}
+            )
+        ).output
         response_content = response['choices'][0]['message']['content']
 
         choice = extract_choice_from_response(

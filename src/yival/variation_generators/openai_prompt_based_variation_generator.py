@@ -3,11 +3,12 @@ import os
 import pickle
 from typing import Any, Dict, Iterator, List
 
-import openai
 from tqdm import tqdm
 
 from ..common import utils
+from ..common.model_utils import llm_completion
 from ..schemas.experiment_config import WrapperVariation
+from ..schemas.model_configs import Request
 from ..schemas.varation_generator_configs import (
     OpenAIPromptBasedVariationGeneratorConfig,
 )
@@ -109,7 +110,7 @@ class OpenAIPromptBasedVariationGenerator(BaseVariationGenerator):
                     responses = asyncio.run(
                         utils.parallel_completions(
                             message_batches,
-                            self.config.openai_model_name,
+                            self.config.model_name,
                             self.config.max_tokens,
                             pbar=pbar
                         )
@@ -131,13 +132,17 @@ class OpenAIPromptBasedVariationGenerator(BaseVariationGenerator):
                     desc="Generating Variations",
                     unit="variation"
                 ) as pbar:
-                    output = openai.ChatCompletion.create(
-                        model=self.config.openai_model_name,
-                        messages=messages,
-                        temperature=1,
-                        presence_penalty=1,
-                        max_tokens=self.config.max_tokens,
-                    )
+                    output = llm_completion(
+                        Request(
+                            model_name=self.config.model_name,
+                            prompt=messages,
+                            params={
+                                "temperature": 1,
+                                "presence_penalty": 1,
+                                "max_tokens": self.config.max_tokens,
+                            }
+                        )
+                    ).output
                     if self.config.variables and not validate_output(
                         output.choices[0].message.content,
                         self.config.variables
