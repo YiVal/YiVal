@@ -140,5 +140,3 @@ For more details, check out the [Question Answering with expected result evaluat
 
 Dive into the world of YiChing and discover your fortune on our index page.
 A fun and interactive way to get started with Yival.
-
-![Screenshot 2023-08-16 at 10 50 57 PM](https://github.com/YiVal/YiVal/assets/1544154/b5c04295-7809-4331-8cce-cc4a1ceea73c)
