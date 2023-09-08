@@ -135,8 +135,3 @@ Once started, navigate to the following address in your web browser:
 </details>
 
 For more details, check out the [Question Answering with expected result evaluator](https://github.com/YiVal/YiVal/blob/master/docs/qa_expected_results.md#demo).
-
-### Fun Cast Fortune Telling
-
-Dive into the world of YiChing and discover your fortune on our index page.
-A fun and interactive way to get started with Yival.
