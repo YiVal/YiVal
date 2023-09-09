@@ -7,8 +7,6 @@ experiment.
 from dataclasses import asdict, dataclass, field
 from typing import Any, Callable, Dict, List, Optional, Tuple, Type, Union
 
-from PIL.PngImagePlugin import PngImageFile
-
 from .combination_improver_configs import BaseCombinationImproverConfig
 from .common_structures import InputData
 from .dataset_config import DatasetConfig
