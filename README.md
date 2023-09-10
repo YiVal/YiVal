@@ -27,7 +27,7 @@
 
 <!-- markdownlint-disable-next-line MD013 -->
 👉 Follow us: [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/YiValai.svg?style=social&label=Follow%20%40YiVal)](https://twitter.com/yivalloveaigc) |
-[![Discord](https://dcbadge.vercel.app/api/server/4V4jyt2K?compact=true&style=flat)](https://discord.gg/4V4jyt2K)
+[![Discord](https://dcbadge.vercel.app/api/server/6Q6Rgwrstw?compact=true&style=flat)](https://discord.gg/6Q6Rgwrstw)
 
 [![Downloads](https://static.pepy.tech/badge/YiVal/month)](https://pepy.tech/project/YiVal)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -48,10 +48,10 @@ strategies.
 
 ### Expected Features in Sep
 
-- Add ROUGE and BERTScore evaluators
-- Add support to midjourney
-- Add support to LLaMA2-70B, LLaMA2-7B, Falcon-40B,
-- Support LoRA fine-tune to open source models
+- [ ] Add ROUGE and BERTScore evaluators
+- [x] Add support to midjourney
+- [x] Add support to LLaMA2-70B, LLaMA2-7B, Falcon-40B,
+- [ ] Support LoRA fine-tune to open source models
 
 ## 🚀 Features
 
@@ -59,7 +59,7 @@ strategies.
 | -------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | Workflow | Define your AI/ML application ➡️ Define test dataset ➡️ Evaluate 🔄 Improve ➡️ Prompt related artifacts built ✅ | Define your AI/ML application ➡️ Auto-prompting ➡️ Prompt related artifacts built ✅ |
 | Features | 🌟 Streamlined prompt development process<br/> 🌟 Support for multimedia and multimodel<br/> 🌟 Support CSV upload and GPT4 generated test data<br/>🌟 Dashboard tracking latency, price and evaluator results<br/> 🌟 Human(RLHF) and algorithm based improvers <br/>🌟 Service with detailed web view<br/>🌟 Customizable evaluators and improvers | 🌟 Non-code experience of Gen-AI application build<br/>  🌟 Witness your Gen-AI application born and improve with just one click |
-| Demos    |                                                              | - Startup Company Headline Generation Bot🔥 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1EiWUL8rE_kfNLXVPowCWCh6hwHFagvs_?usp=sharing)<br /> - Animal story with MidJourney 🐯 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1DgtDZghleiLEaaNF7f4vSGJ4ChDVls2X?usp=sharing)<br/>- Automate Prompt Generation with Retrieval Methods🔥 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1L7miRwTQSZfm5xOKBakWOG5bOumMynpv?usp=sharing)  |
+| Demos    |   - Animal story with MidJourney 🐯 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1DgtDZghleiLEaaNF7f4vSGJ4ChDVls2X?usp=sharing)<br/> - Model Comparison in QA ability 🌟[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1cSjsEKNwDq8W4O2oeRI93vH-BhYH5JXj?usp=sharing)                                                         | - Startup Company Headline Generation Bot🔥 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1EiWUL8rE_kfNLXVPowCWCh6hwHFagvs_?usp=sharing)<br /> - Automate Prompt Generation with Retrieval Methods🔥 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1L7miRwTQSZfm5xOKBakWOG5bOumMynpv?usp=sharing)  |
 
 ## Model Support matrix
 
