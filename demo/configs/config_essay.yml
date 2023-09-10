@@ -11,7 +11,7 @@ dataset:
         parameters:
           topic: str
       number_of_examples: 1
-      openai_model_name: gpt-4
+      model_name: gpt-4
       output_path: generated_xiaohongshu_small.pkl
   source_type: machine_generated
 description: Generated experiment config
@@ -21,7 +21,7 @@ evaluators:
     input_description: 根据主题生成一行小红书标题
     metric_calculators: []
     name: openai_elo_evaluator
-    openai_model_name: gpt-4
+    model_name: gpt-4
 
 selection_strategy:
   ahp_selection:
@@ -51,7 +51,7 @@ variations:
       input_description: 根据主题生成一行小红书标题 used by system prompt
       input_test_cases: ["美妆", "穿搭"]
       number_of_variations: 1
-      openai_model_name: gpt-4
+      model_name: gpt-4
       output_path: generated_xiaohongshu_system_small.pkl
     generator_name: openai_prompt_based_variation_generator
     name: system
@@ -64,7 +64,7 @@ variations:
       input_description: 根据主题生成一行小红书标题
       input_test_cases: ["美妆", "穿搭"]
       number_of_variations: 1
-      openai_model_name: gpt-4
+      model_name: gpt-4
       output_path: generated_xiaohongshu_user_small.pkl
     generator_name: openai_prompt_based_variation_generator
     name: topic

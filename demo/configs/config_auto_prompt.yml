@@ -13,7 +13,7 @@ dataset:
         parameters:
           tech_startup_business: str
       number_of_examples: 10
-      openai_model_name: gpt-4
+      model_name: gpt-4
       output_path: generated_examples.pkl
   source_type: machine_generated
 description: Generated experiment config
@@ -34,7 +34,7 @@ evaluators:
   #     page headline
   #   metric_calculators: []
   #   name: openai_elo_evaluator
-  #   openai_model_name: gpt-4
+  #   model_name: gpt-4
   - evaluator_type: individual
     metric_calculators:
       - method: AVERAGE
@@ -157,7 +157,7 @@ variations:
       page headline
     input_test_cases: ["AI law firm", "AI sales agent"]
     number_of_variations: 5
-    openai_model_name: gpt-4
+    model_name: gpt-4
     output_path: generated_prompt.pkl
   generator_name: openai_prompt_based_variation_generator
 name: task
