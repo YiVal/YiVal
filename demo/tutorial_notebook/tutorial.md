@@ -19,6 +19,40 @@ the final result.
 step-by-step optimization pipeline mode, continuously adjusting based on
 the test case results. We provide an example : [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1tr5s_adAPmI9Mv6Zz97JnTGIh3mGojsi?usp=sharing)
 
+## Animal story with MidJourney 🐯
+
+* google colab : [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1DgtDZghleiLEaaNF7f4vSGJ4ChDVls2X?usp=sharing)
+* notebook : [animal_story](./animal_story.ipynb)
+
+Yival now supports image now , and in near future We will equip Yival
+with full modality capabilities (including sound, video, etc.) in
+near future.
+
+In this demo, we only need to provide the initial prompt, and Yival will
+generate a variety of animal types and personalities, and write cute and
+concise animal stories based on different story templates. Finally,
+corresponding images are generated through Midjourney. What's surprising
+is that this series of actions is completely automated, you only need to
+provide a prompt.
+
+![hello](https://uninaruto.oss-cn-shanghai.aliyuncs.com/img/816211693805398_.pic_hd.jpg)
+
+## Model comparison
+
+* google colab: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1DgtDZghleiLEaaNF7f4vSGJ4ChDVls2X?usp=sharing)
+* notebook : [model_comparison](./model_comparison.ipynb)
+
+For NLP practitioners, a common issue is evaluating the capabilities of
+different models. Yival provides a variety of generalized evaluation methods,
+requiring only the provision of data and configuration files.In this demo,
+we conducted a horizontal comparison of the QA capabilities of the following
+four models:
+
+* gpt-3.5-turbo
+* llama-2-13b-chat
+* llama-2-70b-chat
+* vicuna-13b
+
 ## Basic Demo
 
 ### Basic Interactive Mode

@@ -18,7 +18,7 @@ dataset:
         parameters:
           tech_startup_business: str
       number_of_examples: 1
-      openai_model_name: gpt-4
+      model_name: gpt-4
       output_path: null
   source_type: machine_generated
 
@@ -31,7 +31,7 @@ variations:
         variation_id: null
     generator_name: openai_prompt_based_variation_generator
     generator_config:
-      openai_model_name: gpt-4
+      model_name: gpt-4
       number_of_variations: 1
       diversify: true
       variables: null
