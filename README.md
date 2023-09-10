@@ -48,10 +48,10 @@ strategies.
 
 ### Expected Features in Sep
 
-- Add ROUGE and BERTScore evaluators
-- Add support to midjourney
-- Add support to LLaMA2-70B, LLaMA2-7B, Falcon-40B,
-- Support LoRA fine-tune to open source models
+- [ ] Add ROUGE and BERTScore evaluators
+- [x] Add support to midjourney
+- [x] Add support to LLaMA2-70B, LLaMA2-7B, Falcon-40B,
+- [ ] Support LoRA fine-tune to open source models
 
 ## 🚀 Features
 
