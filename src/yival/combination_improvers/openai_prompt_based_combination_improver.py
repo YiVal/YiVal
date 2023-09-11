@@ -301,6 +301,8 @@ class OpenAIPromptBasedCombinationImprover(BaseCombinationImprover):
             state.set_experiment_config(self.updated_config)
             state.active = True
             all_combinations = state.get_all_variation_combinations()
+
+            print(f"[INFO] all_combination:{all_combinations}")
             total = len(combo.experiment_results)
             data.clear()
             for r in combo.experiment_results:

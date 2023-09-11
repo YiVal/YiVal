@@ -29,7 +29,9 @@ def headline_generation(
         )
     )
 
-    print(f"[INFO] prompt is now {prompt}")
+    print(
+        f"[INFO] prompt is now {prompt}\n[INFO] tech_startup_business is now {tech_startup_business}\n[INFO] business is now {business}\n[INFO] target_people is now {target_people}"
+    )
     messages = [{"role": "user", "content": prompt}]
     # Use the chat-based completion
     response = openai.ChatCompletion.create(
