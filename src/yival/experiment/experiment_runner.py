@@ -147,13 +147,13 @@ class ExperimentRunner:
 
             if display:
                 display_results_dash(
-                    experiment, self.config, all_combinations, state, logger,
+                    experiment, self.config, all_combinations, ExperimentState.get_instance(), logger,
                     evaluator
                 )
 
         elif source_type == "user_input":
             display_results_dash(
-                Experiment([], []), self.config, all_combinations, state,
+                Experiment([], []), self.config, all_combinations, ExperimentState.get_instance(),
                 logger, evaluator, True
             )
 
