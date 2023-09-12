@@ -235,7 +235,7 @@ def finetune(
 
     formatted_data = _format_data_for_chatgpt_finetune(
         result_pairs, system_prompt
-    )
+    ) * 2
     if validate_message(formatted_data):
         openai.api_key = os.getenv("OPENAI_API_KEY")
         _print_stats(formatted_data)
@@ -264,11 +264,11 @@ def finetune(
                     print("Waiting for file to be ready...")
                     time.sleep(60)
 
-            ft_job = openai.FineTuningJob.retrieve(model_details)
+            ft_job = openai.FineTuningJob.retrieve(model_details["id"])
             print(ft_job)
             while ft_job["status"] != "succeeded" and ft_job["status"
                                                              ] != "failed":
-                ft_job = openai.FineTuningJob.retrieve(model_details)
+                ft_job = openai.FineTuningJob.retrieve(model_details["id"])
                 print(ft_job)
                 time.sleep(60)
 
@@ -281,7 +281,7 @@ def finetune(
 def main():
     finetune(
         'test_demo_results.pkl',
-        "name == openai_prompt_based_evaluator AND result >= 3 AND display_name == clarity",
+        "name == openai_prompt_based_evaluator AND result >= 0 AND display_name == clarity",
         "yival.demo.headline_generation",
     )
 

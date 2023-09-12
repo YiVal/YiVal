@@ -283,7 +283,12 @@ def transform_experiment_result_generic(
     formatted_input = combo_value.format(**exp_result.input_data.content)
 
     # Construct the final pair
-    result_pair = {"Input": formatted_input, "Output": exp_result.raw_output}
+
+    if isinstance(exp_result.raw_output, str):
+        output = exp_result.raw_output.strip('"')
+    else:
+        output = exp_result.raw_output
+    result_pair = {"Input": formatted_input, "Output": output}
 
     return result_pair
 
