@@ -200,7 +200,7 @@ def finetune(
     custom_function: str,
     system_prompt: str = "",
     model_suffx: str = "",
-):
+) -> str:
     """
     Fine-tunes a gpt-3.5 using provided data and conditions.
 
@@ -210,12 +210,15 @@ def finetune(
     - custom_function (str): Path or module containing the custom function used in the experiment.
     - system_prompt (str, optional): System message to prepend to each chat. Defaults to None.
     - model_suffix: (str, optional): Suffix to append to the model name. Defaults to None.
+
+    Returns:
+    - str: ID of the fine-tuned model.
     """
 
     code = read_code_from_path_or_module(custom_function)
     if not code:
         print("Failed to read code from path or module.")
-        return
+        return ""
     with open(input_file, 'rb') as f:
         result: Experiment = pickle.load(f)
     result_pairs = []
@@ -273,9 +276,11 @@ def finetune(
                 time.sleep(60)
 
             print("Fine-tuning job finished: %s", model_details["id"])
+            return ft_job["fine_tuned_model"]
+        return ""
     else:
         print("Something is wrong, please check the data format.")
-        return None
+        return ""
 
 
 def main():
