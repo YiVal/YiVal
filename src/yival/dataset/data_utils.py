@@ -115,7 +115,7 @@ def _evaluate_condition(
     return COMPARISON_OPERATORS[operator](actual_value, value)
 
 
-def evaluate_condition(
+def _evaluate_tokenized_condition(
     tokens: List[str], evaluator_output: EvaluatorOutput
 ) -> bool:
     """
@@ -145,7 +145,9 @@ def evaluate_condition(
                 stack.pop()
             else:
                 raise ValueError("Mismatched parentheses in condition")
-            inner_result = evaluate_condition(temp_tokens, evaluator_output)
+            inner_result = _evaluate_tokenized_condition(
+                temp_tokens, evaluator_output
+            )
             stack.append(inner_result)
         else:
             stack.append(token)
@@ -210,6 +212,13 @@ def evaluate_condition(
     return stack[0]
 
 
+def evaluate_condition(
+    condition: str, evaluator_output: EvaluatorOutput
+) -> bool:
+    tokens = _tokenize_condition(condition)
+    return _evaluate_tokenized_condition(tokens, evaluator_output)
+
+
 def read_code_from_path_or_module(path_or_module: str) -> Optional[str]:
     """
     Reads the source code either from an absolute file path or from a module, refined version.
@@ -260,6 +269,17 @@ def transform_experiment_result_generic(
     if not combo_value:
         return None
     # Format the combination's value using the content in input_data.content
+    variable_pattern = r"\{(\w+)\}"
+    variables_in_combo = re.findall(variable_pattern, combo_value)
+
+    if not variables_in_combo or not all(
+        var in exp_result.input_data.content for var in variables_in_combo
+    ):
+        return {
+            "Instruction": combo_value,
+            "Input": exp_result.input_data.content,
+            "Output": exp_result.raw_output
+        }
     formatted_input = combo_value.format(**exp_result.input_data.content)
 
     # Construct the final pair
@@ -280,8 +300,7 @@ def main():
         results: List[ExperimentResult] = combo_result.experiment_results
         for result in results:
             for eo in result.evaluator_outputs:
-                tokens = _tokenize_condition(condition)
-                condition_met = evaluate_condition(tokens, eo)
+                condition_met = evaluate_condition(condition, eo)
                 if condition_met:
                     result_pair = transform_experiment_result_generic(
                         code, result
