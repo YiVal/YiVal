@@ -68,7 +68,7 @@ class ExperimentRunner:
                 with ThreadPoolExecutor() as executor:
                     for res in executor.map(
                         self.parallel_task, data,
-                        [all_combinations] * len(data), [state] * len(data),
+                        [all_combinations] * len(data), [ExperimentState.get_instance()] * len(data),
                         [logger] * len(data), [evaluator] * len(data)
                     ):
                         results.extend(res)
@@ -104,7 +104,7 @@ class ExperimentRunner:
         )  # type: ignore
         logger = TokenLogger()
 
-        state = ExperimentState.get_instance()
+        state = ExperimentState.get_default_state()
         state.set_experiment_config(self.config)
         state.active = True
 
