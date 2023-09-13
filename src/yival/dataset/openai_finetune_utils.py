@@ -218,7 +218,10 @@ def finetune(
     code = read_code_from_path_or_module(custom_function)
     if not code:
         print("Failed to read code from path or module.")
+
         return ""
+
+        return
     with open(input_file, 'rb') as f:
         result: Experiment = pickle.load(f)
     result_pairs = []
@@ -238,7 +241,7 @@ def finetune(
 
     formatted_data = _format_data_for_chatgpt_finetune(
         result_pairs, system_prompt
-    ) * 2
+    )
     if validate_message(formatted_data):
         openai.api_key = os.getenv("OPENAI_API_KEY")
         _print_stats(formatted_data)
@@ -272,6 +275,7 @@ def finetune(
             while ft_job["status"] != "succeeded" and ft_job["status"
                                                              ] != "failed":
                 ft_job = openai.FineTuningJob.retrieve(model_details["id"])
+
                 print(ft_job)
                 time.sleep(60)
 
@@ -287,7 +291,6 @@ def main():
     finetune(
         'test_demo_results.pkl',
         "name == openai_prompt_based_evaluator AND result >= 0 AND display_name == clarity",
-        "yival.demo.headline_generation",
     )
 
 
