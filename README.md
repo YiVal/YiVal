@@ -63,6 +63,9 @@ strategies.
 
 ## Model Support matrix
 
+We support 100+ LLM ( gpt-4 , gpt-3.5-turbo , llama, blablabla e.g.).
+Different Model sources can be viewed as follow
+
 | Model        | llm-Evaluate |Human-Evaluate|Variation Generate|Custom func|
 |--------------| ---- | ---- | ---- |--------------|
 | OpenAI  | ✅  | ✅  | ✅  |✅|
