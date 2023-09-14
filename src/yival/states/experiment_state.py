@@ -43,14 +43,14 @@ class ExperimentState:
     _default_state = None
     _thread_local_state = threading.local()
 
-
     @staticmethod
     def get_instance():
         if not hasattr(ExperimentState._thread_local_state, "_instance"):
-            ExperimentState._thread_local_state._instance = copy.deepcopy(ExperimentState._default_state)
+            ExperimentState._thread_local_state._instance = copy.deepcopy(
+                ExperimentState._default_state
+            )
         return ExperimentState._thread_local_state._instance
-    
-    
+
     @staticmethod
     def get_default_state():
         if not ExperimentState._default_state:
