@@ -29,7 +29,7 @@ class RougeEvaluator(BaseEvaluator):
         self.rough = rouge.Rouge()
 
     def evaluate(self, experiment_result: ExperimentResult) -> EvaluatorOutput:
-        """Evalurte the experiment result using rouge evaluat"""
+        """Evaluate the experiment result using rouge evaluat"""
         assert isinstance(self.config, RougeEvaluatorConfig)
         input_data = experiment_result.input_data
         raw_output = experiment_result.raw_output
