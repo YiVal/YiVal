@@ -96,7 +96,7 @@ Find more information in the Animal story demo we provided.
 yival run demo/configs/animal_story.yml
 ```
 
-![MidJourney](https://uninaruto.oss-cn-shanghai.aliyuncs.com/img/816211693805398_.pic_hd.jpg)
+![pic](https://github.com/YiVal/YiVal/assets/55043304/553a2369-adcf-4fbd-a4dc-64e2ecba0e09)
 
 ### Basic Interactive Mode
 
