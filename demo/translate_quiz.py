@@ -1,11 +1,9 @@
 import os
-import re
+
 import openai
 
 from yival.logger.token_logger import TokenLogger
 from yival.wrappers.string_wrapper import StringWrapper
-from yival.common.model_utils import llm_completion
-from yival.schemas.model_configs import Request
 
 
 def translate_quiz(teacher_quiz: str) -> str:

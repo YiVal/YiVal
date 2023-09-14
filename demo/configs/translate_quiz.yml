@@ -23,10 +23,10 @@ dataset:
   source_type: machine_generated
 
 variations:
-  - name: task
+  - name : model_name
     variations:
-      - instantiated_value: Translate this English sentence to Chinese 
-        value: Translate this English sentence to Chinese 
+      - instantiated_value: gpt-3.5-turbo
+        value: gpt-3.5-turbo
         value_type: str
         variation_id: null
 

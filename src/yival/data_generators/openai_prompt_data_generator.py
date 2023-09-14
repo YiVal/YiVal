@@ -144,6 +144,7 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
             self.config.input_function.get('parameters', {}).keys()
         ):
             return
+        print(f"[DEBUG] generated_example:{generated_example}")
         input_data_instance = InputData(
             example_id=super().generate_example_id(output_content),
             content=generated_example,
