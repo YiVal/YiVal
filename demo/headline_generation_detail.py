@@ -3,6 +3,8 @@ import random
 import time
 
 import openai
+from yival.common.model_utils import llm_completion
+from yival.schemas.model_configs import Request
 
 from yival.logger.token_logger import TokenLogger
 from yival.wrappers.string_wrapper import StringWrapper
@@ -29,12 +31,17 @@ def headline_generation(
         )
     )
 
-    print(f"[INFO] prompt is now {prompt}")
     messages = [{"role": "user", "content": prompt}]
     # Use the chat-based completion
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo", messages=messages
     )
+    # response = llm_completion(
+    #     Request(
+    #         model_name=str(StringWrapper("a16z-infra/llama-2-13b-chat:9dff94b1bed5af738655d4a7cbcdcde2bd503aa85c94334fe1f42af7f3dd5ee3", name="model_name")),
+    #         prompt=prompt
+    #     )
+    # ).output
     res = response['choices'][0]['message']['content']
     token_usage = response['usage']['total_tokens']
     logger.log(token_usage)
