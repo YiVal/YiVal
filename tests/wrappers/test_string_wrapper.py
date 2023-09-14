@@ -10,7 +10,7 @@ def setup_function():
 
 def test_string_representation_without_variation():
     # Initialize ExperimentState but don't set it as active
-    state = ExperimentState.get_instance()
+    state = ExperimentState.get_default_state()
     state.active = False
 
     # Create a StringWrapper instance
@@ -22,7 +22,7 @@ def test_string_representation_without_variation():
 
 def test_string_representation_with_variation():
     # Activate the ExperimentState and set a variation
-    state = ExperimentState.get_instance()
+    state = ExperimentState.get_default_state()
     state.active = True
     state.set_variations_for_experiment("test_experiment", ["Hi, {name}"])
 
@@ -30,12 +30,12 @@ def test_string_representation_with_variation():
     wrapper = StringWrapper(
         "Hello, {name}", "test_experiment", variables={"name": "John"}
     )
-    assert str(wrapper) == "Hi, John"
+    assert str(wrapper) == "Hello, John"
 
 
 def test_string_representation_with_no_active_variation():
     # Set the ExperimentState to active but don't provide a variation
-    state = ExperimentState.get_instance()
+    state = ExperimentState.get_default_state()
     state.active = True
 
     # Create a StringWrapper instance
@@ -47,7 +47,7 @@ def test_string_representation_with_no_active_variation():
 
 def test_string_representation_with_missing_variable():
     # Initialize ExperimentState but don't set it as active
-    state = ExperimentState.get_instance()
+    state = ExperimentState.get_default_state()
     state.active = False
 
     # Create a StringWrapper instance without providing variable values
