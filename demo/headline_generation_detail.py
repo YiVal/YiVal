@@ -3,10 +3,10 @@ import random
 import time
 
 import openai
-from yival.common.model_utils import llm_completion
-from yival.schemas.model_configs import Request
 
+from yival.common.model_utils import llm_completion
 from yival.logger.token_logger import TokenLogger
+from yival.schemas.model_configs import Request
 from yival.wrappers.string_wrapper import StringWrapper
 
 
