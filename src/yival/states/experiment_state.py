@@ -7,6 +7,8 @@ management of variations associated with different experiments, providing a
 mechanism to cycle through the variations and track the experiment's state.
 """
 
+import copy
+import threading
 from collections import defaultdict
 from itertools import product
 from typing import Any, Dict, Iterator, List, Optional, Union
@@ -38,13 +40,22 @@ class ExperimentState:
             If the state is inactive or no variations are found, returns None.
     """
 
-    _shared_instance = None
+    _default_state = None
+    _thread_local_state = threading.local()
 
     @staticmethod
     def get_instance():
-        if ExperimentState._shared_instance is None:
-            ExperimentState._shared_instance = ExperimentState()
-        return ExperimentState._shared_instance
+        if not hasattr(ExperimentState._thread_local_state, "_instance"):
+            ExperimentState._thread_local_state._instance = copy.deepcopy(
+                ExperimentState._default_state
+            )
+        return ExperimentState._thread_local_state._instance
+
+    @staticmethod
+    def get_default_state():
+        if not ExperimentState._default_state:
+            ExperimentState._default_state = ExperimentState()
+        return ExperimentState._default_state
 
     def __init__(self) -> None:
         self.active: bool = False

@@ -52,7 +52,7 @@ class ExperimentRunner:
             self.config.get("custom_variation_generators", {})
         )
 
-    def _process_dataset(self, all_combinations, state, logger,
+    def _process_dataset(self, all_combinations, logger,
                          evaluator) -> List[ExperimentResult]:
         """Process dataset source type and return the results."""
         results = []
@@ -68,7 +68,8 @@ class ExperimentRunner:
                 with ThreadPoolExecutor() as executor:
                     for res in executor.map(
                         self.parallel_task, data,
-                        [all_combinations] * len(data), [state] * len(data),
+                        [all_combinations] * len(data),
+                        [ExperimentState.get_instance()] * len(data),
                         [logger] * len(data), [evaluator] * len(data)
                     ):
                         results.extend(res)
@@ -104,7 +105,7 @@ class ExperimentRunner:
         )  # type: ignore
         logger = TokenLogger()
 
-        state = ExperimentState.get_instance()
+        state = ExperimentState.get_default_state()
         state.set_experiment_config(self.config)
         state.active = True
 
@@ -120,7 +121,7 @@ class ExperimentRunner:
                     self.config.get("custom_reader", {})  # type: ignore
                 )  # type: ignore
                 results = self._process_dataset(
-                    all_combinations, state, logger, evaluator
+                    all_combinations, logger, evaluator
                 )
                 experiment = generate_experiment(
                     results, evaluator
@@ -134,7 +135,9 @@ class ExperimentRunner:
                     )
 
                 improver = get_improver(self.config)
+                print(f"[INFO] improver: {improver}")
                 if improver:
+                    print("[INFO] improve")
                     experiment.improver_output = improver.improve(
                         experiment, self.config, evaluator, logger
                     )
@@ -145,14 +148,14 @@ class ExperimentRunner:
 
             if display:
                 display_results_dash(
-                    experiment, self.config, all_combinations, state, logger,
-                    evaluator
+                    experiment, self.config, all_combinations,
+                    ExperimentState.get_instance(), logger, evaluator
                 )
 
         elif source_type == "user_input":
             display_results_dash(
-                Experiment([], []), self.config, all_combinations, state,
-                logger, evaluator, True
+                Experiment([], []), self.config, all_combinations,
+                ExperimentState.get_instance(), logger, evaluator, True
             )
 
 
