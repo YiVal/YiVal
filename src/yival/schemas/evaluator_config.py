@@ -103,6 +103,11 @@ class ExpectedResultEvaluatorConfig(EvaluatorConfig):
 
 
 @dataclass
+class PythonValidationEvaluatorConfig(EvaluatorConfig):
+    matching_technique: MatchingTechnique = MatchingTechnique.MATCH
+
+
+@dataclass
 class OpenAIEloEvaluatorConfig(GlobalEvaluatorConfig):
     openai_model_name: str = "gpt-4"
     input_description: str = "This is a description."
