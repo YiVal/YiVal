@@ -33,7 +33,12 @@ def headline_generation(
 
     response = llm_completion(
         Request(
-            model_name=str(StringWrapper("a16z-infra/llama-2-13b-chat:9dff94b1bed5af738655d4a7cbcdcde2bd503aa85c94334fe1f42af7f3dd5ee3", name="model_name")),
+            model_name=str(
+                StringWrapper(
+                    "a16z-infra/llama-2-13b-chat:9dff94b1bed5af738655d4a7cbcdcde2bd503aa85c94334fe1f42af7f3dd5ee3",
+                    name="model_name"
+                )
+            ),
             prompt=prompt
         )
     ).output
