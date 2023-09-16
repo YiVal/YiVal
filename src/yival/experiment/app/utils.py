@@ -1,5 +1,6 @@
 import base64
 import io
+import json
 from typing import List
 
 import pandas as pd  # type: ignore
@@ -8,15 +9,20 @@ from PIL import Image
 from yival.schemas.experiment_config import GroupedExperimentResult
 
 
-def sanitize_group_key(group_key):
-    import re
-    pattern = r'content:\s*\{(.*?)\}'
-    match = re.search(pattern, group_key)
-
-    if match:
-        content = match.group(1).strip()
-        items = content.split(",")
-        group_key = ", ".join([item.strip() for item in items])
+def sanitize_group_key(group_key: str):
+    try:
+        json_str = group_key.replace('example_id:', '"example_id":').replace(
+            'content:', '"content":'
+        ).replace('expected_result:', '"expected_result":')
+        escaped_json_str = json_str.replace("\n", "\\n").replace("\t", "\\t")
+        valid_json_str = escaped_json_str.replace(": None", ": null")
+        data_dict = json.loads(valid_json_str)
+        content = data_dict['content']
+        if content:
+            items = [str(value) for value in content.values()]
+            group_key = ", ".join([item.strip() for item in items])
+            return group_key
+    except Exception:
         return group_key
     return ""
 
@@ -110,7 +116,7 @@ def generate_group_key_combination_data(
                     for e in exp_result.evaluator_outputs
                 ]) if exp_result.evaluator_outputs else None
             }
-            formatted_output = f"raw_output: {nested_output['raw_output']}\n{nested_output['evaluator_outputs']}"
+            formatted_output = f"<yival_raw_output>{nested_output['raw_output']}</yival_raw_output>\n{nested_output['evaluator_outputs']}"
             row_dict[combo_str] = formatted_output
             all_combos.add(combo_str)
         data_list.append(row_dict)

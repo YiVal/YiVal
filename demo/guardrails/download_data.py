@@ -6,7 +6,7 @@ import requests
 def main():
     offset = 0
     limit = 100
-    total_data = 500
+    total_data = 100
     questions = []
 
     while offset < total_data:

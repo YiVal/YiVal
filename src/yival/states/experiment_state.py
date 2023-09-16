@@ -7,6 +7,7 @@ management of variations associated with different experiments, providing a
 mechanism to cycle through the variations and track the experiment's state.
 """
 
+import contextvars
 import copy
 import threading
 from collections import defaultdict
@@ -42,9 +43,12 @@ class ExperimentState:
 
     _default_state = None
     _thread_local_state = threading.local()
+    _coroutine_local_state = contextvars.ContextVar('experiment_state')
 
     @staticmethod
     def get_instance():
+        if not ExperimentState._default_state:
+            ExperimentState.get_default_state()
         if not hasattr(ExperimentState._thread_local_state, "_instance"):
             ExperimentState._thread_local_state._instance = copy.deepcopy(
                 ExperimentState._default_state

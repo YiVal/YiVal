@@ -14,6 +14,7 @@ from typing import Any, Dict, List, Optional
 
 import dash  # type: ignore
 import dash_bootstrap_components as dbc  # type: ignore
+import numpy as np
 import pandas as pd  # type: ignore
 import plotly.express as px  # type: ignore
 from dash import dash_table, dcc, html  # type: ignore
@@ -310,20 +311,36 @@ def create_dash_app(
                     if str(exp_result.combination) == metric.combo_key
                 ]
                 if matching_results:
-                    import re
-                    pattern = r'content:\s*\{(.*?)\}'
-                    match = re.search(pattern, group.group_key)
 
-                    if match:
-                        content = match.group(1).strip()
-                        items = content.split(",")
-                        group_key = ", ".join([item.strip() for item in items])
-                    else:
-                        group_key = ""
+                    json_str = group.group_key.replace(
+                        'example_id:', '"example_id":'
+                    ).replace('content:', '"content":').replace(
+                        'expected_result:', '"expected_result":'
+                    )
+                    escaped_json_str = json_str.replace("\n", "\\n"
+                                                        ).replace("\t", "\\t")
+                    valid_json_str = escaped_json_str.replace(
+                        ": None", ": null"
+                    )
+                    try:
+                        data_dict = json.loads(valid_json_str)
+                        content = data_dict['content']
+                        if content:
+                            items = [str(value) for value in content.values()]
+                            group_key = ", ".join([
+                                item.strip() for item in items
+                            ])
+                        else:
+                            group_key = ""
+                    except Exception as e:
+                        group_key = group.group_key
                     group_key = sanitize_column_name(group_key)
-                    row[f"Sample {sample_count + 1} ({group_key})"
-                        ] = matching_results[0]
-                    sample_count += 1
+                    if sample_count < 3:
+                        row[f"Sample {sample_count + 1} ({group_key})"
+                            ] = matching_results[0]
+                        sample_count += 1
+                    else:
+                        break
 
             data.append(row)
         df = pd.DataFrame(data)
@@ -698,6 +715,42 @@ def create_dash_app(
 
         return table
 
+    def format_with_tags(cell):
+        # Split the cell content using the yival_raw_output tags
+        raw_output_start = "<yival_raw_output>"
+        raw_output_end = "</yival_raw_output>"
+
+        if raw_output_start in cell and raw_output_end in cell:
+            raw_output_content, rest = cell.split(raw_output_end, 1)
+            raw_output_content = raw_output_content.replace(
+                raw_output_start, ""
+            ).strip()
+
+            # Format the rest of the content
+            formatted_evaluator_outputs = []
+            for line in rest.split("\n"):
+                formatted_evaluator_outputs.append(
+                    "▶ " + line.strip() if ":" in line else line.strip()
+                )
+
+            # Combine raw_output and formatted evaluator outputs
+            return raw_output_start + "\n" + raw_output_content + "\n" + raw_output_end + "\n" + "\n".join(
+                formatted_evaluator_outputs
+            )
+        else:
+            return cell
+
+    def format_dataframe_column(cell):
+        # If the cell contains the yival_raw_output tags
+        if "<yival_raw_output>" in cell and "</yival_raw_output>" in cell:
+            return format_with_tags(cell)
+        else:
+            # Otherwise, format the cell content using the original "▶" logic
+            return "\n".join([
+                "▶ " + line if ":" in line else line
+                for line in cell.split("\n")
+            ])
+
     def group_key_combination_layout(
         group_experiment_results: List[GroupedExperimentResult],
         highlight_key: Optional[str] = None
@@ -708,10 +761,7 @@ def create_dash_app(
         for col in df_group_key.columns:
             if col != "Test Data":
                 df_group_key[col] = df_group_key[col].apply(
-                    lambda cell: "\n".join([
-                        "▶ " + line if ":" in line else line
-                        for line in cell.split("\n")
-                    ])
+                    format_dataframe_column
                 )
 
         csv_string = df_group_key.to_csv(index=False, encoding='utf-8')
@@ -830,8 +880,6 @@ def create_dash_app(
                 dcc.Link('Go to Data Analysis', href='/data-analysis'),
                 html.Br()
             ])
-
-    import numpy as np
 
     def determine_relative_color(value, values):
         if not isinstance(value, (int, float)):

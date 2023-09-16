@@ -10,6 +10,9 @@ Classes:
     - PythonValidationEvaluator: Evaluates the raw output of an experiment.
 """
 
+import contextlib
+import io
+
 from ..schemas.evaluator_config import (
     EvaluatorOutput,
     EvaluatorType,
@@ -30,7 +33,7 @@ class PythonValidationEvaluator(BaseEvaluator):
     Python code. If the code executes without any errors, a positive result is
     returned. Otherwise, a negative result is returned.
     """
-    
+
     default_config = PythonValidationEvaluatorConfig(
         matching_technique=MatchingTechnique.MATCH,
         evaluator_type=EvaluatorType.INDIVIDUAL,
@@ -51,11 +54,12 @@ class PythonValidationEvaluator(BaseEvaluator):
         raw_output = experiment_result.raw_output
         res = 0
         try:
-            exec(raw_output)
+            with contextlib.redirect_stdout(io.StringIO()):
+                exec(raw_output)
             res = 1
         except Exception:
             pass
-    
+
         return EvaluatorOutput(
             name=self.config.name,
             display_name="matching",
