@@ -164,3 +164,4 @@ class BertScoreEvaluatorConfig(EvaluatorConfig):
     evaluator_type: EvaluatorType = EvaluatorType.INDIVIDUAL
     description: str = " This is the description of the evaluator"
     lan: str = 'zh'
+    indicator: str = 'p'  # p,r,f

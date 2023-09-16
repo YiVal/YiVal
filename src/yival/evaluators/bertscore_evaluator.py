@@ -4,7 +4,7 @@ It leverages the pre-trained contextual embeddings from BERT and matches words i
 It has been shown to correlate with human judgment on sentence-level and system-level evaluation.
 """
 
-from bert_score import score
+from bert_score import score  # type:ignore
 
 from ..schemas.common_structures import InputData
 from ..schemas.evaluator_config import (
@@ -35,11 +35,14 @@ class BertScoreEvaluator(BaseEvaluator):
                          verbose=True)
 
         scores = {"p": p.item(), "r": r.item(), "f": f1.item()}
+        result = scores.get(self.config.indicator, .0)
+
+        print(f"[INFO] bert_score: {scores}, result:{result}")
 
         return EvaluatorOutput(
             name=self.config.name,
-            display_name="bertscore",
-            result=scores,
+            display_name=self.config.display_name,
+            result=result,
             metric_calculators=self.config.metric_calculators
         )
 
@@ -52,7 +55,7 @@ BaseEvaluator.register_evaluator(
 def main():
     """Main function to test the bertscore evaluator"""
     evaluator_config = BertScoreEvaluatorConfig(
-        name="roge_evaluator",
+        name="bertscore_evaluator",
         display_name="rouge",
         metric_calculators=[],
     )

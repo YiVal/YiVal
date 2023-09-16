@@ -268,7 +268,6 @@ def run_single_input(
                 config["custom_function"],  # type: ignore
                 **d.content
             )
-            print(f"[INFO]res: {res}")
             end_time = time.time()
             latency = end_time - start_time  # Time in seconds
 

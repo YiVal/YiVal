@@ -144,11 +144,20 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
             self.config.input_function.get('parameters', {}).keys()
         ):
             return
+
+        # choose expected_value
+        expected_value = generated_example.get(
+            self.config.expected_param_name, None
+        )
         print(f"[DEBUG] generated_example:{generated_example}")
+
+        if expected_value:
+            generated_example.pop(self.config.expected_param_name)
+        print(f"[DEBUG] expected_value:{expected_value}")
         input_data_instance = InputData(
             example_id=super().generate_example_id(output_content),
             content=generated_example,
-            expected_result=None
+            expected_result=expected_value
         )
         all_data.append(input_data_instance)
         chunk.append(input_data_instance)
@@ -210,6 +219,7 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                     c = extract_dict_from_gpt_output(
                         output.choices[0].message.content
                     )
+                    print(f"[DEBUG]output:{output}")
                     if c:
                         all_data_content.append(c)
                     pbar.update(1)

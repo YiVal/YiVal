@@ -28,5 +28,8 @@ class OpenAIPromptBasedGeneratorConfig(BaseDataGeneratorConfig):
     diversify: bool = True
     max_token = 2000
 
+    # Expected Value name
+    expected_param_name: str = ""
+
     def asdict(self):
         return asdict(self)
