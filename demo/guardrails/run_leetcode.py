@@ -9,6 +9,7 @@ from guardrails.datatypes import PythonCode
 from guardrails.validators import BugFreePython
 from pydantic import BaseModel, Field
 from rich import print
+
 from yival.logger.token_logger import TokenLogger
 from yival.wrappers.string_wrapper import StringWrapper
 
@@ -46,7 +47,7 @@ def run_leetcode(leetcode_problem: str) -> str:
     if str(use_guardrails) == "use_guardrails":
         try:
             loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)            
+            asyncio.set_event_loop(loop)
             guard = gd.Guard.from_pydantic(
                 output_class=BugFreePythonCode, prompt=prompt_guardrail
             )
@@ -75,7 +76,10 @@ def run_leetcode(leetcode_problem: str) -> str:
         messages = [{"role": "user", "content": prompt}]
         # Use the chat-based completion
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo", messages=messages, temperature=0, max_tokens=1000
+            model="gpt-3.5-turbo",
+            messages=messages,
+            temperature=0,
+            max_tokens=1000
         )
         res = response['choices'][0]['message']['content']
         token_usage = response['usage']['total_tokens']
