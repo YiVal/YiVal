@@ -26,14 +26,14 @@ def add_arguments_to(subparser):
     parser.add_argument(
         "--output_path",
         type=str,
-        default="export.pkl",
+        default="",
         help="Path to store the experiment results."
     )
 
     parser.add_argument(
         "--experiment_input_path",
         type=str,
-        default="export.pkl",
+        default="",
         help="Path to existing experiment results."
     )
 

@@ -1,0 +1,26 @@
+# This is a generated template. Modify the values as needed.
+
+custom_function: demo.guardrails.run_leetcode.run_leetcode
+dataset:
+  file_path: demo/guardrails/data/leetcode_problems.csv
+  reader: csv_reader
+  source_type: dataset
+description: Generate the expected results for the Leetcode problems.
+evaluators:
+  - evaluator_type: individual
+    matching_technique: includes
+    metric_calculators:
+      - method: AVERAGE
+    name: python_validation_evaluator
+
+variations:
+  - name: use_guardrails
+    variations:
+      - instantiated_value: "use_guardrails"
+        value: "use_guardrails"
+        value_type: str
+        variation_id: null
+      - instantiated_value: "gpt"
+        value: "gpt"
+        value_type: str
+        variation_id: null

@@ -81,7 +81,7 @@ class ExperimentRunner:
         self, data_point, all_combinations, state, logger, evaluator
     ):
         """Task to be run in parallel for processing data points."""
-        RateLimiter(10 / 60)()  # Ensure rate limit
+        RateLimiter(30 / 60)()  # Ensure rate limit
         return run_single_input(
             data_point,
             self.config,
@@ -123,6 +123,7 @@ class ExperimentRunner:
                 results = self._process_dataset(
                     all_combinations, logger, evaluator
                 )
+
                 experiment = generate_experiment(
                     results, evaluator
                 )  # type: ignore

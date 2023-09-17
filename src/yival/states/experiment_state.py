@@ -45,6 +45,8 @@ class ExperimentState:
 
     @staticmethod
     def get_instance():
+        if not ExperimentState._default_state:
+            ExperimentState.get_default_state()
         if not hasattr(ExperimentState._thread_local_state, "_instance"):
             ExperimentState._thread_local_state._instance = copy.deepcopy(
                 ExperimentState._default_state
