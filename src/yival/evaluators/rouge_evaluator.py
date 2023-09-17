@@ -30,19 +30,14 @@ class RougeEvaluator(BaseEvaluator):
 
     def evaluate(self, experiment_result: ExperimentResult) -> EvaluatorOutput:
         """Evaluate the experiment result using rouge evaluat"""
-        print("[INFO] ROUGE_EVALUATOR")
         assert isinstance(self.config, RougeEvaluatorConfig)
         input_data = experiment_result.input_data
         raw_output = experiment_result.raw_output
         expected_result = input_data.expected_result
 
-        print(f"[INFO] hyps:{raw_output}, refs:{expected_result}")
-
         scores = self.rough.get_scores(
             hyps=raw_output, refs=expected_result, avg=True
         )
-
-        print(f"[INFO] scores:{scores}")
 
         return EvaluatorOutput(
             name=self.config.name,

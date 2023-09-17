@@ -37,8 +37,6 @@ class BertScoreEvaluator(BaseEvaluator):
         scores = {"p": p.item(), "r": r.item(), "f": f1.item()}
         result = scores.get(self.config.indicator, .0)
 
-        print(f"[INFO] bert_score: {scores}, result:{result}")
-
         return EvaluatorOutput(
             name=self.config.name,
             display_name=self.config.display_name,

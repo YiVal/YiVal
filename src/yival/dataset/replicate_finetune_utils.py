@@ -36,15 +36,14 @@ def _extract_from_input_data(result: Experiment) -> List[Dict[str, str]]:
     result_pairs = []
     for rs in result.group_experiment_results:
         input_data = json.loads(rs.group_key)
-        for _ in range(100):
-            finetune_data = {
-                "prompt":
-                "Translate the following english to chinese" + "\n" +
-                input_data['content']['teacher_quiz'],
-                "completion":
-                input_data['expected_result']
-            }
-            result_pairs.append(finetune_data)
+        finetune_data = {
+            "prompt":
+            "Translate the following english to chinese" + "\n" +
+            input_data['content']['teacher_quiz'],
+            "completion":
+            input_data['expected_result']
+        }
+        result_pairs.append(finetune_data)
 
     return result_pairs
 

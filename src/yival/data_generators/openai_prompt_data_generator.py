@@ -149,11 +149,9 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
         expected_value = generated_example.get(
             self.config.expected_param_name, None
         )
-        print(f"[DEBUG] generated_example:{generated_example}")
 
         if expected_value:
             generated_example.pop(self.config.expected_param_name)
-        print(f"[DEBUG] expected_value:{expected_value}")
         input_data_instance = InputData(
             example_id=super().generate_example_id(output_content),
             content=generated_example,

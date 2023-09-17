@@ -136,7 +136,6 @@ class ExperimentRunner:
                     )
 
                 improver = get_improver(self.config)
-                print(f"[INFO] improver: {improver}")
                 if improver:
                     experiment.improver_output = improver.improve(
                         experiment, self.config, evaluator, logger
