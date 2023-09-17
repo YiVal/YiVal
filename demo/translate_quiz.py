@@ -14,13 +14,12 @@ def translate_quiz(teacher_quiz: str) -> str:
     # Ensure you have your OpenAI API key set up
     openai.api_key = os.getenv("OPENAI_API_KEY")
 
-    prompt = f"Translate this English text to Chinese: \n Please only output the translated sentence, do not reply with any other content. {teacher_quiz}"
+    prompt = f"Instruction: Translate this English text to Chinese: \n {teacher_quiz}"
     model_name = str(StringWrapper("", name="model_name"))
     # Use the chat-based completion
     response = llm_completion(
         Request(model_name=model_name, prompt=prompt)
     ).output
-    print(f"[DEBUG]response:{response}")
     res = response['choices'][0]['message']['content']
     token_usage = response['usage']['total_tokens']
     logger.log(token_usage)

@@ -157,6 +157,9 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
             content=generated_example,
             expected_result=expected_value
         )
+        print(
+            f"[INFO][data_generator] generated instance:{input_data_instance}"
+        )
         all_data.append(input_data_instance)
         chunk.append(input_data_instance)
 
@@ -201,12 +204,12 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                     desc="Generating Examples",
                     unit="example"
                 ) as pbar:
-                    call_option = self.config.call_option if self.config.call_option else {}
+                    # call_option = self.config.call_option if self.config.call_option else {}
                     output = llm_completion(
                         Request(
                             model_name=self.config.model_name,
                             prompt=messages,
-                            params=call_option
+                            params=self.config.call_option  #type:ignore
                         )
                     ).output
                     self.process_output(
@@ -215,7 +218,6 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                     c = extract_dict_from_gpt_output(
                         output.choices[0].message.content
                     )
-                    print(f"[DEBUG]output:{output}")
                     if c:
                         all_data_content.append(c)
                     pbar.update(1)

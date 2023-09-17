@@ -37,7 +37,6 @@ class AHPSelection(SelectionStrategy):
         combination_data = {}
         alternatives_data = []
 
-
         # Convert each combination's metrics to a criteria vector
         for combo in experiment.combination_aggregated_metrics:
             data = self._extract_data(combo)
