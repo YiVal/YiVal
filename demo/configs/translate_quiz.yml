@@ -20,7 +20,7 @@ dataset:
           teacher_quiz: str
           teacher_answer: str
       expected_param_name: teacher_answer
-      number_of_examples: 5
+      number_of_examples: 3
       output_path: null
   source_type: machine_generated
 
