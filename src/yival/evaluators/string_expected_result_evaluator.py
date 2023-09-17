@@ -95,23 +95,26 @@ class StringExpectedResultEvaluator(BaseEvaluator):
         expected_result = input_data.expected_result
         is_match = False
         technique = MatchingTechnique(self.config.matching_technique)
+        # Default to empty strings if the values are None
+        output_text = raw_output.text_output if raw_output.text_output is not None else ""
+        expected_text = expected_result if expected_result is not None else ""
         if technique == MatchingTechnique.FUZZY_MATCH:
             if not expected_result:
                 is_match = True
             else:
-                is_match = fuzzy_match_util(raw_output, expected_result)
+                is_match = fuzzy_match_util(output_text, expected_text)
         elif technique == MatchingTechnique.JSON_VALIDATOR:
-            is_match = is_valid_json(raw_output)
+            is_match = is_valid_json(output_text)
         elif technique == MatchingTechnique.MATCH:
             if not expected_result:
                 is_match = True
             else:
-                is_match = expected_result == raw_output
+                is_match = expected_result == output_text
         elif technique == MatchingTechnique.INCLUDES:
             if not expected_result:
                 is_match = True
             else:
-                is_match = expected_result in raw_output
+                is_match = expected_result in output_text
 
         result = 1 if is_match else 0
         return EvaluatorOutput(

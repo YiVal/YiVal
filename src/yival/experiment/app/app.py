@@ -53,7 +53,7 @@ def include_image_base64(data_dict):
     """Check if a string include a base64 encoded image."""
     pattern = r'iVBORw.+'
     # Remove the prefix
-    prefix = "▶ raw_output: ['"
+    prefix = "<yival_raw_output>\n['"
     for item in data_dict:
         for record in item:
             for value in record.values():
@@ -83,11 +83,14 @@ def extract_and_decode_image_from_string(data_string):
     if data_string.startswith(prefix):
         data_string = data_string[len(prefix):]
 
-    # Find the first occurrence of "]"
-    end_index = data_string.find("]")
+    end_marker = "]\n</yival_raw_output>"
+    end_index = data_string.find(end_marker)
     if end_index != -1:
-        evaluate_string = data_string[end_index +
-                                      1:].strip()  # Get the string after "]"
+        end_index += len(
+            end_marker
+        )  # Update the end_index to include the length of end_marker
+        evaluate_string = data_string[end_index:].strip(
+        )  # Get the string after end_marker
         data_string = data_string[:end_index]
 
     # Split the string into a list
@@ -804,7 +807,6 @@ def create_dash_app(
                 )
             )
         data_dict = df_group_key.to_dict('records'),
-
         if include_image_base64(data_dict):
             new_data_dict = extract_and_decode_image(data_dict)
             return html.Div([

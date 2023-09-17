@@ -51,11 +51,12 @@ class PythonValidationEvaluator(BaseEvaluator):
         self.config: PythonValidationEvaluatorConfig = config
 
     def evaluate(self, experiment_result: ExperimentResult) -> EvaluatorOutput:
-        raw_output = experiment_result.raw_output
+        raw_output = experiment_result.raw_output.text_output
         res = 0
         try:
             with contextlib.redirect_stdout(io.StringIO()):
-                exec(raw_output)
+                if raw_output is not None:  # Add this line
+                    exec(raw_output)
             res = 1
         except Exception:
             pass
