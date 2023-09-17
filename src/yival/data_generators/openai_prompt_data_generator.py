@@ -201,14 +201,12 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                     desc="Generating Examples",
                     unit="example"
                 ) as pbar:
+                    call_option = self.config.call_option if self.config.call_option else {}
                     output = llm_completion(
                         Request(
                             model_name=self.config.model_name,
                             prompt=messages,
-                            params={
-                                "temperature": 1.3,
-                                "presence_penalty": 2
-                            }
+                            params=call_option
                         )
                     ).output
                     self.process_output(

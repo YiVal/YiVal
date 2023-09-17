@@ -45,6 +45,7 @@ def _extract_from_input_data(result: Experiment) -> List[Dict[str, str]]:
         }
         result_pairs.append(finetune_data)
 
+    print(f"[INFO] len format data: {len(result_pairs)}")
     return result_pairs
 
 
@@ -160,9 +161,9 @@ def headline_generation():
 
 def teacher_quiz():
     finetune(
-        "quiz", "", "yival.demo.headline_generation", "yival/llama2",
+        "quiz100.pkl", "", "yival.demo.headline_generation", "yival/llama2",
         "meta/llama-2-7b-chat:8e6975e5ed6174911a6ff3d60540dfd4844201974602551e10e9e87ab143d81e",
-        3, True
+        5, True
     )
 
 
