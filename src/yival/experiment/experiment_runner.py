@@ -122,7 +122,7 @@ class ExperimentRunner:
 
     def parallel_task(self, data_point, all_combinations, logger, evaluator):
         """Task to be run in parallel for processing data points."""
-        RateLimiter(60 / 60)()  # Ensure rate limit
+        RateLimiter(30 / 60)()  # Ensure rate limit
         return run_single_input(
             data_point,
             self.config,
@@ -162,23 +162,15 @@ class ExperimentRunner:
                     self.config.get("custom_reader", {})  # type: ignore
                 )  # type: ignore
                 if async_eval:
-                    import time
-                    start_time = time.time()
                     results = asyncio.run(
                         self._aprocess_dataset(
                             all_combinations, logger, evaluator
                         )
                     )
-                    end_time = time.time()
-                    print(f"[INFO] time taken: {end_time - start_time}")
                 else:
-                    import time
-                    start_time = time.time()
                     results = self._process_dataset(
                         all_combinations, logger, evaluator
                     )
-                    end_time = time.time()
-                    print(f"[INFO] time taken: {end_time - start_time}")
                 experiment = generate_experiment(
                     results, evaluator
                 )  # type: ignore

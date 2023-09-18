@@ -16,6 +16,7 @@ from ..data.csv_reader import CSVReader
 from ..data_generators.base_data_generator import BaseDataGenerator
 from ..evaluators.base_evaluator import BaseEvaluator
 from ..evaluators.openai_elo_evaluator import OpenAIEloEvaluator
+from ..evaluators.python_validation_evaluator import PythonValidationEvaluator
 from ..evaluators.string_expected_result_evaluator import (
     StringExpectedResultEvaluator,
 )
@@ -164,6 +165,7 @@ def register_custom_evaluators(custom_evaulators: Dict[str, Dict[str, Any]]):
         BaseEvaluator.register_evaluator(name, evaluator_cls, config_cls)
     _ = StringExpectedResultEvaluator
     _ = OpenAIEloEvaluator
+    _ = PythonValidationEvaluator
 
 
 def register_custom_wrappers(custom_wrappers: Dict[str, Dict[str, Any]]):

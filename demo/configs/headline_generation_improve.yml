@@ -14,21 +14,21 @@ dataset:
           **Only provide the dictionary.**"
       input_function:
         description:
-          "Generate a succinct and compelling landing page headline for a tech startup business named [tech_startup_business], which specializes in [business] and targets [target_people]. Only include one headline."
+          "Given a tech startup business named [tech_startup_business], specializing in [business], and target_peopleing [target_people], generate a corresponding landing page headline."
         name: headline_generation_for_business
         parameters:
           tech_startup_business: str
           business: str
           target_people: str
-      number_of_examples: 4
+      number_of_examples: 2
       output_path: null
   source_type: machine_generated
 
 variations:
   - name: task
     variations:
-      - instantiated_value: Generate a succinct and compelling landing page headline for a tech startup business named [tech_startup_business], which specializes in [business] and targets [target_people]. Only include one headline.
-        value: Generate a succinct and compelling landing page headline for a tech startup business named [tech_startup_business], which specializes in [business] and targets [target_people]. Only include one headline.
+      - instantiated_value: Generate landing page headline for {tech_startup_business}, company business is {business}, target_people is {target_people}
+        value: Generate landing page headline for {tech_startup_business}, company business is {business}, target_people is {target_people}
         value_type: str
         variation_id: null
     generator_name: openai_prompt_based_variation_generator
@@ -71,32 +71,22 @@ evaluators:
       [Input]: company name: {tech_startup_business} , company business: {business} , target people: {target_people}
       [Result]: {raw_output}
       Answer the question by selecting one of the following options:
-      A It fails to meet the criterion at all. The headline does not clearly or succinctly communicate what the startup does or the problem it solves.
-      B It barely meets the criterion. The headline somewhat communicates what the startup does or the problem it solves, but it's not succinct or clear, and substantial improvement is needed.
-      C It somewhat meets the criterion. The headline somewhat communicates what the startup does or the problem it solves, but it's not succinct or clear, and substantial improvement is needed.
-      D It meets the criterion to a satisfactory degree, but there are still areas that could be enhanced.
-      E It meets the criterion well. The headline clearly and succinctly communicates what the startup does or the problem it solves with minor areas for improvement.
-      F It meets the criterion very well. The headline communicates what the startup does or the problem it solves in a clear and succinct manner with only trivial areas for improvement.
-      G It meets the criterion exceptionally well, with little to no room for improvement. The headline is outstanding.
-      H The headline goes above and beyond the criterion. It communicates what the startup does or the problem it solves in a clear, succinct, and creative manner that stands out.
-      I The headline greatly exceeds the criterion. It not only clearly and succinctly communicates what the startup does or the problem it solves, but also does so in a highly engaging and innovative way.
-      J The headline far surpasses the criterion in an exceptional manner. It communicates what the startup does or the problem it solves in a clear, succinct, creative, and highly captivating manner that is virtually flawless.
-    choices: ["A", "B", "C", "D", "E","F","G","H","I","J"]
+      A It fails to meet the criterion at all.
+      B It somewhat meets the criterion, but there is significant room for improvement.
+      C It meets the criterion to a satisfactory degree.
+      D It meets the criterion very well.
+      E It meets the criterion exceptionally well, with little to no room for improvement.
+    choices: ["A", "B", "C", "D", "E"]
     # model_name specify the llm model , e.g. a16z-infra/llama-2-13b-chat:9dff94b1bed5af738655d4a7cbcdcde2bd503aa85c94334fe1f42af7f3dd5ee3
     model_name: gpt-4
     description: "evaluate the quality of the landing page headline"
-    scale_description: "0-9"
+    scale_description: "0-4"
     choice_scores:
       A: 0
       B: 1
       C: 2
       D: 3
       E: 4
-      F: 5
-      G: 6
-      H: 7
-      I: 8
-      J: 9
   
 
   - evaluator_type: individual
@@ -112,31 +102,21 @@ evaluators:
       [Input]: company name: {tech_startup_business} , company business: {business} , target people: {target_people}
       [Result]: {raw_output}
       Answer the question by selecting one of the following options:
-      A. It fails to meet the criterion at all. The headline does not clearly or succinctly communicate what the startup does or the problem it solves. 
-      B. It barely meets the criterion. Substantial improvement is needed.
-      C. It somewhat meets the criterion. The headline has some relevance to the target audience, but it's not compelling, and substantial improvement is needed.
-      D. It meets the criterion to a satisfactory degree, but there are still areas that could be enhanced.
-      E. It meets the criterion well. The headline has minor areas for improvement.
-      F. It meets the criterion very well. The headline has only trivial areas for improvement.
-      G. It meets the criterion exceptionally well, with little to no room for improvement. The headline is outstanding.
-      H. The headline is impressive, meeting the criterion with distinction and minor tweaks could bring perfection.
-      I. The headline is excellent, meeting the criterion nearly perfectly with only the slightest room for improvement.
-      J. The headline perfectly meets the criterion, demonstrating an ideal balance of clarity, succinctness, and compelling communication.
+      A It fails to meet the criterion at all.
+      B It somewhat meets the criterion, but there is significant room for improvement.
+      C It meets the criterion to a satisfactory degree.
+      D It meets the criterion very well.
+      E It meets the criterion exceptionally well, with little to no room for improvement.
     display_name: relevance
     description: Is the headline relevant to the target audience?
-    scale_description: "0-6"
-    choices: ["A", "B", "C", "D", "E", "F", "G","H","I","J"]
+    scale_description: "0-4"
+    choices: ["A", "B", "C", "D", "E"]
     choice_scores:
       A: 0
       B: 1
       C: 2
       D: 3
       E: 4
-      F: 5
-      G: 6
-      H: 7
-      I: 8
-      J: 9
   
   - evaluator_type: individual
     metric_calculators:
@@ -151,31 +131,21 @@ evaluators:
       [Input]: company name: {tech_startup_business} , company business: {business} , target people: {target_people}
       [Result]: {raw_output}
       Answer the question by selecting one of the following options:
-      A. It fails to meet the criterion at all. The headline does not clearly or succinctly communicate what the startup does or the problem it solves. 
-      B. It barely meets the criterion. Substantial improvement is needed.
-      C. It somewhat meets the criterion, but there is significant room for improvement. The headline is either catchy, memorable, or unique, but not all three.
-      D. It meets the criterion to a satisfactory degree, but there are still areas that could be enhanced.
-      E. It meets the criterion well. The headline has minor areas for improvement.
-      F. It meets the criterion very well. The headline has only trivial areas for improvement.
-      G. It meets the criterion exceptionally well, with little to no room for improvement. The headline is outstanding.
-      H. It meets the criterion in an excellent manner. The headline is outstanding and leaves no room for improvement.
-      I. It far exceeds the criterion. The headline is remarkable and unforgettable.
-      J. It sets a new standard for the criterion. The headline is revolutionary in its clarity, succinctness, and relevance to the startup's purpose.
+      A It fails to meet the criterion at all.
+      B It somewhat meets the criterion, but there is significant room for improvement.
+      C It meets the criterion to a satisfactory degree.
+      D It meets the criterion very well.
+      E It meets the criterion exceptionally well, with little to no room for improvement.
     display_name: catchiness
     description: Is the headline catchy or memorable?
-    scale_description: "0-6"
-    choices: ["A", "B", "C", "D", "E", "F", "G", "H","I","J"]
+    scale_description: "0-4"
+    choices: ["A", "B", "C", "D", "E"]
     choice_scores:
       A: 0
       B: 1
       C: 2
       D: 3
       E: 4
-      F: 5
-      G: 6
-      H: 7
-      I: 8
-      J: 9
 
 
 selection_strategy:
@@ -200,11 +170,7 @@ selection_strategy:
       average_token_usage: 0.0
     # normalize_func: "z-score"
 
-improver:
-  name: "openai_prompt_based_combination_improver"
-  openai_model_name: "gpt-4"
-  max_iterations: 3
-  stop_conditions:
-    "openai_prompt_based_evaluator: clear": 8
-    "openai_prompt_based_evaluator: relevance" : 8
-    "openai_prompt_based_evaluator: catchiness" : 8
+# improver:
+#   name: "openai_prompt_based_combination_improver"
+#   openai_model_name: "gpt-4"
+#   max_iterations: 3

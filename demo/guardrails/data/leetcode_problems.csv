@@ -1,0 +1,684 @@
+leetcode_problem
+"Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
+		You may assume that each input would have exactly one solution, and you may not use the same element twice.
+		You can return the answer in any order.
+		Example 1:
+		Input: nums = [2,7,11,15], target = 9
+		Output: [0,1]
+		Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
+		Example 2:
+		Input: nums = [3,2,4], target = 6
+		Output: [1,2]
+		Example 3:
+		Input: nums = [3,3], target = 6
+		Output: [0,1]"
+"You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order, and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.
+		You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+		Example 1:
+		Input: l1 = [2,4,3], l2 = [5,6,4]
+		Output: [7,0,8]
+		Explanation: 342 + 465 = 807.
+		Example 2:
+		Input: l1 = [0], l2 = [0]
+		Output: [0]
+		Example 3:
+		Input: l1 = [9,9,9,9,9,9,9], l2 = [9,9,9,9]
+		Output: [8,9,9,9,0,0,0,1]"
+"Given a string s, find the length of the longest substring without repeating characters.
+		Example 1:
+		Input: s = ""abcabcbb""
+		Output: 3
+		Explanation: The answer is ""abc"", with the length of 3.
+		Example 2:
+		Input: s = ""bbbbb""
+		Output: 1
+		Explanation: The answer is ""b"", with the length of 1.
+		Example 3:
+		Input: s = ""pwwkew""
+		Output: 3
+		Explanation: The answer is ""wke"", with the length of 3.
+		Notice that the answer must be a substring, ""pwke"" is a subsequence and not a substring."
+"Given a string s, return the longest palindromic substring in s.
+		Example 1:
+		Input: s = ""babad""
+		Output: ""bab""
+		Explanation: ""aba"" is also a valid answer.
+		Example 2:
+		Input: s = ""cbbd""
+		Output: ""bb"""
+"The string ""PAYPALISHIRING"" is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility)
+		P   A   H   N
+		A P L S I I G
+		Y   I   R
+		And then read line by line: ""PAHNAPLSIIGYIR""
+		Write the code that will take a string and make this conversion given a number of rows:
+		string convert(string s, int numRows);
+		Example 1:
+		Input: s = ""PAYPALISHIRING"", numRows = 3
+		Output: ""PAHNAPLSIIGYIR""
+		Example 2:
+		Input: s = ""PAYPALISHIRING"", numRows = 4
+		Output: ""PINALSIGYAHRPI""
+		Explanation:
+		P     I    N
+		A   L S  I G
+		Y A   H R
+		P     I
+		Example 3:
+		Input: s = ""A"", numRows = 1
+		Output: ""A"""
+"Given a signed 32-bit integer x, return x with its digits reversed. If reversing x causes the value to go outside the signed 32-bit integer range [-231, 231 - 1], then return 0.
+		Assume the environment does not allow you to store 64-bit integers (signed or unsigned).
+		Example 1:
+		Input: x = 123
+		Output: 321
+		Example 2:
+		Input: x = -123
+		Output: -321
+		Example 3:
+		Input: x = 120
+		Output: 21"
+"Implement the myAtoi(string s) function, which converts a string to a 32-bit signed integer (similar to C/C++'s atoi function).
+		The algorithm for myAtoi(string s) is as follows:
+			Read in and ignore any leading whitespace.
+			Check if the next character (if not already at the end of the string) is '-' or '+'. Read this character in if it is either. This determines if the final result is negative or positive respectively. Assume the result is positive if neither is present.
+			Read in next the characters until the next non-digit character or the end of the input is reached. The rest of the string is ignored.
+			Convert these digits into an integer (i.e. ""123"" -> 123, ""0032"" -> 32). If no digits were read, then the integer is 0. Change the sign as necessary (from step 2).
+			If the integer is out of the 32-bit signed integer range [-231, 231 - 1], then clamp the integer so that it remains in the range. Specifically, integers less than -231 should be clamped to -231, and integers greater than 231 - 1 should be clamped to 231 - 1.
+			Return the integer as the final result.
+		Note:
+			Only the space character ' ' is considered a whitespace character.
+			Do not ignore any characters other than the leading whitespace or the rest of the string after the digits.
+		Example 1:
+		Input: s = ""42""
+		Output: 42
+		Explanation: The underlined characters are what is read in, the caret is the current reader position.
+		Step 1: ""42"" (no characters read because there is no leading whitespace)
+		         ^
+		Step 2: ""42"" (no characters read because there is neither a '-' nor '+')
+		         ^
+		Step 3: ""42"" (""42"" is read in)
+		           ^
+		The parsed integer is 42.
+		Since 42 is in the range [-231, 231 - 1], the final result is 42.
+		Example 2:
+		Input: s = ""   -42""
+		Output: -42
+		Explanation:
+		Step 1: ""   -42"" (leading whitespace is read and ignored)
+		            ^
+		Step 2: ""   -42"" ('-' is read, so the result should be negative)
+		             ^
+		Step 3: ""   -42"" (""42"" is read in)
+		               ^
+		The parsed integer is -42.
+		Since -42 is in the range [-231, 231 - 1], the final result is -42.
+		Example 3:
+		Input: s = ""4193 with words""
+		Output: 4193
+		Explanation:
+		Step 1: ""4193 with words"" (no characters read because there is no leading whitespace)
+		         ^
+		Step 2: ""4193 with words"" (no characters read because there is neither a '-' nor '+')
+		         ^
+		Step 3: ""4193 with words"" (""4193"" is read in; reading stops because the next character is a non-digit)
+		             ^
+		The parsed integer is 4193.
+		Since 4193 is in the range [-231, 231 - 1], the final result is 4193."
+"Given an integer x, return true if x is a palindrome, and false otherwise.
+		Example 1:
+		Input: x = 121
+		Output: true
+		Explanation: 121 reads as 121 from left to right and from right to left.
+		Example 2:
+		Input: x = -121
+		Output: false
+		Explanation: From left to right, it reads -121. From right to left, it becomes 121-. Therefore it is not a palindrome.
+		Example 3:
+		Input: x = 10
+		Output: false
+		Explanation: Reads 01 from right to left. Therefore it is not a palindrome."
+"You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]).
+		Find two lines that together with the x-axis form a container, such that the container contains the most water.
+		Return the maximum amount of water a container can store.
+		Notice that you may not slant the container.
+		Example 1:
+		Input: height = [1,8,6,2,5,4,8,3,7]
+		Output: 49
+		Explanation: The above vertical lines are represented by array [1,8,6,2,5,4,8,3,7]. In this case, the max area of water (blue section) the container can contain is 49.
+		Example 2:
+		Input: height = [1,1]
+		Output: 1"
+"Roman numerals are represented by seven different symbols: I, V, X, L, C, D and M.
+		Symbol       Value
+		I             1
+		V             5
+		X             10
+		L             50
+		C             100
+		D             500
+		M             1000
+		For example, 2 is written as II in Roman numeral, just two one's added together. 12 is written as XII, which is simply X + II. The number 27 is written as XXVII, which is XX + V + II.
+		Roman numerals are usually written largest to smallest from left to right. However, the numeral for four is not IIII. Instead, the number four is written as IV. Because the one is before the five we subtract it making four. The same principle applies to the number nine, which is written as IX. There are six instances where subtraction is used:
+			I can be placed before V (5) and X (10) to make 4 and 9. 
+			X can be placed before L (50) and C (100) to make 40 and 90. 
+			C can be placed before D (500) and M (1000) to make 400 and 900.
+		Given an integer, convert it to a roman numeral.
+		Example 1:
+		Input: num = 3
+		Output: ""III""
+		Explanation: 3 is represented as 3 ones.
+		Example 2:
+		Input: num = 58
+		Output: ""LVIII""
+		Explanation: L = 50, V = 5, III = 3.
+		Example 3:
+		Input: num = 1994
+		Output: ""MCMXCIV""
+		Explanation: M = 1000, CM = 900, XC = 90 and IV = 4."
+"Roman numerals are represented by seven different symbols: I, V, X, L, C, D and M.
+		Symbol       Value
+		I             1
+		V             5
+		X             10
+		L             50
+		C             100
+		D             500
+		M             1000
+		For example, 2 is written as II in Roman numeral, just two ones added together. 12 is written as XII, which is simply X + II. The number 27 is written as XXVII, which is XX + V + II.
+		Roman numerals are usually written largest to smallest from left to right. However, the numeral for four is not IIII. Instead, the number four is written as IV. Because the one is before the five we subtract it making four. The same principle applies to the number nine, which is written as IX. There are six instances where subtraction is used:
+			I can be placed before V (5) and X (10) to make 4 and 9. 
+			X can be placed before L (50) and C (100) to make 40 and 90. 
+			C can be placed before D (500) and M (1000) to make 400 and 900.
+		Given a roman numeral, convert it to an integer.
+		Example 1:
+		Input: s = ""III""
+		Output: 3
+		Explanation: III = 3.
+		Example 2:
+		Input: s = ""LVIII""
+		Output: 58
+		Explanation: L = 50, V= 5, III = 3.
+		Example 3:
+		Input: s = ""MCMXCIV""
+		Output: 1994
+		Explanation: M = 1000, CM = 900, XC = 90 and IV = 4."
+"Write a function to find the longest common prefix string amongst an array of strings.
+		If there is no common prefix, return an empty string """".
+		Example 1:
+		Input: strs = [""flower"",""flow"",""flight""]
+		Output: ""fl""
+		Example 2:
+		Input: strs = [""dog"",""racecar"",""car""]
+		Output: """"
+		Explanation: There is no common prefix among the input strings."
+"Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
+		Notice that the solution set must not contain duplicate triplets.
+		Example 1:
+		Input: nums = [-1,0,1,2,-1,-4]
+		Output: [[-1,-1,2],[-1,0,1]]
+		Explanation: 
+		nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0.
+		nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0.
+		nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0.
+		The distinct triplets are [-1,0,1] and [-1,-1,2].
+		Notice that the order of the output and the order of the triplets does not matter.
+		Example 2:
+		Input: nums = [0,1,1]
+		Output: []
+		Explanation: The only possible triplet does not sum up to 0.
+		Example 3:
+		Input: nums = [0,0,0]
+		Output: [[0,0,0]]
+		Explanation: The only possible triplet sums up to 0."
+"Given an integer array nums of length n and an integer target, find three integers in nums such that the sum is closest to target.
+		Return the sum of the three integers.
+		You may assume that each input would have exactly one solution.
+		Example 1:
+		Input: nums = [-1,2,1,-4], target = 1
+		Output: 2
+		Explanation: The sum that is closest to the target is 2. (-1 + 2 + 1 = 2).
+		Example 2:
+		Input: nums = [0,0,0], target = 1
+		Output: 0
+		Explanation: The sum that is closest to the target is 0. (0 + 0 + 0 = 0)."
+"Given a string containing digits from 2-9 inclusive, return all possible letter combinations that the number could represent. Return the answer in any order.
+		A mapping of digits to letters (just like on the telephone buttons) is given below. Note that 1 does not map to any letters.
+		Example 1:
+		Input: digits = ""23""
+		Output: [""ad"",""ae"",""af"",""bd"",""be"",""bf"",""cd"",""ce"",""cf""]
+		Example 2:
+		Input: digits = """"
+		Output: []
+		Example 3:
+		Input: digits = ""2""
+		Output: [""a"",""b"",""c""]"
+"Given an array nums of n integers, return an array of all the unique quadruplets [nums[a], nums[b], nums[c], nums[d]] such that:
+			0 <= a, b, c, d < n
+			a, b, c, and d are distinct.
+			nums[a] + nums[b] + nums[c] + nums[d] == target
+		You may return the answer in any order.
+		Example 1:
+		Input: nums = [1,0,-1,0,-2,2], target = 0
+		Output: [[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]
+		Example 2:
+		Input: nums = [2,2,2,2,2], target = 8
+		Output: [[2,2,2,2]]"
+"Given the head of a linked list, remove the nth node from the end of the list and return its head.
+		Example 1:
+		Input: head = [1,2,3,4,5], n = 2
+		Output: [1,2,3,5]
+		Example 2:
+		Input: head = [1], n = 1
+		Output: []
+		Example 3:
+		Input: head = [1,2], n = 1
+		Output: [1]"
+"Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+		An input string is valid if:
+			Open brackets must be closed by the same type of brackets.
+			Open brackets must be closed in the correct order.
+			Every close bracket has a corresponding open bracket of the same type.
+		Example 1:
+		Input: s = ""()""
+		Output: true
+		Example 2:
+		Input: s = ""()[]{}""
+		Output: true
+		Example 3:
+		Input: s = ""(]""
+		Output: false"
+"You are given the heads of two sorted linked lists list1 and list2.
+		Merge the two lists in a one sorted list. The list should be made by splicing together the nodes of the first two lists.
+		Return the head of the merged linked list.
+		Example 1:
+		Input: list1 = [1,2,4], list2 = [1,3,4]
+		Output: [1,1,2,3,4,4]
+		Example 2:
+		Input: list1 = [], list2 = []
+		Output: []
+		Example 3:
+		Input: list1 = [], list2 = [0]
+		Output: [0]"
+"Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
+		Example 1:
+		Input: n = 3
+		Output: [""((()))"",""(()())"",""(())()"",""()(())"",""()()()""]
+		Example 2:
+		Input: n = 1
+		Output: [""()""]"
+"Given a linked list, swap every two adjacent nodes and return its head. You must solve the problem without modifying the values in the list's nodes (i.e., only nodes themselves may be changed.)
+		Example 1:
+		Input: head = [1,2,3,4]
+		Output: [2,1,4,3]
+		Example 2:
+		Input: head = []
+		Output: []
+		Example 3:
+		Input: head = [1]
+		Output: [1]"
+"Given an integer array nums sorted in non-decreasing order, remove the duplicates in-place such that each unique element appears only once. The relative order of the elements should be kept the same.
+		Since it is impossible to change the length of the array in some languages, you must instead have the result be placed in the first part of the array nums. More formally, if there are k elements after removing the duplicates, then the first k elements of nums should hold the final result. It does not matter what you leave beyond the first k elements.
+		Return k after placing the final result in the first k slots of nums.
+		Do not allocate extra space for another array. You must do this by modifying the input array in-place with O(1) extra memory.
+		Custom Judge:
+		The judge will test your solution with the following code:
+		int[] nums = [...]; // Input array
+		int[] expectedNums = [...]; // The expected answer with correct length
+		int k = removeDuplicates(nums); // Calls your implementation
+		assert k == expectedNums.length;
+		for (int i = 0; i < k; i++) {
+		    assert nums[i] == expectedNums[i];
+		}
+		If all assertions pass, then your solution will be accepted.
+		Example 1:
+		Input: nums = [1,1,2]
+		Output: 2, nums = [1,2,_]
+		Explanation: Your function should return k = 2, with the first two elements of nums being 1 and 2 respectively.
+		It does not matter what you leave beyond the returned k (hence they are underscores).
+		Example 2:
+		Input: nums = [0,0,1,1,1,2,2,3,3,4]
+		Output: 5, nums = [0,1,2,3,4,_,_,_,_,_]
+		Explanation: Your function should return k = 5, with the first five elements of nums being 0, 1, 2, 3, and 4 respectively.
+		It does not matter what you leave beyond the returned k (hence they are underscores)."
+"Given an integer array nums and an integer val, remove all occurrences of val in nums in-place. The relative order of the elements may be changed.
+		Since it is impossible to change the length of the array in some languages, you must instead have the result be placed in the first part of the array nums. More formally, if there are k elements after removing the duplicates, then the first k elements of nums should hold the final result. It does not matter what you leave beyond the first k elements.
+		Return k after placing the final result in the first k slots of nums.
+		Do not allocate extra space for another array. You must do this by modifying the input array in-place with O(1) extra memory.
+		Custom Judge:
+		The judge will test your solution with the following code:
+		int[] nums = [...]; // Input array
+		int val = ...; // Value to remove
+		int[] expectedNums = [...]; // The expected answer with correct length.
+		                            // It is sorted with no values equaling val.
+		int k = removeElement(nums, val); // Calls your implementation
+		assert k == expectedNums.length;
+		sort(nums, 0, k); // Sort the first k elements of nums
+		for (int i = 0; i < actualLength; i++) {
+		    assert nums[i] == expectedNums[i];
+		}
+		If all assertions pass, then your solution will be accepted.
+		Example 1:
+		Input: nums = [3,2,2,3], val = 3
+		Output: 2, nums = [2,2,_,_]
+		Explanation: Your function should return k = 2, with the first two elements of nums being 2.
+		It does not matter what you leave beyond the returned k (hence they are underscores).
+		Example 2:
+		Input: nums = [0,1,2,2,3,0,4,2], val = 2
+		Output: 5, nums = [0,1,4,0,3,_,_,_]
+		Explanation: Your function should return k = 5, with the first five elements of nums containing 0, 0, 1, 3, and 4.
+		Note that the five elements can be returned in any order.
+		It does not matter what you leave beyond the returned k (hence they are underscores)."
+"Given two strings needle and haystack, return the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.
+		Example 1:
+		Input: haystack = ""sadbutsad"", needle = ""sad""
+		Output: 0
+		Explanation: ""sad"" occurs at index 0 and 6.
+		The first occurrence is at index 0, so we return 0.
+		Example 2:
+		Input: haystack = ""leetcode"", needle = ""leeto""
+		Output: -1
+		Explanation: ""leeto"" did not occur in ""leetcode"", so we return -1."
+"Given two integers dividend and divisor, divide two integers without using multiplication, division, and mod operator.
+		The integer division should truncate toward zero, which means losing its fractional part. For example, 8.345 would be truncated to 8, and -2.7335 would be truncated to -2.
+		Return the quotient after dividing dividend by divisor.
+		Note: Assume we are dealing with an environment that could only store integers within the 32-bit signed integer range: [−231, 231 − 1]. For this problem, if the quotient is strictly greater than 231 - 1, then return 231 - 1, and if the quotient is strictly less than -231, then return -231.
+		Example 1:
+		Input: dividend = 10, divisor = 3
+		Output: 3
+		Explanation: 10/3 = 3.33333.. which is truncated to 3.
+		Example 2:
+		Input: dividend = 7, divisor = -3
+		Output: -2
+		Explanation: 7/-3 = -2.33333.. which is truncated to -2."
+"# Medium
+"
+"There is an integer array nums sorted in ascending order (with distinct values).
+		Prior to being passed to your function, nums is possibly rotated at an unknown pivot index k (1 <= k < nums.length) such that the resulting array is [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]] (0-indexed). For example, [0,1,2,4,5,6,7] might be rotated at pivot index 3 and become [4,5,6,7,0,1,2].
+		Given the array nums after the possible rotation and an integer target, return the index of target if it is in nums, or -1 if it is not in nums.
+		You must write an algorithm with O(log n) runtime complexity.
+		Example 1:
+		Input: nums = [4,5,6,7,0,1,2], target = 0
+		Output: 4
+		Example 2:
+		Input: nums = [4,5,6,7,0,1,2], target = 3
+		Output: -1
+		Example 3:
+		Input: nums = [1], target = 0
+		Output: -1"
+"Given an array of integers nums sorted in non-decreasing order, find the starting and ending position of a given target value.
+		If target is not found in the array, return [-1, -1].
+		You must write an algorithm with O(log n) runtime complexity.
+		Example 1:
+		Input: nums = [5,7,7,8,8,10], target = 8
+		Output: [3,4]
+		Example 2:
+		Input: nums = [5,7,7,8,8,10], target = 6
+		Output: [-1,-1]
+		Example 3:
+		Input: nums = [], target = 0
+		Output: [-1,-1]"
+"Given a sorted array of distinct integers and a target value, return the index if the target is found. If not, return the index where it would be if it were inserted in order.
+		You must write an algorithm with O(log n) runtime complexity.
+		Example 1:
+		Input: nums = [1,3,5,6], target = 5
+		Output: 2
+		Example 2:
+		Input: nums = [1,3,5,6], target = 2
+		Output: 1
+		Example 3:
+		Input: nums = [1,3,5,6], target = 7
+		Output: 4"
+"Determine if a 9 x 9 Sudoku board is valid. Only the filled cells need to be validated according to the following rules:
+			Each row must contain the digits 1-9 without repetition.
+			Each column must contain the digits 1-9 without repetition.
+			Each of the nine 3 x 3 sub-boxes of the grid must contain the digits 1-9 without repetition.
+		Note:
+			A Sudoku board (partially filled) could be valid but is not necessarily solvable.
+			Only the filled cells need to be validated according to the mentioned rules.
+		Example 1:
+		Input: board = 
+		[[""5"",""3"",""."",""."",""7"",""."",""."",""."","".""]
+		,[""6"",""."",""."",""1"",""9"",""5"",""."",""."","".""]
+		,[""."",""9"",""8"",""."",""."",""."",""."",""6"","".""]
+		,[""8"",""."",""."",""."",""6"",""."",""."",""."",""3""]
+		,[""4"",""."",""."",""8"",""."",""3"",""."",""."",""1""]
+		,[""7"",""."",""."",""."",""2"",""."",""."",""."",""6""]
+		,[""."",""6"",""."",""."",""."",""."",""2"",""8"","".""]
+		,[""."",""."",""."",""4"",""1"",""9"",""."",""."",""5""]
+		,[""."",""."",""."",""."",""8"",""."",""."",""7"",""9""]]
+		Output: true
+		Example 2:
+		Input: board = 
+		[[""8"",""3"",""."",""."",""7"",""."",""."",""."","".""]
+		,[""6"",""."",""."",""1"",""9"",""5"",""."",""."","".""]
+		,[""."",""9"",""8"",""."",""."",""."",""."",""6"","".""]
+		,[""8"",""."",""."",""."",""6"",""."",""."",""."",""3""]
+		,[""4"",""."",""."",""8"",""."",""3"",""."",""."",""1""]
+		,[""7"",""."",""."",""."",""2"",""."",""."",""."",""6""]
+		,[""."",""6"",""."",""."",""."",""."",""2"",""8"","".""]
+		,[""."",""."",""."",""4"",""1"",""9"",""."",""."",""5""]
+		,[""."",""."",""."",""."",""8"",""."",""."",""7"",""9""]]
+		Output: false
+		Explanation: Same as Example 1, except with the 5 in the top left corner being modified to 8. Since there are two 8's in the top left 3x3 sub-box, it is invalid."
+"The count-and-say sequence is a sequence of digit strings defined by the recursive formula:
+			countAndSay(1) = ""1""
+			countAndSay(n) is the way you would ""say"" the digit string from countAndSay(n-1), which is then converted into a different digit string.
+		To determine how you ""say"" a digit string, split it into the minimal number of substrings such that each substring contains exactly one unique digit. Then for each substring, say the number of digits, then say the digit. Finally, concatenate every said digit.
+		For example, the saying and conversion for digit string ""3322251"":
+		Given a positive integer n, return the nth term of the count-and-say sequence.
+		Example 1:
+		Input: n = 1
+		Output: ""1""
+		Explanation: This is the base case.
+		Example 2:
+		Input: n = 4
+		Output: ""1211""
+		Explanation:
+		countAndSay(1) = ""1""
+		countAndSay(2) = say ""1"" = one 1 = ""11""
+		countAndSay(3) = say ""11"" = two 1's = ""21""
+		countAndSay(4) = say ""21"" = one 2 + one 1 = ""12"" + ""11"" = ""1211"""
+"Given an array of distinct integers candidates and a target integer target, return a list of all unique combinations of candidates where the chosen numbers sum to target. You may return the combinations in any order.
+		The same number may be chosen from candidates an unlimited number of times. Two combinations are unique if the frequency of at least one of the chosen numbers is different.
+		The test cases are generated such that the number of unique combinations that sum up to target is less than 150 combinations for the given input.
+		Example 1:
+		Input: candidates = [2,3,6,7], target = 7
+		Output: [[2,2,3],[7]]
+		Explanation:
+		2 and 3 are candidates, and 2 + 2 + 3 = 7. Note that 2 can be used multiple times.
+		7 is a candidate, and 7 = 7.
+		These are the only two combinations.
+		Example 2:
+		Input: candidates = [2,3,5], target = 8
+		Output: [[2,2,2,2],[2,3,3],[3,5]]
+		Example 3:
+		Input: candidates = [2], target = 1
+		Output: []"
+"Given a collection of candidate numbers (candidates) and a target number (target), find all unique combinations in candidates where the candidate numbers sum to target.
+		Each number in candidates may only be used once in the combination.
+		Note: The solution set must not contain duplicate combinations.
+		Example 1:
+		Input: candidates = [10,1,2,7,6,1,5], target = 8
+		Output: 
+		[
+		[1,1,6],
+		[1,2,5],
+		[1,7],
+		[2,6]
+		]
+		Example 2:
+		Input: candidates = [2,5,2,1,2], target = 5
+		Output: 
+		[
+		[1,2,2],
+		[5]
+		]"
+"Given two non-negative integers num1 and num2 represented as strings, return the product of num1 and num2, also represented as a string.
+		Note: You must not use any built-in BigInteger library or convert the inputs to integer directly.
+		Example 1:
+		Input: num1 = ""2"", num2 = ""3""
+		Output: ""6""
+		Example 2:
+		Input: num1 = ""123"", num2 = ""456""
+		Output: ""56088"""
+"You are given a 0-indexed array of integers nums of length n. You are initially positioned at nums[0].
+		Each element nums[i] represents the maximum length of a forward jump from index i. In other words, if you are at nums[i], you can jump to any nums[i + j] where:
+			0 <= j <= nums[i] and
+			i + j < n
+		Return the minimum number of jumps to reach nums[n - 1]. The test cases are generated such that you can reach nums[n - 1].
+		Example 1:
+		Input: nums = [2,3,1,1,4]
+		Output: 2
+		Explanation: The minimum number of jumps to reach the last index is 2. Jump 1 step from index 0 to 1, then 3 steps to the last index.
+		Example 2:
+		Input: nums = [2,3,0,1,4]
+		Output: 2"
+"Given an array nums of distinct integers, return all the possible permutations. You can return the answer in any order.
+		Example 1:
+		Input: nums = [1,2,3]
+		Output: [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+		Example 2:
+		Input: nums = [0,1]
+		Output: [[0,1],[1,0]]
+		Example 3:
+		Input: nums = [1]
+		Output: [[1]]"
+"Given a collection of numbers, nums, that might contain duplicates, return all possible unique permutations in any order.
+		Example 1:
+		Input: nums = [1,1,2]
+		Output:
+		[[1,1,2],
+		 [1,2,1],
+		 [2,1,1]]
+		Example 2:
+		Input: nums = [1,2,3]
+		Output: [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]"
+"# Medium
+"
+"Given an array of strings strs, group the anagrams together. You can return the answer in any order.
+		An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.
+		Example 1:
+		Input: strs = [""eat"",""tea"",""tan"",""ate"",""nat"",""bat""]
+		Output: [[""bat""],[""nat"",""tan""],[""ate"",""eat"",""tea""]]
+		Example 2:
+		Input: strs = [""""]
+		Output: [[""""]]
+		Example 3:
+		Input: strs = [""a""]
+		Output: [[""a""]]"
+"Implement pow(x, n), which calculates x raised to the power n (i.e., xn).
+		Example 1:
+		Input: x = 2.00000, n = 10
+		Output: 1024.00000
+		Example 2:
+		Input: x = 2.10000, n = 3
+		Output: 9.26100
+		Example 3:
+		Input: x = 2.00000, n = -2
+		Output: 0.25000
+		Explanation: 2-2 = 1/22 = 1/4 = 0.25"
+"Given an integer array nums, find the subarray with the largest sum, and return its sum.
+		Example 1:
+		Input: nums = [-2,1,-3,4,-1,2,1,-5,4]
+		Output: 6
+		Explanation: The subarray [4,-1,2,1] has the largest sum 6.
+		Example 2:
+		Input: nums = [1]
+		Output: 1
+		Explanation: The subarray [1] has the largest sum 1.
+		Example 3:
+		Input: nums = [5,4,-1,7,8]
+		Output: 23
+		Explanation: The subarray [5,4,-1,7,8] has the largest sum 23."
+"Given an m x n matrix, return all elements of the matrix in spiral order.
+		Example 1:
+		Input: matrix = [[1,2,3],[4,5,6],[7,8,9]]
+		Output: [1,2,3,6,9,8,7,4,5]
+		Example 2:
+		Input: matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]
+		Output: [1,2,3,4,8,12,11,10,9,5,6,7]"
+"You are given an integer array nums. You are initially positioned at the array's first index, and each element in the array represents your maximum jump length at that position.
+		Return true if you can reach the last index, or false otherwise.
+		Example 1:
+		Input: nums = [2,3,1,1,4]
+		Output: true
+		Explanation: Jump 1 step from index 0 to 1, then 3 steps to the last index.
+		Example 2:
+		Input: nums = [3,2,1,0,4]
+		Output: false
+		Explanation: You will always arrive at index 3 no matter what. Its maximum jump length is 0, which makes it impossible to reach the last index."
+"Given an array of intervals where intervals[i] = [starti, endi], merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.
+		Example 1:
+		Input: intervals = [[1,3],[2,6],[8,10],[15,18]]
+		Output: [[1,6],[8,10],[15,18]]
+		Explanation: Since intervals [1,3] and [2,6] overlap, merge them into [1,6].
+		Example 2:
+		Input: intervals = [[1,4],[4,5]]
+		Output: [[1,5]]
+		Explanation: Intervals [1,4] and [4,5] are considered overlapping."
+"You are given an array of non-overlapping intervals intervals where intervals[i] = [starti, endi] represent the start and the end of the ith interval and intervals is sorted in ascending order by starti. You are also given an interval newInterval = [start, end] that represents the start and end of another interval.
+		Insert newInterval into intervals such that intervals is still sorted in ascending order by starti and intervals still does not have any overlapping intervals (merge overlapping intervals if necessary).
+		Return intervals after the insertion.
+		Example 1:
+		Input: intervals = [[1,3],[6,9]], newInterval = [2,5]
+		Output: [[1,5],[6,9]]
+		Example 2:
+		Input: intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]], newInterval = [4,8]
+		Output: [[1,2],[3,10],[12,16]]
+		Explanation: Because the new interval [4,8] overlaps with [3,5],[6,7],[8,10]."
+"Given a string s consisting of words and spaces, return the length of the last word in the string.
+		A word is a maximal substring consisting of non-space characters only.
+		Example 1:
+		Input: s = ""Hello World""
+		Output: 5
+		Explanation: The last word is ""World"" with length 5.
+		Example 2:
+		Input: s = ""   fly me   to   the moon  ""
+		Output: 4
+		Explanation: The last word is ""moon"" with length 4.
+		Example 3:
+		Input: s = ""luffy is still joyboy""
+		Output: 6
+		Explanation: The last word is ""joyboy"" with length 6."
+"Given a positive integer n, generate an n x n matrix filled with elements from 1 to n2 in spiral order.
+		Example 1:
+		Input: n = 3
+		Output: [[1,2,3],[8,9,4],[7,6,5]]
+		Example 2:
+		Input: n = 1
+		Output: [[1]]"
+"Given the head of a linked list, rotate the list to the right by k places.
+		Example 1:
+		Input: head = [1,2,3,4,5], k = 2
+		Output: [4,5,1,2,3]
+		Example 2:
+		Input: head = [0,1,2], k = 4
+		Output: [2,0,1]"
+"There is a robot on an m x n grid. The robot is initially located at the top-left corner (i.e., grid[0][0]). The robot tries to move to the bottom-right corner (i.e., grid[m - 1][n - 1]). The robot can only move either down or right at any point in time.
+		Given the two integers m and n, return the number of possible unique paths that the robot can take to reach the bottom-right corner.
+		The test cases are generated so that the answer will be less than or equal to 2 * 109.
+		Example 1:
+		Input: m = 3, n = 7
+		Output: 28
+		Example 2:
+		Input: m = 3, n = 2
+		Output: 3
+		Explanation: From the top-left corner, there are a total of 3 ways to reach the bottom-right corner:
+		1. Right -> Down -> Down
+		2. Down -> Down -> Right
+		3. Down -> Right -> Down"
+"You are given an m x n integer array grid. There is a robot initially located at the top-left corner (i.e., grid[0][0]). The robot tries to move to the bottom-right corner (i.e., grid[m - 1][n - 1]). The robot can only move either down or right at any point in time.
+		An obstacle and space are marked as 1 or 0 respectively in grid. A path that the robot takes cannot include any square that is an obstacle.
+		Return the number of possible unique paths that the robot can take to reach the bottom-right corner.
+		The testcases are generated so that the answer will be less than or equal to 2 * 109.
+		Example 1:
+		Input: obstacleGrid = [[0,0,0],[0,1,0],[0,0,0]]
+		Output: 2
+		Explanation: There is one obstacle in the middle of the 3x3 grid above.
+		There are two ways to reach the bottom-right corner:
+		1. Right -> Right -> Down -> Down
+		2. Down -> Down -> Right -> Right
+		Example 2:
+		Input: obstacleGrid = [[0,1],[0,0]]
+		Output: 1"
