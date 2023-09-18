@@ -1,3 +1,4 @@
+import asyncio
 import os
 import pickle
 from concurrent.futures import ThreadPoolExecutor
@@ -16,6 +17,7 @@ from .data_processor import DataProcessor
 from .evaluator import Evaluator
 from .rate_limiter import RateLimiter
 from .utils import (
+    arun_single_input,
     generate_experiment,
     get_improver,
     get_selection_strategy,
@@ -52,6 +54,36 @@ class ExperimentRunner:
             self.config.get("custom_variation_generators", {})
         )
 
+    async def _aprocess_dataset(self, all_combinations, logger,
+                                evaluator) -> List[ExperimentResult]:
+        processor = DataProcessor(self.config["dataset"])  # type: ignore
+        data_batches = list(processor.process_data())
+        sum([len(batch) for batch in data_batches]) * len(all_combinations)
+        semaphore = asyncio.Semaphore(32)
+        total_tasks = sum([len(batch)
+                           for batch in data_batches]) * len(all_combinations)
+
+        async def eval_fn_with_semaphore(data_point):
+            async with semaphore:
+                return await self.aparallel_task(
+                    data_point, all_combinations, logger, evaluator
+                )
+
+        futures = []
+        results = []
+        for data_batch in data_batches:
+            for data in data_batch:
+                futures.append(
+                    asyncio.ensure_future(eval_fn_with_semaphore(data))
+                )
+
+        for future in tqdm(
+            asyncio.as_completed(futures), total=total_tasks, disable=False
+        ):
+            results.extend(await future)
+
+        return results
+
     def _process_dataset(self, all_combinations, logger,
                          evaluator) -> List[ExperimentResult]:
         """Process dataset source type and return the results."""
@@ -68,25 +100,33 @@ class ExperimentRunner:
                 with ThreadPoolExecutor() as executor:
                     for res in executor.map(
                         self.parallel_task, data,
-                        [all_combinations] * len(data),
-                        [ExperimentState.get_instance()] * len(data),
-                        [logger] * len(data), [evaluator] * len(data)
+                        [all_combinations] * len(data), [logger] * len(data),
+                        [evaluator] * len(data)
                     ):
                         results.extend(res)
                         pbar.update(len(res))
 
         return results
 
-    def parallel_task(
-        self, data_point, all_combinations, state, logger, evaluator
+    async def aparallel_task(
+        self, data_point, all_combinations, logger, evaluator
     ):
+        for _ in all_combinations:
+            return await arun_single_input(
+                data_point,
+                self.config,
+                all_combinations=all_combinations,
+                logger=logger,
+                evaluator=evaluator
+            )
+
+    def parallel_task(self, data_point, all_combinations, logger, evaluator):
         """Task to be run in parallel for processing data points."""
-        RateLimiter(10 / 60)()  # Ensure rate limit
+        RateLimiter(60 / 60)()  # Ensure rate limit
         return run_single_input(
             data_point,
             self.config,
             all_combinations=all_combinations,
-            state=state,
             logger=logger,
             evaluator=evaluator
         )
@@ -95,7 +135,8 @@ class ExperimentRunner:
         self,
         display: bool = True,
         output_path: Optional[str] = "abc.pkl",
-        experiment_input_path: Optional[str] = "abc.pkl"
+        experiment_input_path: Optional[str] = "abc.pkl",
+        async_eval: bool = False
     ):
         """Run the experiment based on the source type and provided configuration."""
         self._register_custom_components()
@@ -120,9 +161,24 @@ class ExperimentRunner:
                 register_custom_readers(
                     self.config.get("custom_reader", {})  # type: ignore
                 )  # type: ignore
-                results = self._process_dataset(
-                    all_combinations, logger, evaluator
-                )
+                if async_eval:
+                    import time
+                    start_time = time.time()
+                    results = asyncio.run(
+                        self._aprocess_dataset(
+                            all_combinations, logger, evaluator
+                        )
+                    )
+                    end_time = time.time()
+                    print(f"[INFO] time taken: {end_time - start_time}")
+                else:
+                    import time
+                    start_time = time.time()
+                    results = self._process_dataset(
+                        all_combinations, logger, evaluator
+                    )
+                    end_time = time.time()
+                    print(f"[INFO] time taken: {end_time - start_time}")
                 experiment = generate_experiment(
                     results, evaluator
                 )  # type: ignore

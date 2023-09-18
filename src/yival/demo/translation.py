@@ -6,10 +6,11 @@ import os
 import openai
 
 from yival.logger.token_logger import TokenLogger
+from yival.states.experiment_state import ExperimentState
 from yival.wrappers.string_wrapper import StringWrapper
 
 
-def translate(input: str) -> str:
+def translate(input: str, state: ExperimentState) -> str:
     """
     Demo code to translate text from English to Chinese using GPT-3.
     """
@@ -30,7 +31,9 @@ def translate(input: str) -> str:
         "content":
         str(
             StringWrapper(
-                "Translate the following to Chinese", name="translate"
+                "Translate the following to Chinese",
+                name="translate",
+                state=state
             )
         ) + f'{input}'
     }]

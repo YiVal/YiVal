@@ -55,7 +55,7 @@ def demo(args: Namespace):
         src_path = os.path.join(
             base_dir, '../demo/configs/qa_expected_results_config.yml'
         )
-        dest_path = './basic_interactive_config.yml'
+        dest_path = './qa_expected_results_config.yml'
         shutil.copy(src_path, dest_path)
         print(f"Copied {src_path} to {dest_path}")
         run_args = Namespace(
@@ -74,7 +74,7 @@ def demo(args: Namespace):
         run_args = Namespace(
             config_path=dest_path,
             display=True,
-            output_path="test_demo_results.pkl",
-            experiment_input_path="test_demo_results.pkl"
+            output_path="demo_results.pkl",
+            experiment_input_path="demo_results.pkl"
         )
     run_experiment(run_args)

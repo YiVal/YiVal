@@ -15,8 +15,8 @@ dataset:
         parameters:
           tech_startup_business: str
       number_of_examples: 2
-      openai_model_name: gpt-4
-      output_path: test_demo_generated_examples.pkl
+      model_name: gpt-4
+      output_path: demo_generated_examples.pkl
       prompt: |-
         Please provide a concrete and realistic test case as
         a dictionary for function invocation using the ** operator.
@@ -34,8 +34,8 @@ variations:
       diversify: false
       max_tokens: 7000
       number_of_variations: 2
-      openai_model_name: gpt-4
-      output_path: test_demo_generated_prompt.pkl
+      model_name: gpt-4
+      output_path: demo_generated_prompt.pkl
       prompt:
         - content: |-
 

@@ -21,6 +21,7 @@ from dash.dependencies import ALL, MATCH, Input, Output, State
 from dash_dangerously_set_inner_html import DangerouslySetInnerHTML
 from PIL import Image
 from pyngrok import ngrok
+from sympy import fu
 
 from yival.experiment.rate_limiter import RateLimiter
 from yival.experiment.utils import (
@@ -192,14 +193,13 @@ def create_dash_app(
     interactive_mode
 ):
 
-    def parallel_task(data_point, all_combinations, state, logger, evaluator):
+    def parallel_task(data_point, all_combinations, logger, evaluator):
         """Task to be run in parallel for processing data points."""
-        RateLimiter(10 / 60)()  # Ensure rate limit
+        RateLimiter(60 / 60)()  # Ensure rate limit
         return run_single_input(
             data_point,
             experiment_config,
             all_combinations=all_combinations,
-            state=state,
             logger=logger,
             evaluator=evaluator
         )
@@ -1526,8 +1526,8 @@ def create_dash_app(
         results: List[ExperimentResult] = []
         with ThreadPoolExecutor() as executor:
             for res in executor.map(
-                parallel_task, [input_data], [selected_combinations], [state],
-                [logger], [evaluator]
+                parallel_task, [input_data], [selected_combinations], [logger],
+                [evaluator]
             ):
                 results.extend(res)
 

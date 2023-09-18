@@ -37,6 +37,13 @@ def add_arguments_to(subparser):
         help="Path to existing experiment results."
     )
 
+    parser.add_argument(
+        "--async_eval",
+        type=bool,
+        default=False,
+        help="Wheter the custom function is async"
+    )
+
 
 def run_experiment(args: Namespace):
     """Run the experiment using the provided YAML configuration file."""
@@ -45,7 +52,8 @@ def run_experiment(args: Namespace):
         runner.run(
             display=args.display,
             output_path=args.output_path,
-            experiment_input_path=args.experiment_input_path
+            experiment_input_path=args.experiment_input_path,
+            async_eval=args.async_eval
         )
         print("Experiment completed!")
     except Exception as e:

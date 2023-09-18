@@ -11,6 +11,7 @@ from langchain.schema import Document
 from langchain.vectorstores import FAISS
 
 from yival.logger.token_logger import TokenLogger
+from yival.states.experiment_state import ExperimentState
 from yival.wrappers.string_wrapper import StringWrapper
 
 execution_flags = {}
@@ -89,7 +90,7 @@ class Reply:
         )
         self.retriever.add_documents(documents)
 
-    def reply(self, weibo_post: str, user_input: str):
+    def reply(self, weibo_post: str, user_input: str, state: ExperimentState):
         logger = TokenLogger()
         logger.reset()
         # Ensure you have your OpenAI API key set up
@@ -134,6 +135,7 @@ class Reply:
                     "query_context": query_context
                 },
                 name="chatbot_prompt",
+                state=state,
             )
         ) + suffix
 
