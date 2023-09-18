@@ -9,8 +9,8 @@ from guardrails.datatypes import PythonCode
 from guardrails.validators import BugFreePython
 from pydantic import BaseModel, Field
 from rich import print
-
 from yival.logger.token_logger import TokenLogger
+from yival.states.experiment_state import ExperimentState
 from yival.wrappers.string_wrapper import StringWrapper
 
 prompt_guardrail = """
@@ -39,11 +39,13 @@ class BugFreePythonCode(BaseModel):
         arbitrary_types_allowed = True
 
 
-def run_leetcode(leetcode_problem: str) -> str:
+def run_leetcode(leetcode_problem: str, state: ExperimentState) -> str:
     logger = TokenLogger()
     logger.reset()
     # Ensure you have your OpenAI API key set up
-    use_guardrails = StringWrapper("use_guardrails", name="use_guardrails")
+    use_guardrails = StringWrapper(
+        "use_guardrails", name="use_guardrails", state=state
+    )
     if str(use_guardrails) == "use_guardrails":
         try:
             loop = asyncio.new_event_loop()
