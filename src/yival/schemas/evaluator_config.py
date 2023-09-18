@@ -157,3 +157,11 @@ class RougeEvaluatorConfig(EvaluatorConfig):
     evaluator_type: EvaluatorType = EvaluatorType.INDIVIDUAL
     description: str = " This is the description of the evaluator"
     rough_type: str = "rouge-1"
+
+
+@dataclass
+class BertScoreEvaluatorConfig(EvaluatorConfig):
+    evaluator_type: EvaluatorType = EvaluatorType.INDIVIDUAL
+    description: str = " This is the description of the evaluator"
+    lan: str = 'zh'
+    indicator: str = 'p'  # p,r,f

@@ -2,7 +2,7 @@ import json
 import os
 import pickle
 import time
-from typing import List
+from typing import Dict, List
 
 import replicate
 import requests
@@ -32,6 +32,23 @@ def _format_data_for_replicate_finetune(data: list[dict[str, str]]):
     return formatted_data
 
 
+def _extract_from_input_data(result: Experiment) -> List[Dict[str, str]]:
+    result_pairs = []
+    for rs in result.group_experiment_results:
+        input_data = json.loads(rs.group_key)
+        finetune_data = {
+            "prompt":
+            "Translate the following english to chinese" + "\n" +
+            input_data['content']['teacher_quiz'],
+            "completion":
+            input_data['expected_result']
+        }
+        result_pairs.append(finetune_data)
+
+    print(f"[INFO] len format data: {len(result_pairs)}")
+    return result_pairs
+
+
 def finetune(
     input_file: str,
     condition: str,
@@ -39,6 +56,7 @@ def finetune(
     destination: str,
     model_name: str,
     num_train_epochs: int = 3,
+    support_expected_value: bool = False,
     system_prompt: str = "",
 ) -> str:
     """
@@ -64,26 +82,30 @@ def finetune(
 
     with open(input_file, 'rb') as f:
         result: Experiment = pickle.load(f)
-    result_pairs = []
-    for combo_result in result.combination_aggregated_metrics:
-        results: List[ExperimentResult] = combo_result.experiment_results
-        for rs in results:
-            if rs.evaluator_outputs:
-                for evaluator_output in rs.evaluator_outputs:
-                    condition_met = evaluate_condition(
-                        condition, evaluator_output
-                    )
-                    if condition_met:
-                        result_pair = transform_experiment_result_generic(
-                            code, rs
-                        )
-                        result_pairs.append(result_pair)
 
-    formatted_data = _format_data_for_replicate_finetune(result_pairs)
+    if support_expected_value:
+        formatted_data = _extract_from_input_data(result)
+    else:
+        result_pairs = []
+        for combo_result in result.combination_aggregated_metrics:
+            results: List[ExperimentResult] = combo_result.experiment_results
+            for rs in results:
+                if rs.evaluator_outputs:
+                    for evaluator_output in rs.evaluator_outputs:
+                        condition_met = evaluate_condition(
+                            condition, evaluator_output
+                        )
+                        if condition_met:
+                            result_pair = transform_experiment_result_generic(
+                                code, rs
+                            )
+                            result_pairs.append(result_pair)
+
+        formatted_data = _format_data_for_replicate_finetune(result_pairs)
 
     headers = {"Authorization": f"Token {os.environ['REPLICATE_API_TOKEN']}"}
 
-    with open("data.jsonl", "w") as f:
+    with open("data.jsonl", "w", encoding='utf-8') as f:
         for entry in formatted_data:
             json_str = json.dumps(entry, separators=(',', ':'))
             f.write(json_str + "\n")
@@ -127,15 +149,23 @@ def finetune(
             time.sleep(60)
 
 
-def main():
+def headline_generation():
     finetune(
-        'test_demo_results.pkl',
-        "name == openai_prompt_based_evaluator AND result >= 0 AND display_name == clarity",
+        'headline.pkl',
+        "name == openai_prompt_based_evaluator AND result >= 0 AND display_name == clear",
         "yival.demo.headline_generation",
         "yival/llama2",
         "meta/llama-2-7b-chat:8e6975e5ed6174911a6ff3d60540dfd4844201974602551e10e9e87ab143d81e",
     )
 
 
+def teacher_quiz():
+    finetune(
+        "quiz100.pkl", "", "yival.demo.headline_generation", "yival/llama2",
+        "meta/llama-2-7b-chat:8e6975e5ed6174911a6ff3d60540dfd4844201974602551e10e9e87ab143d81e",
+        5, True
+    )
+
+
 if __name__ == "__main__":
-    main()
+    teacher_quiz()

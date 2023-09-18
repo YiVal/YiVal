@@ -146,10 +146,21 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
             self.config.input_function.get('parameters', {}).keys()
         ):
             return
+
+        # choose expected_value
+        expected_value = generated_example.get(
+            self.config.expected_param_name, None
+        )
+
+        if expected_value:
+            generated_example.pop(self.config.expected_param_name)
         input_data_instance = InputData(
             example_id=super().generate_example_id(output_content),
             content=generated_example,
-            expected_result=None
+            expected_result=expected_value
+        )
+        print(
+            f"[INFO][data_generator] generated instance:{input_data_instance}"
         )
         all_data.append(input_data_instance)
         chunk.append(input_data_instance)
@@ -195,14 +206,12 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                     desc="Generating Examples",
                     unit="example"
                 ) as pbar:
+                    # call_option = self.config.call_option if self.config.call_option else {}
                     output = llm_completion(
                         Request(
                             model_name=self.config.model_name,
                             prompt=messages,
-                            params={
-                                "temperature": 1.3,
-                                "presence_penalty": 2
-                            }
+                            params=self.config.call_option  #type:ignore
                         )
                     ).output
                     self.process_output(

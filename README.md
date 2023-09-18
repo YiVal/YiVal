@@ -48,10 +48,10 @@ strategies.
 
 ### Expected Features in Sep
 
-- [ ] Add ROUGE and BERTScore evaluators
+- [x] Add ROUGE and BERTScore evaluators
 - [x] Add support to midjourney
 - [x] Add support to LLaMA2-70B, LLaMA2-7B, Falcon-40B,
-- [ ] Support LoRA fine-tune to open source models
+- [x] Support LoRA fine-tune to open source models
 
 ## 🚀 Features
 
@@ -63,7 +63,8 @@ strategies.
 
 ## Model Support matrix
 
-We support 100+ LLM ( gpt-4 , gpt-3.5-turbo , llama, blablabla e.g.).
+We support 100+ LLM ( gpt-4 , gpt-3.5-turbo , llama e.g.).
+
 Different Model sources can be viewed as follow
 
 | Model        | llm-Evaluate |Human-Evaluate|Variation Generate|Custom func|

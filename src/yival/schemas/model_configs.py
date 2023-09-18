@@ -48,3 +48,26 @@ class Response:
         which can be of any type depending on the model and task.
     """
     output: Any
+
+
+@dataclass
+class CallOption:
+    """
+    Represents call options with llm
+
+    Args:
+        temperature (float): hyperparameter that
+        controls the randomness of predictions by scaling the logits
+        before applying softmax.
+
+        presence_penalty (float)
+        
+    """
+    temperature: Optional[float] = None
+    presence_penalty: Optional[float] = None
+
+    def asdict(self) -> Dict[str, Any]:
+        return {
+            "temperature": self.temperature,
+            "presence_penalty": self.presence_penalty
+        }
