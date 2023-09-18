@@ -1,16 +1,19 @@
 from yival.common.model_utils import llm_completion
 from yival.logger.token_logger import TokenLogger
 from yival.schemas.model_configs import Request
+from yival.states.experiment_state import ExperimentState
 from yival.wrappers.string_wrapper import StringWrapper
 
 
-def model_compare(input: str) -> str:
+def model_compare(input: str, state: ExperimentState) -> str:
     logger = TokenLogger()
     logger.reset()
 
     response = llm_completion(
         Request(
-            model_name=str(StringWrapper("gpt-3.5-turbo", name="model_name")),
+            model_name=str(
+                StringWrapper("gpt-3.5-turbo", name="model_name", state=state)
+            ),
             prompt=input
         )
     ).output

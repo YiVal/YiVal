@@ -45,10 +45,13 @@ class BaseWrapper:
         return inner
 
     def __init__(
-        self, name: str, config: Optional[BaseWrapperConfig] = None
+        self,
+        name: str,
+        config: Optional[BaseWrapperConfig] = None,
+        state: Optional[ExperimentState] = None,
     ) -> None:
         self.name = name
-        self.experiment_state = ExperimentState.get_instance()
+        self.experiment_state = state if state else ExperimentState()
         self.config = config
 
     def get_variation(self) -> Optional[Any]:
@@ -77,7 +80,7 @@ class BaseWrapper:
         return cls._registry.get(name, {}).get("config_cls")
 
     def get_active_config(self, name: str) -> Optional[BaseWrapperConfig]:
-        if self.experiment_state.active and self.experiment_state.config.wrapper_configs:
+        if self.experiment_state.active and self.experiment_state.config and self.experiment_state.config.wrapper_configs:
             config = self.experiment_state.config.wrapper_configs.get(name)
             if config:
                 config_cls = BaseWrapper.get_config_class(name)

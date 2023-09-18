@@ -191,7 +191,7 @@ class OpenAIPromptBasedCombinationImprover(BaseCombinationImprover):
         super().__init__(config)
         self.config = config
 
-    def parallel_task(self, data, all_combinations, state, logger, evaluator):
+    def parallel_task(self, data, all_combinations, logger, evaluator):
         """
         Execute a single input run in parallel.
         """
@@ -200,7 +200,6 @@ class OpenAIPromptBasedCombinationImprover(BaseCombinationImprover):
             data,
             self.updated_config,
             all_combinations=all_combinations,
-            state=state,
             logger=logger,
             evaluator=evaluator
         )
@@ -311,7 +310,7 @@ class OpenAIPromptBasedCombinationImprover(BaseCombinationImprover):
                 with ThreadPoolExecutor() as executor:
                     for res in executor.map(
                         self.parallel_task, data,
-                        [all_combinations] * len(data), [state] * len(data),
+                        [all_combinations] * len(data),
                         [token_logger] * len(data), [evaluator] * len(data)
                     ):
                         current_iteration_results.extend(res)

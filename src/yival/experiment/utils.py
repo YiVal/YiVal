@@ -1,3 +1,4 @@
+import asyncio
 import importlib
 import inspect
 import os
@@ -48,6 +49,10 @@ from ..wrappers.string_wrapper import StringWrapper
 from .evaluator import Evaluator
 
 
+def is_async_function(func):
+    return asyncio.iscoroutinefunction(func)
+
+
 def import_function_from_string(func_string: str):
     """Helper function to import a function from a string."""
     try:
@@ -71,6 +76,7 @@ def get_function_args(func_string: str):
     return {
         name: str(param.annotation)
         for name, param in signature.parameters.items()
+        if name.lower() != "state"
     }
 
 
@@ -78,6 +84,15 @@ def call_function_from_string(func_string: str, **kwargs) -> Any:
     """Call a function specified by a string."""
     function = import_function_from_string(func_string)
     return function(**kwargs)
+
+
+async def acall_function_from_string(func_string: str, **kwargs) -> Any:
+
+    function = import_function_from_string(func_string)
+    if is_async_function(function):
+        return await function(**kwargs)
+    else:
+        return function(**kwargs)
 
 
 def _add_to_sys_path_if_not_present(directory: str):
@@ -257,34 +272,74 @@ def calculate_average_latency(results: List[ExperimentResult]) -> float:
 def run_single_input(
     d: InputData, config: ExperimentConfig, all_combinations: List[Dict[str,
                                                                         Any]],
-    state: ExperimentState, logger: TokenLogger, evaluator: Evaluator
+    logger: TokenLogger, evaluator: Evaluator
 ):
     results = []
+    tmp_state = ExperimentState()
+    tmp_state.active = True
     for combo in all_combinations:
         for name, variation in combo.items():
-            state.set_specific_variation(name, variation)
-            start_time = time.time()
-            res = call_function_from_string(
-                config["custom_function"],  # type: ignore
-                **d.content
-            )
-            end_time = time.time()
-            latency = end_time - start_time  # Time in seconds
+            tmp_state.set_specific_variation(name, variation)
+        start_time = time.time()
+        res = call_function_from_string(
+            config["custom_function"],  # type: ignore
+            **d.content,
+            state=tmp_state
+        )
+        end_time = time.time()
+        latency = end_time - start_time  # Time in seconds
 
-            tokens_used = logger.get_current_usage()
-            result = ExperimentResult(
-                input_data=d,
-                combination=combo,
-                raw_output=res,
-                latency=latency,
-                token_usage=tokens_used,
-                evaluator_outputs=[]
+        tokens_used = logger.get_current_usage()
+        result = ExperimentResult(
+            input_data=d,
+            combination=combo,
+            raw_output=res,
+            latency=latency,
+            token_usage=tokens_used,
+            evaluator_outputs=[]
+        )
+        if result.evaluator_outputs is not None:
+            result.evaluator_outputs.extend(
+                evaluator.evaluate_individual_result(result)
             )
-            if result.evaluator_outputs is not None:
-                result.evaluator_outputs.extend(
-                    evaluator.evaluate_individual_result(result)
-                )
-            results.append(result)
+        results.append(result)
+    return results
+
+
+async def arun_single_input(
+    d: InputData, config: ExperimentConfig, all_combinations: List[Dict[str,
+                                                                        Any]],
+    logger: TokenLogger, evaluator: Evaluator
+):
+    results = []
+    tmp_state = ExperimentState()
+    tmp_state.active = True
+    for combo in all_combinations:
+        for name, variation in combo.items():
+            tmp_state.set_specific_variation(name, variation)
+        start_time = time.time()
+        res = await acall_function_from_string(
+            config["custom_function"],  # type: ignore
+            **d.content,
+            state=tmp_state
+        )
+        end_time = time.time()
+        latency = end_time - start_time  # Time in seconds
+
+        tokens_used = logger.get_current_usage()
+        result = ExperimentResult(
+            input_data=d,
+            combination=combo,
+            raw_output=res,
+            latency=latency,
+            token_usage=tokens_used,
+            evaluator_outputs=[]
+        )
+        if result.evaluator_outputs is not None:
+            result.evaluator_outputs.extend(
+                evaluator.evaluate_individual_result(result)
+            )
+        results.append(result)
     return results
 
 

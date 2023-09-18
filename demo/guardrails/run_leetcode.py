@@ -1,5 +1,4 @@
 #type: ignore
-import asyncio
 import os
 import re
 
@@ -11,6 +10,7 @@ from pydantic import BaseModel, Field
 from rich import print
 
 from yival.logger.token_logger import TokenLogger
+from yival.states.experiment_state import ExperimentState
 from yival.wrappers.string_wrapper import StringWrapper
 
 prompt_guardrail = """
@@ -39,20 +39,20 @@ class BugFreePythonCode(BaseModel):
         arbitrary_types_allowed = True
 
 
-def run_leetcode(leetcode_problem: str) -> str:
+async def run_leetcode(leetcode_problem: str, state: ExperimentState) -> str:
     logger = TokenLogger()
     logger.reset()
     # Ensure you have your OpenAI API key set up
-    use_guardrails = StringWrapper("use_guardrails", name="use_guardrails")
+    use_guardrails = StringWrapper(
+        "use_guardrails", name="use_guardrails", state=state
+    )
     if str(use_guardrails) == "use_guardrails":
         try:
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
             guard = gd.Guard.from_pydantic(
                 output_class=BugFreePythonCode, prompt=prompt_guardrail
             )
-            raw_llm_response, validated_response = guard(
-                llm_api=openai.ChatCompletion.create,
+            raw_llm_response, validated_response = await guard(
+                llm_api=openai.ChatCompletion.acreate,
                 prompt_params={"leetcode_problem": leetcode_problem},
                 model="gpt-3.5-turbo",
                 max_tokens=1000,
@@ -75,7 +75,7 @@ def run_leetcode(leetcode_problem: str) -> str:
         prompt = prompt_raw.format(leetcode_problem=leetcode_problem)
         messages = [{"role": "user", "content": prompt}]
         # Use the chat-based completion
-        response = openai.ChatCompletion.create(
+        response = await openai.ChatCompletion.acreate(
             model="gpt-3.5-turbo",
             messages=messages,
             temperature=0,

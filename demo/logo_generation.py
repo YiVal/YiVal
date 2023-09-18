@@ -3,6 +3,7 @@
 import io
 import json
 import os
+import stat
 import time
 
 import openai
@@ -12,6 +13,7 @@ from requests.adapters import HTTPAdapter  # type: ignore
 from requests.packages.urllib3.util.retry import Retry  # type: ignore
 
 from yival.logger.token_logger import TokenLogger
+from yival.states.experiment_state import ExperimentState
 from yival.wrappers.string_wrapper import StringWrapper
 
 TOKEN = os.getenv('MIDJOURNEY_TOKEN')
@@ -87,7 +89,7 @@ def load_image(response):
     return logo_list
 
 
-def logo_generation(species, character):
+def logo_generation(species, character, state: ExperimentState):
     '''generate logo for a tech startup company.'''
     payload = json.dumps({
         "msg":
@@ -99,20 +101,11 @@ def logo_generation(species, character):
                     variables={
                         "animal_species": species,
                         "animal_character": character,
-                    }
+                    },
+                    state=state
                 )
             )
         ),
-        # str(
-        #     StringWrapper(
-        #         "Design a single image logo for a tech startup company. The logo should represent cutting-edge technology, forward-thinking, high-quality solutions. It should be visually appealing and memorable, incorporating the company's name or its initials. No text in graphic. Company names ",
-        #         name="task",
-        #         variables={
-        #             "animal_species": species,
-        #             "animal_character": character,
-        #         }
-        #     )
-        # ) + f'{tech_startup_business}',
         "ref":
         "",
         "webhookOverride":
@@ -140,4 +133,4 @@ def logo_generation(species, character):
 
 
 if __name__ == "__main__":
-    logo_generation('duck', 'cute')
+    logo_generation('duck', 'cute', ExperimentState())

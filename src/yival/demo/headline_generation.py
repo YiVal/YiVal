@@ -7,10 +7,13 @@ import os
 import openai
 
 from yival.logger.token_logger import TokenLogger
+from yival.states.experiment_state import ExperimentState
 from yival.wrappers.string_wrapper import StringWrapper
 
 
-def headline_generation(tech_startup_business: str) -> str:
+def headline_generation(
+    tech_startup_business: str, state: ExperimentState
+) -> str:
     """
     Demo code for headline generation using GPT-3.
     """
@@ -35,7 +38,8 @@ def headline_generation(tech_startup_business: str) -> str:
                 variables={
                     "tech_startup_business": tech_startup_business,
                 },
-                name="task"
+                name="task",
+                state=state,
             )
         )
     }]
