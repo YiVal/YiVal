@@ -44,6 +44,8 @@ torch = ">=2.0.0, !=2.0.1"
 transformers = "^4.33.0"
 psutil = "^5.9.5"
 replicate = "^0.12.0"
+bert-score = "^0.3.13"
+rouge = "^1.0.1"
 
 [tool.poetry.group.doc.dependencies]
 mkdocs = "*"

@@ -1,0 +1,83 @@
+custom_function: demo.translate_quiz.translate_quiz
+description: Generated experiment config
+dataset:
+  data_generators:
+    openai_prompt_data_generator:
+      chunk_size: 100000
+      diversify: true
+      # model_name specify the llm model , e.g. a16z-infra/llama-2-13b-chat:9dff94b1bed5af738655d4a7cbcdcde2bd503aa85c94334fe1f42af7f3dd5ee3
+      model_name: gpt-4
+      prompt:
+          "Please provide a concrete and realistic test case as a dictionary for function invocation using the ** operator.
+          Only include parameters, excluding description and name.
+          Ensure it's succinct and well-structured.
+          **Only provide the dictionary.**"
+      input_function:
+        description:
+          The current function is to evaluate the English to Chinese translation ability of the large language model. You will play the role of a teacher, so please provide a coherent English sentence (teacher_quiz), and give the corresponding Chinese translation (teachaer_answer).
+        name: translation_english_to_chinese
+        parameters:
+          teacher_quiz: str
+          teacher_answer: str
+      expected_param_name: teacher_answer
+      number_of_examples: 2
+      output_path: english2chinese1.pkl
+      call_option:
+        temperature: 1.6
+        presence_penalty: 2
+  source_type: machine_generated
+
+
+variations:
+  - name : model_name
+    variations:
+      - instantiated_value: gpt-3.5-turbo
+        value: gpt-3.5-turbo
+        value_type: str
+        variation_id: null
+
+      - instantiated_value: replicate/a16z-infra/llama-2-13b-chat:9dff94b1bed5af738655d4a7cbcdcde2bd503aa85c94334fe1f42af7f3dd5ee3
+        value: a16z-infra/llama-2-13b-chat:9dff94b1bed5af738655d4a7cbcdcde2bd503aa85c94334fe1f42af7f3dd5ee3
+        value_type: str
+        variation_id: null
+      
+      # - instantiated_value: replicate/yival/llama2:c033319b0f9da249fb08fb10ee2e70cec795274e8f518121796ab484064f4f0c
+      #   value: a16z-infra/yival/llama2:c033319b0f9da249fb08fb10ee2e70cec795274e8f518121796ab484064f4f0c
+      #   value_type: str
+      #   variation_id: null
+
+evaluators:
+  - evaluator_type: individual
+    name: bertscore_evaluator
+    metric_calculators:
+      - method: AVERAGE
+    display_name: p
+    indicator: p
+  - evaluator_type: individual
+    name: bertscore_evaluator
+    metric_calculators:
+      - method: AVERAGE
+    display_name: r
+    indicator: r
+  - evaluator_type: individual
+    name: bertscore_evaluator
+    metric_calculators:
+      - method: AVERAGE
+    display_name: f
+    indicator: f
+
+selection_strategy:
+  ahp_selection:
+    criteria:
+      - "bertscore_evaluator: p"
+      - "bertscore_evaluator: r"
+      - "bertscore_evaluator: f"
+    criteria_maximization:
+      "bertscore_evaluator: p": true
+      "bertscore_evaluator: r": true
+      "bertscore_evaluator: f": true
+    criteria_weights:
+      "bertscore_evaluator: p": 0.33
+      "bertscore_evaluator: r": 0.33
+      "bertscore_evaluator: f": 0.33
+    normalize_func: null
