@@ -3,10 +3,13 @@ import os
 import openai
 
 from yival.logger.token_logger import TokenLogger
+from yival.states.experiment_state import ExperimentState
 from yival.wrappers.string_wrapper import StringWrapper
 
 
-def headline_generation(tech_startup_business: str) -> str:
+def headline_generation(
+    tech_startup_business: str, state: ExperimentState
+) -> str:
     logger = TokenLogger()
     logger.reset()
     # Ensure you have your OpenAI API key set up
@@ -22,7 +25,9 @@ def headline_generation(tech_startup_business: str) -> str:
         "content":
         str(
             StringWrapper(
-                "Generate landing one page headline for", name="task"
+                "Generate landing one page headline for",
+                name="task",
+                state=state
             )
         ) + f'{tech_startup_business}'
     }]

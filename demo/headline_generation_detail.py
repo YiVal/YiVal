@@ -7,11 +7,13 @@ import openai
 from yival.common.model_utils import llm_completion
 from yival.logger.token_logger import TokenLogger
 from yival.schemas.model_configs import Request
+from yival.states.experiment_state import ExperimentState
 from yival.wrappers.string_wrapper import StringWrapper
 
 
 def headline_generation(
-    tech_startup_business: str, business: str, target_people: str
+    tech_startup_business: str, business: str, target_people: str,
+    state: ExperimentState
 ) -> str:
     time.sleep(random.choice([1, 2, 3]))
     logger = TokenLogger()
@@ -27,7 +29,8 @@ def headline_generation(
                 "tech_startup_business": tech_startup_business,
                 "business": business,
                 "target_people": target_people
-            }
+            },
+            state=state,
         )
     )
 
