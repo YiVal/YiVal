@@ -6,6 +6,7 @@ import openai
 
 from yival.common.model_utils import llm_completion
 from yival.logger.token_logger import TokenLogger
+from yival.schemas.experiment_config import MultimodalOutput
 from yival.schemas.model_configs import Request
 from yival.states.experiment_state import ExperimentState
 from yival.wrappers.string_wrapper import StringWrapper
@@ -14,7 +15,7 @@ from yival.wrappers.string_wrapper import StringWrapper
 def headline_generation(
     tech_startup_business: str, business: str, target_people: str,
     state: ExperimentState
-) -> str:
+) -> MultimodalOutput:
     time.sleep(random.choice([1, 2, 3]))
     logger = TokenLogger()
     logger.reset()
@@ -45,7 +46,9 @@ def headline_generation(
             prompt=prompt
         )
     ).output
-    res = response['choices'][0]['message']['content']
+    res = MultimodalOutput(
+        text_output=response['choices'][0]['message']['content'],
+    )
     token_usage = response['usage']['total_tokens']
     logger.log(token_usage)
     return res

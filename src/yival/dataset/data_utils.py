@@ -278,7 +278,7 @@ def transform_experiment_result_generic(
         return {
             "Instruction": combo_value,
             "Input": exp_result.input_data.content,
-            "Output": exp_result.raw_output
+            "Output": exp_result.raw_output.text_output
         }
     formatted_input = combo_value.format(**exp_result.input_data.content)
 

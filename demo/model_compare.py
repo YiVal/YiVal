@@ -1,11 +1,12 @@
 from yival.common.model_utils import llm_completion
 from yival.logger.token_logger import TokenLogger
+from yival.schemas.experiment_config import MultimodalOutput
 from yival.schemas.model_configs import Request
 from yival.states.experiment_state import ExperimentState
 from yival.wrappers.string_wrapper import StringWrapper
 
 
-def model_compare(input: str, state: ExperimentState) -> str:
+def model_compare(input: str, state: ExperimentState) -> MultimodalOutput:
     logger = TokenLogger()
     logger.reset()
 
@@ -18,7 +19,9 @@ def model_compare(input: str, state: ExperimentState) -> str:
         )
     ).output
 
-    res = response['choices'][0]['message']['content']
+    res = MultimodalOutput(
+        text_output=response['choices'][0]['message']['content'],
+    )
     token_usage = response['usage']['total_tokens']
     logger.log(token_usage)
     return res

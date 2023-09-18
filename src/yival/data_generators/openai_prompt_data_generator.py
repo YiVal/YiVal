@@ -159,9 +159,6 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
             content=generated_example,
             expected_result=expected_value
         )
-        print(
-            f"[INFO][data_generator] generated instance:{input_data_instance}"
-        )
         all_data.append(input_data_instance)
         chunk.append(input_data_instance)
 

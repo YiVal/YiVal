@@ -37,6 +37,7 @@ from yival.schemas.experiment_config import (
     ExperimentConfig,
     ExperimentResult,
     GroupedExperimentResult,
+    MultimodalOutput,
 )
 
 from ...schemas.common_structures import InputData
@@ -51,16 +52,13 @@ from .utils import (
 
 
 def include_image_base64(data_dict):
-    """Check if a string include a base64 encoded image."""
+    """Check if a string includes a base64 encoded image."""
     pattern = r'iVBORw.+'
-    # Remove the prefix
-    prefix = "<yival_raw_output>\n['"
     for item in data_dict:
         for record in item:
             for value in record.values():
-                if value.startswith(prefix):
-                    value = value[len(prefix):]
-                    return re.match(pattern, value)
+                if re.search(pattern, value):
+                    return True
     return False
 
 
@@ -79,35 +77,28 @@ def base64_to_img(base64_string):
 
 def extract_and_decode_image_from_string(data_string):
     """Extract and decode the first image from a string include base64 encoded and return a dictionary."""
-    # Remove the prefix
-    prefix = "▶ raw_output: ["
-    if data_string.startswith(prefix):
-        data_string = data_string[len(prefix):]
-
-    end_marker = "]\n</yival_raw_output>"
-    end_index = data_string.find(end_marker)
-    if end_index != -1:
-        end_index += len(
-            end_marker
-        )  # Update the end_index to include the length of end_marker
-        evaluate_string = data_string[end_index:].strip(
-        )  # Get the string after end_marker
-        data_string = data_string[:end_index]
-
-    # Split the string into a list
-    image_list = data_string.split(',')
-
-    # Find the first base64 image in the list
-    for image_string in image_list:
-        image_string = image_string.strip("'\" ")  # Remove quotes and spaces
-        if is_base64_image(image_string):
-            return {
-                "raw_output": base64_to_img(image_string),
-                "evaluate": evaluate_string
-            }
-
-    # If no base64 image was found, return None
-    return None
+    # Extract text_output, image_output and evaluate part
+    image_output_string_match = re.search(
+        r"\['(.*?)',", data_string, re.DOTALL
+    )
+    if image_output_string_match:
+        text_output_match = re.search(
+            r'<yival_raw_output>\n(.*?)\n</yival_raw_output>', data_string,
+            re.DOTALL
+        )
+        text_output = text_output_match.group(1)
+        image_output_string = image_output_string_match.group(1)
+        evaluate_match = re.search(r"\](.*)", data_string, re.DOTALL)
+        evaluate = evaluate_match.group(1).strip()
+        # Check if image_output_string is base64 image
+        image_output = base64_to_img(image_output_string)
+        return {
+            "text_output": text_output,
+            "image_output": image_output,
+            "evaluate": evaluate
+        }
+    else:
+        return None
 
 
 def extract_and_decode_image(data_dict):
@@ -150,13 +141,17 @@ def create_table(data):
                 )  # Replace "Link text" with the text you want to display
             elif isinstance(value, dict):
                 img = html.Img(
-                    src=pil_image_to_base64(value["raw_output"]),
+                    src=pil_image_to_base64(value["image_output"]),
                     style={
                         'width': '200px',
                         'height': '200px'
                     }
                 )
-                cell = html.Td([img, html.Br(), value["evaluate"]])
+                text = html.P(value["text_output"])
+                cell = html.Td([
+                    text, html.Br(), img,
+                    html.Br(), value["evaluate"]
+                ])
             else:
                 cell = html.Td(value)
             row.append(cell)
@@ -368,18 +363,20 @@ def create_dash_app(
             csv_string
         )
         sample_columns = [col for col in df.columns if "Sample" in col]
-        contains_lists = any(
-            df[col].apply(lambda x: isinstance(x, list)).any()
-            for col in sample_columns
+        contains_images = any(
+            df[col].apply(
+                lambda x: isinstance(x, MultimodalOutput) and x.image_output is
+                not None
+            ).any() for col in sample_columns
         )
-
         return html.Div([
             html.H3(
                 "Experiment Results Analysis", style={'textAlign': 'center'}
             ),
+            html.Hr(),
             html.Div([
                 image_combo_aggregated_metrics_layout(df)
-                if contains_lists else combo_aggregated_metrics_layout(df)
+                if contains_images else combo_aggregated_metrics_layout(df)
             ],
                      style={
                          'overflowY': 'auto',
@@ -437,6 +434,7 @@ def create_dash_app(
     def combo_page_layout():
         return html.Div([
             html.H3("Detailed Test Results", style={'textAlign': 'center'}),
+            html.Hr(),
             group_key_combination_layout(
                 experiment_data.group_experiment_results
             ),
@@ -564,6 +562,11 @@ def create_dash_app(
 
         columns = [{"name": i, "id": i} for i in df.columns]
         sample_columns = [col for col in df.columns if "Sample" in col]
+        for col in sample_columns:
+            df[col] = df[col].apply(
+                lambda x: x.text_output
+                if isinstance(x, MultimodalOutput) else x
+            )
         sample_style = [{
             'if': {
                 'column_id': col
@@ -673,31 +676,33 @@ def create_dash_app(
         )
 
     def image_combo_aggregated_metrics_layout(df):
-
         sample_columns = [col for col in df.columns if "Sample" in col]
 
-        # Convert PIL Image to base64 image string and wrap with html.Img
+        # Process each column with MultimodalOutput
         for col in sample_columns:
             df[col] = df[col].apply(
-                lambda x: html.Div(
-                    html.Img(
-                        src=pil_image_to_base64(x[0]),
+                lambda x: html.Div([
+                    html.P(f'<text_output> {x.text_output} </text_output>'),
+                    html.Div(
+                        html.Img(
+                            src=pil_image_to_base64(x.image_output[0]),
+                            style={
+                                'maxHeight': '100%',
+                                'maxWidth': '100%',
+                                'objectFit': 'contain'
+                            }
+                        ),
                         style={
-                            'maxHeight': '100%',
-                            'maxWidth': '100%',
-                            'objectFit': 'contain'
+                            'height': '200px',
+                            'width': '200px',
+                            'display': 'flex',
+                            'justifyContent': 'center',
+                            'alignItems': 'center',
+                            'overflow': 'hidden'
                         }
-                    ),
-                    style={
-                        'height': '200px',
-                        'width': '200px',
-                        'display': 'flex',
-                        'justifyContent': 'center',
-                        'alignItems': 'center',
-                        'overflow': 'hidden'
-                    }
-                ) if isinstance(x, list) and len(x) > 0 and
-                isinstance(x[0], Image.Image) else x
+                    )
+                ]) if isinstance(x, MultimodalOutput) and x.image_output is
+                not None else x
             )
 
         # Create html.Table
@@ -1100,9 +1105,9 @@ def create_dash_app(
                     }
                 )
             )
-            if isinstance(exp_result.raw_output, list):
+            if exp_result.raw_output.image_output:
                 images = []
-                for image in exp_result.raw_output:
+                for image in exp_result.raw_output.image_output:
                     img_str = pil_image_to_base64(image)
                     img = html.Img(
                         src=img_str,
@@ -1113,17 +1118,21 @@ def create_dash_app(
                         }
                     )
                     images.append(img)
-                content = html.Div(
-                    images,
-                    style={
-                        'display': 'grid',
-                        'grid-template-columns': 'repeat(2, 1fr)',
-                        'justify-content': 'center',
-                        'align-items': 'center'
-                    }
-                )
+                text = html.P(
+                    exp_result.raw_output.text_output,
+                    style={'grid-column': 'span 4'
+                           }  # Make the text span 4 columns
+                ) if exp_result.raw_output.text_output else None
+                content = html.Div([text] + images,
+                                   style={
+                                       'display': 'grid',
+                                       'grid-template-columns':
+                                       'repeat(4, 1fr)',
+                                       'justify-content': 'center',
+                                       'align-items': 'center'
+                                   })
             else:
-                content = str(exp_result.raw_output)
+                content = str(exp_result.raw_output.text_output)
 
             children.append(
                 html.Div(
@@ -1608,9 +1617,14 @@ def create_dash_app(
                 html.H5(f"Result {i+1}"),
                 html.Ul([
                     html.Li(f"Combination: {result.combination}"),
-                    html.Li("Raw Output:"),
+                    html.Li("Text Raw Output:"),
                     html.Div(
-                        handle_output(result.raw_output),
+                        handle_output(result.raw_output.text_output),
+                        className="raw-output"
+                    ),
+                    html.Li("Image Raw Output:"),
+                    html.Div(
+                        handle_output(result.raw_output.image_output),
                         className="raw-output"
                     ),
                     html.Li(

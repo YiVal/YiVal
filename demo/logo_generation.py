@@ -13,6 +13,7 @@ from requests.adapters import HTTPAdapter  # type: ignore
 from requests.packages.urllib3.util.retry import Retry  # type: ignore
 
 from yival.logger.token_logger import TokenLogger
+from yival.schemas.experiment_config import MultimodalOutput
 from yival.states.experiment_state import ExperimentState
 from yival.wrappers.string_wrapper import StringWrapper
 
@@ -69,7 +70,7 @@ def get_request(messageId):
 
 def load_image(response):
     '''load image from response'''
-    print("[INFO][logl_generation] start load images")
+    print("[INFO][logo_generation] start load images")
     url = f"{BASE_URL}/getImage"
     image_urls = response['response']['imageUrls']
     logo_list = []
@@ -128,7 +129,10 @@ def logo_generation(species, character, state: ExperimentState):
     post_response = post_request(payload)
     messageid = post_response.get("messageId")
     response = get_request(messageid)
-    logo_res = load_image(response)
+    logo_res = MultimodalOutput(
+        text_output=response['response']['content'],
+        image_output=load_image(response),
+    )
     return logo_res
 
 

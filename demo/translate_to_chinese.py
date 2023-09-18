@@ -3,11 +3,14 @@ import os
 import openai
 
 from yival.logger.token_logger import TokenLogger
+from yival.schemas.experiment_config import MultimodalOutput
 from yival.states.experiment_state import ExperimentState
 from yival.wrappers.string_wrapper import StringWrapper
 
 
-def translate_to_chinese(input: str, state: ExperimentState) -> str:
+def translate_to_chinese(
+    input: str, state: ExperimentState
+) -> MultimodalOutput:
     logger = TokenLogger()
     logger.reset()
     # Ensure you have your OpenAI API key set up
@@ -37,7 +40,9 @@ def translate_to_chinese(input: str, state: ExperimentState) -> str:
     )
 
     # Extract the assistant's message (translated text) from the response
-    translated_text = response['choices'][0]['message']['content']
+    translated_text = MultimodalOutput(
+        text_output=response['choices'][0]['message']['content'],
+    )
     token_usage = response['usage']['total_tokens']
     logger.log(token_usage)
 

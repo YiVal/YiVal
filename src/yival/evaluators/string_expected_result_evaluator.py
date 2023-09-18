@@ -91,12 +91,12 @@ class StringExpectedResultEvaluator(BaseEvaluator):
 
         """
         input_data = experiment_result.input_data
-        raw_output = experiment_result.raw_output
+        raw_output = experiment_result.raw_output.text_output
         expected_result = input_data.expected_result
         is_match = False
         technique = MatchingTechnique(self.config.matching_technique)
         # Default to empty strings if the values are None
-        output_text = raw_output.text_output if raw_output.text_output is not None else ""
+        output_text = raw_output if raw_output is not None else ""
         expected_text = expected_result if expected_result is not None else ""
         if technique == MatchingTechnique.FUZZY_MATCH:
             if not expected_result:

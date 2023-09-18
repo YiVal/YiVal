@@ -11,7 +11,7 @@ from ..schemas.evaluator_config import (
     BertScoreEvaluatorConfig,
     EvaluatorOutput,
 )
-from ..schemas.experiment_config import ExperimentResult
+from ..schemas.experiment_config import ExperimentResult, MultimodalOutput
 from .base_evaluator import BaseEvaluator
 
 
@@ -27,7 +27,7 @@ class BertScoreEvaluator(BaseEvaluator):
         """Evaluate the experiment result according to bertsocre"""
         assert isinstance(self.config, BertScoreEvaluatorConfig)
         input_data = experiment_result.input_data
-        raw_output = experiment_result.raw_output
+        raw_output = experiment_result.raw_output.text_output
         expected_result = input_data.expected_result
 
         p, r, f1 = score([raw_output], [expected_result],
@@ -69,7 +69,7 @@ def main():
             "wrapper1": "var1",
             "wrapper2": "var2"
         },
-        raw_output="have a nice day",
+        raw_output=MultimodalOutput(text_output="have a nice day"),
         latency=30.0,
         token_usage=20
     )

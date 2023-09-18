@@ -18,7 +18,11 @@ from ..schemas.evaluator_config import (
     MetricCalculatorConfig,
     OpenAIPromptBasedEvaluatorConfig,
 )
-from ..schemas.experiment_config import ExperimentResult, InputData
+from ..schemas.experiment_config import (
+    ExperimentResult,
+    InputData,
+    MultimodalOutput,
+)
 from ..schemas.model_configs import Request
 from .base_evaluator import BaseEvaluator
 
@@ -113,7 +117,7 @@ class OpenAIPromptBasedEvaluator(BaseEvaluator):
         """Evaluate the experiment result using OpenAI's prompt-based evaluation."""
         assert isinstance(self.config, OpenAIPromptBasedEvaluatorConfig)
         format_dict = copy.deepcopy(experiment_result.input_data.content)
-        format_dict["raw_output"] = experiment_result.raw_output
+        format_dict["raw_output"] = experiment_result.raw_output.text_output
 
         prompt = format_template(self.config.prompt, format_dict)
         if isinstance(prompt, str):
@@ -182,7 +186,9 @@ def main():
             "wrapper1": "var1",
             "wrapper2": "var2"
         },
-        raw_output="The area of the circle is 78.54 square units.",
+        raw_output=MultimodalOutput(
+            text_output="The area of the circle is 78.54 square units."
+        ),
         latency=150.0,
         token_usage=50
     )
