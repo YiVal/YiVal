@@ -1,6 +1,8 @@
 from dataclasses import asdict, dataclass, field
 from typing import Any, Dict, List, Optional, Union
 
+from .model_configs import CallOption
+
 
 @dataclass
 class BaseDataGeneratorConfig:
@@ -27,6 +29,12 @@ class OpenAIPromptBasedGeneratorConfig(BaseDataGeneratorConfig):
     # Whether to diversify the generated examples.
     diversify: bool = True
     max_token = 2000
+
+    # Expected Value name
+    expected_param_name: str = ""
+
+    # Llm call option
+    call_option: Optional[CallOption] = None
 
     def asdict(self):
         return asdict(self)

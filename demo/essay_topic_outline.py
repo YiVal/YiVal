@@ -3,10 +3,11 @@ import os
 import openai
 
 from yival.logger.token_logger import TokenLogger
+from yival.states.experiment_state import ExperimentState
 from yival.wrappers.string_wrapper import StringWrapper
 
 
-def essay_topic_outline(topic: str) -> str:
+def essay_topic_outline(topic: str, state: ExperimentState) -> str:
     logger = TokenLogger()
     logger.reset()
     # Ensure you have your OpenAI API key set up
@@ -15,12 +16,13 @@ def essay_topic_outline(topic: str) -> str:
         "role":
         "system",
         "content":
-        str(StringWrapper("你是一个帮助小红书博主生成标题的助手.", name="system"))
+        str(StringWrapper("你是一个帮助小红书博主生成标题的助手.", name="system", state=state))
     }, {
         "role":
         "user",
         "content":
-        str(StringWrapper("根据主题生成小红书标题", name="topic")) + f'{topic}'
+        str(StringWrapper("根据主题生成小红书标题", name="topic", state=state)) +
+        f'{topic}'
     }]
 
     # Use the chat-based completion

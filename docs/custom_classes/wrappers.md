@@ -53,8 +53,9 @@ class NumberWrapper(BaseWrapper):
         value: float,
         name: str,
         config: Optional[NumberWrapperConfig] = None
+        state: Optional[ExperimentState] = None
     ) -> None:
-        super().__init__(name, config)
+        super().__init__(name, config, state)
         self._value = value
 
     def get_value(self) -> float:

@@ -1,3 +1,4 @@
+import asyncio
 import os
 import pickle
 from concurrent.futures import ThreadPoolExecutor
@@ -5,6 +6,7 @@ from typing import List, Optional
 
 from tqdm import tqdm
 
+import yival.common.utils as common
 from yival.experiment.app.app import display_results_dash  # type: ignore
 
 from ..configs.config_utils import load_and_validate_config
@@ -16,6 +18,7 @@ from .data_processor import DataProcessor
 from .evaluator import Evaluator
 from .rate_limiter import RateLimiter
 from .utils import (
+    arun_single_input,
     generate_experiment,
     get_improver,
     get_selection_strategy,
@@ -52,6 +55,47 @@ class ExperimentRunner:
             self.config.get("custom_variation_generators", {})
         )
 
+    async def _aprocess_dataset(self, all_combinations, logger,
+                                evaluator) -> List[ExperimentResult]:
+        processor = DataProcessor(self.config["dataset"])  # type: ignore
+        data_batches = list(processor.process_data())
+        sum([len(batch) for batch in data_batches]) * len(all_combinations)
+        semaphore = asyncio.Semaphore(20)
+        total_tasks = sum([len(batch)
+                           for batch in data_batches]) * len(all_combinations)
+        rate_limiter = common.RateLimiter(100 / 60, 10000)
+
+        async def eval_fn_with_semaphore(data_point):
+            async with semaphore:
+                while True:
+                    await rate_limiter.wait()
+                    try:
+                        resutls = await self.aparallel_task(
+                            data_point, all_combinations, logger, evaluator
+                        )
+                        if results:
+                            for result in resutls:
+                                rate_limiter.add_tokens(result.token_usage)
+                        return resutls
+                    except:
+                        print("Rate limit exceeded, sleeping...")
+                        await asyncio.sleep(100)
+
+        futures = []
+        results = []
+        for data_batch in data_batches:
+            for data in data_batch:
+                futures.append(
+                    asyncio.ensure_future(eval_fn_with_semaphore(data))
+                )
+
+        for future in tqdm(
+            asyncio.as_completed(futures), total=total_tasks, disable=False
+        ):
+            results.extend(await future)
+
+        return results
+
     def _process_dataset(self, all_combinations, logger,
                          evaluator) -> List[ExperimentResult]:
         """Process dataset source type and return the results."""
@@ -68,25 +112,33 @@ class ExperimentRunner:
                 with ThreadPoolExecutor() as executor:
                     for res in executor.map(
                         self.parallel_task, data,
-                        [all_combinations] * len(data),
-                        [ExperimentState.get_instance()] * len(data),
-                        [logger] * len(data), [evaluator] * len(data)
+                        [all_combinations] * len(data), [logger] * len(data),
+                        [evaluator] * len(data)
                     ):
                         results.extend(res)
                         pbar.update(len(res))
 
         return results
 
-    def parallel_task(
-        self, data_point, all_combinations, state, logger, evaluator
+    async def aparallel_task(
+        self, data_point, all_combinations, logger, evaluator
     ):
+        for _ in all_combinations:
+            return await arun_single_input(
+                data_point,
+                self.config,
+                all_combinations=all_combinations,
+                logger=logger,
+                evaluator=evaluator
+            )
+
+    def parallel_task(self, data_point, all_combinations, logger, evaluator):
         """Task to be run in parallel for processing data points."""
         RateLimiter(30 / 60)()  # Ensure rate limit
         return run_single_input(
             data_point,
             self.config,
             all_combinations=all_combinations,
-            state=state,
             logger=logger,
             evaluator=evaluator
         )
@@ -95,7 +147,8 @@ class ExperimentRunner:
         self,
         display: bool = True,
         output_path: Optional[str] = "abc.pkl",
-        experiment_input_path: Optional[str] = "abc.pkl"
+        experiment_input_path: Optional[str] = "abc.pkl",
+        async_eval: bool = False
     ):
         """Run the experiment based on the source type and provided configuration."""
         self._register_custom_components()
@@ -120,10 +173,16 @@ class ExperimentRunner:
                 register_custom_readers(
                     self.config.get("custom_reader", {})  # type: ignore
                 )  # type: ignore
-                results = self._process_dataset(
-                    all_combinations, logger, evaluator
-                )
-
+                if async_eval:
+                    results = asyncio.run(
+                        self._aprocess_dataset(
+                            all_combinations, logger, evaluator
+                        )
+                    )
+                else:
+                    results = self._process_dataset(
+                        all_combinations, logger, evaluator
+                    )
                 experiment = generate_experiment(
                     results, evaluator
                 )  # type: ignore
@@ -136,9 +195,7 @@ class ExperimentRunner:
                     )
 
                 improver = get_improver(self.config)
-                print(f"[INFO] improver: {improver}")
                 if improver:
-                    print("[INFO] improve")
                     experiment.improver_output = improver.improve(
                         experiment, self.config, evaluator, logger
                     )

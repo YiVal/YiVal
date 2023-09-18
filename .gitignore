@@ -166,3 +166,6 @@ docs/docs_skeleton/node_modules
 docs/docs_skeleton/yarn.lock
 
 aimebot.pem
+
+# json file
+*.jsonl

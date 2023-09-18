@@ -48,10 +48,10 @@ strategies.
 
 ### Expected Features in Sep
 
-- [ ] Add ROUGE and BERTScore evaluators
+- [x] Add ROUGE and BERTScore evaluators
 - [x] Add support to midjourney
 - [x] Add support to LLaMA2-70B, LLaMA2-7B, Falcon-40B,
-- [ ] Support LoRA fine-tune to open source models
+- [x] Support LoRA fine-tune to open source models
 
 ## 🚀 Features
 
@@ -62,6 +62,10 @@ strategies.
 | Demos    |   - Animal story with MidJourney 🐯 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1DgtDZghleiLEaaNF7f4vSGJ4ChDVls2X?usp=sharing)<br/> - Model Comparison in QA ability 🌟[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1cSjsEKNwDq8W4O2oeRI93vH-BhYH5JXj?usp=sharing)                                                         | - Startup Company Headline Generation Bot🔥 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1EiWUL8rE_kfNLXVPowCWCh6hwHFagvs_?usp=sharing)<br /> - Automate Prompt Generation with Retrieval Methods🔥 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1L7miRwTQSZfm5xOKBakWOG5bOumMynpv?usp=sharing)  |
 
 ## Model Support matrix
+
+We support 100+ LLM ( gpt-4 , gpt-3.5-turbo , llama e.g.).
+
+Different Model sources can be viewed as follow
 
 | Model        | llm-Evaluate |Human-Evaluate|Variation Generate|Custom func|
 |--------------| ---- | ---- | ---- |--------------|

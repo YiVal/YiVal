@@ -18,12 +18,14 @@ from typing import Any, Dict, Iterator, List
 
 from tqdm import tqdm
 
-from ..common import utils
-from ..common.model_utils import llm_completion
-from ..schemas.common_structures import InputData
-from ..schemas.data_generator_configs import OpenAIPromptBasedGeneratorConfig
-from ..schemas.model_configs import Request
-from .base_data_generator import BaseDataGenerator
+from yival.common import utils
+from yival.common.model_utils import llm_completion
+from yival.data_generators.base_data_generator import BaseDataGenerator
+from yival.schemas.common_structures import InputData
+from yival.schemas.data_generator_configs import (
+    OpenAIPromptBasedGeneratorConfig,
+)
+from yival.schemas.model_configs import Request
 
 
 def dict_to_description(data, indent=0):
@@ -144,10 +146,21 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
             self.config.input_function.get('parameters', {}).keys()
         ):
             return
+
+        # choose expected_value
+        expected_value = generated_example.get(
+            self.config.expected_param_name, None
+        )
+
+        if expected_value:
+            generated_example.pop(self.config.expected_param_name)
         input_data_instance = InputData(
             example_id=super().generate_example_id(output_content),
             content=generated_example,
-            expected_result=None
+            expected_result=expected_value
+        )
+        print(
+            f"[INFO][data_generator] generated instance:{input_data_instance}"
         )
         all_data.append(input_data_instance)
         chunk.append(input_data_instance)
@@ -193,14 +206,12 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                     desc="Generating Examples",
                     unit="example"
                 ) as pbar:
+                    # call_option = self.config.call_option if self.config.call_option else {}
                     output = llm_completion(
                         Request(
                             model_name=self.config.model_name,
                             prompt=messages,
-                            params={
-                                "temperature": 1.3,
-                                "presence_penalty": 2
-                            }
+                            params=self.config.call_option  #type:ignore
                         )
                     ).output
                     self.process_output(
@@ -229,12 +240,18 @@ BaseDataGenerator.register_data_generator(
 
 
 def main():
+    import time
+    start_time = time.time()
     generator = OpenAIPromptDataGenerator(
         OpenAIPromptDataGenerator.default_config
     )
     res = generator.generate_examples()
+
     for d in res:
         print(d)
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+    print(f"Execution time: {elapsed_time:.2f} seconds")
 
 
 if __name__ == "__main__":

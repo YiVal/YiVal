@@ -1,4 +1,4 @@
-input,expected_result
+question,expected_result
 """Question: Rs. 5600 is divided into three parts A, B and C. How much A is more than C if their ratio is 1/7:1/7:1/14?\nOptions:\n(A) 300\n(B) 992\n(C) 1120\n(D) 552\n(E) 312""",(C)
 """The edge of a cube is 7a cm. Find its surface?\nOptions:\n(A) 24a8\n(B) 24a4\n(C) 24a1\n(D) 24a2\n(E) 294a2""",(E)
 """A board 7ft. 9 inches long is divided into 3 equal parts . What is the length of each part?\nOptions:\n(A) 31 inches\n(B) 32 inches\n(C) 33 inches\n(D) 34 inches\n(E) 35 inches""",(A)

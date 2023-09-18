@@ -31,4 +31,4 @@ class InputData:
             f'"{k}": "{v}"' for k, v in self.content.items()
         ])
         expected_result_str = f'"{self.expected_result}"' if self.expected_result is not None else "None"
-        return f'{{example_id:"{self.example_id}", content:{{{content_str}}}, expected_result: {expected_result_str}}}'
+        return f'{{"example_id" : "{self.example_id}", "content" : {{{content_str}}}, "expected_result" : {expected_result_str}}}'

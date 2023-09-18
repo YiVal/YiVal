@@ -3,10 +3,11 @@ import os
 import openai
 
 from yival.logger.token_logger import TokenLogger
+from yival.states.experiment_state import ExperimentState
 from yival.wrappers.string_wrapper import StringWrapper
 
 
-def translate_to_chinese(input: str) -> str:
+def translate_to_chinese(input: str, state: ExperimentState) -> str:
     logger = TokenLogger()
     logger.reset()
     # Ensure you have your OpenAI API key set up
@@ -24,7 +25,9 @@ def translate_to_chinese(input: str) -> str:
         "content":
         str(
             StringWrapper(
-                "Translate the following to Chinese", name="translate"
+                "Translate the following to Chinese",
+                name="translate",
+                state=state
             )
         ) + f'{input}'
     }]
