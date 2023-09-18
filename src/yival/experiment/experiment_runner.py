@@ -6,6 +6,7 @@ from typing import List, Optional
 
 from tqdm import tqdm
 
+import yival.common.utils as common
 from yival.experiment.app.app import display_results_dash  # type: ignore
 
 from ..configs.config_utils import load_and_validate_config
@@ -59,15 +60,26 @@ class ExperimentRunner:
         processor = DataProcessor(self.config["dataset"])  # type: ignore
         data_batches = list(processor.process_data())
         sum([len(batch) for batch in data_batches]) * len(all_combinations)
-        semaphore = asyncio.Semaphore(32)
+        semaphore = asyncio.Semaphore(20)
         total_tasks = sum([len(batch)
                            for batch in data_batches]) * len(all_combinations)
+        rate_limiter = common.RateLimiter(100 / 60, 10000)
 
         async def eval_fn_with_semaphore(data_point):
             async with semaphore:
-                return await self.aparallel_task(
-                    data_point, all_combinations, logger, evaluator
-                )
+                while True:
+                    await rate_limiter.wait()
+                    try:
+                        resutls = await self.aparallel_task(
+                            data_point, all_combinations, logger, evaluator
+                        )
+                        if results:
+                            for result in resutls:
+                                rate_limiter.add_tokens(result.token_usage)
+                        return resutls
+                    except:
+                        print("Rate limit exceeded, sleeping...")
+                        await asyncio.sleep(100)
 
         futures = []
         results = []
