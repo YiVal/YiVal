@@ -10,7 +10,9 @@ from yival.states.experiment_state import ExperimentState
 from yival.wrappers.string_wrapper import StringWrapper
 
 
-def translate_quiz(teacher_quiz: str, state: ExperimentState) -> str:
+def translate_quiz(
+    teacher_quiz: str, state: ExperimentState
+) -> MultimodalOutput:
     logger = TokenLogger()
     logger.reset()
     # Ensure you have your OpenAI API key set up
