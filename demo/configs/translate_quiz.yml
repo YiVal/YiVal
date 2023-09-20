@@ -20,7 +20,7 @@ dataset:
           teacher_quiz: str
           teacher_answer: str
       expected_param_name: teacher_answer
-      number_of_examples: 2
+      number_of_examples: 10
       output_path: english2chinese1.pkl
       call_option:
         temperature: 1.6

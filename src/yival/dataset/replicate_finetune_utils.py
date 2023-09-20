@@ -43,7 +43,8 @@ def _extract_from_input_data(result: Experiment) -> List[Dict[str, str]]:
             "completion":
             input_data['expected_result']
         }
-        result_pairs.append(finetune_data)
+        for _ in range(100):
+            result_pairs.append(finetune_data)
 
     print(f"[INFO] len format data: {len(result_pairs)}")
     return result_pairs
