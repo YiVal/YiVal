@@ -34,6 +34,13 @@ def add_arguments_to(subparser):
         "Automatically generate prompts and test data for tech startup landing page headline."
     )
 
+    parser.add_argument(
+        "--async_eval",
+        type=bool,
+        default=False,
+        help="Whether the custom function is async"
+    )
+
 
 def demo(args: Namespace):
     """Demo usage of YiVal"""
@@ -49,7 +56,8 @@ def demo(args: Namespace):
             config_path=dest_path,
             display=True,
             output_path="",
-            experiment_input_path=""
+            experiment_input_path="",
+            async_eval=args.async_eval
         )
     elif args.qa_expected_results:
         src_path = os.path.join(
@@ -62,7 +70,8 @@ def demo(args: Namespace):
             config_path=dest_path,
             display=True,
             output_path="",
-            experiment_input_path=""
+            experiment_input_path="",
+            async_eval=args.async_eval
         )
     elif args.auto_prompts:
         src_path = os.path.join(
@@ -75,6 +84,7 @@ def demo(args: Namespace):
             config_path=dest_path,
             display=True,
             output_path="demo_results.pkl",
-            experiment_input_path="demo_results.pkl"
+            experiment_input_path="demo_results.pkl",
+            async_eval=args.async_eval
         )
     run_experiment(run_args)

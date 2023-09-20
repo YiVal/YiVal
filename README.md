@@ -59,7 +59,6 @@ strategies.
 | -------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | Workflow | Define your AI/ML application ➡️ Define test dataset ➡️ Evaluate 🔄 Improve ➡️ Prompt related artifacts built ✅ | Define your AI/ML application ➡️ Auto-prompting ➡️ Prompt related artifacts built ✅ |
 | Features | 🌟 Streamlined prompt development process<br/> 🌟 Support for multimedia and multimodel<br/> 🌟 Support CSV upload and GPT4 generated test data<br/>🌟 Dashboard tracking latency, price and evaluator results<br/> 🌟 Human(RLHF) and algorithm based improvers <br/>🌟 Service with detailed web view<br/>🌟 Customizable evaluators and improvers | 🌟 Non-code experience of Gen-AI application build<br/>  🌟 Witness your Gen-AI application born and improve with just one click |
-| Demos    |   - Animal story with MidJourney 🐯 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1DgtDZghleiLEaaNF7f4vSGJ4ChDVls2X?usp=sharing)<br/> - Model Comparison in QA ability 🌟[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1cSjsEKNwDq8W4O2oeRI93vH-BhYH5JXj?usp=sharing)                                                         | - Startup Company Headline Generation Bot🔥 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1EiWUL8rE_kfNLXVPowCWCh6hwHFagvs_?usp=sharing)<br /> - Automate Prompt Generation with Retrieval Methods🔥 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1L7miRwTQSZfm5xOKBakWOG5bOumMynpv?usp=sharing)  |
 
 ## Model Support matrix
 
@@ -89,6 +88,16 @@ pip install yival
 
 ## Demo
 
+### Colab
+
+| Demo | Supported Features | Colab Link |
+|------|--------------------|------------|
+| 🐯  Animal story with MidJourney| **Multi-modal** support of text and images| [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1DgtDZghleiLEaaNF7f4vSGJ4ChDVls2X?usp=sharing) |
+| 🌟 Model Comparison in QA ability | Easy **model** evaluation comparison thanks to LiteLLM | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1cSjsEKNwDq8W4O2oeRI93vH-BhYH5JXj?usp=sharing) |
+| 🔥 Startup Company Headline Generation Bot | Automated prompt **evolution**   | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1EiWUL8rE_kfNLXVPowCWCh6hwHFagvs_?usp=sharing) |
+| 🧳 Build Your Customized Travel Guide Bot | Automate prompt generation with **retrieval** methods   | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1L7miRwTQSZfm5xOKBakWOG5bOumMynpv?usp=sharing) |
+| 📖 Enhance Model Translation Capabilities | **Finetune** the translation performance of llama2 with replicate | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1HtQOadV0o3vrXjVI9Nf0Xv4rLarqu-fv?usp=sharing) |
+
 ### Multi-model Mode
 
 Yival has multimodal capabilities and can handle generated images in AIGC really
@@ -108,7 +117,7 @@ To get started with a demo for basic interactive mode of YiVal, run the
 following command:
 
 ```python
-yival demo --basic_interactive
+yival demo --auto_prompts
 ```
 
 Once started, navigate to the following address in your web browser:
@@ -143,7 +152,7 @@ For more details, check out the [Question Answering with expected result evaluat
 ### Automatically generate prompts with evaluator
 
 ```python
-yival demo --auto_prompts
+yival demo --basic_interactive
 ```
 
 Once started, navigate to the following address in your web browser:
