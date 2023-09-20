@@ -333,12 +333,15 @@ def create_dash_app(
                     except Exception as e:
                         group_key = group.group_key
                     group_key = sanitize_column_name(group_key)
-                    if sample_count < 3:
-                        row[f"Sample {sample_count + 1} ({group_key})"
-                            ] = matching_results[0]
-                        sample_count += 1
-                    else:
-                        break
+                    # if sample_count < 3:
+                    #     row[f"Sample {sample_count + 1} ({group_key})"
+                    #         ] = matching_results[0]
+                    #     sample_count += 1
+                    # else:
+                    #     break
+                    row[f"Sample {sample_count + 1} ({group_key})"
+                        ] = matching_results[0]
+                    sample_count += 1
 
             data.append(row)
         df = pd.DataFrame(data)
