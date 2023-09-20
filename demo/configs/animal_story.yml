@@ -3,7 +3,7 @@ description: Generated experiment config
 dataset:
   data_generators:
     openai_prompt_data_generator:
-      chunk_size: 1
+      chunk_size: 2
       diversify: true
       prompt:
           "Please provide a concrete and realistic test case as a dictionary for function invocation using the ** operator.
@@ -19,7 +19,7 @@ dataset:
           character: str
       number_of_examples: 1
       model_name: gpt-4
-      output_path: null
+      output_path: animal_story.pkl
   source_type: machine_generated
 
 variations:
@@ -27,7 +27,7 @@ variations:
     generator_name: openai_prompt_based_variation_generator
     generator_config:
       model_name: gpt-4
-      number_of_variations: 1
+      number_of_variations: 2
       diversify: true
       variables: null
       prompt: 

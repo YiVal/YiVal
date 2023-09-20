@@ -10,7 +10,11 @@ from yival.schemas.evaluator_config import (
     ExpectedResultEvaluatorConfig,
     MatchingTechnique,
 )
-from yival.schemas.experiment_config import EvaluatorOutput, ExperimentResult
+from yival.schemas.experiment_config import (
+    EvaluatorOutput,
+    ExperimentResult,
+    MultimodalOutput,
+)
 
 
 @pytest.fixture
@@ -32,7 +36,7 @@ def test_evaluate_includes_matching(evaluator):
     experiment_result = ExperimentResult(
         input_data=input_data,
         combination={},
-        raw_output="hello world",
+        raw_output=MultimodalOutput(text_output="hello world"),
         latency=0.1,
         token_usage=5
     )

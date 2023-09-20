@@ -278,16 +278,16 @@ def transform_experiment_result_generic(
         return {
             "Instruction": combo_value,
             "Input": exp_result.input_data.content,
-            "Output": exp_result.raw_output
+            "Output": exp_result.raw_output.text_output
         }
     formatted_input = combo_value.format(**exp_result.input_data.content)
 
     # Construct the final pair
 
-    if isinstance(exp_result.raw_output, str):
-        output = exp_result.raw_output.strip('"')
+    if isinstance(exp_result.raw_output.text_output, str):
+        output = exp_result.raw_output.text_output.strip('"')
     else:
-        output = exp_result.raw_output
+        output = exp_result.raw_output.text_output if exp_result.raw_output.text_output is not None else ""
     result_pair = {"Input": formatted_input, "Output": output}
 
     return result_pair

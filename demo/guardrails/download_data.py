@@ -22,7 +22,6 @@ def main():
                 questions.append(content)
         offset += limit + 1
     csv_file_path = "leetcode_problems.csv"
-    print(len(questions))
     with open(csv_file_path, 'w', newline='') as csvfile:
         csv_writer = csv.writer(csvfile)
         csv_writer.writerow(["leetcode_problem"])

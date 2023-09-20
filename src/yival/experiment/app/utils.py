@@ -108,15 +108,19 @@ def generate_group_key_combination_data(
                 str(exp_result.combination).replace("{", "").replace("}", "")
             )
             nested_output = {
-                "raw_output":
-                process_raw_output(exp_result.raw_output),
+                "text_output":
+                process_raw_output(exp_result.raw_output.text_output),
+                "image_output":
+                process_raw_output(
+                    getattr(exp_result.raw_output, 'image_output', None)
+                ),
                 "evaluator_outputs":
                 "\n".join([
                     f"{e.name} : {e.display_name} = {e.result}"
                     for e in exp_result.evaluator_outputs
                 ]) if exp_result.evaluator_outputs else None
             }
-            formatted_output = f"<yival_raw_output>{nested_output['raw_output']}</yival_raw_output>\n{nested_output['evaluator_outputs']}"
+            formatted_output = f"<yival_raw_output>{nested_output['text_output']}</yival_raw_output>{nested_output['image_output']}\n{nested_output['evaluator_outputs']}"
             row_dict[combo_str] = formatted_output
             all_combos.add(combo_str)
         data_list.append(row_dict)

@@ -26,6 +26,7 @@ from ..schemas.experiment_config import (
     GroupedExperimentResult,
     InputData,
     Metric,
+    MultimodalOutput,
 )
 from .base_evaluator import BaseEvaluator
 
@@ -83,8 +84,8 @@ class OpenAIEloEvaluator(BaseEvaluator):
                 "content":
                 f"""Task: {self.config.input_description.strip()}
     Prompt: {test_case}
-    Generation A: {result1.raw_output}
-    Generation B: {result2.raw_output}"""
+    Generation A: {result1.raw_output.text_output}
+    Generation B: {result2.raw_output.text_output}"""
             }],
             logit_bias={
                 '32': 100,  # 'A' token
@@ -135,8 +136,8 @@ class OpenAIEloEvaluator(BaseEvaluator):
                     "content":
                     f"""Task: {self.config.input_description.strip()}
                         Prompt: {test_case}
-                        Generation A: {result1.raw_output}
-                        Generation B: {result2.raw_output}"""
+                        Generation A: {result1.raw_output.text_output}
+                        Generation B: {result2.raw_output.text_output}"""
                 }]
                 message_batches.append(message1)
 
@@ -149,8 +150,8 @@ class OpenAIEloEvaluator(BaseEvaluator):
                     "content":
                     f"""Task: {self.config.input_description.strip()}
                         Prompt: {test_case}
-                        Generation A: {result2.raw_output}
-                        Generation B: {result1.raw_output}"""
+                        Generation A: {result2.raw_output.text_output}
+                        Generation B: {result1.raw_output.text_output}"""
                 }]
                 message_batches.append(message2)
         # 2. Utilizing parallel_completions:
@@ -219,42 +220,42 @@ def create_test_data_v2():
     er1 = ExperimentResult(
         input_data=input_data1,
         combination={"name": "A"},
-        raw_output="Bonjour le monde!",
+        raw_output=MultimodalOutput(text_output="Bonjour le monde!"),
         latency=100,
         token_usage=5
     )
     er2 = ExperimentResult(
         input_data=input_data2,
         combination={"name": "A"},
-        raw_output="Comment ça va?",
+        raw_output=MultimodalOutput(text_output="Comment ça va?"),
         latency=100,
         token_usage=5
     )
     er3 = ExperimentResult(
         input_data=input_data1,
         combination={"name": "B"},
-        raw_output="Salut monde!",
+        raw_output=MultimodalOutput(text_output="Salut monde!"),
         latency=150,
         token_usage=6
     )
     er4 = ExperimentResult(
         input_data=input_data2,
         combination={"name": "B"},
-        raw_output="Comment tu es?",
+        raw_output=MultimodalOutput(text_output="Comment tu es?"),
         latency=150,
         token_usage=6
     )
     er5 = ExperimentResult(
         input_data=input_data1,
         combination={"name": "C"},
-        raw_output="Bonjour monde!",
+        raw_output=MultimodalOutput(text_output="Bonjour monde!"),
         latency=130,
         token_usage=6
     )
     er6 = ExperimentResult(
         input_data=input_data2,
         combination={"name": "C"},
-        raw_output="Comment vas-tu?",
+        raw_output=MultimodalOutput(text_output="Comment vas-tu?"),
         latency=130,
         token_usage=5
     )

@@ -7,6 +7,8 @@ experiment.
 from dataclasses import asdict, dataclass, field
 from typing import Any, Callable, Dict, List, Optional, Tuple, Type, Union
 
+from PIL import Image
+
 from .combination_improver_configs import BaseCombinationImproverConfig
 from .common_structures import InputData
 from .dataset_config import DatasetConfig
@@ -256,6 +258,26 @@ class ExperimentSummary:
 
 
 @dataclass
+class MultimodalOutput:
+    """
+    Multimodal output that can include a string, a PIL Image, or both.
+
+    Attributes:
+    - text_output (str): Text output for this example.
+    - image_output (PIL.Image.Image): Image output for this example.
+    """
+    text_output: Optional[str] = None
+    image_output: Optional[List[Image.Image]] = None
+
+    def asdict(self) -> Dict[str, Any]:
+        return {
+            "text_output": self.text_output,
+            "image_output": "PIL Image List" if self.image_output else
+            None  # You might want to serialize the image differently
+        }
+
+
+@dataclass
 class ExperimentResult:
     """
     Result for a single example based on a specific combination of active variations
@@ -275,7 +297,7 @@ class ExperimentResult:
 
     input_data: InputData
     combination: Dict[str, str]
-    raw_output: Any
+    raw_output: MultimodalOutput
     latency: float
     token_usage: int
     evaluator_outputs: Optional[List[EvaluatorOutput]] = None
@@ -288,7 +310,7 @@ class ExperimentResult:
             "combination":
             self.combination,
             "raw_output":
-            self.raw_output,
+            self.raw_output.asdict(),
             "latency":
             self.latency,
             "token_usage":

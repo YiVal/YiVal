@@ -6,11 +6,12 @@ import os
 import openai
 
 from yival.logger.token_logger import TokenLogger
+from yival.schemas.experiment_config import MultimodalOutput
 from yival.states.experiment_state import ExperimentState
 from yival.wrappers.string_wrapper import StringWrapper
 
 
-def qa(question: str, state: ExperimentState) -> str:
+def qa(question: str, state: ExperimentState) -> MultimodalOutput:
     """
     Demo code for question answering using GPT-3.
     """
@@ -36,7 +37,9 @@ def qa(question: str, state: ExperimentState) -> str:
     )
 
     # Extract the assistant's message (translated text) from the response
-    answer = response['choices'][0]['message']['content']
+    answer = MultimodalOutput(
+        text_output=response['choices'][0]['message']['content'],
+    )
     token_usage = response['usage']['total_tokens']
     logger.log(token_usage)
 

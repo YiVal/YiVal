@@ -19,8 +19,8 @@ dataset:
         name: headline_generation_for_business
         parameters:
           tech_startup_business: str
-      number_of_examples: 1
-      output_path: null
+      number_of_examples: 2
+      output_path: headline_generation.pkl
   source_type: machine_generated
 
 variations:
@@ -94,3 +94,8 @@ selection_strategy:
       average_latency: 0.2
       average_token_usage: 0.2
     normalize_func: "z-score"
+
+human_rating_configs:
+  - name: clear
+    instructions: Rate whether the headline clearly state what the start is doing
+    scale: [1, 5]

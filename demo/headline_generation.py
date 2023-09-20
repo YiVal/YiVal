@@ -3,13 +3,14 @@ import os
 import openai
 
 from yival.logger.token_logger import TokenLogger
+from yival.schemas.experiment_config import MultimodalOutput
 from yival.states.experiment_state import ExperimentState
 from yival.wrappers.string_wrapper import StringWrapper
 
 
 def headline_generation(
     tech_startup_business: str, state: ExperimentState
-) -> str:
+) -> MultimodalOutput:
     logger = TokenLogger()
     logger.reset()
     # Ensure you have your OpenAI API key set up
@@ -35,7 +36,9 @@ def headline_generation(
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo", messages=messages
     )
-    res = response['choices'][0]['message']['content']
+    res = MultimodalOutput(
+        text_output=response['choices'][0]['message']['content'],
+    )
     token_usage = response['usage']['total_tokens']
     logger.log(token_usage)
     return res

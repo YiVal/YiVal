@@ -14,7 +14,7 @@ import rouge  # type:ignore
 
 from ..schemas.common_structures import InputData
 from ..schemas.evaluator_config import EvaluatorOutput, RougeEvaluatorConfig
-from ..schemas.experiment_config import ExperimentResult
+from ..schemas.experiment_config import ExperimentResult, MultimodalOutput
 from .base_evaluator import BaseEvaluator
 
 
@@ -32,7 +32,7 @@ class RougeEvaluator(BaseEvaluator):
         """Evaluate the experiment result using rouge evaluat"""
         assert isinstance(self.config, RougeEvaluatorConfig)
         input_data = experiment_result.input_data
-        raw_output = experiment_result.raw_output
+        raw_output = experiment_result.raw_output.text_output
         expected_result = input_data.expected_result
 
         scores = self.rough.get_scores(
@@ -71,7 +71,7 @@ def main():
             "wrapper1": "var1",
             "wrapper2": "var2"
         },
-        raw_output="have a nice day",
+        raw_output=MultimodalOutput(text_output="have a nice day"),
         latency=30.0,
         token_usage=20
     )
