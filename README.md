@@ -139,3 +139,36 @@ Once started, navigate to the following address in your web browser:
 </details>
 
 For more details, check out the [Question Answering with expected result evaluator](https://github.com/YiVal/YiVal/blob/master/docs/qa_expected_results.md#demo).
+
+### Automatically generate prompts with evaluator
+
+```python
+yival demo --auto_prompts
+```
+
+Once started, navigate to the following address in your web browser:
+<http://127.0.0.1:8073/>
+<details>
+  <summary>Click to view the screenshot</summary>
+  
+ <img width="1288" alt="Screenshot 2023-08-18 at 1 11 44 AM" src="https://github.com/YiVal/YiVal/assets/1544154/4e9a182f-07ba-413e-9160-f38bfdc743ce">
+
+</details>
+
+# Contributors
+
+<p align="center">
+🌟 YiVal welcomes your contributions! 🌟<p align="center">
+🥳 Thanks so much to all of our amazing contributors 🥳</p>
+
+</p>
+<a href="https://github.com/YiVal/YiVal/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=YiVal/YiVal" />
+</a>
+
+## Paper Implement
+
+| **Paper**                                                    | **Author**                                                   | **Topics**                        | **YiVal Contributor**                      |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | --------------------------------- | ------------------------------------------ |
+| [Large Language Models Are Human-Level Prompt Engineers](https://arxiv.org/abs/2211.01910) | [Yongchao Zhou](https://arxiv.org/search/cs?searchtype=author&query=Zhou,+Y), [Andrei Ioan Muresanu](https://arxiv.org/search/cs?searchtype=author&query=Muresanu,+A+I), [Ziwen Han](https://arxiv.org/search/cs?searchtype=author&query=Han,+Z) | YiVal Evolver,Auto-Prompting      | [@Tao Feng](https://github.com/oliverfeng) |
+| [BERTScore: Evaluating Text Generation with BERT](https://arxiv.org/abs/1904.09675) | [Tianyi Zhang](https://arxiv.org/search/cs?searchtype=author&query=Zhang,+T), [Varsha Kishore](https://arxiv.org/search/cs?searchtype=author&query=Kishore,+V), [Felix Wu](https://arxiv.org/search/cs?searchtype=author&query=Wu,+F) | YiVal Evaluator, bertscore, rouge | [@crazycth](https://github.com/crazycth)   |
