@@ -175,7 +175,6 @@ Once started, navigate to the following address in your web browser:
   <img src="https://contrib.rocks/image?repo=YiVal/YiVal" />
 </a>
 
-
 ## Paper / Algorithm Implementation
 
 | **Paper** | **Author** | **Topics** | **YiVal Contributor** | **Data Generator** | **Variation Generator** | **Evaluator** | **Selector** | **Evolver** | **Config** |
