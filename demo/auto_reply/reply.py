@@ -157,8 +157,8 @@ class Reply:
 r = Reply()
 
 
-def reply(weibo_post: str, user_input: str):
-    return r.reply(weibo_post, user_input)
+def reply(weibo_post: str, user_input: str, state: ExperimentState):
+    return r.reply(weibo_post, user_input, state)
 
 
 def main():

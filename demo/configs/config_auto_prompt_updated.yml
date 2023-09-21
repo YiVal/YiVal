@@ -16,7 +16,7 @@ evaluators:
     input_description: Guide GPT-4 to role-play as a predefined fantasy character for a Weibo auto-reply chatbot, ensuring responses align with character traits, backstory, and Chinese cultural context.
     metric_calculators: []
     name: openai_elo_evaluator
-    model_name: gpt-4
+    openai_model_name: gpt-4
 
 selection_strategy:
   ahp_selection:

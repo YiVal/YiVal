@@ -84,8 +84,8 @@ class OpenAIEloEvaluator(BaseEvaluator):
                 "content":
                 f"""Task: {self.config.input_description.strip()}
     Prompt: {test_case}
-    Generation A: {result1.raw_output.text_output}
-    Generation B: {result2.raw_output.text_output}"""
+    Generation A: {result1.raw_output}
+    Generation B: {result2.raw_output}"""
             }],
             logit_bias={
                 '32': 100,  # 'A' token
@@ -136,8 +136,8 @@ class OpenAIEloEvaluator(BaseEvaluator):
                     "content":
                     f"""Task: {self.config.input_description.strip()}
                         Prompt: {test_case}
-                        Generation A: {result1.raw_output.text_output}
-                        Generation B: {result2.raw_output.text_output}"""
+                        Generation A: {result1.raw_output}
+                        Generation B: {result2.raw_output}"""
                 }]
                 message_batches.append(message1)
 
@@ -150,8 +150,8 @@ class OpenAIEloEvaluator(BaseEvaluator):
                     "content":
                     f"""Task: {self.config.input_description.strip()}
                         Prompt: {test_case}
-                        Generation A: {result2.raw_output.text_output}
-                        Generation B: {result1.raw_output.text_output}"""
+                        Generation A: {result2.raw_output}
+                        Generation B: {result1.raw_output}"""
                 }]
                 message_batches.append(message2)
         # 2. Utilizing parallel_completions:
