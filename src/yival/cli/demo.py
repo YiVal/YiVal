@@ -48,6 +48,7 @@ def demo(args: Namespace):
         run_args = Namespace(
             config_path=dest_path,
             display=True,
+            async_eval=False,
             output_path="",
             experiment_input_path=""
         )
@@ -61,6 +62,7 @@ def demo(args: Namespace):
         run_args = Namespace(
             config_path=dest_path,
             display=True,
+            async_eval=False,
             output_path="",
             experiment_input_path=""
         )
@@ -74,7 +76,8 @@ def demo(args: Namespace):
         run_args = Namespace(
             config_path=dest_path,
             display=True,
+            async_eval=False,
             output_path="demo_results.pkl",
-            experiment_input_path="demo_results.pkl"
+            experiment_input_path=""
         )
     run_experiment(run_args)
