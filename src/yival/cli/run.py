@@ -41,7 +41,7 @@ def add_arguments_to(subparser):
         "--async_eval",
         type=bool,
         default=False,
-        help="Wheter the custom function is async"
+        help="Whether the custom function is async"
     )
 
 
