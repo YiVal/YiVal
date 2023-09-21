@@ -84,7 +84,7 @@ def demo(args: Namespace):
             config_path=dest_path,
             display=True,
             output_path="demo_results.pkl",
-            experiment_input_path="demo_results.pkl",
+            experiment_input_path="",
             async_eval=args.async_eval
         )
     run_experiment(run_args)

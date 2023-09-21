@@ -46,6 +46,7 @@ psutil = "^5.9.5"
 replicate = "^0.12.0"
 bert-score = "^0.3.13"
 rouge = "^1.0.1"
+alpaca-eval = "^0.3.1"
 
 [tool.poetry.group.doc.dependencies]
 mkdocs = "*"

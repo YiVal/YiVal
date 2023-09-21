@@ -14,6 +14,7 @@ from ..combination_improvers.base_combination_improver import (
 from ..data.base_reader import BaseReader
 from ..data.csv_reader import CSVReader
 from ..data_generators.base_data_generator import BaseDataGenerator
+from ..evaluators.alpaca_eval_evaluator import AlpacaEvalEvaluator
 from ..evaluators.base_evaluator import BaseEvaluator
 from ..evaluators.openai_elo_evaluator import OpenAIEloEvaluator
 from ..evaluators.python_validation_evaluator import PythonValidationEvaluator
@@ -166,6 +167,7 @@ def register_custom_evaluators(custom_evaulators: Dict[str, Dict[str, Any]]):
     _ = StringExpectedResultEvaluator
     _ = OpenAIEloEvaluator
     _ = PythonValidationEvaluator
+    _ = AlpacaEvalEvaluator
 
 
 def register_custom_wrappers(custom_wrappers: Dict[str, Dict[str, Any]]):
@@ -416,7 +418,7 @@ def generate_experiment(
     ]
     if evaluate_group:
         for grouped_experiment_result in grouped_experiment_results:
-            grouped_experiment_result.grouped_evaluator_outputs = evaluator.evaluate_group_result(
+            evaluator.evaluate_group_result(
                 grouped_experiment_result.experiment_results
             )
 

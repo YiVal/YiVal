@@ -85,6 +85,13 @@ class ComparisonEvaluatorConfig(BaseEvaluatorConfig):
     )
     evaluator_type = EvaluatorType.COMPARISON
 
+    def asdict(self) -> Dict[str, Any]:
+        base_dict = super().asdict()
+        base_dict["metric_calculators"] = [
+            mc.asdict() for mc in self.metric_calculators
+        ]
+        return base_dict
+
 
 @dataclass
 class GlobalEvaluatorConfig(BaseEvaluatorConfig):
@@ -104,6 +111,12 @@ class ExpectedResultEvaluatorConfig(EvaluatorConfig):
 
 @dataclass
 class PythonValidationEvaluatorConfig(EvaluatorConfig):
+    matching_technique: MatchingTechnique = MatchingTechnique.MATCH
+
+
+@dataclass
+class AlpacaEvalEvaluatorConfig(ComparisonEvaluatorConfig):
+    alpaca_annotator_name: str = "alpaca_eval_gpt4"
     matching_technique: MatchingTechnique = MatchingTechnique.MATCH
 
 

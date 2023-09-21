@@ -102,9 +102,7 @@ class BaseEvaluator(ABC):
         """
         return EvaluatorOutput("evaluate", "evaluate")
 
-    def evaluate_comparison(
-        self, group_data: List[ExperimentResult]
-    ) -> EvaluatorOutput:
+    def evaluate_comparison(self, group_data: List[ExperimentResult]) -> None:
         """
         Evaluate and compare a list of experiment results.
 
@@ -115,14 +113,11 @@ class BaseEvaluator(ABC):
         Args:
             group_data (List[ExperimentResult]): A list of experiment results
             to be evaluated together.
-        Returns:
-            EvaluatorOutput: The result of the evaluation.
 
         Note:
             Implementations of this method in subclasses should handle the
             specifics of how multiple experiments are evaluated and compared.
         """
-        return EvaluatorOutput("evaluate", "evaluate")
 
     def evaluate_based_on_all_results(
         self, experiment: List[Experiment]
