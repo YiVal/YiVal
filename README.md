@@ -94,9 +94,10 @@ pip install yival
 |------|--------------------|------------|
 | 🐯  Animal story with MidJourney| **Multi-modal** support of text and images| [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1DgtDZghleiLEaaNF7f4vSGJ4ChDVls2X?usp=sharing) |
 | 🌟 Model Comparison in QA ability | Easy **model** evaluation comparison thanks to LiteLLM | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1cSjsEKNwDq8W4O2oeRI93vH-BhYH5JXj?usp=sharing) |
-| 🔥 Startup Company Headline Generation Bot | Automated prompt **evolution**   | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1EiWUL8rE_kfNLXVPowCWCh6hwHFagvs_?usp=sharing) |
+| 🔥 Startup Company Headline Generation Bot | Automate prompt **evolution**   | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1EiWUL8rE_kfNLXVPowCWCh6hwHFagvs_?usp=sharing) |
 | 🧳 Build Your Customized Travel Guide Bot | Automate prompt generation with **retrieval** methods   | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1L7miRwTQSZfm5xOKBakWOG5bOumMynpv?usp=sharing) |
 | 📖 Enhance Model Translation Capabilities | **Finetune** the translation performance of llama2 with replicate | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1HtQOadV0o3vrXjVI9Nf0Xv4rLarqu-fv?usp=sharing) |
+| 🤖️ Auto-Reply of Weibo Chatbot | Enhance the auto-reply capabilities with automated prompt generation | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/12XS1fhgxRAHsRZPXtJ8c5exslgj7EDHE#scrollTo=31Wq1Oeb-bSY) |
 
 ### Multi-model Mode
 

@@ -11,6 +11,7 @@ from langchain.schema import Document
 from langchain.vectorstores import FAISS
 
 from yival.logger.token_logger import TokenLogger
+from yival.schemas.experiment_config import MultimodalOutput
 from yival.states.experiment_state import ExperimentState
 from yival.wrappers.string_wrapper import StringWrapper
 
@@ -147,7 +148,9 @@ class Reply:
         )
 
         # Extract the assistant's message (translated text) from the response
-        answer = response['choices'][0]['message']['content']
+        answer = MultimodalOutput(
+            text_output=response['choices'][0]['message']['content'],
+        )
         token_usage = response['usage']['total_tokens']
         logger.log(token_usage)
 
