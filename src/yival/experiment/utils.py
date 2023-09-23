@@ -8,11 +8,16 @@ from collections import defaultdict
 from importlib import import_module
 from typing import Any, Dict, List
 
+from yival.variation_generators.chain_of_density_prompt import (
+    ChainOfDensityPromptGenerator,
+)
+
 from ..combination_improvers.base_combination_improver import (
     BaseCombinationImprover,
 )
 from ..data.base_reader import BaseReader
 from ..data.csv_reader import CSVReader
+from ..data.huggingface_dataset_reader import HuggingFaceDatasetReader
 from ..data_generators.base_data_generator import BaseDataGenerator
 from ..evaluators.alpaca_eval_evaluator import AlpacaEvalEvaluator
 from ..evaluators.base_evaluator import BaseEvaluator
@@ -122,6 +127,7 @@ def register_custom_readers(custom_readers: Dict[str, Dict[str, Any]]):
         BaseReader.register_reader(name, reader_cls, config_cls)
 
     _ = CSVReader
+    _ = HuggingFaceDatasetReader
 
 
 def register_custom_improver(custom_improver: Dict[str, Dict[str, Any]]):
@@ -216,6 +222,7 @@ def register_custom_variation_generators(
             name, variation_generator_cls, config_cls
         )
     _ = OpenAIPromptBasedVariationGenerator
+    _ = ChainOfDensityPromptGenerator
 
 
 def calculate_metrics(
@@ -279,6 +286,7 @@ def run_single_input(
     results = []
     tmp_state = ExperimentState()
     tmp_state.active = True
+    print(all_combinations)
     for combo in all_combinations:
         for name, variation in combo.items():
             tmp_state.set_specific_variation(name, variation)

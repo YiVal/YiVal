@@ -1,5 +1,5 @@
-from dataclasses import asdict, dataclass
-from typing import Optional
+from dataclasses import asdict, dataclass, field
+from typing import Dict, List, Optional
 
 
 @dataclass
@@ -25,3 +25,13 @@ class CSVReaderConfig(BaseReaderConfig):
 
     def asdict(self):
         return asdict(self)
+
+
+@dataclass
+class HuggingFaceDatasetReaderConfig(BaseReaderConfig):
+    example_limit: int = 1
+    output_mapping: Dict[str, str] = field(default_factory=dict)
+    # List of regex patterns to include based on content
+    include: List[str] = field(default_factory=list)
+    # List of regex patterns to exclude based on content
+    exclude: List[str] = field(default_factory=list)

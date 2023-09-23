@@ -1,0 +1,26 @@
+# This is a generated template. Modify the values as needed.
+
+custom_function: demo.news_article_summary.summarize
+dataset:
+  file_path: https://datasets-server.huggingface.co/rows?dataset=griffin%2Fchain_of_density&config=annotated&split=test
+  reader: huggingface_dataset_reader
+  source_type: dataset
+  reader_config:
+    example_limit: 2
+    output_mapping:
+      article: article
+description: Configuration fo summarize news articles
+
+human_rating_configs:
+  - name: preference
+    instructions: Rate whether you like the summary or not
+    scale: [0, 1]
+
+variations:
+  - name: summarization
+    variations:
+      - instantiated_value: You will be given an article, summarize it"
+        value: You will be given an article, summarize it"
+        value_type: str
+        variation_id: null
+    generator_name: chain_of_density_prompt_generator
