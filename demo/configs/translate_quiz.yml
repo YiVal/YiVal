@@ -41,8 +41,13 @@ variations:
         value_type: str
         variation_id: null
       
-      # - instantiated_value: replicate/yival/llama2:c033319b0f9da249fb08fb10ee2e70cec795274e8f518121796ab484064f4f0c
-      #   value: a16z-infra/yival/llama2:c033319b0f9da249fb08fb10ee2e70cec795274e8f518121796ab484064f4f0c
+      - instantiated_value: llama2-finetune
+        value: llama2-finetune
+        value_type: str
+        variation_id: null
+      
+      #  - instantiated_value: finetune
+      #   value: finetune
       #   value_type: str
       #   variation_id: null
 
