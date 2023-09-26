@@ -12,6 +12,7 @@ from rich import print
 from yival.logger.token_logger import TokenLogger
 from yival.states.experiment_state import ExperimentState
 from yival.wrappers.string_wrapper import StringWrapper
+from yival.schemas.experiment_config import MultimodalOutput
 
 prompt_guardrail = """
 Given the following high level leetcode problem description, write a short Python code snippet that solves the problem.
@@ -65,11 +66,19 @@ async def run_leetcode(leetcode_problem: str, state: ExperimentState) -> str:
                 total_token += log.llm_response.prompt_token_count
             logger.log(total_token)
             if validated_response and isinstance(validated_response, dict):
-                return validated_response.get("python_code", "invalid")
+                # return validated_response.get("python_code", "invalid")
+                return MultimodalOutput(
+                    text_output=validated_response.get("python_code", "invalid")
+                )
             else:
-                return "invalid"
+                return MultimodalOutput(
+                    text_output="invalid"
+                )
         except Exception:
-            return "guardrails throws exception"
+            return MultimodalOutput(
+                text_output="guardrails throws exception"
+            )
+        
     else:
         openai.api_key = os.getenv("OPENAI_API_KEY")
         prompt = prompt_raw.format(leetcode_problem=leetcode_problem)
@@ -89,7 +98,9 @@ async def run_leetcode(leetcode_problem: str, state: ExperimentState) -> str:
         logger.log(token_usage)
         if extracted_code and extracted_code[0] == ' ':
             extracted_code = extracted_code[1:]
-        return extracted_code
+        return MultimodalOutput(
+            text_output=extracted_code
+        )
 
 
 problem = """
