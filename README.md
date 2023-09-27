@@ -82,9 +82,33 @@ To support different models in evaluators and generators , [check our config](ht
 
 ## Installation
 
+### Requirements
+
+- Python 3.10+ environment
+- OpenAI API Keys (Add `OPENAI_API_KEY` as an environment variable)
+
+### Traditional Installation
+
 ```sh
 pip install yival
 ```
+
+### Install by Poetry
+
+1. **Install [Poetry](https://python-poetry.org/docs/#installing-with-the-official-installer)**
+
+2. **Clone Yival**
+
+    ```sh
+    git clone https://github.com/YiVal/YiVal.git
+    cd Yival
+    ```
+
+3. **Initialize a Python virtual environment with `poetry`**
+
+    ```sh
+    poetry install --sync
+    ```
 
 ## Demo
 
