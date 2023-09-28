@@ -22,7 +22,6 @@ from dash.dependencies import ALL, MATCH, Input, Output, State
 from dash_dangerously_set_inner_html import DangerouslySetInnerHTML
 from PIL import Image
 from pyngrok import ngrok
-from sympy import fu
 
 from yival.experiment.rate_limiter import RateLimiter
 from yival.experiment.utils import (
@@ -1809,7 +1808,8 @@ def display_results_dash(
     state,
     logger,
     evaluator,
-    interactive=False
+    interactive=False,
+    port=8073
 ):
     if experiment_data.improver_output:
         for group_result in experiment_data.improver_output.group_experiment_results:
@@ -1829,8 +1829,8 @@ def display_results_dash(
         state, logger, evaluator, interactive
     )
     if os.environ.get("ngrok", False):
-        public_url = ngrok.connect(8073)
+        public_url = ngrok.connect(port)
         print(f"Access Yival from this public URL :{public_url}")
-        app.run(debug=False, port=8073)
+        app.run(debug=False, port=port)
     else:
-        app.run(debug=False, port=8073)
+        app.run(debug=False, port=port)

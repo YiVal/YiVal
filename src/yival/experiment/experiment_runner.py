@@ -2,14 +2,15 @@ import asyncio
 import os
 import pickle
 from concurrent.futures import ThreadPoolExecutor
+from threading import Thread
 from typing import List, Optional
 
 from tqdm import tqdm
 
 import yival.common.utils as common
+from yival.configs.config_utils import load_and_validate_configs
 from yival.experiment.app.app import display_results_dash  # type: ignore
 
-from ..configs.config_utils import load_and_validate_config
 from ..logger.token_logger import TokenLogger
 from ..result_selectors.selection_context import SelectionContext
 from ..schemas.experiment_config import Experiment, ExperimentResult
@@ -38,7 +39,7 @@ rate_limiter = RateLimiter(10 / 60)
 class ExperimentRunner:
 
     def __init__(self, config_path: str):
-        self.config = load_and_validate_config(config_path)
+        self.configs = load_and_validate_configs(config_path)
 
     def _register_custom_components(self):
         """Register custom components based on the configuration."""
@@ -151,70 +152,91 @@ class ExperimentRunner:
         async_eval: bool = False
     ):
         """Run the experiment based on the source type and provided configuration."""
-        self._register_custom_components()
+        base_port = 8073
+        display_threads = []
+        for idx, config in enumerate(self.configs):
+            self.config = config
+            config_experiment_input_path = ""
+            if output_path:
+                config_output_path = f"{os.path.splitext(output_path)[0]}_{idx}.pkl"
+            if experiment_input_path:
+                config_experiment_input_path = f"{os.path.splitext(experiment_input_path)[0]}_{idx}.pkl"
+            self._register_custom_components()
 
-        evaluator = Evaluator(
-            self.config.get("evaluators", [])  # type: ignore
-        )  # type: ignore
-        logger = TokenLogger()
+            evaluator = Evaluator(
+                self.config.get("evaluators", [])  # type: ignore
+            )  # type: ignore
+            logger = TokenLogger()
 
-        state = ExperimentState.get_default_state()
-        state.set_experiment_config(self.config)
-        state.active = True
+            state = ExperimentState()
+            state.set_experiment_config(self.config)
+            state.active = True
 
-        all_combinations = state.get_all_variation_combinations()
+            all_combinations = state.get_all_variation_combinations()
 
-        source_type = self.config["dataset"]["source_type"]  # type: ignore
-        if source_type in ["dataset", "machine_generated"]:  # type: ignore
-            if experiment_input_path and os.path.exists(experiment_input_path):
-                with open(experiment_input_path, 'rb') as file:
-                    experiment: Experiment = pickle.load(file)
-            else:
-                register_custom_readers(
-                    self.config.get("custom_reader", {})  # type: ignore
-                )  # type: ignore
-                if async_eval:
-                    results = asyncio.run(
-                        self._aprocess_dataset(
+            source_type = self.config["dataset"]["source_type"]  # type: ignore
+            if source_type in ["dataset", "machine_generated"]:  # type: ignore
+                if config_experiment_input_path and os.path.exists(
+                    config_experiment_input_path
+                ):
+                    with open(config_experiment_input_path, 'rb') as file:
+                        experiment: Experiment = pickle.load(file)
+                else:
+                    register_custom_readers(
+                        self.config.get("custom_reader", {})  # type: ignore
+                    )  # type: ignore
+                    if async_eval:
+                        results = asyncio.run(
+                            self._aprocess_dataset(
+                                all_combinations, logger, evaluator
+                            )
+                        )
+                    else:
+                        results = self._process_dataset(
                             all_combinations, logger, evaluator
                         )
-                    )
-                else:
-                    results = self._process_dataset(
-                        all_combinations, logger, evaluator
-                    )
-                experiment = generate_experiment(
-                    results, evaluator
-                )  # type: ignore
+                    experiment = generate_experiment(
+                        results, evaluator
+                    )  # type: ignore
 
-                strategy = get_selection_strategy(self.config)
-                if strategy:
-                    context_trade_off = SelectionContext(strategy=strategy)
-                    experiment.selection_output = context_trade_off.execute_selection( # type: ignore
-                        experiment=experiment
+                    strategy = get_selection_strategy(self.config)
+                    if strategy:
+                        context_trade_off = SelectionContext(strategy=strategy)
+                        experiment.selection_output = context_trade_off.execute_selection( # type: ignore
+                            experiment=experiment
+                        )
+
+                    improver = get_improver(self.config)
+                    if improver:
+                        experiment.improver_output = improver.improve(
+                            experiment, self.config, evaluator, logger
+                        )
+
+                if output_path:
+                    with open(config_output_path, 'wb') as file:
+                        pickle.dump(experiment, file)
+                if display:
+                    # display_results_dash(
+                    #     experiment, self.config, all_combinations,
+                    #     ExperimentState.get_instance(), logger, evaluator, port=base_port+idx
+                    # )
+                    t = Thread(
+                        target=display_results_dash,
+                        args=(
+                            experiment, self.config, all_combinations,
+                            ExperimentState.get_instance(), logger, evaluator
+                        ),
+                        kwargs={"port": base_port + idx}
                     )
-
-                improver = get_improver(self.config)
-                if improver:
-                    experiment.improver_output = improver.improve(
-                        experiment, self.config, evaluator, logger
-                    )
-
-            if output_path:
-                with open(output_path, 'wb') as file:
-                    pickle.dump(experiment, file)
-
-            if display:
+                    display_threads.append(t)
+                    t.start()
+            elif source_type == "user_input":
                 display_results_dash(
-                    experiment, self.config, all_combinations,
-                    ExperimentState.get_instance(), logger, evaluator
+                    Experiment([], []), self.config, all_combinations,
+                    ExperimentState.get_instance(), logger, evaluator, True
                 )
-
-        elif source_type == "user_input":
-            display_results_dash(
-                Experiment([], []), self.config, all_combinations,
-                ExperimentState.get_instance(), logger, evaluator, True
-            )
+        for t in display_threads:
+            t.join()
 
 
 # def main():
