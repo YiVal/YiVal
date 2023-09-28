@@ -5,6 +5,9 @@ from yival.wrappers.string_wrapper import StringWrapper
 from ..combination_improvers.openai_prompt_based_combination_improver import (
     OpenAIPromptBasedCombinationImprover,
 )
+from ..combination_improvers.optimize_by_prompt_improver import (
+    OptimizeByPromptImprover,
+)
 from ..data.csv_reader import CSVReader
 from ..data_generators.openai_prompt_data_generator import (
     OpenAIPromptBasedGeneratorConfig,
@@ -38,6 +41,7 @@ def _prevent_unused_imports():
     _ = AHPSelection
     _ = OpenAIPromptBasedEvaluator
     _ = OpenAIPromptBasedCombinationImprover
+    _ = OptimizeByPromptImprover
 
 
 def variation_type(arg: str):
