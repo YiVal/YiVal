@@ -6,7 +6,7 @@ dataset:
       chunk_size: 100000
       diversify: true
       # model_name specify the llm model , e.g. a16z-infra/llama-2-13b-chat:9dff94b1bed5af738655d4a7cbcdcde2bd503aa85c94334fe1f42af7f3dd5ee3
-      model_name: gpt-4
+      model_name: gpt-3.5-turbo
       prompt:
           "Please provide a concrete and realistic test case as a dictionary for function invocation using the ** operator.
           Only include parameters, excluding description and name.
