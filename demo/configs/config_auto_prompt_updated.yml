@@ -18,20 +18,83 @@ evaluators:
     name: openai_elo_evaluator
     openai_model_name: gpt-4
 
+  - evaluator_type: individual
+    metric_calculators:
+      - method: AVERAGE
+    name: openai_prompt_based_evaluator
+    display_name: similarity
+    prompt: |-
+      You are assessing a submitted answer on a given task based on a criterion. Here is the data:
+      - Task: Given a weibo post and a corresponding user input, generate a reasonable response that is similar to the character's persona and Chinese Weibo conversational style.
+      - Does the bot's response align with the character's persona presented in weibo post and the conversational style of Chinese Weibo? It should be immediately clear to anyone who reads the reply that the bot is role-playing the character accurately and engaging in a conversation that is typical on Weibo. A lack of similarity can lead to a less immersive and genuine interaction.
+      [Input]: {weibo_post}
+      [Result]: {raw_output}
+      Answer the question by selecting one of the following options:
+      A It fails to meet the criterion at all.
+      B It somewhat meets the criterion, but there is significant room for improvement.
+      C It meets the criterion to a satisfactory degree.
+      D It meets the criterion very well.
+      E It meets the criterion exceptionally well, with little to no room for improvement.
+    choices: ["A", "B", "C", "D", "E"]
+    model_name: gpt-4
+    description: "Evaluate the similarity of the bot's response to the character's persona and Chinese Weibo conversational style"
+    scale_description: "0-4"
+    choice_scores:
+      A: 0
+      B: 1
+      C: 2
+      D: 3
+      E: 4
+
+  - evaluator_type: individual
+    metric_calculators:
+      - method: AVERAGE
+    name: openai_prompt_based_evaluator
+    display_name: accuracy
+    prompt: |-
+      You are assessing a submitted answer on a given task based on a criterion. Here is the data:
+      - Task: Given a weibo post and a corresponding user input, generate a reasonable response that is similar to the character's persona and Chinese Weibo conversational style.
+      - Does the bot's response accurately address the content of the user input? The bot should be able to understand and respond appropriately to the user's input. An inaccurate response can lead to confusion and a less satisfying user experience.
+      [Input]: {user_input}
+      [Result]: {raw_output}
+      Answer the question by selecting one of the following options:
+      A It fails to meet the criterion at all.
+      B It somewhat meets the criterion, but there is significant room for improvement.
+      C It meets the criterion to a satisfactory degree.
+      D It meets the criterion very well.
+      E It meets the criterion exceptionally well, with little to no room for improvement.
+    choices: ["A", "B", "C", "D", "E"]
+    model_name: gpt-4
+    description: "Evaluate the accuracy of the bot's response in relation to the user's input"
+    scale_description: "0-4"
+    choice_scores:
+      A: 0
+      B: 1
+      C: 2
+      D: 3
+      E: 4
+
+
 selection_strategy:
   ahp_selection:
     criteria:
-      - openai_elo_evaluator
+      # - openai_elo_evaluator
+      - "openai_prompt_based_evaluator: similarity"
+      - "openai_prompt_based_evaluator: accuracy"
       - average_token_usage
       - average_latency
     criteria_maximization:
-      openai_elo_evaluator: true
+      # openai_elo_evaluator: true
+      "openai_prompt_based_evaluator: similarity": true
+      "openai_prompt_based_evaluator: accuracy": true
       average_latency: false
       average_token_usage: false
     criteria_weights:
-      openai_elo_evaluator: 0.6
-      average_latency: 0.2
-      average_token_usage: 0.2
+      # openai_elo_evaluator: 0.4
+      "openai_prompt_based_evaluator: similarity": 0.4
+      "openai_prompt_based_evaluator: accuracy": 0.4
+      average_latency: 0.1
+      average_token_usage: 0.1
 
 variations:
   - generator_config:
