@@ -266,6 +266,10 @@ class OptimizeByPromptImprover(BaseCombinationImprover):
             prompt_now = fetch_next_prompt(opro_prompt, self.config.model_name)
             print(f"[INFO] prompt_now: {prompt_now}")
 
+        for exp in experiments:
+            for res in exp.combination_aggregated_metrics:
+                results.extend(res.experiment_results)
+
         experiment = generate_experiment(
             results, evaluator, evaluate_group=False, evaluate_all=False
         )
