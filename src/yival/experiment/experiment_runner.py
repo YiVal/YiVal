@@ -70,13 +70,13 @@ class ExperimentRunner:
                 while True:
                     await rate_limiter.wait()
                     try:
-                        resutls = await self.aparallel_task(
+                        results = await self.aparallel_task(
                             data_point, all_combinations, logger, evaluator
                         )
                         if results:
-                            for result in resutls:
+                            for result in results:
                                 rate_limiter.add_tokens(result.token_usage)
-                        return resutls
+                        return results
                     except:
                         print("Rate limit exceeded, sleeping...")
                         await asyncio.sleep(100)

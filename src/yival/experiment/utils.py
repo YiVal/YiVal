@@ -286,7 +286,6 @@ def run_single_input(
     results = []
     tmp_state = ExperimentState()
     tmp_state.active = True
-    print(all_combinations)
     for combo in all_combinations:
         for name, variation in combo.items():
             tmp_state.set_specific_variation(name, variation)
