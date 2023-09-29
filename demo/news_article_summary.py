@@ -1,7 +1,6 @@
 import os
 
 import openai
-
 from yival.logger.token_logger import TokenLogger
 from yival.schemas.experiment_config import MultimodalOutput
 from yival.states.experiment_state import ExperimentState
@@ -31,9 +30,7 @@ def summarize(article: str, state: ExperimentState) -> MultimodalOutput:
         "content": article
     }]
     # Use the chat-based completion
-    print(messages)
     response = openai.ChatCompletion.create(model="gpt-4", messages=messages)
-    print(response)
 
     answer = MultimodalOutput(
         text_output=response['choices'][0]['message']['content'],
