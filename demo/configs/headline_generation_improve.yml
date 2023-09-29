@@ -20,9 +20,10 @@ dataset:
           tech_startup_business: str
           business: str
           target_people: str
-      number_of_examples: 1
+      number_of_examples: 2
       output_path: null
   source_type: machine_generated
+
 
 variations:
   - name: task
@@ -41,17 +42,17 @@ variations:
       prompt: 
         - content: |-
             Hi, You are the best prompt writer!
-            Your object is to construct a concise instruction prompt for GPT-4. This prompt will guide GPT-4 in its interactions as a professional writer who writes attractive landing page headline for startup business according to its name, company Business and target audience.
+            Your object is to construct a concise instruction prompt for gpt-4. This prompt will guide gpt-4 in its interactions as a professional writer who writes attractive landing page headline for startup business according to its name, company Business and target audience.
             Points to emphasize in your instruction:
 
             - GPT4 will play the role of an experienced, mature and sophisticated writer who is familiar with all kinds of pop-up landing page headlines and is very creative.
-            - The GPT-4 response should conform to the basic structure of the company's landing page headline, be able to fully reflect the company's identity, and be able to attract a sufficiently large number of people
+            - The gpt-4 response should conform to the basic structure of the company's landing page headline, be able to fully reflect the company's identity, and be able to attract a sufficiently large number of people
             - {tech_startup_business} represent the name of the company
             - {business} represent the company business
             - {target_people} represent the target people of company
-            - At all times, GPT-4 must give a response as landing page headline.
+            - At all times, gpt-4 must give a response as landing page headline.
 
-            Craft your instruction ensuring GPT-4 understands the name of the startup company, the company business , the target people, and then generate attractive professional landing page headline according to its name.
+            Craft your instruction ensuring gpt-4 understands the name of the startup company, the company business , the target people, and then generate attractive professional landing page headline according to its name.
             keep your output crisp: only the prompt, devoid of any extraneous content , don't give example , just the prompt.
 
           role: system
@@ -171,6 +172,6 @@ selection_strategy:
     # normalize_func: "z-score"
 
 improver:
-  name: "openai_prompt_based_combination_improver"
-  openai_model_name: "gpt-4"
-  max_iterations: 1
+  name: "optimize_by_prompt_improver"
+  model_name: "gpt-4"
+  max_iterations: 3

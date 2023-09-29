@@ -22,7 +22,6 @@ from dash.dependencies import ALL, MATCH, Input, Output, State
 from dash_dangerously_set_inner_html import DangerouslySetInnerHTML
 from PIL import Image
 from pyngrok import ngrok
-from sympy import fu
 
 from yival.experiment.rate_limiter import RateLimiter
 from yival.experiment.utils import (
@@ -306,7 +305,7 @@ def create_dash_app(
                 matching_results = [
                     exp_result.raw_output
                     for exp_result in group.experiment_results
-                    if str(exp_result.combination) == metric.combo_key
+                    if json.dumps(exp_result.combination) == metric.combo_key
                 ]
                 if matching_results:
 
