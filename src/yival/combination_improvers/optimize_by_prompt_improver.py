@@ -211,12 +211,12 @@ class OptimizeByPromptImprover(BaseCombinationImprover):
         #optimize by prompt for max_iterations times
         for i in range(self.config.max_iterations + 1):
             logging.info(
-                f"[INFO][optimize_by_prompt_improver] start iteration{i}"
+                f"[INFO][optimize_by_prompt_improver] start iteration [{i}]"
             )
             current_iteration_results: List[ExperimentResult] = []
 
             #FIXME: supporm more variations other than 'task'
-            self.updated_config.variations = []
+            self.updated_config["variations"] = []  #type: ignore
             self.updated_config["variations"].append(( #type: ignore
                 WrapperConfig(
                     name="task",

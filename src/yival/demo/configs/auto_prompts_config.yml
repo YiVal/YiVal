@@ -197,11 +197,8 @@ selection_strategy:
       "openai_prompt_based_evaluator: relevance": 0.1
       "openai_prompt_based_evaluator: catchiness": 0.1
 
+
 improver:
-  name: openai_prompt_based_combination_improver
+  name: "optimize_by_prompt_improver"
+  model_name: "gpt-4"
   max_iterations: 2
-  openai_model_name: gpt-4
-  stop_conditions:
-    "openai_prompt_based_evaluator: catchiness": 3
-    "openai_prompt_based_evaluator: clarity": 3
-    "openai_prompt_based_evaluator: relevance": 3
