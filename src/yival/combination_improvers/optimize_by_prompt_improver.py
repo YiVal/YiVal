@@ -64,6 +64,9 @@ Give me a new prompt that is different from all pairs above, and has a evaluatio
 value higher than any of above. Do not write code. The prompt must be on the last line and start with "prompt:"
 """
 
+OPTIMATION_TASK_FORMAT = """
+"""
+
 rate_limiter = RateLimiter(10 / 60)
 
 
@@ -130,7 +133,7 @@ def fetch_next_prompt(prompt: str, model_name="gpt-4") -> str:
     """
     response = llm_completion(
         Request(
-            model_name=model_name, prompt=prompt, params={"temperature": 0.3}
+            model_name=model_name, prompt=prompt, params={"temperature": 1.0}
         )
     ).output
 
@@ -251,20 +254,17 @@ class OptimizeByPromptImprover(BaseCombinationImprover):
 
             strategy = get_selection_strategy(self.updated_config)
             if strategy:
-                print("[INFO] INTO strategy")
                 context_trade_off = SelectionContext(strategy=strategy)
                 experiment.selection_output = context_trade_off.execute_selection( # type: ignore
                     experiment=experiment
                 )
             experiments.append(experiment)
-            print(f"[DEBUG] generate experiment: {experiment}")
 
             best_combo, score = find_first_meta_data(experiment)
             cache.append((best_combo, score))
 
             opro_prompt = construct_opro_full_prompt(cache)
             prompt_now = fetch_next_prompt(opro_prompt, self.config.model_name)
-            print(f"[INFO] prompt_now: {prompt_now}")
 
         for exp in experiments:
             for res in exp.combination_aggregated_metrics:
