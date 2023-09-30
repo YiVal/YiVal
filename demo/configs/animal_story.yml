@@ -1,4 +1,4 @@
-custom_function: demo.logo_generation.logo_generation
+custom_function: demo.animal_story.image_generation
 description: Generated experiment config
 dataset:
   data_generators:
@@ -13,11 +13,12 @@ dataset:
       input_function:
         description:
           Given the species of an animal and its character, generate a corresponding story
-        name: headline_generation_for_business
+        name: animal_story_generation
         parameters:
           species: str
           character: str
-      number_of_examples: 1
+          drawing_style: str
+      number_of_examples: 3
       model_name: gpt-4
       output_path: animal_story.pkl
   source_type: machine_generated
@@ -27,8 +28,9 @@ variations:
     generator_name: openai_prompt_based_variation_generator
     generator_config:
       model_name: gpt-4
-      number_of_variations: 2
+      number_of_variations: 3
       diversify: true
+      max_tokens: 2000
       variables: null
       prompt: 
         - content: |-
@@ -38,18 +40,58 @@ variations:
               -   The story must be kept lively and as short, short, short, short, short as possible. The story should have a variety of backgrounds + drawing styles and fully emphasize the location where the story takes place; it can be dreamlike and generally bizarre.
               -  Be sure to use words that are as easy to understand as possible so TEENAGERS can easily understand the story.
               -   Please limit the output to within 300 words
-            - {animal_species} represent the specs of the animal
+            - {animal_species} represent the species of the animal
             - {animal_character} represent the character of the animal
-            - At all times, GPT-4 must give a response as an animal story
+            - At all times, gpt-4 must give a response as an animal story
 
             Craft your instruction Ensure that GPT-4 is able to fully understand the types and personalities of small animals and write engaging and fully pictorial stories.
             keep your output crisp: only the prompt, devoid of any extraneous content.
 
           role: system
 
-evaluators: []
+evaluators:
+  - evaluator_type: individual
+    metric_calculators:
+      - method: AVERAGE
+    name: openai_prompt_based_evaluator
+    display_name: story_quality
+    prompt: |-
+      You are assessing a submitted story based on a given task based on a criterion. Here is the data:
+      - Task: Given the species of an animal and corresponding character, generate one story.
+      - Does the story demonstrate creativity, coherence, and engaging narrative? A well-written story should captivate the reader and effectively convey a compelling narrative with clear structure and character development.
+      [Input]: animal_species : {species}, animal_character: {character}
+      [Result]: {raw_output}
+      Answer the question by selecting one of the following options:
+      A The story is of very low quality and lacks coherence and engagement.
+      B The story has some issues with coherence and engagement, but has potential for improvement.
+      C The story is of satisfactory quality, but there is room for improvement.
+      D The story is well-written and demonstrates good coherence and engagement.
+      E The story is exceptionally well-written, demonstrating strong coherence and engagement.
+    choices: ["A", "B", "C", "D", "E"]
+    # model_name specify the llm model , e.g. a16z-infra/llama-2-13b-chat:9dff94b1bed5af738655d4a7cbcdcde2bd503aa85c94334fe1f42af7f3dd5ee3
+    model_name: gpt-4
+    description: "evaluate the quality of the generated story"
+    scale_description: "0-4"
+    choice_scores:
+      A: 0
+      B: 1
+      C: 2
+      D: 3
+      E: 4
 
 human_rating_configs:
-  - name: clarity
-    instructions: Rate whether the image clearly state what the story is about.
+  - name: relevance
+    instructions: Rate the relevance of the image to the story.
     scale: [1, 5]
+
+  - name: image_quality
+    instructions: Rate the quality of the generated image.
+    scale: [1, 5]
+
+
+# improver:
+#   name: "openai_prompt_based_combination_improver"
+#   openai_model_name: "gpt-4"
+#   stop_conditions:
+#     "openai_prompt_based_evaluator: story_quality": 4
+#   max_iterations: 1
