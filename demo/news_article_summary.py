@@ -1,6 +1,7 @@
 import os
 
 import openai
+
 from yival.logger.token_logger import TokenLogger
 from yival.schemas.experiment_config import MultimodalOutput
 from yival.states.experiment_state import ExperimentState
