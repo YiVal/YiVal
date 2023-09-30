@@ -1,3 +1,10 @@
+"""
+This module provides a demo for various functionalities within the
+YiVal framework. It includes command-line arguments for various modes like
+basic interactive, question-answering with expected results, auto-prompts,
+and asynchronous evaluation.
+"""
+
 import os
 import shutil
 from argparse import ArgumentParser, Namespace
