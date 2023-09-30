@@ -32,30 +32,6 @@ variations:
         value: Generate landing page headline for {tech_startup_business}, company business is {business}, target_people is {target_people}
         value_type: str
         variation_id: null
-    generator_name: openai_prompt_based_variation_generator
-    generator_config:
-     #model_name specify the llm model , e.g. a16z-infra/llama-2-13b-chat:9dff94b1bed5af738655d4a7cbcdcde2bd503aa85c94334fe1f42af7f3dd5ee3
-      model_name: gpt-4
-      number_of_variations: 1
-      diversify: true
-      variables: null
-      prompt: 
-        - content: |-
-            Hi, You are the best prompt writer!
-            Your object is to construct a concise instruction prompt for gpt-4. This prompt will guide gpt-4 in its interactions as a professional writer who writes attractive landing page headline for startup business according to its name, company Business and target audience.
-            Points to emphasize in your instruction:
-
-            - GPT4 will play the role of an experienced, mature and sophisticated writer who is familiar with all kinds of pop-up landing page headlines and is very creative.
-            - The gpt-4 response should conform to the basic structure of the company's landing page headline, be able to fully reflect the company's identity, and be able to attract a sufficiently large number of people
-            - {tech_startup_business} represent the name of the company
-            - {business} represent the company business
-            - {target_people} represent the target people of company
-            - At all times, gpt-4 must give a response as landing page headline.
-
-            Craft your instruction ensuring gpt-4 understands the name of the startup company, the company business , the target people, and then generate attractive professional landing page headline according to its name.
-            keep your output crisp: only the prompt, devoid of any extraneous content , don't give example , just the prompt.
-
-          role: system
 
 evaluators:
   - evaluator_type: individual
@@ -175,3 +151,4 @@ improver:
   name: "optimize_by_prompt_improver"
   model_name: "gpt-4"
   max_iterations: 2
+  improve_var: "task"

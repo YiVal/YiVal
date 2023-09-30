@@ -33,3 +33,7 @@ class OpenAIPromptBasedCombinationImproverConfig(
 class OptimizeByPromptImproverConfig(BaseCombinationImproverConfig):
     model_name: str = "gpt-4"
     max_iterations: int = 3
+    improve_var: str = "task"
+    custom_head_meta_instruction: Optional[str] = None
+    custom_end_meta_instruction: Optional[str] = None
+    custom_optimation_task_format: Optional[str] = None

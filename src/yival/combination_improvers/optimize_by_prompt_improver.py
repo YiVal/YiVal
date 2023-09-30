@@ -21,21 +21,13 @@ the SOLUTION_SCORE_PAIRS part.
 import copy
 import json
 import logging
-from concurrent.futures import ThreadPoolExecutor
 from typing import Dict, List, Tuple
-
-from tqdm import tqdm
 
 from ..common.model_utils import llm_completion
 from ..experiment.evaluator import Evaluator
 from ..experiment.rate_limiter import RateLimiter
-from ..experiment.utils import (
-    generate_experiment,
-    get_selection_strategy,
-    run_single_input,
-)
+from ..experiment.utils import generate_experiment, run_single_input
 from ..logger.token_logger import TokenLogger
-from ..result_selectors.selection_context import SelectionContext
 from ..schemas.combination_improver_configs import (
     OptimizeByPromptImproverConfig,
 )
@@ -45,12 +37,10 @@ from ..schemas.experiment_config import (
     ExperimentConfig,
     ExperimentResult,
     ImproverOutput,
-    WrapperConfig,
-    WrapperVariation,
 )
 from ..schemas.model_configs import Request
-from ..states.experiment_state import ExperimentState
 from .base_combination_improver import BaseCombinationImprover
+from .lite_experiment import LiteExperimentRunner
 
 HEAD_META_INSTRUCTION = """
 Now you will help me generate a prompt which is used to generate a corresponding
@@ -67,7 +57,7 @@ value higher than any of above. Do not write code. The prompt must be on the las
 OPTIMATION_TASK_FORMAT = """
 """
 
-rate_limiter = RateLimiter(10 / 60)
+rate_limiter = RateLimiter(60 / 60)
 
 
 def find_first_meta_data(experiment: Experiment) -> Tuple[Dict, Dict]:
@@ -100,7 +90,9 @@ def find_origin_combo_key(experiment: Experiment) -> str:
         raise ValueError("Selection output is None")
 
 
-def construct_solution_score_pairs(cache: List[Tuple[Dict, Dict]]) -> str:
+def construct_solution_score_pairs(
+    cache: List[Tuple[Dict, Dict]], improve_var: str
+) -> str:
     """
     Construct the solution_score_pairs for the full prompt.
     This part will be longer after each iteration.
@@ -110,8 +102,7 @@ def construct_solution_score_pairs(cache: List[Tuple[Dict, Dict]]) -> str:
     prompt = ""
     for prompt_dict, eval_dict in cache[-5:]:
         prompt += 'Input:\n'
-        #FIXME: support more variations than 'task'
-        prompt += f"prompt: {prompt_dict.get('task','')}\n"
+        prompt += f"prompt: {prompt_dict.get(improve_var,'')}\n"
         prompt += 'Evaluation:\n'
         for evaluator_name, score in eval_dict.items():
             display = evaluator_name.split(":")[-1].strip()
@@ -123,7 +114,10 @@ def construct_solution_score_pairs(cache: List[Tuple[Dict, Dict]]) -> str:
     return prompt
 
 
-def construct_opro_full_prompt(cache: List[Tuple[Dict, Dict]]) -> str:
+def construct_opro_full_prompt(
+    cache: List[Tuple[Dict, Dict]], head_meta_instruction: str,
+    optimation_task_format: str, end_meta_instruction: str, improve_var: str
+) -> str:
     """
     Construct full opro prompt , which has a format as follow
     - HEAD_META_INSTRUCTION
@@ -131,9 +125,13 @@ def construct_opro_full_prompt(cache: List[Tuple[Dict, Dict]]) -> str:
     - OPTIMATION_TASK_FORMAT(optional)
     - END_META_INSTRUCTION
     """
-    full_prompt = HEAD_META_INSTRUCTION + '\n' + construct_solution_score_pairs(
-        cache
-    ) + '\n' + END_META_INSTRUCTION
+
+    full_prompt = head_meta_instruction + '\n'
+    full_prompt += (construct_solution_score_pairs(cache, improve_var) + '\n')
+    if optimation_task_format:
+        full_prompt += (optimation_task_format + '\n')
+    full_prompt += (end_meta_instruction + '\n')
+
     return full_prompt
 
 
@@ -176,6 +174,14 @@ class OptimizeByPromptImprover(BaseCombinationImprover):
     def __init__(self, config: OptimizeByPromptImproverConfig):
         super().__init__(config)
         self.config = config
+        if not self.config.custom_head_meta_instruction:
+            self.config.custom_head_meta_instruction = HEAD_META_INSTRUCTION
+
+        if not self.config.custom_optimation_task_format:
+            self.config.custom_optimation_task_format = OPTIMATION_TASK_FORMAT
+
+        if not self.config.custom_end_meta_instruction:
+            self.config.custom_end_meta_instruction = END_META_INSTRUCTION
 
     def parallel_task(self, data, all_combinations, logger, evaluator):
         """
@@ -205,69 +211,48 @@ class OptimizeByPromptImprover(BaseCombinationImprover):
         best_combo, score = find_first_meta_data(experiment)
         cache.append((best_combo, score))
 
-        prompt_now = best_combo["task"]
+        assert self.config.improve_var in best_combo
+        prompt_now = best_combo[self.config.improve_var]
         logging.info(f"[INFO][opro] first prompt now is {prompt_now}")
+
+        lite_experiment_runner = LiteExperimentRunner(
+            config=self.updated_config,
+            limiter=rate_limiter,
+            data=collect_all_data(experiment),
+            token_logger=token_logger,
+            evaluator=evaluator
+        )
 
         #optimize by prompt for max_iterations times
         for i in range(self.config.max_iterations + 1):
             logging.info(
                 f"[INFO][optimize_by_prompt_improver] start iteration [{i}]"
             )
-            current_iteration_results: List[ExperimentResult] = []
 
-            #FIXME: supporm more variations other than 'task'
-            self.updated_config["variations"] = []  #type: ignore
-            self.updated_config["variations"].append(( #type: ignore
-                WrapperConfig(
-                    name="task",
-                    variations=[
-                        WrapperVariation(
-                            value=prompt_now,
-                            value_type=str(type(prompt_now)).split("'")[1]
-                        )
-                    ]
-                )
-            ))
-
-            state = ExperimentState.get_instance()
-            state.clear_variations_for_experiment()
-            state.set_experiment_config(self.updated_config)
-            state.active = True
-            all_combinations = state.get_all_variation_combinations()
-            data = collect_all_data(experiment)
-            total = len(data)
-
-            with tqdm(
-                total=total, desc="[opro_improver]Processing", unit="item"
-            ) as pbar:
-                with ThreadPoolExecutor() as executor:
-                    for res in executor.map(
-                        self.parallel_task, data,
-                        [all_combinations] * len(data),
-                        [token_logger] * len(data), [evaluator] * len(data)
-                    ):
-                        current_iteration_results.extend(res)
-                        pbar.update(len(res))
-
-            experiment = generate_experiment(
-                current_iteration_results,
-                evaluator,
-                evaluate_group=False,
-                evaluate_all=False
+            #update variations and run experiment
+            lite_experiment_runner.set_variations([{
+                self.config.improve_var: [prompt_now]
+            }])
+            experiment = lite_experiment_runner.run_experiment(
+                enable_selector=True
             )
-
-            strategy = get_selection_strategy(self.updated_config)
-            if strategy:
-                context_trade_off = SelectionContext(strategy=strategy)
-                experiment.selection_output = context_trade_off.execute_selection( # type: ignore
-                    experiment=experiment
-                )
             experiments.append(experiment)
 
+            #fetch next prompt
             best_combo, score = find_first_meta_data(experiment)
             cache.append((best_combo, score))
 
-            opro_prompt = construct_opro_full_prompt(cache)
+            #assert that prompt part is not None
+            assert self.config.custom_head_meta_instruction
+            assert self.config.custom_optimation_task_format
+            assert self.config.custom_end_meta_instruction
+
+            opro_prompt = construct_opro_full_prompt(
+                cache, self.config.custom_head_meta_instruction,
+                self.config.custom_optimation_task_format,
+                self.config.custom_end_meta_instruction,
+                self.config.improve_var
+            )
             prompt_now = fetch_next_prompt(opro_prompt, self.config.model_name)
 
         for exp in experiments:
