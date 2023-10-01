@@ -1,9 +1,8 @@
-'''This script is used to generate logo for a tech startup company.'''
+'''This script is used to generate image from a story.'''
 
 import io
 import json
 import os
-import stat
 import time
 
 import openai
@@ -28,7 +27,7 @@ HEADERS = {
 s = requests.Session()
 
 
-def prompt_generation(prompt: str) -> str:
+def prompt_generation(prompt: str, style) -> str:
     '''generate prompt for chatgpt based on the input'''
     logger = TokenLogger()
     logger.reset()
@@ -38,9 +37,12 @@ def prompt_generation(prompt: str) -> str:
         model="gpt-3.5-turbo",
         messages=messages,
         temperature=1.0,
-        max_tokens=300
+        max_tokens=3000
     )
-    res = response['choices'][0]['message']['content'][:1000]
+    res = str(
+        f'Drawing style: {style}, ' +
+        response['choices'][0]['message']['content'][:1000]
+    )
     token_usage = response['usage']['total_tokens']
     logger.log(token_usage)
     return res
@@ -62,42 +64,41 @@ def get_request(messageId):
         response_json = response.json()
         if response_json.get('progress') == 100:
             break
-    print(
-        f"[INFO][logo_generation] Successfully get response from messageId: {messageId}"
-    )
+    print(f"[INFO] Successfully get response from messageId: {messageId}")
     return response.json()
 
 
 def load_image(response):
     '''load image from response'''
-    print("[INFO][logo_generation] start load images")
+    print("[INFO] start load images")
     url = f"{BASE_URL}/getImage"
     image_urls = response['response']['imageUrls']
-    logo_list = []
+    image_list = []
     for image_url in image_urls:
         payload = json.dumps({"imgUrl": image_url})
         response = s.post(url, headers=HEADERS, data=payload)
         if response.status_code == 200:
             image_data = response.content
             image = Image.open(io.BytesIO(image_data))
-            logo_list.append(image)
+            image_list.append(image)
         else:
             print(
-                f"[Error][logo_generation] Failed to load image from {image_url}. Response code: {response.status_code}"
+                f"[Error] Failed to load image from {image_url}. Response code: {response.status_code}"
             )
-    print("[INFO][logo_generation] Successfully load images.")
+    print("[INFO] Successfully load images.")
 
-    return logo_list
+    return image_list
 
 
-def logo_generation(species, character, state: ExperimentState):
-    '''generate logo for a tech startup company.'''
+def image_generation(
+    species, character, drawing_style, state: ExperimentState
+):
     payload = json.dumps({
         "msg":
         prompt_generation(
             str(
                 StringWrapper(
-                    "Error",
+                    "Draw a picture of a",
                     name="task",
                     variables={
                         "animal_species": species,
@@ -105,7 +106,8 @@ def logo_generation(species, character, state: ExperimentState):
                     },
                     state=state
                 )
-            )
+            ),
+            style=drawing_style
         ),
         "ref":
         "",
@@ -129,12 +131,12 @@ def logo_generation(species, character, state: ExperimentState):
     post_response = post_request(payload)
     messageid = post_response.get("messageId")
     response = get_request(messageid)
-    logo_res = MultimodalOutput(
+    image_res = MultimodalOutput(
         text_output=response['response']['content'],
         image_output=load_image(response),
     )
-    return logo_res
+    return image_res
 
 
 if __name__ == "__main__":
-    logo_generation('duck', 'cute', ExperimentState())
+    image_generation('duck', 'cute', 'Picture Book Style', ExperimentState())
