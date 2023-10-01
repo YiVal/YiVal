@@ -136,6 +136,14 @@ def generate_group_key_combination_data(
 
 def generate_heatmap_style(df, *cols):
     styles = []
+
+    # Define light and dark shades for positive and negative metrics
+    light_positive = (173, 216, 230)
+    dark_positive = (70, 130, 180)
+
+    light_negative = (255, 223, 186)
+    dark_negative = (255, 69, 0)
+
     for col in df.columns:
         if pd.api.types.is_numeric_dtype(df[col]):
             min_val = df[col].min()
@@ -144,18 +152,28 @@ def generate_heatmap_style(df, *cols):
             for val in df[col].unique():
                 normalized = (val - min_val) / range_val
 
-                # Check if the column is "Average Token Usage" or "Average Latency"
                 if col in ["Average Token Usage", "Average Latency"]:
-                    bg_color = f"rgb({255*normalized}, {255*(1-normalized)}, 150)"
+                    bg_color = tuple(
+                        int(
+                            light_negative[i] + normalized *
+                            (dark_negative[i] - light_negative[i])
+                        ) for i in range(3)
+                    )
                 else:
-                    bg_color = f"rgb({255*(1-normalized)}, {255*normalized}, 150)"
+                    bg_color = tuple(
+                        int(
+                            light_positive[i] + normalized *
+                            (dark_positive[i] - light_positive[i])
+                        ) for i in range(3)
+                    )
 
+                bg_color_str = f"rgb({bg_color[0]}, {bg_color[1]}, {bg_color[2]})"
                 styles.append({
                     'if': {
                         'filter_query': f'{{{col}}} eq {val}',
                         'column_id': col
                     },
-                    'backgroundColor': bg_color
+                    'backgroundColor': bg_color_str
                 })
         else:  # For aggregated metrics columns and evaluator outputs
             metrics_values = df[col].str.extractall(r":\s?(\d+\.\d+)"
@@ -166,12 +184,19 @@ def generate_heatmap_style(df, *cols):
                 range_val = max_val - min_val if min_val != max_val else 1
                 for _, val in metrics_values[0].items():
                     normalized = (val - min_val) / range_val
-                    bg_color = f"rgb({255*(1-normalized)}, {255*normalized}, 150)"
+                    bg_color = tuple(
+                        int(
+                            light_positive[i] + normalized *
+                            (dark_positive[i] - light_positive[i])
+                        ) for i in range(3)
+                    )
+
+                    bg_color_str = f"rgb({bg_color[0]}, {bg_color[1]}, {bg_color[2]})"
                     styles.append({
                         'if': {
                             'filter_query': f'{{{col}}} contains "{val}"',
                             'column_id': col
                         },
-                        'backgroundColor': bg_color
+                        'backgroundColor': bg_color_str
                     })
     return styles
