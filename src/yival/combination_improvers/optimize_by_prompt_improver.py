@@ -16,6 +16,9 @@ END_META_INSTRUCTION
 
 and after each iteration , the new propmt with evaluator score will be added to 
 the SOLUTION_SCORE_PAIRS part.
+
+You can find an example in demo/configs/headline_generation_improve.yml,
+and more examples in paper appendix
 """
 
 import copy
@@ -26,7 +29,7 @@ from typing import Dict, List, Tuple
 from ..common.model_utils import llm_completion
 from ..experiment.evaluator import Evaluator
 from ..experiment.rate_limiter import RateLimiter
-from ..experiment.utils import generate_experiment, run_single_input
+from ..experiment.utils import generate_experiment
 from ..logger.token_logger import TokenLogger
 from ..schemas.combination_improver_configs import (
     OptimizeByPromptImproverConfig,
@@ -41,26 +44,16 @@ from ..schemas.experiment_config import (
 from ..schemas.model_configs import Request
 from .base_combination_improver import BaseCombinationImprover
 from .lite_experiment import LiteExperimentRunner
-
-HEAD_META_INSTRUCTION = """
-Now you will help me generate a prompt which is used to generate a corresponding
-landing page headline according for a startup business named [tech_startup_business],
-specializing in [business], and target_peopleing [target_people].
-I already have some prompt and its evaluation results :
-"""
-
-END_META_INSTRUCTION = """
-Give me a new prompt that is different from all pairs above, and has a evaluation
-value higher than any of above. Do not write code. The prompt must be on the last line and start with "prompt:"
-"""
-
-OPTIMATION_TASK_FORMAT = """
-"""
+from .utils import (
+    construct_output_format,
+    format_input_from_dict,
+    scratch_variations_from_str,
+)
 
 rate_limiter = RateLimiter(60 / 60)
 
 
-def find_first_meta_data(experiment: Experiment) -> Tuple[Dict, Dict]:
+def find_combo_with_score(experiment: Experiment) -> Tuple[Dict, Dict]:
     """
     Fine the best combination and its score from experiment. If the experiment
     has selection output , use the best combination from selection output.
@@ -91,7 +84,7 @@ def find_origin_combo_key(experiment: Experiment) -> str:
 
 
 def construct_solution_score_pairs(
-    cache: List[Tuple[Dict, Dict]], improve_var: str
+    cache: List[Tuple[Dict, Dict]], improve_var: List[str]
 ) -> str:
     """
     Construct the solution_score_pairs for the full prompt.
@@ -102,7 +95,7 @@ def construct_solution_score_pairs(
     prompt = ""
     for prompt_dict, eval_dict in cache[-5:]:
         prompt += 'Input:\n'
-        prompt += f"prompt: {prompt_dict.get(improve_var,'')}\n"
+        prompt += format_input_from_dict(prompt_dict, improve_var)
         prompt += 'Evaluation:\n'
         for evaluator_name, score in eval_dict.items():
             display = evaluator_name.split(":")[-1].strip()
@@ -116,7 +109,8 @@ def construct_solution_score_pairs(
 
 def construct_opro_full_prompt(
     cache: List[Tuple[Dict, Dict]], head_meta_instruction: str,
-    optimation_task_format: str, end_meta_instruction: str, improve_var: str
+    optimation_task_format: str | None, end_meta_instruction: str,
+    improve_var: List[str]
 ) -> str:
     """
     Construct full opro prompt , which has a format as follow
@@ -131,14 +125,15 @@ def construct_opro_full_prompt(
     if optimation_task_format:
         full_prompt += (optimation_task_format + '\n')
     full_prompt += (end_meta_instruction + '\n')
+    full_prompt += construct_output_format(improve_var)
 
     return full_prompt
 
 
-def fetch_next_prompt(prompt: str, model_name="gpt-4") -> str:
+def fetch_next_variations(prompt: str, model_name="gpt-4") -> str:
     """
     improve prompt according to opro improver
-    fetch the next prompt from llm_completion
+    fetch the next variations from llm output
     """
     response = llm_completion(
         Request(
@@ -165,8 +160,13 @@ class OptimizeByPromptImprover(BaseCombinationImprover):
     """
     Optimization by PROmpting improver to improve and auto-generate combination.
     """
+
     default_config = OptimizeByPromptImproverConfig(
         name="optimize_by_prompt_improver",
+        head_meta_instruction="",
+        end_meta_instruction="",
+        optimation_task_format="",
+        improve_var=["task"],
         model_name="gpt-4",
         max_iterations=3
     )
@@ -174,27 +174,31 @@ class OptimizeByPromptImprover(BaseCombinationImprover):
     def __init__(self, config: OptimizeByPromptImproverConfig):
         super().__init__(config)
         self.config = config
-        if not self.config.custom_head_meta_instruction:
-            self.config.custom_head_meta_instruction = HEAD_META_INSTRUCTION
 
-        if not self.config.custom_optimation_task_format:
-            self.config.custom_optimation_task_format = OPTIMATION_TASK_FORMAT
-
-        if not self.config.custom_end_meta_instruction:
-            self.config.custom_end_meta_instruction = END_META_INSTRUCTION
-
-    def parallel_task(self, data, all_combinations, logger, evaluator):
+    def fetch_next_variations(self, prompt: str) -> Dict:
         """
-        Execute a single input run in parallel
+        improve variations according to opro
+        
+        make sure llm response format is valid and return new varations
         """
-        rate_limiter()
-        return run_single_input(
-            data,
-            self.updated_config,
-            all_combinations=all_combinations,
-            logger=logger,
-            evaluator=evaluator
+        assert isinstance(self.config, OptimizeByPromptImproverConfig)
+        response = llm_completion(
+            Request(
+                model_name=self.config.model_name,
+                prompt=prompt,
+                params={"temperature": 1.0}
+            )
+        ).output
+
+        llm_output_str = response["choices"][0]["message"]["content"].strip(
+            "'"
+        ).strip('"')  #type: ignore
+
+        variations = scratch_variations_from_str(
+            llm_output_str, self.config.improve_var
         )
+
+        return variations
 
     def improve(
         self, experiment: Experiment, config: ExperimentConfig,
@@ -208,12 +212,13 @@ class OptimizeByPromptImprover(BaseCombinationImprover):
         self.updated_config = copy.deepcopy(config)
 
         #init cache with the best combo
-        best_combo, score = find_first_meta_data(experiment)
-        cache.append((best_combo, score))
+        best_combo, score = find_combo_with_score(experiment)
 
-        assert self.config.improve_var in best_combo
-        prompt_now = best_combo[self.config.improve_var]
-        logging.info(f"[INFO][opro] first prompt now is {prompt_now}")
+        #ensure that all variation in improve_var appears best_combo
+        assert set(self.config.improve_var).issubset(set(best_combo.keys()))
+
+        variations_now = best_combo
+        logging.info(f"[INFO][opro] first variations is {variations_now}")
 
         lite_experiment_runner = LiteExperimentRunner(
             config=self.updated_config,
@@ -231,29 +236,36 @@ class OptimizeByPromptImprover(BaseCombinationImprover):
 
             #update variations and run experiment
             lite_experiment_runner.set_variations([{
-                self.config.improve_var: [prompt_now]
+                key: [value]
+                for key, value in variations_now.items()
             }])
+
             experiment = lite_experiment_runner.run_experiment(
                 enable_selector=True
             )
             experiments.append(experiment)
 
             #fetch next prompt
-            best_combo, score = find_first_meta_data(experiment)
+            best_combo, score = find_combo_with_score(experiment)
             cache.append((best_combo, score))
 
-            #assert that prompt part is not None
-            assert self.config.custom_head_meta_instruction
-            assert self.config.custom_optimation_task_format
-            assert self.config.custom_end_meta_instruction
-
             opro_prompt = construct_opro_full_prompt(
-                cache, self.config.custom_head_meta_instruction,
-                self.config.custom_optimation_task_format,
-                self.config.custom_end_meta_instruction,
-                self.config.improve_var
+                cache, self.config.head_meta_instruction,
+                self.config.optimation_task_format,
+                self.config.end_meta_instruction, self.config.improve_var
             )
-            prompt_now = fetch_next_prompt(opro_prompt, self.config.model_name)
+
+            gen_variations = self.fetch_next_variations(opro_prompt)
+
+            if not gen_variations:
+                logging.info(
+                    f"[INFO][optimize_by_prompt_improver] fetch next variations error"
+                )
+            else:
+                logging.info(
+                    f"[INFO][optimize_by_prompt_improver] generate new variations: {gen_variations}"
+                )
+                variations_now = gen_variations
 
         for exp in experiments:
             for res in exp.combination_aggregated_metrics:

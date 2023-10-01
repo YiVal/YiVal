@@ -20,7 +20,7 @@ dataset:
           tech_startup_business: str
           business: str
           target_people: str
-      number_of_examples: 2
+      number_of_examples: 3
       output_path: null
   source_type: machine_generated
 
@@ -151,4 +151,12 @@ improver:
   name: "optimize_by_prompt_improver"
   model_name: "gpt-4"
   max_iterations: 2
-  improve_var: "task"
+  improve_var: ["task"]
+  head_meta_instruction: |
+    Now you will help me generate a prompt which is used to generate a corresponding
+    landing page headline according for a startup business named [tech_startup_business],
+    specializing in [business], and target_peopleing [target_people].
+    I already have some prompt and its evaluation results :
+    
+  end_meta_instruction: |
+    Give me a new prompt that is different from all pairs above, and has a evaluation value higher than any of above.
