@@ -89,9 +89,31 @@ human_rating_configs:
     scale: [1, 5]
 
 
-# improver:
-#   name: "openai_prompt_based_combination_improver"
-#   openai_model_name: "gpt-4"
-#   stop_conditions:
-#     "openai_prompt_based_evaluator: story_quality": 4
-#   max_iterations: 1
+selection_strategy:
+  ahp_selection:
+    criteria:
+      - "openai_prompt_based_evaluator: story_quality"
+      - average_token_usage
+      - average_latency
+    criteria_maximization:
+      "openai_prompt_based_evaluator: story_quality": true
+      average_latency: false
+      average_token_usage: false
+    criteria_weights:
+      "openai_prompt_based_evaluator: story_quality": 1
+      average_latency: 0.0
+      average_token_usage: 0.0
+    # normalize_func: "z-score"
+
+improver:
+  name: "optimize_by_prompt_improver"
+  model_name: "gpt-4"
+  max_iterations: 2
+  improve_var: ["task"]
+  head_meta_instruction: |
+    Now you will help me generate a prompt which is used to generate a corresponding
+    story according to the species of an animal which is [animal_species] and its character [animal_character]. 
+    I already have some prompt and its evaluation results :
+    
+  end_meta_instruction: |
+    Give me a new prompt that is different from all pairs above, and has a evaluation value higher than any of above.
