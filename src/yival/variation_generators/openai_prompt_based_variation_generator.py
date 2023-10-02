@@ -123,7 +123,8 @@ class OpenAIPromptBasedVariationGenerator(BaseVariationGenerator):
                             continue
                         variation = WrapperVariation(
                             value_type="str",
-                            value=r["choices"][0]["message"]["content"]
+                            value=r["choices"][0]["message"]
+                            ["content"].strip("'").strip('"')
                         )
                         res.append(variation)
             else:
@@ -150,7 +151,8 @@ class OpenAIPromptBasedVariationGenerator(BaseVariationGenerator):
                         continue
                     variation = WrapperVariation(
                         value_type="str",
-                        value=output.choices[0].message.content
+                        value=output.choices[0].message.content.strip("'").
+                        strip('"')
                     )
                     res.append(variation)
                     res_content.append(output.choices[0].message.content)

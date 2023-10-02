@@ -1,6 +1,7 @@
 import asyncio
 import importlib
 import inspect
+import json
 import os
 import sys
 import time
@@ -431,7 +432,8 @@ def generate_experiment(
 
     combo_metrics = defaultdict(list)
     for item in results:
-        combo_metrics[str(item.combination)].append(item)
+        combo_str = json.dumps(item.combination)
+        combo_metrics[combo_str].append(item)
 
     cobo_aggregated_metrics = [
         CombinationAggregatedMetrics(

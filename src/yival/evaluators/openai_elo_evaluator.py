@@ -9,6 +9,7 @@ implementation interfaces with the OpenAI API for those evaluations.
 """
 import asyncio
 import itertools
+import json
 import re
 from math import comb
 from typing import Dict, List, Tuple
@@ -176,8 +177,8 @@ class OpenAIEloEvaluator(BaseEvaluator):
                     group_experiment_result.experiment_results, 2
                 ):
                     pbar.update()
-                    formatted_combination1 = str(result1.combination)
-                    formatted_combination2 = str(result2.combination)
+                    formatted_combination1 = json.dumps(result1.combination)
+                    formatted_combination2 = json.dumps(result2.combination)
                     score1 = responses[idx]["choices"][0]["message"]["content"]
                     score1 = 1 if score1 == 'A' else 0 if score1 == 'B' else 0.5
                     idx += 1
