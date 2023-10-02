@@ -43,7 +43,7 @@ def scratch_variations_from_str(
     for line in lines:
         for var in variations:
             if line.startswith(var + '='):
-                result[var] = line[len(var) + 2:].strip().strip("'").strip('"')
+                result[var] = line[len(var) + 1:].strip().strip("'").strip('"')
     return result
 
 
