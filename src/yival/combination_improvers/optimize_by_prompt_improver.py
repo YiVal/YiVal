@@ -173,7 +173,7 @@ class OptimizeByPromptImprover(BaseCombinationImprover):
 
     def __init__(self, config: OptimizeByPromptImproverConfig):
         super().__init__(config)
-        self.config = config
+        self.config: OptimizeByPromptImproverConfig = config
 
     def fetch_next_variations(self, prompt: str) -> Dict:
         """
@@ -181,7 +181,6 @@ class OptimizeByPromptImprover(BaseCombinationImprover):
         
         make sure llm response format is valid and return new varations
         """
-        assert isinstance(self.config, OptimizeByPromptImproverConfig)
         response = llm_completion(
             Request(
                 model_name=self.config.model_name,
@@ -204,7 +203,6 @@ class OptimizeByPromptImprover(BaseCombinationImprover):
         self, experiment: Experiment, config: ExperimentConfig,
         evaluator: Evaluator, token_logger: TokenLogger
     ) -> ImproverOutput:
-        assert isinstance(self.config, OptimizeByPromptImproverConfig)
         experiments: List[Experiment] = []
         results: List[ExperimentResult] = []
         cache: List[Tuple[Dict, Dict]] = []
