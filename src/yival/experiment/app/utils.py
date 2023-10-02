@@ -137,12 +137,11 @@ def generate_group_key_combination_data(
 def generate_heatmap_style(df, *cols):
     styles = []
 
-    # Define light and dark shades for positive and negative metrics
     light_positive = (173, 216, 230)
     dark_positive = (70, 130, 180)
 
-    light_negative = (255, 223, 186)
-    dark_negative = (255, 69, 0)
+    light_negative = (255, 245, 235)
+    dark_negative = (255, 150, 140)
 
     for col in df.columns:
         if pd.api.types.is_numeric_dtype(df[col]):
