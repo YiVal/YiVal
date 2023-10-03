@@ -36,5 +36,7 @@ class OpenAIPromptBasedGeneratorConfig(BaseDataGeneratorConfig):
     # Llm call option
     call_option: Optional[CallOption] = None
 
+    output_csv_path: Optional[str] = None
+
     def asdict(self):
         return asdict(self)

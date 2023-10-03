@@ -38,6 +38,15 @@ class BaseDataGenerator(ABC):
     _registry: Dict[str, Dict[str, Any]] = {}
     default_config: Optional[BaseDataGeneratorConfig] = None
 
+    @staticmethod
+    def input_data_to_csv_row(data: InputData) -> Dict[str, Any]:
+        row = {
+            'example_id': data.example_id,
+        }
+        for key, value in data.content.items():
+            row[key] = value
+        return row
+
     @classmethod
     def get_data_generator(cls,
                            name: str) -> Optional[Type['BaseDataGenerator']]:
