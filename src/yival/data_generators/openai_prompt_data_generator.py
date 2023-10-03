@@ -11,6 +11,7 @@ the generated data.
 
 import ast
 import asyncio
+import csv
 import os
 import pickle
 import re
@@ -233,6 +234,20 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                 pickle.dump(all_data, file)
                 print(
                     f"Data succesfully generated and saved to {self.config.output_path}"
+                )
+        if self.config.output_csv_path:
+            with open(self.config.output_csv_path, 'w', newline='') as csvfile:
+                rows = [
+                    BaseDataGenerator.input_data_to_csv_row(data)
+                    for data in all_data
+                ]
+                header = rows[0].keys()
+                writer = csv.DictWriter(csvfile, fieldnames=header)
+                writer.writeheader()
+                for row in rows:
+                    writer.writerow(row)
+                print(
+                    f"Data succesfully generated and saved to {self.config.output_csv_path}"
                 )
         if chunk:
             yield chunk
