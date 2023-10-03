@@ -151,8 +151,8 @@ class ExperimentConfig:
     # Required configurations
     description: str
     dataset: DatasetConfig
-    custom_function: str
     # Optional configurations with default values
+    custom_function: Optional[str] = None
     variations: Optional[List[WrapperConfig]] = None
     selection_strategy: Optional[Dict[str, BaseConfig]] = None
     wrapper_configs: Optional[Dict[str, BaseWrapperConfig]] = None

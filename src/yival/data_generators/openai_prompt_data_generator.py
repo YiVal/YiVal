@@ -67,6 +67,14 @@ def join_dicts_to_string(dicts: List[Dict[Any, Any]], last_n=10) -> str:
     return '\n'.join(map(str, to_join))
 
 
+DEFAULT_PROMPT = """
+    Please provide a concrete and realistic test case as a dictionary for
+    function invocation using the ** operator. Only include parameters,
+    excluding description and name. Ensure it's succinct and well-structured.
+    **Only provide the dictionary.**
+    """
+
+
 class OpenAIPromptDataGenerator(BaseDataGenerator):
     """
     Data generator using OpenAI's model based on provided prompts and
@@ -80,12 +88,7 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
     """
     config: OpenAIPromptBasedGeneratorConfig
     default_config: OpenAIPromptBasedGeneratorConfig = OpenAIPromptBasedGeneratorConfig(
-        prompt="""
-            Please provide a concrete and realistic test case as a dictionary for function invocation using the ** operator.
-            Only include parameters, excluding description and name.
-            Ensure it's succinct and well-structured.
-            **Only provide the dictionary.**
-            """,
+        prompt=DEFAULT_PROMPT,
         input_function={
             "name": "headline_generation_for_business",
             "description":
@@ -104,6 +107,8 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
 
     def prepare_messages(self, all_data_content) -> List[Dict[str, Any]]:
         """Prepare the messages for GPT API based on configurations."""
+        if not self.config.prompt:
+            self.config.prompt = DEFAULT_PROMPT
         if isinstance(self.config.prompt, str):
             content = self.config.prompt + "\n\n Here is the function details \n\n" + dict_to_description(
                 self.config.input_function
@@ -226,6 +231,9 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
         if self.config.output_path:
             with open(self.config.output_path, 'wb') as file:
                 pickle.dump(all_data, file)
+                print(
+                    f"Data succesfully generated and saved to {self.config.output_path}"
+                )
         if chunk:
             yield chunk
 

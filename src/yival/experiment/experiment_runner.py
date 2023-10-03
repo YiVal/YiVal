@@ -64,6 +64,9 @@ class ExperimentRunner:
         semaphore = asyncio.Semaphore(20)
         total_tasks = sum([len(batch)
                            for batch in data_batches]) * len(all_combinations)
+        if "custom_function" not in self.config or not self.config[  # type: ignore
+            "custom_function"]:
+            return []
         rate_limiter = common.RateLimiter(100 / 60, 10000)
 
         async def eval_fn_with_semaphore(data_point):
@@ -107,6 +110,9 @@ class ExperimentRunner:
 
         for data in data_points:
             total_combinations = len(all_combinations) * len(data)
+            if "custom_function" not in self.config or not self.config[  # type: ignore
+                "custom_function"]:
+                continue
             with tqdm(
                 total=total_combinations, desc="Processing", unit="item"
             ) as pbar:
@@ -195,6 +201,8 @@ class ExperimentRunner:
                         results = self._process_dataset(
                             all_combinations, logger, evaluator
                         )
+                    if not results:
+                        return
                     experiment = generate_experiment(
                         results, evaluator
                     )  # type: ignore
