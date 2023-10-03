@@ -385,6 +385,11 @@ class ImproverOutput:
 
 
 @dataclass
+class TrainerOutput:
+    train_logs: List[str]
+
+
+@dataclass
 class Experiment:
     """
     Represents an entire experiment.

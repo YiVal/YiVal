@@ -48,6 +48,9 @@ bert-score = "^0.3.13"
 rouge = "^1.0.1"
 alpaca-eval = "^0.3.1"
 
+[tool.poetry.extras]
+trainers = ["transformers","peft","trl"]
+
 [tool.poetry.group.doc.dependencies]
 mkdocs = "*"
 mkdocs-git-revision-date-localized-plugin = "*"
