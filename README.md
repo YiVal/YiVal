@@ -133,6 +133,9 @@ of random tech startup business names.
 
 ## Demo
 
+
+https://github.com/community/community/assets/1544154/89cd5ae9-c30a-4f57-8ce9-dece38df98c0
+
 | Use Case Demo | Supported Features | Colab Link |
 |---------------|--------------------|------------|
 | 🐯 Craft your AI story with ChatGPT and MidJourney | **Multi-modal** support: Design an AI-powered narrative using YiVal's multi-modal support of simultaneous text and images. It supports native and seamless [Reinforcement Learning from Human Feedback](https://en.wikipedia.org/wiki/Reinforcement_learning_from_human_feedback)(RLHF) and [Reinforcement Learning from AI Feedback](https://arxiv.org/abs/2309.00267)(RLAIF). Please watch the video above for this use case. |[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1DgtDZghleiLEaaNF7f4vSGJ4ChDVls2X?usp=sharing) |
