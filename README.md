@@ -2,27 +2,14 @@
 <!-- markdownlint-disable MD041 -->
 
 <p align="center">
-    <h1 align="center">🧚🏻‍️ YiVal</h1>
-</p>
-
-<p align="center">
-  <a aria-label="website" href="" target="_blank">
-    Website
-  </a>
-  ·
-  <a aria-label="producthunt" href="" target="_blank">
-    Producthunt
-  </a>
-·
-  <a aria-label="producthunt" href="" target="_blank">
-    Documentation
-  </a>
-
-</p>
-
-<p align="center">
-    <h5 align="center">⚡ Build any Generative AI application with evaluation
-        and improvement ⚡</h5>
+    <h1 align="center">
+        <img src="https://github.com/YiVal/YiVal/assets/1544154/b0c681e7-7474-4b87-9c69-fde6e0e47401"
+         alt="YiVal Logo" width="100"
+        height="100" style="vertical-align: middle;">
+        YiVal
+    </h1>
+     <p align="center">⚡ Build any Generative AI application with evaluation
+    and enhancement ⚡</p>
 </p>
 
 <!-- markdownlint-disable-next-line MD013 -->
@@ -30,175 +17,143 @@
 [![Discord](https://dcbadge.vercel.app/api/server/6Q6Rgwrstw?compact=true&style=flat)](https://discord.gg/6Q6Rgwrstw)
 
 [![Downloads](https://static.pepy.tech/badge/YiVal/month)](https://pepy.tech/project/YiVal)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-Apache2.0-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub star chart](https://img.shields.io/github/stars/YiVal/YiVal?style=social)](https://star-history.com/#YiVal/YiVal)
-[![Dependency Status](https://img.shields.io/librariesio/github/YiVal/YiVal)](https://libraries.io/github/YiVal/YiVal)
 [![Open Issues](https://img.shields.io/github/issues-raw/YiVal/YiVal)](https://github.com/YiVal/YiVal/issues)
 
-## 🤔 What is YiVal?
+## What is YiVal?
 
-YiVal is an GenAI-Ops framework that allows you to iteratively tune your **Generative
- AI model metadata, params, prompts and retrieval configs** all at once with your
- preferred choices of test dataset generation, evaluation algorithms and improvement
-strategies.
-  <!-- markdownlint-disable-next-line MD013 -->
+**YiVal is a versatile platform and framework that streamlines the evaluation
+and enhancement of your Generative AI applications.** It empowers you to
+generate better results, reduce latency, and decrease inference cost as easily.
+Depending on your knowledge and comfort level, YiVal will help you
+simultaneously optimize model metadata, model parameters, prompts, and
+retrieval configurations. You can easily customize your test data, evaluation
+methods, and enhancement strategies, all in one place. Enhance and evaluate
+everything with ease!
+
 [Check out our quickstart guide!](https://github.com/YiVal/YiVal/blob/master/demo/tutorial_notebook/tutorial.md) →
 
-## 📣 What's Next?
-
-### Expected Features in Sep
-
-- [x] Add ROUGE and BERTScore evaluators
-- [x] Add support to midjourney
-- [x] Add support to LLaMA2-70B, LLaMA2-7B, Falcon-40B,
-- [x] Support LoRA fine-tune to open source models
-
-## 🚀 Features
-
-|          | 🔧 Experiment Mode:                                           | 🤖 Agent Mode (Auto-prompting):                               |
-| -------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| Workflow | Define your AI/ML application ➡️ Define test dataset ➡️ Evaluate 🔄 Improve ➡️ Prompt related artifacts built ✅ | Define your AI/ML application ➡️ Auto-prompting ➡️ Prompt related artifacts built ✅ |
-| Features | 🌟 Streamlined prompt development process<br/> 🌟 Support for multimedia and multimodel<br/> 🌟 Support CSV upload and GPT4 generated test data<br/>🌟 Dashboard tracking latency, price and evaluator results<br/> 🌟 Human(RLHF) and algorithm based improvers <br/>🌟 Service with detailed web view<br/>🌟 Customizable evaluators and improvers | 🌟 Non-code experience of Gen-AI application build<br/>  🌟 Witness your Gen-AI application born and improve with just one click |
-
-## Model Support matrix
-
-We support 100+ LLM ( gpt-4 , gpt-3.5-turbo , llama e.g.).
-
-Different Model sources can be viewed as follow
-
-| Model        | llm-Evaluate |Human-Evaluate|Variation Generate|Custom func|
-|--------------| ---- | ---- | ---- |--------------|
-| OpenAI  | ✅  | ✅  | ✅  |✅|
-| Azure   | ✅  | ✅  | ✅  |✅|
-| TogetherAI | ✅ | ✅ | ✅  |✅|
-| Cohere | ✅ | ✅ | ✅ |✅|
-| Huggingface | ✅ | ✅ | ✅ |✅|
-| Anthropic | ✅ | ✅ | ✅ |✅|
-| MidJourney | | ✅ |  |✅|
-
-To support different models in custom func(e.g. Model Comparison) , [follow our example](https://github.com/YiVal/YiVal/blob/litellm_complete/demo/configs/model_compare.yml)
-
-To support different models in evaluators and generators , [check our config](https://github.com/YiVal/YiVal/blob/litellm_complete/demo/configs/headline_generation.yml)
+<img src="https://github.com/YiVal/YiVal/assets/1544154/dba5acd9-995c-45fd-9d08-c7cf198a77ad">
 
 ## Installation
 
-### Requirements
+### Prerequisites
 
-- Python 3.10+ environment
-- OpenAI API Keys (Add `OPENAI_API_KEY` as an environment variable)
+- **Python Version**: Ensure you have Python 3.10 or later installed.
+- **OpenAI API Key**: Obtain an API key from OpenAI. Once you have the key, set
+it as an environment variable named `OPENAI_API_KEY`.
 
-### Traditional Installation
+### Installation Methods
 
-```sh
+#### Using pip (Recommended for Users)
+
+Install the `yival` package directly using pip:
+
+```bash
 pip install yival
 ```
 
-### Install by Poetry
+#### Development Setup Using Poetry
 
-1. **Install [Poetry](https://python-poetry.org/docs/#installing-with-the-official-installer)**
+If you're looking to contribute or set up a development environment:
 
-2. **Clone Yival**
+1. **Install Poetry**: If you haven't already, [install Poetry](https://python-poetry.org/docs/#installation).
 
-    ```sh
+2. **Clone the Repository**:
+
+    ```bash
     git clone https://github.com/YiVal/YiVal.git
-    cd Yival
+    cd YiVal
     ```
 
-3. **Initialize a Python virtual environment with `poetry`**
+3. **Setup with Poetry**: Initialize the Python virtual environment and install
+  dependencies using Poetry:
 
-    ```sh
+    ```bash
     poetry install --sync
     ```
 
+## Trying Out YiVal
+
+After setting up, you can quickly get started with YiVal by generating datasets
+of random tech startup business names.
+
+### Steps to Run Your First YiVal Program
+
+1. **Navigate to the YiVal Directory**:
+
+    ```bash
+    cd /YiVal/src/yival
+    ```
+
+2. **Set OpenAI API Key**: Replace `$YOUR_OPENAI_API_KEY` with your actual OpenAI API key.
+
+    ```bash
+    export OPENAI_API_KEY=$YOUR_OPENAI_API_KEY
+    ```
+
+3. **Define YiVal Configuration**:
+   Create a configuration file named `config_data_generation.yml` for automated test dataset generation with the following content:
+
+    ```yaml
+    description: Generate test data
+    dataset:
+      data_generators:
+        openai_prompt_data_generator:
+          chunk_size: 100000
+          diversify: true
+          model_name: gpt-4
+          input_function:
+            description: # Description of the function
+              Given a tech startup business, generate a corresponding landing
+              page headline
+            name: headline_generation_for_business
+            parameters:
+              tech_startup_business: str # Parameter name and type
+          number_of_examples: 3
+          output_csv_path: generated_examples.csv
+      source_type: machine_generated
+    ```
+
+4. **Execute YiVal**:
+   Run the following command from within the `/YiVal/src/yival` directory:
+
+    ```bash
+    yival run config_data_generation.yml
+    ```
+
+5. **Check the Generated Dataset**:
+   The generated test dataset will be stored in `generated_examples.csv`.
+
 ## Demo
 
-### Colab
+| Use Case Demo | Supported Features | Colab Link |
+|---------------|--------------------|------------|
+| 🐯 Craft your AI story with ChatGPT and MidJourney | Multi-modal support: Design an AI-powered narrative using YiVal's multi-modal support of simultaneous text and images. It supports native and seamless Reinforcement Learning from Human Feedback(RLHF) and Reinforcement Learning from AI Feedback(RLAIF). Please watch the video above for this use case. |[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1DgtDZghleiLEaaNF7f4vSGJ4ChDVls2X?usp=sharing) |
+| 🌟 Evaluate performance of multiple LLMs with your own Q&A test dataset | Conveniently evaluate and compare performance of your model of choice against 100+ models, thanks to LiteLLM. Analyze model performance benchmarks tailored to your customized test data or use case. |[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1cSjsEKNwDq8W4O2oeRI93vH-BhYH5JXj?usp=sharing) |
+| 🔥 Startup Company Headline Generation Bot | Streamline generation of headlines for your startup with automated test data creation, prompt crafting, results evaluation, and performance enhancement via GPT-4. |[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1EiWUL8rE_kfNLXVPowCWCh6hwHFagvs_?usp=sharing) |
+| 🧳 Build a Customized Travel Guide Bot | Leverage automated prompts inspired by the travel community's most popular suggestions, such as those from awesome-chatgpt-prompts. |[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1L7miRwTQSZfm5xOKBakWOG5bOumMynpv?usp=sharing) |
+| 📖 Build a Cheaper Translator: Use GPT-3.5 to teach Llama2 to create a translator with lower inference cost | Using Replicate and GPT-3.5's test data, you can fine-tune Llama2's translation bot. Benefit from 18x savings while experiencing only a 6% performance decrease. |[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](<https://colab.research.google.com/drive/1HtQOadV0o3vrXjVI9Nf0Xv4rLarqu-fv?usp=sharing>) |
+| 🤖️ Chat with Your Favorite Characters - 澹台烬(Dantan Ji) from《长月烬明》(Till the End of the Moon) | Bring your favorite characters to life through automated prompt creation and character script retrieval. |[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/12XS1fhgxRAHsRZPXtJ8c5exslgj7EDHE#scrollTo=31Wq1Oeb-bSY) |
+| 🔍Evaluate guardrails's performance in generating Python(.py) outputs | Guardrails: where are my guardrails? 😭 <br>Yival: I am here. ⭐️<br><br>The integrated evaluation experiment is carried out with 80 LeetCode problems in csv, using guardrail and using only GPT-4. The accuracy drops from 0.625 to 0.55 with guardrail, latency increases by 44%, and cost increases by 140%. Guardrail still has a long way to go from demo to production. | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](<https://colab.research.google.com/drive/1QgRQmFmC_L07Ler4vbq_vcCNm_OHmJL_#scrollTo=KnmaSTEc13Rg>) |
 
-| Demo | Supported Features | Colab Link |
-|------|--------------------|------------|
-| 🐯  Craft your AI story with ChatGPT and MidJourney| **Multi-modal** support of text and images.| [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1DgtDZghleiLEaaNF7f4vSGJ4ChDVls2X?usp=sharing) |
-| 🌟 Evaluate different LLM Model Performance With Your Own Q&A Test Dataset| Easy model **evaluation and comparison** against 100+ models, thanks to LiteLLM. It provides a benchmark of model performances tailored to **your customized use case or test data**.| [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1cSjsEKNwDq8W4O2oeRI93vH-BhYH5JXj?usp=sharing) |
-| 🔥 Startup Company Headline Generation Bot | Automate prompt **evolution**   | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1EiWUL8rE_kfNLXVPowCWCh6hwHFagvs_?usp=sharing) |
-| 🧳 Build Your Customized Travel Guide Bot | Automate prompt generation by retrieving the most related popular prompt from the **community**. e.g. [awesome-chatgpt-prompts](https://github.com/f/awesome-chatgpt-prompts)| [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1L7miRwTQSZfm5xOKBakWOG5bOumMynpv?usp=sharing) |
-| 📖 Build a Cheaper Translator: Let GPT-4 Teach Llama2 to Create an Cheaper Translator| Use GPT-4-generated test data to **fine-tune** the translation bot of Llama2 with Replicate. 6% sacrifice in performance, 18x save in cost.| [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1HtQOadV0o3vrXjVI9Nf0Xv4rLarqu-fv?usp=sharing) |
-| 🤖️ Chat with Your Favorite Characters - 澹台烬 from《长月烬明》|Give your character a soul with automated prompt generation and **character scripts retrieval**| [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/12XS1fhgxRAHsRZPXtJ8c5exslgj7EDHE#scrollTo=31Wq1Oeb-bSY) |
+## Contribution Guidelines
 
-### Multi-model Mode
-
-Yival has multimodal capabilities and can handle generated images in AIGC really
-well.
-
-Find more information in the Animal story demo we provided.
-
-```bash
-yival run demo/configs/animal_story.yml
-```
-
-![pic](https://github.com/YiVal/YiVal/assets/55043304/553a2369-adcf-4fbd-a4dc-64e2ecba0e09)
-
-### Basic Interactive Mode
-
-To get started with a demo for basic interactive mode of YiVal, run the
-following command:
-
-```python
-yival demo --auto_prompts
-```
-
-Once started, navigate to the following address in your web browser:
-
-<http://127.0.0.1:8073/interactive>
-<details>
-  <summary>Click to view the screenshot</summary>
-  
-  ![Screenshot 2023-08-17 at 10 55 31 PM](https://github.com/YiVal/YiVal/assets/1544154/a720c3ad-1288-4830-8a3d-377d9827f46e)
-  
-</details>
-
-For more details on this demo, check out the [Basic Interactive Mode Demo](https://github.com/YiVal/YiVal/blob/master/docs/docs/basic_interactive_mode.md#demo).
-
-### Question Answering with expected result evaluator
-
-```python
-yival demo --qa_expected_results
-```
-
-Once started, navigate to the following address in your web browser:
-<http://127.0.0.1:8073/>
-<details>
-  <summary>Click to view the screenshot</summary>
-  
- <img width="1288" alt="Screenshot 2023-08-18 at 1 11 44 AM" src="https://github.com/YiVal/YiVal/assets/1544154/4e9a182f-07ba-413e-9160-f38bfdc743ce">
-
-</details>
-
-For more details, check out the [Question Answering with expected result evaluator](https://github.com/YiVal/YiVal/blob/master/docs/qa_expected_results.md#demo).
-
-### Automatically generate prompts with evaluator
-
-```python
-yival demo --basic_interactive
-```
-
-Once started, navigate to the following address in your web browser:
-<http://127.0.0.1:8073/>
-<details>
-  <summary>Click to view the screenshot</summary>
-  
- <img width="1288" alt="Screenshot 2023-08-18 at 1 11 44 AM" src="https://github.com/YiVal/YiVal/assets/1544154/4e9a182f-07ba-413e-9160-f38bfdc743ce">
-
-</details>
-
-# Contributors
+If you want to contribute to YiVal, be sure to review the [contribution guidelines](https://yival.github.io/YiVal/contributing/).
+We use [GitHub issues](https://github.com/YiVal/YiVal/issues) for tracking
+requests and bugs.
+Please join [YiVal's discord channel]((https://discord.gg/6Q6Rgwrstw)) for
+general questions and discussion.
+Join our collaborative community where your unique expertise as researchers and
+software engineers is highly valued! Contribute to our project and be a part of
+an innovative space where every line of code and research insight actively
+fuels advancements in technology, fostering a future that is intelligently
+connected and universally accessible.
 
 <p align="center">
 🌟 YiVal welcomes your contributions! 🌟<p align="center">
 🥳 Thanks so much to all of our amazing contributors 🥳</p>
-
-</p>
-<a href="https://github.com/YiVal/YiVal/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=YiVal/YiVal" />
-</a>
 
 ## Paper / Algorithm Implementation
 
