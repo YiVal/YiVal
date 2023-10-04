@@ -33,7 +33,6 @@ retrieval configurations. You can easily customize your test data, evaluation
 methods, and enhancement strategies, all in one place. Enhance and evaluate
 everything with ease!
 
-
 [Check out our quickstart guide!][1]
 
 [1]: https://github.com/YiVal/YiVal/blob/master/demo/tutorial_notebook/tutorial.md
