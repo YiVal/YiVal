@@ -2,6 +2,10 @@ from argparse import Namespace
 
 from yival.wrappers.string_wrapper import StringWrapper
 
+from ..finetune.sft_trainer import (
+    SFTTrainer,
+)
+
 from ..combination_improvers.openai_prompt_based_combination_improver import (
     OpenAIPromptBasedCombinationImprover,
 )
@@ -30,18 +34,31 @@ from .utils import generate_experiment_config_yaml
 
 
 def _prevent_unused_imports():
+
+    #tools
     _ = StringWrapper
+    _ = CSVReader
+
+    #DataGenerator
+    _ = OpenAIPromptBasedGeneratorConfig
+    _ = OpenAIPromptBasedVariationGenerator
+
+    #Evaluator
     _ = StringExpectedResultEvaluator
     _ = RougeEvaluator
     _ = BertScoreEvaluator
-    _ = CSVReader
-    _ = OpenAIPromptBasedGeneratorConfig
-    _ = OpenAIPromptBasedVariationGenerator
     _ = OpenAIEloEvaluator
-    _ = AHPSelection
     _ = OpenAIPromptBasedEvaluator
+
+    #Improver
     _ = OpenAIPromptBasedCombinationImprover
     _ = OptimizeByPromptImprover
+
+    #Strategy
+    _ = AHPSelection
+
+    #Trainer
+    _ = SFTTrainer
 
 
 def variation_type(arg: str):

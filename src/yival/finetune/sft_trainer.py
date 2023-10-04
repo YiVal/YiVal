@@ -107,3 +107,6 @@ class SFTTrainer(BaseTrainer):
         output_dir = os.path.join(output_dir, "final_checkpoint")
         trainer.model.save_pretrained(output_dir)
         tokenizer.save_pretrained(output_dir)
+
+
+BaseTrainer.register_trainer("sft_trainer", SFTTrainer, SFTTrainerConfig)

@@ -9,6 +9,8 @@ from typing import Any, Callable, Dict, List, Optional, Tuple, Type, Union
 
 from PIL import Image
 
+from ..finetune.base_trainer import BaseTrainer
+
 from .combination_improver_configs import BaseCombinationImproverConfig
 from .common_structures import InputData
 from .dataset_config import DatasetConfig
@@ -160,6 +162,7 @@ class ExperimentConfig:
     evaluators: Optional[List[Union[EvaluatorConfig, ComparisonEvaluatorConfig,
                                     GlobalEvaluatorConfig]]] = None
     improver: Optional[BaseCombinationImproverConfig] = None
+    trainer: Optional[BaseTrainer] = None
     output: Optional[OutputConfig] = None
     human_rating_configs: Optional[List[HumanRatingConfig]] = None
     existing_experiment_path: Optional[str] = None
