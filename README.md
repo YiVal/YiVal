@@ -32,7 +32,9 @@ retrieval configurations. You can easily customize your test data, evaluation
 methods, and enhancement strategies, all in one place. Enhance and evaluate
 everything with ease!
 
-[Check out our quickstart guide!](https://github.com/YiVal/YiVal/blob/master/demo/tutorial_notebook/tutorial.md) →
+[Check out our quickstart guide!][1]
+
+[1]: https://github.com/YiVal/YiVal/blob/master/demo/tutorial_notebook/tutorial.md
 
 <img src="https://github.com/YiVal/YiVal/assets/1544154/dba5acd9-995c-45fd-9d08-c7cf198a77ad">
 
@@ -87,14 +89,16 @@ of random tech startup business names.
     cd /YiVal/src/yival
     ```
 
-2. **Set OpenAI API Key**: Replace `$YOUR_OPENAI_API_KEY` with your actual OpenAI API key.
+2. **Set OpenAI API Key**: Replace `$YOUR_OPENAI_API_KEY` with your
+  actual OpenAI API key.
 
     ```bash
     export OPENAI_API_KEY=$YOUR_OPENAI_API_KEY
     ```
 
 3. **Define YiVal Configuration**:
-   Create a configuration file named `config_data_generation.yml` for automated test dataset generation with the following content:
+   Create a configuration file named `config_data_generation.yml` for automated
+   test dataset generation with the following content:
 
     ```yaml
     description: Generate test data
