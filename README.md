@@ -132,6 +132,7 @@ of random tech startup business names.
    The generated test dataset will be stored in `generated_examples.csv`.
 
 ## Demo
+[![YiValDemoVideo](http://img.youtube.com/vi/jMDAwsS3MAY/0.jpg)](https://youtu.be/jMDAwsS3MAY)
 
 | Use Case Demo | Supported Features | Colab Link |
 |---------------|--------------------|------------|
