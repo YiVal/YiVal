@@ -133,7 +133,6 @@ of random tech startup business names.
 
 ## Demo
 
-
 https://github.com/community/community/assets/1544154/89cd5ae9-c30a-4f57-8ce9-dece38df98c0
 
 | Use Case Demo | Supported Features | Colab Link |
