@@ -14,7 +14,7 @@
 
 <!-- markdownlint-disable-next-line MD013 -->
 👉 Follow us: [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/YiValai.svg?style=social&label=Follow%20%40YiVal)](https://twitter.com/yivalloveaigc) |
-[![Discord](https://dcbadge.vercel.app/api/server/6Q6Rgwrstw?compact=true&style=flat)](https://discord.gg/6Q6Rgwrstw)
+[![Discord](https://dcbadge.vercel.app/api/server/6Q6Rgwrstw?compact=true&style=flat)](https://discord.gg/MRaXNcsB)
 
 [![Downloads](https://static.pepy.tech/badge/YiVal/month)](https://pepy.tech/project/YiVal)
 [![License: MIT](https://img.shields.io/badge/License-Apache2.0-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -24,13 +24,15 @@
 ## What is YiVal?
 
 **YiVal is a versatile platform and framework that streamlines the evaluation
-and enhancement of your Generative AI applications.** It empowers you to
+and enhancement of your Generative AI applications.**  
+It empowers you to
 generate better results, reduce latency, and decrease inference cost as easily.
 Depending on your knowledge and comfort level, YiVal will help you
 simultaneously optimize model metadata, model parameters, prompts, and
 retrieval configurations. You can easily customize your test data, evaluation
 methods, and enhancement strategies, all in one place. Enhance and evaluate
 everything with ease!
+
 
 [Check out our quickstart guide!][1]
 
@@ -134,20 +136,20 @@ of random tech startup business names.
 
 | Use Case Demo | Supported Features | Colab Link |
 |---------------|--------------------|------------|
-| 🐯 Craft your AI story with ChatGPT and MidJourney | Multi-modal support: Design an AI-powered narrative using YiVal's multi-modal support of simultaneous text and images. It supports native and seamless Reinforcement Learning from Human Feedback(RLHF) and Reinforcement Learning from AI Feedback(RLAIF). Please watch the video above for this use case. |[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1DgtDZghleiLEaaNF7f4vSGJ4ChDVls2X?usp=sharing) |
-| 🌟 Evaluate performance of multiple LLMs with your own Q&A test dataset | Conveniently evaluate and compare performance of your model of choice against 100+ models, thanks to LiteLLM. Analyze model performance benchmarks tailored to your customized test data or use case. |[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1cSjsEKNwDq8W4O2oeRI93vH-BhYH5JXj?usp=sharing) |
-| 🔥 Startup Company Headline Generation Bot | Streamline generation of headlines for your startup with automated test data creation, prompt crafting, results evaluation, and performance enhancement via GPT-4. |[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1EiWUL8rE_kfNLXVPowCWCh6hwHFagvs_?usp=sharing) |
-| 🧳 Build a Customized Travel Guide Bot | Leverage automated prompts inspired by the travel community's most popular suggestions, such as those from awesome-chatgpt-prompts. |[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1L7miRwTQSZfm5xOKBakWOG5bOumMynpv?usp=sharing) |
-| 📖 Build a Cheaper Translator: Use GPT-3.5 to teach Llama2 to create a translator with lower inference cost | Using Replicate and GPT-3.5's test data, you can fine-tune Llama2's translation bot. Benefit from 18x savings while experiencing only a 6% performance decrease. |[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](<https://colab.research.google.com/drive/1HtQOadV0o3vrXjVI9Nf0Xv4rLarqu-fv?usp=sharing>) |
-| 🤖️ Chat with Your Favorite Characters - 澹台烬(Dantan Ji) from《长月烬明》(Till the End of the Moon) | Bring your favorite characters to life through automated prompt creation and character script retrieval. |[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/12XS1fhgxRAHsRZPXtJ8c5exslgj7EDHE#scrollTo=31Wq1Oeb-bSY) |
-| 🔍Evaluate guardrails's performance in generating Python(.py) outputs | Guardrails: where are my guardrails? 😭 <br>Yival: I am here. ⭐️<br><br>The integrated evaluation experiment is carried out with 80 LeetCode problems in csv, using guardrail and using only GPT-4. The accuracy drops from 0.625 to 0.55 with guardrail, latency increases by 44%, and cost increases by 140%. Guardrail still has a long way to go from demo to production. | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](<https://colab.research.google.com/drive/1QgRQmFmC_L07Ler4vbq_vcCNm_OHmJL_#scrollTo=KnmaSTEc13Rg>) |
+| 🐯 Craft your AI story with ChatGPT and MidJourney | **Multi-modal** support: Design an AI-powered narrative using YiVal's multi-modal support of simultaneous text and images. It supports native and seamless Reinforcement Learning from Human Feedback(RLHF) and Reinforcement Learning from AI Feedback(RLAIF). Please watch the video above for this use case. |[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1DgtDZghleiLEaaNF7f4vSGJ4ChDVls2X?usp=sharing) |
+| 🌟 Evaluate performance of multiple LLMs with your own Q&A test dataset | Conveniently **evaluate and compare** performance of your model of choice against 100+ models, thanks to LiteLLM. Analyze model performance benchmarks tailored to your **customized test data** or use case. |[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1cSjsEKNwDq8W4O2oeRI93vH-BhYH5JXj?usp=sharing) |
+| 🔥 Startup Company Headline Generation Bot | Streamline generation of headlines for your startup with automated test data **creation**, prompt **crafting**, results **evaluation**, and performance **enhancement** via GPT-4. |[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1EiWUL8rE_kfNLXVPowCWCh6hwHFagvs_?usp=sharing) |
+| 🧳 Build a Customized Travel Guide Bot | Leverage **automated prompts** inspired by the travel **community's** most popular suggestions, such as those from awesome-chatgpt-prompts. |[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1L7miRwTQSZfm5xOKBakWOG5bOumMynpv?usp=sharing) |
+| 📖 Build a Cheaper Translator: Use GPT-3.5 to teach Llama2 to create a translator with lower inference cost | Using Replicate and GPT-3.5's test data, you can **fine-tune** Llama2's translation bot. Benefit from 18x savings while experiencing only a 6% performance decrease. |[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](<https://colab.research.google.com/drive/1HtQOadV0o3vrXjVI9Nf0Xv4rLarqu-fv?usp=sharing>) |
+| 🤖️ Chat with Your Favorite Characters - 澹台烬(Dantan Ji) from《长月烬明》(Till the End of the Moon) | Bring your favorite characters to life through automated prompt creation and **character script retrieval**. |[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/12XS1fhgxRAHsRZPXtJ8c5exslgj7EDHE#scrollTo=31Wq1Oeb-bSY) |
+| 🔍Evaluate guardrails's performance in generating Python(.py) outputs | Guardrails: where are my guardrails? 😭 <br>Yival: I am here. ⭐️<br><br>The **integrated evaluation** experiment is carried out with 80 LeetCode problems in csv, using guardrail and using only GPT-4. The accuracy drops from 0.625 to 0.55 with guardrail, latency increases by 44%, and cost increases by 140%. Guardrail still has a long way to go from demo to production. | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](<https://colab.research.google.com/drive/1QgRQmFmC_L07Ler4vbq_vcCNm_OHmJL_#scrollTo=KnmaSTEc13Rg>) |
 
 ## Contribution Guidelines
 
 If you want to contribute to YiVal, be sure to review the [contribution guidelines](https://yival.github.io/YiVal/contributing/).
 We use [GitHub issues](https://github.com/YiVal/YiVal/issues) for tracking
 requests and bugs.
-Please join [YiVal's discord channel]((https://discord.gg/6Q6Rgwrstw)) for
+Please join [YiVal's discord channel]((https://discord.gg/MRaXNcsB)) for
 general questions and discussion.
 Join our collaborative community where your unique expertise as researchers and
 software engineers is highly valued! Contribute to our project and be a part of
