@@ -132,10 +132,6 @@ of random tech startup business names.
    The generated test dataset will be stored in `generated_examples.csv`.
 
 ## Demo
-<video width="320" height="240" controls>
-  <source src="video/DEMO VIDEO.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
 
 | Use Case Demo | Supported Features | Colab Link |
 |---------------|--------------------|------------|
