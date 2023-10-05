@@ -4311,4 +4311,4 @@ trainers = ["bitsandbytes", "peft", "scipy", "transformers", "trl"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.13"
-content-hash = "dfd6de8e60c52a7be383afe22cbb0ad086dca19c3b40497805e45d292c1642cb"
+content-hash = "50e76604f0e6927c009a9309d6ec54ed0bb0530007d2337e3ee07d9a034d7683"
