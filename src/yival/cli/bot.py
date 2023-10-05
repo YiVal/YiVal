@@ -7,7 +7,7 @@ from ..experiment.experiment_runner import ExperimentRunner
 def add_arguments_to(subparser):
     """Add arguments to subcommand run."""
     parser: ArgumentParser = subparser.add_parser(
-        "run", help=run_experiment.__doc__
+        "bot", help=run_experiment.__doc__
     )
     parser.description = run_experiment.__doc__
     parser.set_defaults(func=run_experiment)
@@ -19,14 +19,14 @@ def add_arguments_to(subparser):
     parser.add_argument(
         "--display",
         action="store_true",
-        default=True,
+        default=False,
         help="Display the results after the experiment."
     )
 
     parser.add_argument(
         "--interactive",
         action="store_true",
-        default=False,
+        default=True,
         help="Open interactive mode to use a chatbot."
     )
 

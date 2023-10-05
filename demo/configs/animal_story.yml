@@ -18,9 +18,9 @@ dataset:
           species: str
           character: str
           drawing_style: str
-      number_of_examples: 3
+      number_of_examples: 1
       model_name: gpt-4
-      output_path: animal_story.pkl
+      output_path: null
   source_type: machine_generated
 
 variations:
@@ -28,7 +28,7 @@ variations:
     generator_name: openai_prompt_based_variation_generator
     generator_config:
       model_name: gpt-4
-      number_of_variations: 3
+      number_of_variations: 1
       diversify: true
       max_tokens: 2000
       variables: null
@@ -45,7 +45,7 @@ variations:
             - At all times, gpt-4 must give a response as an animal story
 
             Craft your instruction Ensure that GPT-4 is able to fully understand the types and personalities of small animals and write engaging and fully pictorial stories.
-            keep your output crisp: only the prompt, devoid of any extraneous content.
+            keep your output crisp: only the prompt, devoid of any extraneous content. Let's take a deep breathe. 
 
           role: system
 
