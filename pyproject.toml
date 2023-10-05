@@ -66,7 +66,6 @@ mkdocstrings = {extras = ["python"], version = ">=0.18"}
 pytest = "^7.4.0"
 pytest-isort = "^3.1.0"
 pytest-mypy = "^0.10.3"
-pytest-pylint = "^0.19.0"
 pytest-yapf3 = "^0.7.0"
 
 [build-system]
