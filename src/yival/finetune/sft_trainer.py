@@ -4,15 +4,15 @@ This module provides an implementation of Supervised Fine-tuning trainer.
 """
 import os
 
-import bitsandbytes as bnb
+import bitsandbytes as bnb  #type: ignore
 import torch
-from peft import LoraConfig, get_peft_model
+from peft import LoraConfig, get_peft_model  #type: ignore
 from transformers import (
     AutoModelForCausalLM,
     BitsAndBytesConfig,
     TrainingArguments,
 )
-from trl import SFTTrainer as TRL_SFTTrainer
+from trl import SFTTrainer as TRL_SFTTrainer  #type: ignore
 
 from ..experiment.evaluator import Evaluator
 from ..logger.token_logger import TokenLogger
@@ -166,6 +166,8 @@ class SFTTrainer(BaseTrainer):
         output_dir = os.path.join(output_dir, "final_checkpoint")
         trainer.model.save_pretrained(output_dir)
         tokenizer.save_pretrained(output_dir)
+
+        return TrainerOutput(train_logs=[])
 
 
 BaseTrainer.register_trainer("sft_trainer", SFTTrainer, SFTTrainerConfig)

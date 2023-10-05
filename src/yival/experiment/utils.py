@@ -438,10 +438,10 @@ def get_trainer(config: ExperimentConfig) -> BaseTrainer | None:
                 #remove None value
                 config_data = remove_none_values(config_data)
                 #update data use default_config
-                default_config = default_config.asdict()
-                default_config.update(config_data)
-                config_instance = config_cls(**default_config)
-                trainer_instance = trainer_cls(config_instance)
+                default_config = default_config.asdict()  #type: ignore
+                default_config.update(config_data)  #type: ignore
+                config_instance = config_cls(**default_config)  #type: ignore
+                trainer_instance = trainer_cls(config_instance)  #type: ignore
                 return trainer_instance
             else:
                 trainer_instance = trainer_cls(BaseTrainerConfig(name=""))
