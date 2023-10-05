@@ -4,15 +4,15 @@ This module provides an implementation of Supervised Fine-tuning trainer.
 """
 import os
 
-import bitsandbytes as bnb  #type: ignore
+import bitsandbytes as bnb  # type: ignore
 import torch
-from peft import LoraConfig, get_peft_model  #type: ignore
+from peft import LoraConfig, get_peft_model  # type: ignore
 from transformers import (
     AutoModelForCausalLM,
     BitsAndBytesConfig,
     TrainingArguments,
 )
-from trl import SFTTrainer as TRL_SFTTrainer  #type: ignore
+from trl import SFTTrainer as TRL_SFTTrainer  # type: ignore
 
 from ..experiment.evaluator import Evaluator
 from ..logger.token_logger import TokenLogger
@@ -21,7 +21,11 @@ from ..schemas.experiment_config import (
     ExperimentConfig,
     TrainerOutput,
 )
-from ..schemas.trainer_configs import DatasetConfig, SFTTrainerConfig, TrainArguments
+from ..schemas.trainer_configs import (
+    DatasetConfig,
+    SFTTrainerConfig,
+    TrainArguments,
+)
 from .base_trainer import BaseTrainer
 from .utils import (
     extract_from_input_data,
@@ -80,6 +84,9 @@ class SFTTrainer(BaseTrainer):
     ) -> TrainerOutput:
 
         print("[INFO][sft_trainer] train config: ", self.config)
+
+        assert (isinstance(self.config.dataset_config, dict))
+        assert (isinstance(self.config.bnb_config, dict))
 
         dataset = extract_from_input_data(
             experiment, self.config.dataset_config.get("prompt_key", None),

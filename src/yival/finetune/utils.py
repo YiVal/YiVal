@@ -1,6 +1,7 @@
 import json
+from typing import Dict
 
-from datasets import Dataset as HgDataset
+from datasets import Dataset as HgDataset  # type: ignore
 from transformers import (
     AutoTokenizer,
     PreTrainedTokenizer,
@@ -37,7 +38,7 @@ def print_trainable_parameters(model):
 def extract_from_input_data(
     experiment: Experiment, prompt_key: str, completion_key: str | None
 ) -> HgDataset:
-    result_dict = {"prompt": [], "completion": []}
+    result_dict: Dict = {"prompt": [], "completion": []}
     for rs in experiment.group_experiment_results:
         input_data = json.loads(rs.group_key)
         prompt = input_data['content'][prompt_key]
