@@ -1,9 +1,13 @@
-import bitsandbytes as bnb
+import json
+
+from datasets import Dataset as HgDataset
 from transformers import (
     AutoTokenizer,
     PreTrainedTokenizer,
     PreTrainedTokenizerFast,
 )
+
+from ..schemas.experiment_config import Experiment
 
 
 def get_hg_tokenizer(
@@ -13,17 +17,6 @@ def get_hg_tokenizer(
     tokenizer.pad_token = tokenizer.eos_token
     tokenizer.padding_side = "right"
     return tokenizer
-
-
-def find_all_linear_names(model):
-    cls = bnb.nn.Linear4bit
-    lora_module_names = set()
-    for name, module in model.named_modules():
-        if isinstance(module, cls):
-            names = name.split('.')
-            lora_module_names.add(names[0] if len(names) == 1 else names[-1])
-
-    return list(lora_module_names)
 
 
 def print_trainable_parameters(model):
@@ -39,3 +32,20 @@ def print_trainable_parameters(model):
     print(
         f"trainable params: {trainable_params} || all params: {all_param} || trainables%: {100 * trainable_params / all_param}"
     )
+
+
+def extract_from_input_data(
+    experiment: Experiment, prompt_key: str, completion_key: str | None
+) -> HgDataset:
+    result_dict = {"prompt": [], "completion": []}
+    for rs in experiment.group_experiment_results:
+        input_data = json.loads(rs.group_key)
+        prompt = input_data['content'][prompt_key]
+        completion = input_data['content'][
+            completion_key] if completion_key else input_data['expected_result']
+
+        result_dict['prompt'].append(prompt)
+        result_dict['completion'].append(completion)
+
+    hg_dataset = HgDataset.from_dict(result_dict)
+    return hg_dataset

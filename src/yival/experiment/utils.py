@@ -27,6 +27,7 @@ from ..evaluators.python_validation_evaluator import PythonValidationEvaluator
 from ..evaluators.string_expected_result_evaluator import (
     StringExpectedResultEvaluator,
 )
+from ..finetune.base_trainer import BaseTrainer
 from ..logger.token_logger import TokenLogger
 from ..result_selectors.ahp_selection import AHPSelection
 from ..result_selectors.selection_strategy import SelectionStrategy
@@ -44,6 +45,7 @@ from ..schemas.experiment_config import (
     Metric,
 )
 from ..schemas.selector_strategies import BaseConfig
+from ..schemas.trainer_configs import BaseTrainerConfig
 from ..states.experiment_state import ExperimentState
 from ..variation_generators.base_variation_generator import (
     BaseVariationGenerator,
@@ -404,6 +406,31 @@ def get_improver(config: ExperimentConfig) -> BaseCombinationImprover | None:
                     BaseCombinationImproverConfig(name="")
                 )
                 return improver_instance
+    return None
+
+
+def get_trainer(config: ExperimentConfig) -> BaseTrainer | None:
+    if "trainer" not in config:  #type: ignore
+        return None
+    if config["trainer"]:  #type: ignore
+        trainer_config = config["trainer"]  #type: ignore
+        trainer_cls = BaseTrainer.get_trainer(trainer_config["name"])
+        if trainer_cls:
+            config_cls = BaseTrainer.get_config_class(trainer_config["name"])
+            print(f"config_cls: {config_cls}")
+            if config_cls:
+                if isinstance(trainer_config, dict):
+                    config_data = trainer_config
+                else:
+                    config_data = trainer_config.asdict()
+                print(f"config_data: {config_data}")
+                config_instance = config_cls(**config_data)
+                print(f"config_instance: {config_instance}")
+                trainer_instance = trainer_cls(config_instance)
+                return trainer_instance
+            else:
+                trainer_instance = trainer_cls(BaseTrainerConfig(name=""))
+                return trainer_instance
     return None
 
 

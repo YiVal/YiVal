@@ -2,10 +2,6 @@ from argparse import Namespace
 
 from yival.wrappers.string_wrapper import StringWrapper
 
-from ..finetune.sft_trainer import (
-    SFTTrainer,
-)
-
 from ..combination_improvers.openai_prompt_based_combination_improver import (
     OpenAIPromptBasedCombinationImprover,
 )
@@ -31,6 +27,13 @@ from ..variation_generators.openai_prompt_based_variation_generator import (
     OpenAIPromptBasedVariationGenerator,
 )
 from .utils import generate_experiment_config_yaml
+
+try:
+    from ..finetune.sft_trainer import SFTTrainer
+except ImportError:
+    print(
+        "[Warn] missing modules in trainers, ignore this warn if you don't want to finetune model in yival"
+    )
 
 
 def _prevent_unused_imports():

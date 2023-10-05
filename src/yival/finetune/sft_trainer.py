@@ -4,6 +4,7 @@ This module provides an implementation of Supervised Fine-tuning trainer.
 """
 import os
 
+import bitsandbytes as bnb
 import torch
 from peft import LoraConfig, get_peft_model
 from transformers import (
@@ -23,10 +24,17 @@ from ..schemas.experiment_config import (
 from ..schemas.trainer_configs import SFTTrainerConfig
 from .base_trainer import BaseTrainer
 from .utils import (
-    find_all_linear_names,
+    extract_from_input_data,
     get_hg_tokenizer,
     print_trainable_parameters,
 )
+
+DEFAULT_PROMPT_FORMAT = """
+You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe. Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.
+If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information.\n
+### Input: {prompt}
+### Output: {completion}
+"""
 
 
 class SFTTrainer(BaseTrainer):
@@ -38,10 +46,27 @@ class SFTTrainer(BaseTrainer):
         super().__init__(config)
         self.config: SFTTrainerConfig = config
 
+    def find_all_linear_names(self, model):
+        cls = bnb.nn.Linear4bit
+        lora_module_names = set()
+        for name, module in model.named_modules():
+            if isinstance(module, cls):
+                names = name.split('.')
+                lora_module_names.add(
+                    names[0] if len(names) == 1 else names[-1]
+                )
+
+        return list(lora_module_names)
+
     def train(
-        self, experiment: Experiment, config: ExperimentConfig,
+        self, experiment: Experiment, experiment_config: ExperimentConfig,
         evaluator: Evaluator, token_logger: TokenLogger
     ) -> TrainerOutput:
+
+        dataset = extract_from_input_data(
+            experiment, self.config.dataset_config.get("prompt_key", None),
+            self.config.dataset_config.get("completion_key", None)
+        )
 
         #Prepare base model and tokenizer
         model_name = self.config.model_name
@@ -62,12 +87,12 @@ class SFTTrainer(BaseTrainer):
         peft_config = None
         if self.config.enable_lora:
             peft_config = LoraConfig(
-                r=self.config.lora_config.r,
-                lora_alpha=self.config.lora_config.lora_alpha,
-                target_modules=find_all_linear_names(base_model),
-                lora_dropout=self.config.lora_config.lora_dropout,
-                task_type=self.config.lora_config.task_type,
-                bias=self.config.lora_config.bias
+                r=self.config.lora_config["r"],
+                lora_alpha=self.config.lora_config["lora_alpha"],
+                target_modules=self.find_all_linear_names(base_model),
+                lora_dropout=self.config.lora_config["lora_dropout"],
+                task_type=self.config.lora_config["task_type"],
+                bias=self.config.lora_config["bias"]
             )
             base_model = get_peft_model(base_model, peft_config)
 
@@ -81,16 +106,32 @@ class SFTTrainer(BaseTrainer):
             max_grad_norm=0.3,
             num_train_epochs=15,
             learning_rate=2e-4,
-            bf16=True,
+            bf16=False,
             save_total_limit=3,
-            logging_steps=10,
+            logging_steps=1,
             output_dir=self.config.output_path,
             optim="paged_adamw_32bit",
             lr_scheduler_type="cosine",
             warmup_ratio=0.05,
+            log_level='debug'
         )
 
         output_dir = self.config.output_path
+
+        def formatting_prompts_func(example):
+            output_texts = []
+            prompt_template = DEFAULT_PROMPT_FORMAT
+            if self.config.dataset_config.get("formatting_prompts_format"):
+                prompt_template = self.config.dataset_config[
+                    "formatting_prompts_format"]
+
+            for i in range(len(example['prompt'])):
+                text = prompt_template.format(
+                    prompt=example['prompt'][i],
+                    completion=example['prompt'][i]
+                )
+                output_texts.append(text)
+            return output_texts
 
         trainer = TRL_SFTTrainer(
             base_model,

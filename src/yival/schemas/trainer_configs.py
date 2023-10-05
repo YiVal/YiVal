@@ -1,5 +1,5 @@
-from dataclasses import dataclass, field
-from typing import List, Optional
+from dataclasses import dataclass
+from typing import Optional
 
 from attr import asdict
 
@@ -22,9 +22,6 @@ class LoRAConfig:
     """
     r: int = 8
     lora_alpha: int = 32
-    target_modules: List[str] = field(
-        default_factory=lambda: ["q_proj", "v_proj"]
-    )
     bias = "none"
     task_type: str = "CAUSAL_LM"
     lora_dropout: float = 0.05
@@ -38,12 +35,20 @@ class BnbConfig:
 
 
 @dataclass
-class SFTTrainerConfig:
+class DatasetConfig:
+    prompt_key: str
+    completioin_key: Optional[str]
+    formatting_prompts_format: Optional[str]
+
+
+@dataclass
+class SFTTrainerConfig(BaseTrainerConfig):
     """
     Supervised Fine-tuning trainer config
     """
     model_name: str
     output_path: str
+    dataset_config: DatasetConfig
     enable_bits_and_bytes: bool = False
     bnb_config: Optional[BnbConfig] = None
     enable_lora: bool = False

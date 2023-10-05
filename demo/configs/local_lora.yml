@@ -1,0 +1,51 @@
+custom_function: demo.translate_quiz.translate_quiz
+description: Generated experiment config
+dataset:
+  data_generators:
+    openai_prompt_data_generator:
+      chunk_size: 100000
+      diversify: true
+      # model_name specify the llm model , e.g. a16z-infra/llama-2-13b-chat:9dff94b1bed5af738655d4a7cbcdcde2bd503aa85c94334fe1f42af7f3dd5ee3
+      model_name: gpt-4
+      prompt:
+          "Please provide a concrete and realistic test case as a dictionary for function invocation using the ** operator.
+          Only include parameters, excluding description and name.
+          Ensure it's succinct and well-structured.
+          **Only provide the dictionary.**"
+      input_function:
+        description:
+          The current function is to evaluate the English to Chinese translation ability of the large language model. You will play the role of a teacher, so please provide a coherent English sentence (teacher_quiz), and give the corresponding Chinese translation (teachaer_answer).
+        name: translation_english_to_chinese
+        parameters:
+          teacher_quiz: str
+          teacher_answer: str
+      expected_param_name: teacher_answer
+      number_of_examples: 1
+      output_path: english2chinese1.pkl
+  source_type: machine_generated
+
+variations:
+  - name : model_name
+    variations:
+      - instantiated_value: gpt-3.5-turbo
+        value: gpt-3.5-turbo
+        value_type: str
+        variation_id: null
+
+
+trainer:
+  name: sft_trainer
+  model_name: PY007/TinyLlama-1.1B-Chat-v0.3
+  output_path: output
+  dataset_config:
+    prompt_key: teacher_quiz
+  enable_lora: true
+  lora_config:
+    r: 2
+    lora_alpha: 32
+    bias: none
+    task_type: CAUSLA_LM
+    lora_dropout: 0.05
+    inference_mode: False
+
+
