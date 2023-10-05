@@ -21,7 +21,7 @@ from ..schemas.experiment_config import (
     ExperimentConfig,
     TrainerOutput,
 )
-from ..schemas.trainer_configs import SFTTrainerConfig
+from ..schemas.trainer_configs import DatasetConfig, SFTTrainerConfig, TrainArguments
 from .base_trainer import BaseTrainer
 from .utils import (
     extract_from_input_data,
@@ -41,6 +41,22 @@ class SFTTrainer(BaseTrainer):
     """
     SFT Trainer implement
     """
+
+    default_config = SFTTrainerConfig(
+        name="sft_trainer",
+        model_name="PY007/TinyLlama-1.1B-Chat-v0.3",
+        output_path="output/",
+        dataset_config=DatasetConfig(
+            prompt_key="teacher_quiz",
+            completioin_key=None,
+            formatting_prompts_format=None
+        ),
+        enable_bits_and_bytes=False,
+        bnb_config=None,
+        enable_lora=False,
+        lora_config=None,
+        train_arguments=TrainArguments(),
+    )
 
     def __init__(self, config: SFTTrainerConfig) -> None:
         super().__init__(config)
@@ -62,6 +78,8 @@ class SFTTrainer(BaseTrainer):
         self, experiment: Experiment, experiment_config: ExperimentConfig,
         evaluator: Evaluator, token_logger: TokenLogger
     ) -> TrainerOutput:
+
+        print("[INFO][sft_trainer] train config: ", self.config)
 
         dataset = extract_from_input_data(
             experiment, self.config.dataset_config.get("prompt_key", None),

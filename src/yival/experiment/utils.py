@@ -409,6 +409,16 @@ def get_improver(config: ExperimentConfig) -> BaseCombinationImprover | None:
     return None
 
 
+def remove_none_values(d):
+    if isinstance(d, dict):
+        return {
+            k: remove_none_values(v)
+            for k, v in d.items() if v is not None
+        }
+    else:
+        return d
+
+
 def get_trainer(config: ExperimentConfig) -> BaseTrainer | None:
     if "trainer" not in config:  #type: ignore
         return None
@@ -417,15 +427,20 @@ def get_trainer(config: ExperimentConfig) -> BaseTrainer | None:
         trainer_cls = BaseTrainer.get_trainer(trainer_config["name"])
         if trainer_cls:
             config_cls = BaseTrainer.get_config_class(trainer_config["name"])
-            print(f"config_cls: {config_cls}")
+            default_config = BaseTrainer.get_default_config(
+                trainer_config["name"]
+            )
             if config_cls:
                 if isinstance(trainer_config, dict):
                     config_data = trainer_config
                 else:
                     config_data = trainer_config.asdict()
-                print(f"config_data: {config_data}")
-                config_instance = config_cls(**config_data)
-                print(f"config_instance: {config_instance}")
+                #remove None value
+                config_data = remove_none_values(config_data)
+                #update data use default_config
+                default_config = default_config.asdict()
+                default_config.update(config_data)
+                config_instance = config_cls(**default_config)
                 trainer_instance = trainer_cls(config_instance)
                 return trainer_instance
             else:

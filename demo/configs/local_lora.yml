@@ -41,7 +41,7 @@ trainer:
     prompt_key: teacher_quiz
   enable_lora: true
   lora_config:
-    r: 2
+    r: 8
     lora_alpha: 32
     bias: none
     task_type: CAUSLA_LM

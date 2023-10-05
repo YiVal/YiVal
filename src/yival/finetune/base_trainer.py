@@ -59,7 +59,7 @@ class BaseTrainer(ABC):
            and configuration class."""
         cls._registry[name] = {
             "class": trainer_cls,
-            "defualt_config": trainer_cls.default_config,
+            "default_config": trainer_cls.default_config,
             "config_cls": config_cls
         }
 
