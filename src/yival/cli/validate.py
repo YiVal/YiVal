@@ -1,3 +1,11 @@
+"""Module for validating experiment configurations.
+
+This module provides functionality for validating YAML configuration files
+used in experiments. It defines command-line arguments for specifying the
+configuration file path and uses the ExperimentConfig dataclass for validation.
+
+"""
+
 from argparse import ArgumentParser, Namespace
 
 import yaml
@@ -29,5 +37,5 @@ def validate(args: Namespace):
         # Convert the dictionary into the ExperimentConfig dataclass
         ExperimentConfig(**config_data)
         print(f"Configuration file {args.config_file} is valid!")
-    except Exception as e:
-        print(f"Validation failed for {args.config_file}.\nError: {e}")
+    except Exception as exception:
+        print(f"Validation failed for {args.config_file}.\nError: {exception}")
