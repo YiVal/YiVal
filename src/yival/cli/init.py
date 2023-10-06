@@ -96,7 +96,7 @@ def add_arguments_to(subparser):
         "--source_type",
         type=str,
         default="dataset",
-        choices=["dataset", "user", "machine_generated"],
+        choices=["dataset", "machine_generated", "user"],
         help=(
             "Source type for the experiment. Options: "
             "'dataset', 'machine_generated', or 'user'."

@@ -32,3 +32,10 @@ variations:
         value: "replicate/vicuna-13b:6282abe6a492de4145d7bb601023762212f9ddbbe78278bd6771c8b3b2f2a13b"
         value_type: str
         variation_id: null
+
+
+human_rating_configs:
+  - name: answer_quility
+    instructions: Please rate the quality of the answer provided by the model
+    scale: [1, 5]
+

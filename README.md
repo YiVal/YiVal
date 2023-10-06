@@ -158,7 +158,13 @@ an innovative space where every line of code and research insight actively
 fuels advancements in technology, fostering a future that is intelligently
 connected and universally accessible.
 
+## Contributors
+
+<a href="https://github.com/YiVal/YiVal/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=YiVal/YiVal" />
+</a>  
 <p align="center">
+<br>
 🌟 YiVal welcomes your contributions! 🌟<p align="center">
 🥳 Thanks so much to all of our amazing contributors 🥳</p>
 

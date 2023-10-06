@@ -121,11 +121,6 @@ def generate_variations_section(wrapper_configs) -> str:
     return res
 
 
-from enum import Enum
-
-import yaml
-
-
 # Refactored main function
 def generate_experiment_config_yaml(
     custom_function: str,
@@ -215,6 +210,8 @@ def generate_experiment_config_yaml(
         yaml_string += "\n# wrapper_configs: {}\n"
 
     yaml_string += generate_variations_section(wrapper_configs)
-    yaml_string = "# This is a generated template. Modify the values as needed.\n\n" + yaml_string
-
+    yaml_string = (
+        "# This is a generated template. Modify the values as needed.\n\n" +
+        yaml_string
+    )
     return yaml_string
