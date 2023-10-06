@@ -34,7 +34,7 @@ variations:
     generator_config:
      #model_name specify the llm model , e.g. a16z-infra/llama-2-13b-chat:9dff94b1bed5af738655d4a7cbcdcde2bd503aa85c94334fe1f42af7f3dd5ee3
       model_name: gpt-4
-      number_of_variations: 1
+      number_of_variations: 2
       diversify: true
       variables: null
       prompt: 

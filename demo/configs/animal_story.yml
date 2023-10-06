@@ -18,7 +18,7 @@ dataset:
           species: str
           character: str
           drawing_style: str
-      number_of_examples: 3
+      number_of_examples: 2
       model_name: gpt-4
       output_path: animal_story.pkl
   source_type: machine_generated
@@ -28,7 +28,7 @@ variations:
     generator_name: openai_prompt_based_variation_generator
     generator_config:
       model_name: gpt-4
-      number_of_variations: 3
+      number_of_variations: 2
       diversify: true
       max_tokens: 2000
       variables: null
