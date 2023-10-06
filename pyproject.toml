@@ -47,6 +47,12 @@ replicate = "^0.12.0"
 bert-score = "^0.3.13"
 rouge = "^1.0.1"
 alpaca-eval = "^0.3.1"
+peft = { version = "^0.5.0", optional = true }
+trl = { version = "^0.7.1", optional = true }
+bitsandbytes = { version = "^0.41.1", optional = true }
+
+[tool.poetry.extras]
+trainers = ["peft","trl","bitsandbytes"]
 
 [tool.poetry.group.doc.dependencies]
 mkdocs = "*"
