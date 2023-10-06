@@ -19,9 +19,7 @@ from ..experiment.evaluator import Evaluator
 from ..experiment.rate_limiter import RateLimiter
 from ..experiment.utils import generate_experiment, run_single_input
 from ..logger.token_logger import TokenLogger
-from ..schemas.combination_improver_configs import (
-    OpenAIPromptBasedCombinationImproverConfig,
-)
+from ..schemas.combination_improver_configs import OpenAIPromptBasedCombinationImproverConfig
 from ..schemas.common_structures import InputData
 from ..schemas.evaluator_config import OpenAIPromptBasedEvaluatorConfig
 from ..schemas.experiment_config import (

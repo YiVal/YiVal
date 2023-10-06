@@ -10,11 +10,7 @@ from typing import Any, Dict, Optional, Type
 
 from ..experiment.evaluator import Evaluator
 from ..logger.token_logger import TokenLogger
-from ..schemas.experiment_config import (
-    Experiment,
-    ExperimentConfig,
-    TrainerOutput,
-)
+from ..schemas.experiment_config import Experiment, ExperimentConfig, TrainerOutput
 from ..schemas.trainer_configs import BaseTrainerConfig
 
 

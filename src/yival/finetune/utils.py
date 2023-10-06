@@ -2,11 +2,7 @@ import json
 from typing import Dict
 
 from datasets import Dataset as HgDataset  # type: ignore
-from transformers import (
-    AutoTokenizer,
-    PreTrainedTokenizer,
-    PreTrainedTokenizerFast,
-)
+from transformers import AutoTokenizer, PreTrainedTokenizer, PreTrainedTokenizerFast
 
 from ..schemas.experiment_config import Experiment
 

@@ -3,17 +3,13 @@ from typing import Any, Dict, List, Optional, Type
 
 import yaml
 
-from ..combination_improvers.base_combination_improver import (
-    BaseCombinationImprover,
-)
+from ..combination_improvers.base_combination_improver import BaseCombinationImprover
 from ..data.base_reader import BaseReader
 from ..data_generators.base_data_generator import BaseDataGenerator
 from ..evaluators.base_evaluator import BaseEvaluator
 from ..result_selectors.selection_strategy import SelectionStrategy
 from ..schemas.experiment_config import WrapperConfig
-from ..variation_generators.base_variation_generator import (
-    BaseVariationGenerator,
-)
+from ..variation_generators.base_variation_generator import BaseVariationGenerator
 from ..wrappers.base_wrapper import BaseWrapper
 
 

@@ -9,13 +9,9 @@ from collections import defaultdict
 from importlib import import_module
 from typing import Any, Dict, List
 
-from yival.variation_generators.chain_of_density_prompt import (
-    ChainOfDensityPromptGenerator,
-)
+from yival.variation_generators.chain_of_density_prompt import ChainOfDensityPromptGenerator
 
-from ..combination_improvers.base_combination_improver import (
-    BaseCombinationImprover,
-)
+from ..combination_improvers.base_combination_improver import BaseCombinationImprover
 from ..data.base_reader import BaseReader
 from ..data.csv_reader import CSVReader
 from ..data.huggingface_dataset_reader import HuggingFaceDatasetReader
@@ -24,16 +20,12 @@ from ..evaluators.alpaca_eval_evaluator import AlpacaEvalEvaluator
 from ..evaluators.base_evaluator import BaseEvaluator
 from ..evaluators.openai_elo_evaluator import OpenAIEloEvaluator
 from ..evaluators.python_validation_evaluator import PythonValidationEvaluator
-from ..evaluators.string_expected_result_evaluator import (
-    StringExpectedResultEvaluator,
-)
+from ..evaluators.string_expected_result_evaluator import StringExpectedResultEvaluator
 from ..finetune.base_trainer import BaseTrainer
 from ..logger.token_logger import TokenLogger
 from ..result_selectors.ahp_selection import AHPSelection
 from ..result_selectors.selection_strategy import SelectionStrategy
-from ..schemas.combination_improver_configs import (
-    BaseCombinationImproverConfig,
-)
+from ..schemas.combination_improver_configs import BaseCombinationImproverConfig
 from ..schemas.evaluator_config import MethodCalculationMethod
 from ..schemas.experiment_config import (
     CombinationAggregatedMetrics,
@@ -47,9 +39,7 @@ from ..schemas.experiment_config import (
 from ..schemas.selector_strategies import BaseConfig
 from ..schemas.trainer_configs import BaseTrainerConfig
 from ..states.experiment_state import ExperimentState
-from ..variation_generators.base_variation_generator import (
-    BaseVariationGenerator,
-)
+from ..variation_generators.base_variation_generator import BaseVariationGenerator
 from ..variation_generators.openai_prompt_based_variation_generator import (
     OpenAIPromptBasedVariationGenerator,
 )
@@ -205,9 +195,7 @@ def register_custom_data_generator(
         BaseDataGenerator.register_data_generator(
             name, data_generator_cls, config_cls
         )
-    from ..data_generators.openai_prompt_data_generator import (
-        OpenAIPromptDataGenerator,
-    )
+    from ..data_generators.openai_prompt_data_generator import OpenAIPromptDataGenerator
     _ = OpenAIPromptDataGenerator
 
 

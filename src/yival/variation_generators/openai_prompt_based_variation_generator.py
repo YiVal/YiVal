@@ -9,9 +9,7 @@ from ..common import utils
 from ..common.model_utils import llm_completion
 from ..schemas.experiment_config import WrapperVariation
 from ..schemas.model_configs import Request
-from ..schemas.varation_generator_configs import (
-    OpenAIPromptBasedVariationGeneratorConfig,
-)
+from ..schemas.varation_generator_configs import OpenAIPromptBasedVariationGeneratorConfig
 from .base_variation_generator import BaseVariationGenerator
 
 SYSTEM_PRMPOT = """

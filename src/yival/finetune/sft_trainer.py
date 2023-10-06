@@ -4,30 +4,14 @@ This module provides an implementation of Supervised Fine-tuning trainer.
 """
 import os
 
-from transformers import (
-    AutoModelForCausalLM,
-    BitsAndBytesConfig,
-    TrainingArguments,
-)
+from transformers import AutoModelForCausalLM, BitsAndBytesConfig, TrainingArguments
 
 from ..experiment.evaluator import Evaluator
 from ..logger.token_logger import TokenLogger
-from ..schemas.experiment_config import (
-    Experiment,
-    ExperimentConfig,
-    TrainerOutput,
-)
-from ..schemas.trainer_configs import (
-    DatasetConfig,
-    SFTTrainerConfig,
-    TrainArguments,
-)
+from ..schemas.experiment_config import Experiment, ExperimentConfig, TrainerOutput
+from ..schemas.trainer_configs import DatasetConfig, SFTTrainerConfig, TrainArguments
 from .base_trainer import BaseTrainer
-from .utils import (
-    extract_from_input_data,
-    get_hg_tokenizer,
-    print_trainable_parameters,
-)
+from .utils import extract_from_input_data, get_hg_tokenizer, print_trainable_parameters
 
 DEFAULT_PROMPT_FORMAT = """
 You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe. Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.
