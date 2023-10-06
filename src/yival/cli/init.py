@@ -28,12 +28,14 @@ from ..variation_generators.openai_prompt_based_variation_generator import (
 )
 from .utils import generate_experiment_config_yaml
 
-# try:
-#     from ..finetune.sft_trainer import SFTTrainer
-# except ImportError:
-#     print(
-#         "[Warn] missing modules in trainers, ignore this warn if you don't want to finetune model in yival"
-#     )
+try:
+    from ..finetune.sft_trainer import SFTTrainer
+except ImportError:
+    from ..finetune.back_up_trainer import \
+        BackUpTrainer as SFTTrainer  # type: ignore
+    print(
+        "[Warn] missing modules while import SFTTrainer, ignore this warn if you don't want to finetune model in yival\n solve this by 'pip install yival[trainers]' "
+    )
 
 
 def _prevent_unused_imports():
@@ -61,7 +63,7 @@ def _prevent_unused_imports():
     _ = AHPSelection
 
     #Trainer
-    # _ = SFTTrainer
+    _ = SFTTrainer
 
 
 def variation_type(arg: str):
