@@ -28,3 +28,18 @@ class OpenAIPromptBasedVariationGeneratorConfig(BaseVariationGeneratorConfig):
 
     def asdict(self):
         return asdict(self)
+
+
+@dataclass
+class SelfExemplarConfig(BaseVariationGeneratorConfig):
+
+    model_name: str = "gpt-4"
+    start_prompt: str = ""
+    problem_prompt: str = ""
+    relevant_problems_prompt: str = " Recall three relevant and distinct problems. For each problem, describe it and explain the solution."
+    core_concept_prompt: str = "What is the core concept of the problem?"
+    tutorial_prompt: str = "What is the tutorial about these concept?"
+    end_prompt: str = "Solve the initial problem:"
+
+    def asdict(self):
+        return asdict(self)
