@@ -223,9 +223,7 @@ class ExperimentRunner:
 
                     trainer = get_trainer(self.config)
                     if trainer:
-                        trainer.train(
-                            experiment, self.config, evaluator, logger
-                        )
+                        trainer.train(experiment, self.config)
 
                 if output_path:
                     with open(config_output_path, 'wb') as file:

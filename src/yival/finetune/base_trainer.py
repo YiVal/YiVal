@@ -8,8 +8,6 @@ the data and experiment results
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Optional, Type
 
-from ..experiment.evaluator import Evaluator
-from ..logger.token_logger import TokenLogger
 from ..schemas.experiment_config import Experiment, ExperimentConfig, TrainerOutput
 from ..schemas.trainer_configs import BaseTrainerConfig
 
@@ -61,8 +59,9 @@ class BaseTrainer(ABC):
 
     @abstractmethod
     def train(
-        self, experiment: Experiment, config: ExperimentConfig,
-        evaluator: Evaluator, token_logger: TokenLogger
+        self,
+        experiment: Experiment,
+        config: ExperimentConfig,
     ) -> TrainerOutput:
         """
         Train models based on the configs and datas
