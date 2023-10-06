@@ -4,15 +4,11 @@ This module provides an implementation of Supervised Fine-tuning trainer.
 """
 import os
 
-import bitsandbytes as bnb  # type: ignore
-import torch
-from peft import LoraConfig, get_peft_model  # type: ignore
 from transformers import (
     AutoModelForCausalLM,
     BitsAndBytesConfig,
     TrainingArguments,
 )
-from trl import SFTTrainer as TRL_SFTTrainer  # type: ignore
 
 from ..experiment.evaluator import Evaluator
 from ..logger.token_logger import TokenLogger
@@ -67,6 +63,7 @@ class SFTTrainer(BaseTrainer):
         self.config: SFTTrainerConfig = config
 
     def find_all_linear_names(self, model):
+        import bitsandbytes as bnb  # type: ignore
         cls = bnb.nn.Linear4bit
         lora_module_names = set()
         for name, module in model.named_modules():
@@ -82,6 +79,10 @@ class SFTTrainer(BaseTrainer):
         self, experiment: Experiment, experiment_config: ExperimentConfig,
         evaluator: Evaluator, token_logger: TokenLogger
     ) -> TrainerOutput:
+
+        import torch
+        from peft import LoraConfig, get_peft_model  # type: ignore
+        from trl import SFTTrainer as TRL_SFTTrainer  # type: ignore
 
         print("[INFO][sft_trainer] train config: ", self.config)
 
