@@ -85,6 +85,7 @@ addopts = ["--verbose", "--yapf", "--isort", "--mypy"]
 multi_line_output = 3
 include_trailing_comma = true
 known_first_party = "yival"
+line_length = 100
 
 [tool.yapf]
 align_closing_bracket_with_visual_indent = true
