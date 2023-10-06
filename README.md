@@ -159,6 +159,7 @@ fuels advancements in technology, fostering a future that is intelligently
 connected and universally accessible.
 
 ## Contributors
+
 <a href="https://github.com/YiVal/YiVal/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=YiVal/YiVal" />
 </a>  
