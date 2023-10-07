@@ -8,7 +8,8 @@ from ..schemas.experiment_config import ExperimentConfig
 
 def load_and_validate_config(config_filepath: str) -> ExperimentConfig:
     """
-    Load and validate the experiment configuration directly from a specified filepath.
+    Load and validate the experiment configuration directly from a specified
+    filepath.
     """
 
     # Load the configuration directly from the specified filepath
@@ -21,6 +22,10 @@ def load_and_validate_config(config_filepath: str) -> ExperimentConfig:
 
 
 def load_and_validate_configs(config_filepath: str) -> list[ExperimentConfig]:
+    """
+    Load and validate the experiment configurations
+    """
+
     dict_configs = OmegaConf.load(config_filepath)
     if isinstance(dict_configs, ListConfig):
         configs = [

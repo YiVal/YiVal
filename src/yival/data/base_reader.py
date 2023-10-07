@@ -32,22 +32,6 @@ class BaseReader(ABC):
     default_config: Optional[BaseReaderConfig] = None
 
     @classmethod
-    def register(
-        cls, name: str, config_cls: Optional[Type[BaseReaderConfig]] = None
-    ):
-        """Decorator to register new readers."""
-
-        def inner(subclass: Type[BaseReader]):
-            cls._registry[name] = {
-                "class": subclass,
-                "default_config": subclass.default_config,
-                "config_cls": config_cls
-            }
-            return subclass
-
-        return inner
-
-    @classmethod
     def get_reader(cls, name: str) -> Optional[Type['BaseReader']]:
         """Retrieve reader class from registry by its name."""
         reader_info = cls._registry.get(name, {})
