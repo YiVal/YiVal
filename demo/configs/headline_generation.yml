@@ -46,56 +46,56 @@ variations:
 
           role: system
 
-evaluators:
-  - evaluator_type: individual
-    metric_calculators:
-      - method: AVERAGE
-    name: openai_prompt_based_evaluator
-    display_name: clear
-    prompt: |-
-      You are assessing a submitted answer on a given task based on a criterion. Here is the data:
-      - Task: Given an tech startup business, generate one corresponding landing page headline
-      - Does the headline clearly communicate what the startup does or what problem it solves?
-        It should be immediately clear to anyone who reads the headline what the startup's purpose is.
-        A lack of clarity can lead to confusion and may discourage potential users or investors.
-      [Input]: {tech_startup_business}
-      [Result]: {raw_output}
-      Answer the question by selecting one of the following options:
-      A It fails to meet the criterion at all.
-      B It somewhat meets the criterion, but there is significant room for improvement.
-      C It meets the criterion to a satisfactory degree.
-      D It meets the criterion very well.
-      E It meets the criterion exceptionally well, with little to no room for improvement.
-    choices: ["A", "B", "C", "D", "E"]
-    # model_name specify the llm model , e.g. a16z-infra/llama-2-13b-chat:9dff94b1bed5af738655d4a7cbcdcde2bd503aa85c94334fe1f42af7f3dd5ee3
-    model_name: gpt-4
-    description: "evaluate the quality of the landing page headline"
-    scale_description: "0-4"
-    choice_scores:
-      A: 0
-      B: 1
-      C: 2
-      D: 3
-      E: 4
+evaluators: []
+#   - evaluator_type: individual
+#     metric_calculators:
+#       - method: AVERAGE
+#     name: openai_prompt_based_evaluator
+#     display_name: clear
+#     prompt: |-
+#       You are assessing a submitted answer on a given task based on a criterion. Here is the data:
+#       - Task: Given an tech startup business, generate one corresponding landing page headline
+#       - Does the headline clearly communicate what the startup does or what problem it solves?
+#         It should be immediately clear to anyone who reads the headline what the startup's purpose is.
+#         A lack of clarity can lead to confusion and may discourage potential users or investors.
+#       [Input]: {tech_startup_business}
+#       [Result]: {raw_output}
+#       Answer the question by selecting one of the following options:
+#       A It fails to meet the criterion at all.
+#       B It somewhat meets the criterion, but there is significant room for improvement.
+#       C It meets the criterion to a satisfactory degree.
+#       D It meets the criterion very well.
+#       E It meets the criterion exceptionally well, with little to no room for improvement.
+#     choices: ["A", "B", "C", "D", "E"]
+#     # model_name specify the llm model , e.g. a16z-infra/llama-2-13b-chat:9dff94b1bed5af738655d4a7cbcdcde2bd503aa85c94334fe1f42af7f3dd5ee3
+#     model_name: gpt-4
+#     description: "evaluate the quality of the landing page headline"
+#     scale_description: "0-4"
+#     choice_scores:
+#       A: 0
+#       B: 1
+#       C: 2
+#       D: 3
+#       E: 4
 
 
-selection_strategy:
-  ahp_selection:
-    criteria:
-      - "openai_prompt_based_evaluator: clear"
-      - average_token_usage
-      - average_latency
-    criteria_maximization:
-      "openai_prompt_based_evaluator: clear": true
-      average_latency: false
-      average_token_usage: false
-    criteria_weights:
-      "openai_prompt_based_evaluator: clear": 0.6
-      average_latency: 0.2
-      average_token_usage: 0.2
-    normalize_func: "z-score"
+# selection_strategy:
+#   ahp_selection:
+#     criteria:
+#       - "openai_prompt_based_evaluator: clear"
+#       - average_token_usage
+#       - average_latency
+#     criteria_maximization:
+#       "openai_prompt_based_evaluator: clear": true
+#       average_latency: false
+#       average_token_usage: false
+#     criteria_weights:
+#       "openai_prompt_based_evaluator: clear": 0.6
+#       average_latency: 0.2
+#       average_token_usage: 0.2
+#     normalize_func: "z-score"
 
-human_rating_configs:
-  - name: clear
-    instructions: Rate whether the headline clearly state what the start is doing
-    scale: [1, 5]
+# human_rating_configs:
+#   - name: clear
+#     instructions: Rate whether the headline clearly state what the start is doing
+#     scale: [1, 5]

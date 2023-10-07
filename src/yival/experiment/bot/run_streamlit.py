@@ -44,10 +44,10 @@ def run_streamlit():
     # print(f"[DEBUG]all_combinations: {all_combinations}, type: {type(all_combinations)}")
 
     st.title("Chat With Yival!")
-    combinations = [item['task'] for item in all_combinations]
+    # combinations = [item['task'] for item in all_combinations]
 
     selected_combinations = st.multiselect(
-        'Please select one or more combinations:', combinations
+        'Please select one or more combinations:', all_combinations
     )
     # print(f"[DEBUG]experiment_config: {experiment_config}")
     # experiment_config.all_combinations = selected_combinations
@@ -65,10 +65,10 @@ def run_streamlit():
 
     if prompt := st.chat_input(f"{args_message}"):
         st.session_state.messages.append({"role": "user", "content": prompt})
-        print(f"[DEBUG]st.session_state.messages: {st.session_state.messages}")
+        # print(f"[DEBUG]st.session_state.messages: {st.session_state.messages}")
 
         input_data = extract_params(prompt)
-        print(f"[DEBUG]params: {input_data}")
+        # print(f"[DEBUG]params: {input_data}")
 
         experiments: List[Experiment] = []
         results: List[ExperimentResult] = []
@@ -80,6 +80,9 @@ def run_streamlit():
             token_logger=logger,
             evaluator=evaluator
         )
+        print(f"[DEBUG]selected_combinations: {selected_combinations}, type: {type(selected_combinations)}")
+        lite_experiment_runner.set_config(selected_combinations, experiment_config)
+        print(f"[DEBUG]lite_experiment_runner.config: {lite_experiment_runner.config}")
         experiment = lite_experiment_runner.run_experiment(
             enable_selector=False
         )
