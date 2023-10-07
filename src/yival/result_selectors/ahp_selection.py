@@ -2,11 +2,7 @@ from typing import Any, Dict
 
 import numpy as np
 
-from ..schemas.experiment_config import (
-    CombinationAggregatedMetrics,
-    EvaluatorOutput,
-    Experiment,
-)
+from ..schemas.experiment_config import CombinationAggregatedMetrics, EvaluatorOutput, Experiment
 from ..schemas.selector_strategies import AHPConfig, SelectionOutput
 from .normalize_func import NORMALIZATION_FUNCS
 from .selection_context import SelectionContext

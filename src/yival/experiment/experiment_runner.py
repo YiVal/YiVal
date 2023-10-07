@@ -23,6 +23,7 @@ from .utils import (
     generate_experiment,
     get_improver,
     get_selection_strategy,
+    get_trainer,
     register_custom_data_generator,
     register_custom_evaluators,
     register_custom_improver,
@@ -201,24 +202,28 @@ class ExperimentRunner:
                         results = self._process_dataset(
                             all_combinations, logger, evaluator
                         )
-                    if not results:
-                        return
-                    experiment = generate_experiment(
-                        results, evaluator
-                    )  # type: ignore
+                    if results:
+                        experiment = generate_experiment(
+                            results, evaluator
+                        )  # type: ignore
+                        strategy = get_selection_strategy(self.config)
+                        if strategy:
+                            context_trade_off = SelectionContext(
+                                strategy=strategy
+                            )
+                            experiment.selection_output = context_trade_off.execute_selection( # type: ignore
+                                experiment=experiment
+                            )
 
-                    strategy = get_selection_strategy(self.config)
-                    if strategy:
-                        context_trade_off = SelectionContext(strategy=strategy)
-                        experiment.selection_output = context_trade_off.execute_selection( # type: ignore
-                            experiment=experiment
-                        )
+                        improver = get_improver(self.config)
+                        if improver:
+                            experiment.improver_output = improver.improve(
+                                experiment, self.config, evaluator, logger
+                            )
 
-                    improver = get_improver(self.config)
-                    if improver:
-                        experiment.improver_output = improver.improve(
-                            experiment, self.config, evaluator, logger
-                        )
+                    trainer = get_trainer(self.config)
+                    if trainer:
+                        trainer.train(experiment, self.config)
 
                 if output_path:
                     with open(config_output_path, 'wb') as file:

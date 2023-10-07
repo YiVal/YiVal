@@ -1,20 +1,14 @@
 # test_string_expected_result_evaluator.py
 import pytest
 
-from yival.evaluators.string_expected_result_evaluator import (
-    StringExpectedResultEvaluator,
-)
+from yival.evaluators.string_expected_result_evaluator import StringExpectedResultEvaluator
 from yival.schemas.common_structures import InputData
 from yival.schemas.evaluator_config import (
     EvaluatorType,
     ExpectedResultEvaluatorConfig,
     MatchingTechnique,
 )
-from yival.schemas.experiment_config import (
-    EvaluatorOutput,
-    ExperimentResult,
-    MultimodalOutput,
-)
+from yival.schemas.experiment_config import EvaluatorOutput, ExperimentResult, MultimodalOutput
 
 
 @pytest.fixture

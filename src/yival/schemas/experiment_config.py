@@ -19,6 +19,7 @@ from .evaluator_config import (
     GlobalEvaluatorConfig,
 )
 from .selector_strategies import BaseConfig, SelectionOutput
+from .trainer_configs import BaseTrainerConfig
 from .varation_generator_configs import BaseVariationGeneratorConfig
 from .wrapper_configs import BaseWrapperConfig
 
@@ -160,6 +161,7 @@ class ExperimentConfig:
     evaluators: Optional[List[Union[EvaluatorConfig, ComparisonEvaluatorConfig,
                                     GlobalEvaluatorConfig]]] = None
     improver: Optional[BaseCombinationImproverConfig] = None
+    trainer: Optional[BaseTrainerConfig] = None
     output: Optional[OutputConfig] = None
     human_rating_configs: Optional[List[HumanRatingConfig]] = None
     existing_experiment_path: Optional[str] = None
@@ -382,6 +384,11 @@ class ImproverOutput:
     group_experiment_results: List[GroupedExperimentResult]
     combination_aggregated_metrics: List[CombinationAggregatedMetrics]
     original_best_combo_key: str
+
+
+@dataclass
+class TrainerOutput:
+    train_logs: List[str]
 
 
 @dataclass

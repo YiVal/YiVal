@@ -18,11 +18,7 @@ from ..schemas.evaluator_config import (
     MetricCalculatorConfig,
     OpenAIPromptBasedEvaluatorConfig,
 )
-from ..schemas.experiment_config import (
-    ExperimentResult,
-    InputData,
-    MultimodalOutput,
-)
+from ..schemas.experiment_config import ExperimentResult, InputData, MultimodalOutput
 from ..schemas.model_configs import Request
 from .base_evaluator import BaseEvaluator
 
