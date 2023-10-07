@@ -26,9 +26,9 @@
 **YiVal is a versatile platform and framework that streamlines the evaluation
 and enhancement of your Generative AI applications.**  
 It empowers you to
-generate better results, reduce latency, and decrease inference cost as easily.
+generate better results, reduce latency, and decrease inference cost easily.
 Depending on your knowledge and comfort level, YiVal will help you
-simultaneously optimize model metadata, model parameters, prompts, and
+simultaneously optimize prompts, model metadata, model parameters, and
 retrieval configurations. You can easily customize your test data, evaluation
 methods, and enhancement strategies, all in one place. Enhance and evaluate
 everything with ease!
@@ -43,7 +43,7 @@ everything with ease!
 
 ### Prerequisites
 
-- **Python Version**: Ensure you have Python 3.10 or later installed.
+- **Python Version**: Ensure you have `Python 3.10` or later installed.
 - **OpenAI API Key**: Obtain an API key from OpenAI. Once you have the key, set
 it as an environment variable named `OPENAI_API_KEY`.
 
@@ -84,7 +84,7 @@ of random tech startup business names.
 
 ### Steps to Run Your First YiVal Program
 
-1. **Navigate to the YiVal Directory**:
+1. **Navigate to the yival Directory**:
 
     ```bash
     cd /YiVal/src/yival
