@@ -10,7 +10,7 @@ from tqdm import tqdm
 import yival.common.utils as common
 from yival.configs.config_utils import load_and_validate_configs
 from yival.experiment.app.app import display_results_dash
-from yival.experiment.bot.bot import interactive_bot
+from yival.experiment.bot.interactive_bot import interactive_bot
 
 from ..logger.token_logger import TokenLogger
 from ..result_selectors.selection_context import SelectionContext

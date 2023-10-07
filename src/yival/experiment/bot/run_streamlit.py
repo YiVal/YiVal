@@ -2,8 +2,10 @@
 import os
 import pickle
 import re
-
+import json
 import streamlit as st
+from PIL import Image
+import io
 
 from yival.combination_improvers.lite_experiment import LiteExperimentRunner
 from yival.experiment.rate_limiter import RateLimiter
@@ -19,20 +21,109 @@ def extract_params(input_str):
 
     expected_result = None
     content = {}
+    example_id = 0
     for k, v in list(params.items()):
         if k == "yival_expected_result" and v is not None:
             expected_result = v
+            example_id+=1
             params.pop(k)
         else:
             if v is not None:
                 content[k] = v
 
-    input_data = InputData(content=content, expected_result=expected_result)
+    input_data = InputData(content=content,example_id=example_id, expected_result=expected_result)
 
     return input_data
 
+def display_image(image_list):
+    images = image_list
+    image_data = []
+    for image in images:
+        byte_stream = io.BytesIO()
+        image.save(byte_stream, format='PNG')
+        byte_data = byte_stream.getvalue()
+        image_data.append(byte_data)
+
+    st.image(image_data, caption=["Image 1", "Image 2", "Image 3", "Image 4"], use_column_width=False)
+
+def extract_params(input_str):
+    pattern = r"([\w\s]+)( \(Optional\))?:\s*\{(.*?)\}"
+    matches = re.findall(pattern, input_str)
+    params = {match[0].strip(): match[2] for match in matches}
+
+    expected_result = None
+    content = {}
+    example_id = 0
+    for k, v in list(params.items()):
+        if k == "yival_expected_result" and v is not None:
+            expected_result = v
+            example_id += 1
+            params.pop(k)
+        else:
+            if v is not None:
+                content[k] = v
+
+    input_data = InputData(content=content, example_id=example_id, expected_result=expected_result)
+
+    return input_data
+
+def run_experiments(selected_combinations, input_data, experiment_config, logger, evaluator):
+    """
+    Run the experiment with lite_experiment
+    """
+    experiments: List[Experiment] = []
+    results: List[ExperimentResult] = []
+
+    lite_experiment_runner = LiteExperimentRunner(
+        config=experiment_config,
+        limiter=rate_limiter,
+        data=[input_data],
+        token_logger=logger,
+        evaluator=evaluator
+    )
+    lite_experiment_runner.set_variations(selected_combinations)
+    experiment = lite_experiment_runner.run_experiment(
+        enable_selector=False
+    )
+    experiments.append(experiment)
+    for exp in experiments:
+        for res in exp.combination_aggregated_metrics:
+            results.extend(res.experiment_results)
+
+    return results
+
+def display_results(results):
+    """
+    Display the results with bot messages after the experiment.
+    """
+    for result in results:
+        bot_reply = f"Result to your task: \"{list(result.combination.values())[0]} {list(result.input_data.content.values())[0]}\" is as follows:\n \n"
+
+        if result.raw_output.text_output:
+            bot_reply += f"Text Result: {result.raw_output.text_output}\n \n"
+
+        if result.latency:
+            bot_reply += f"Latency: {result.latency}\n \n"
+
+        if result.token_usage:
+            bot_reply += f"Token Usage: {result.token_usage}\n \n"
+
+        if result.evaluator_outputs:
+            bot_reply += f"Evaluator: {json.dumps(result.evaluator_outputs)}\n \n"
+
+        st.session_state.messages.append({
+            "role": "assistant",
+            "content": bot_reply
+        })
+
+        if result.raw_output.image_output:
+            display_image(result.raw_output.image_output)
 
 def run_streamlit():
+    """
+    Run the experiment using the user input and pkl file.
+    """
+
     with open("data.pkl", "rb") as f:
         data = pickle.load(f)
     experiment_data = data["experiment_data"]
@@ -41,16 +132,15 @@ def run_streamlit():
     all_combinations = data["all_combinations"]
     logger = data["logger"]
     evaluator = data["evaluator"]
-    # print(f"[DEBUG]all_combinations: {all_combinations}, type: {type(all_combinations)}")
+    for combination in all_combinations:
+        for key in combination:
+            combination[key] = [combination[key]]
 
     st.title("Chat With Yival!")
-    # combinations = [item['task'] for item in all_combinations]
 
     selected_combinations = st.multiselect(
         'Please select one or more combinations:', all_combinations
     )
-    # print(f"[DEBUG]experiment_config: {experiment_config}")
-    # experiment_config.all_combinations = selected_combinations
 
     args = [arg for arg in function_args.keys()]
     args_message = ', '.join([f'{arg}: {{content}}' for arg in args])
@@ -65,43 +155,14 @@ def run_streamlit():
 
     if prompt := st.chat_input(f"{args_message}"):
         st.session_state.messages.append({"role": "user", "content": prompt})
-        # print(f"[DEBUG]st.session_state.messages: {st.session_state.messages}")
 
         input_data = extract_params(prompt)
-        # print(f"[DEBUG]params: {input_data}")
-
-        experiments: List[Experiment] = []
-        results: List[ExperimentResult] = []
-
-        lite_experiment_runner = LiteExperimentRunner(
-            config=experiment_config,
-            limiter=rate_limiter,
-            data=[input_data],
-            token_logger=logger,
-            evaluator=evaluator
-        )
-        print(f"[DEBUG]selected_combinations: {selected_combinations}, type: {type(selected_combinations)}")
-        lite_experiment_runner.set_config(selected_combinations, experiment_config)
-        print(f"[DEBUG]lite_experiment_runner.config: {lite_experiment_runner.config}")
-        experiment = lite_experiment_runner.run_experiment(
-            enable_selector=False
-        )
-        experiments.append(experiment)
-        for exp in experiments:
-            for res in exp.combination_aggregated_metrics:
-                results.extend(res.experiment_results)
-
-        st.session_state.messages.append({
-            "role":
-            "assistant",
-            "content":
-            f"Experiment result:{experiment}"
-        })
+        results = run_experiments(selected_combinations, input_data, experiment_config, logger, evaluator)
+        display_results(results)
 
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
-
 
 if __name__ == "__main__":
     run_streamlit()

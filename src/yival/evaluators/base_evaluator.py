@@ -57,6 +57,7 @@ class BaseEvaluator(ABC):
     def get_evaluator(cls, name: str) -> Optional[Type['BaseEvaluator']]:
         """Retrieve evaluator class from registry by its name."""
         evaluator_info = cls._registry.get(name, {})
+        print(f"？？？cls._registry:{cls._registry}")
         return evaluator_info.get(
             "class", None
         ) if "class" in evaluator_info else None
@@ -76,6 +77,7 @@ class BaseEvaluator(ABC):
         reader_cls: Type[T_Evaluator],
         config_cls: Optional[Type[BaseEvaluatorConfig]] = None
     ):
+        print(f"register_evaluator:{name}")
         cls._registry[name] = {
             "class": reader_cls,
             "default_config": reader_cls.default_config,

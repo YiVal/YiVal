@@ -79,32 +79,6 @@ class LiteExperimentRunner:
                 self.config["variations"].append(   #type: ignore
                     (WrapperConfig(name=name, variations=wrapper_variations))
                 )
-    def set_config(self, variations: List[Dict[str, List[str]]], config: ExperimentConfig):
-        """
-        set all variations for current experiment
-        variations are format in 
-        [
-            {
-                var1_name: ["a","b","c"]
-            },
-            {
-                var2_name: ["d","e","f"]
-            }
-        ]
-        """
-        self.config["variations"] = []
-        wrapper_variations=[]
-        for variation_dict in variations:
-            for name, values in variation_dict.items():
-                wrapper_variations.append(
-                    WrapperVariation(
-                        value=values, value_type=str(type(values)).split("'")[1]
-                    ) 
-                    )
-                self.config["variations"].append(   #type: ignore
-                    (WrapperConfig(name=name, variations=wrapper_variations))
-                )
-        return config
 
     def run_experiment(self, enable_selector: bool) -> Experiment:
         state = ExperimentState.get_instance()

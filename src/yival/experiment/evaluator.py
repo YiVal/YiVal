@@ -32,10 +32,14 @@ class Evaluator:
             else:
                 config_dict = config
             if config_dict["evaluator_type"] == EvaluatorType.INDIVIDUAL.value:
+                print(f"config_dict:{config_dict}")
+                print(f"config_dict[name]:{config_dict['name']}")
                 evaluator_cls = BaseEvaluator.get_evaluator(
                     config_dict["name"]
                 )
+                print(f"evaluator_cls:{evaluator_cls}")
                 if evaluator_cls:
+                    print("evaluator_cls")
                     config_cls = BaseEvaluator.get_config_class(
                         config_dict["name"]
                     )
@@ -46,6 +50,7 @@ class Evaluator:
                             config_data = config_dict.asdict()
                         config_instance = config_cls(**config_data)
                         evaluator = evaluator_cls(config_instance)
+                        print("evaluate_individual_result")
                         res.append(evaluator.evaluate(result))
         return res
 
