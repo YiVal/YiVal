@@ -1,62 +1,103 @@
-
 # type: ignore
-import openai
-import streamlit as st
 import os
 import pickle
+import re
+
+import streamlit as st
+
+from yival.combination_improvers.lite_experiment import LiteExperimentRunner
+from yival.experiment.rate_limiter import RateLimiter
+from yival.schemas.common_structures import InputData
+
+rate_limiter = RateLimiter(60 / 60)
+
+
+def extract_params(input_str):
+    pattern = r"([\w\s]+)( \(Optional\))?:\s*\{(.*?)\}"
+    matches = re.findall(pattern, input_str)
+    params = {match[0].strip(): match[2] for match in matches}
+
+    expected_result = None
+    content = {}
+    for k, v in list(params.items()):
+        if k == "yival_expected_result" and v is not None:
+            expected_result = v
+            params.pop(k)
+        else:
+            if v is not None:
+                content[k] = v
+
+    input_data = InputData(content=content, expected_result=expected_result)
+
+    return input_data
 
 
 def run_streamlit():
     with open("data.pkl", "rb") as f:
         data = pickle.load(f)
-    print(f"[DEBUG]data: {data}")
     experiment_data = data["experiment_data"]
     experiment_config = data["experiment_config"]
     function_args = data["function_args"]
     all_combinations = data["all_combinations"]
-    state = data["state"]
     logger = data["logger"]
     evaluator = data["evaluator"]
-    interactive = data["interactive"]
+    # print(f"[DEBUG]all_combinations: {all_combinations}, type: {type(all_combinations)}")
 
-    st.title("ChatGPT-like clone")
+    st.title("Chat With Yival!")
+    combinations = [item['task'] for item in all_combinations]
 
-    openai.api_key = os.getenv("OPENAI_API_KEY")
+    selected_combinations = st.multiselect(
+        'Please select one or more combinations:', combinations
+    )
+    # print(f"[DEBUG]experiment_config: {experiment_config}")
+    # experiment_config.all_combinations = selected_combinations
 
-    print(f"[DEBUG]st.session_state: {st.session_state}")
-
-    if 'openai_model' not in st.session_state:
-        st.session_state['openai_model'] = 'gpt-3.5-turbo'
-
+    args = [arg for arg in function_args.keys()]
+    args_message = ', '.join([f'{arg}: {{content}}' for arg in args])
+    hint_message = f'Please input parameters as this format:\n {args_message}.'
 
     if 'messages' not in st.session_state:
         st.session_state.messages = []
+        st.session_state.messages.append({
+            "role": "assistant",
+            "content": hint_message
+        })
 
-    print(f"[DEBUG]st.session_state: {st.session_state}")
+    if prompt := st.chat_input(f"{args_message}"):
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        print(f"[DEBUG]st.session_state.messages: {st.session_state.messages}")
+
+        input_data = extract_params(prompt)
+        print(f"[DEBUG]params: {input_data}")
+
+        experiments: List[Experiment] = []
+        results: List[ExperimentResult] = []
+
+        lite_experiment_runner = LiteExperimentRunner(
+            config=experiment_config,
+            limiter=rate_limiter,
+            data=[input_data],
+            token_logger=logger,
+            evaluator=evaluator
+        )
+        experiment = lite_experiment_runner.run_experiment(
+            enable_selector=False
+        )
+        experiments.append(experiment)
+        for exp in experiments:
+            for res in exp.combination_aggregated_metrics:
+                results.extend(res.experiment_results)
+
+        st.session_state.messages.append({
+            "role":
+            "assistant",
+            "content":
+            f"Experiment result:{experiment}"
+        })
+
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
-
-    if prompt := st.chat_input("What is up?"):
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.markdown(prompt)
-
-        with st.chat_message("assistant"):
-            message_placeholder = st.empty()
-            full_response = ""
-            for response in openai.ChatCompletion.create(
-                model=st.session_state["openai_model"],
-                messages=[
-                    {"role": m["role"], "content": m["content"]}
-                    for m in st.session_state.messages
-                ],
-                stream=True,
-            ):
-                full_response += response.choices[0].delta.get("content", "")
-                message_placeholder.markdown(full_response + "▌")
-            message_placeholder.markdown(full_response)
-        st.session_state.messages.append({"role": "assistant", "content": full_response})
 
 
 if __name__ == "__main__":

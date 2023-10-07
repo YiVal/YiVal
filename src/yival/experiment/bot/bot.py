@@ -3,12 +3,10 @@
 import os
 import pickle
 
-from yival.experiment.utils import (
-    get_function_args,
-)
-from yival.schemas.experiment_config import (
-    Experiment,
-)
+from yival.experiment.utils import get_function_args
+from yival.schemas.experiment_config import Experiment
+
+
 def interactive_bot(
     experiment_data: Experiment,
     experiment_config,
@@ -46,8 +44,8 @@ def interactive_bot(
     with open("data.pkl", "wb") as f:
         pickle.dump(data, f)
 
-
     os.system("streamlit run src/yival/experiment/bot/run_streamlit.py")
+
 
 if __name__ == "__main__":
     pass

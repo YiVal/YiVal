@@ -241,8 +241,10 @@ class ExperimentRunner:
                     display_threads.append(t)
                     t.start()
                 if interactive:
-                    interactive_bot(experiment, self.config, all_combinations,
-                            ExperimentState.get_instance(), logger, evaluator)
+                    interactive_bot(
+                        experiment, self.config, all_combinations,
+                        ExperimentState.get_instance(), logger, evaluator
+                    )
             elif source_type == "user_input":
                 display_results_dash(
                     Experiment([], []), self.config, all_combinations,
