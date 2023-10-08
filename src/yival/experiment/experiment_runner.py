@@ -10,6 +10,7 @@ from tqdm import tqdm
 import yival.common.utils as common
 from yival.configs.config_utils import load_and_validate_configs
 from yival.experiment.app.app import display_results_dash  # type: ignore
+from yival.experiment.bot.interactive_bot import interactive_bot  # type: ignore
 
 from ..logger.token_logger import TokenLogger
 from ..result_selectors.selection_context import SelectionContext
@@ -154,6 +155,7 @@ class ExperimentRunner:
     def run(
         self,
         display: bool = True,
+        interactive: bool = False,
         output_path: Optional[str] = "abc.pkl",
         experiment_input_path: Optional[str] = "abc.pkl",
         async_eval: bool = False
@@ -243,6 +245,11 @@ class ExperimentRunner:
                     )
                     display_threads.append(t)
                     t.start()
+                if interactive:
+                    interactive_bot(
+                        experiment, self.config, all_combinations,
+                        ExperimentState.get_instance(), logger, evaluator
+                    )
             elif source_type == "user_input":
                 display_results_dash(
                     Experiment([], []), self.config, all_combinations,

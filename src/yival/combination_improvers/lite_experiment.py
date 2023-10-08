@@ -66,11 +66,11 @@ class LiteExperimentRunner:
         """
         self.config["variations"] = []  #type: ignore
         for variation_dict in variations:
-            for name, valus in variation_dict.items():
+            for name, values in variation_dict.items():
                 wrapper_variations = [
                     WrapperVariation(
                         value=v, value_type=str(type(v)).split("'")[1]
-                    ) for v in valus
+                    ) for v in values
                 ]
                 self.config["variations"].append(   #type: ignore
                     (WrapperConfig(name=name, variations=wrapper_variations))

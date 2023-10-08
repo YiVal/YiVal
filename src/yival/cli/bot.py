@@ -1,13 +1,3 @@
-"""Module for running experiments.
-
-This module provides functionality for setting up and running experiments
-based on a YAML configuration file. It defines command-line arguments for
-specifying various settings such as display options and output paths.
-
-Example:
-    To run an experiment using a configuration file 'config.yml':
-    $ yival run config.yml
-"""
 import traceback
 from argparse import ArgumentParser, Namespace
 
@@ -17,7 +7,7 @@ from ..experiment.experiment_runner import ExperimentRunner
 def add_arguments_to(subparser):
     """Add arguments to subcommand run."""
     parser: ArgumentParser = subparser.add_parser(
-        "run", help=run_experiment.__doc__
+        "bot", help=run_experiment.__doc__
     )
     parser.description = run_experiment.__doc__
     parser.set_defaults(func=run_experiment)
@@ -29,14 +19,14 @@ def add_arguments_to(subparser):
     parser.add_argument(
         "--display",
         action="store_true",
-        default=True,
+        default=False,
         help="Display the results after the experiment."
     )
 
     parser.add_argument(
         "--interactive",
         action="store_true",
-        default=False,
+        default=True,
         help="Open interactive mode to use a chatbot."
     )
 
@@ -74,6 +64,6 @@ def run_experiment(args: Namespace):
             async_eval=args.async_eval
         )
         print("Experiment completed!")
-    except Exception as excetion:
-        print("Failed to run the experiment.\nError:", str(excetion))
+    except Exception as e:
+        print("Failed to run the experiment.\nError:", str(e))
         traceback.print_exc()  # This will print the traceback

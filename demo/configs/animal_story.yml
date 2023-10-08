@@ -45,7 +45,7 @@ variations:
             - At all times, gpt-4 must give a response as an animal story
 
             Craft your instruction Ensure that GPT-4 is able to fully understand the types and personalities of small animals and write engaging and fully pictorial stories.
-            keep your output crisp: only the prompt, devoid of any extraneous content.
+            keep your output crisp: only the prompt, devoid of any extraneous content. Let's take a deep breathe. 
 
           role: system
 
