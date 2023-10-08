@@ -399,6 +399,7 @@ class Experiment:
     """
     group_experiment_results: List[GroupedExperimentResult]
     combination_aggregated_metrics: List[CombinationAggregatedMetrics]
+    enable_custom_func: bool = False
     selection_output: Optional[SelectionOutput] = None
     improver_output: Optional[ImproverOutput] = None
 

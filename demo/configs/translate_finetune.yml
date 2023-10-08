@@ -19,9 +19,10 @@ dataset:
           teacher_quiz: str
           teacher_answer: str
       expected_param_name: teacher_answer
-      number_of_examples: 1
+      number_of_examples: 5
       output_path: english2chinese1.pkl
   source_type: machine_generated
+
 
 trainer:
   name: sft_trainer
@@ -29,14 +30,7 @@ trainer:
   output_path: output
   dataset_config:
     prompt_key: teacher_quiz
-  enable_lora: true
-  lora_config:
-    r: 8
-    lora_alpha: 32
-    bias: none
-    task_type: CAUSLA_LM
-    lora_dropout: 0.05
-    inference_mode: False
+  enable_lora: False
   enable_bits_and_bytes: False
 
 

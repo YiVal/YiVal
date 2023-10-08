@@ -115,27 +115,40 @@ class SFTTrainer(BaseTrainer):
 
         assert (isinstance(self.config.train_arguments, dict))
         # Parameters for training arguments details => https://github.com/huggingface/transformers/blob/main/src/transformers/training_args.py#L158
+        output_dir = self.config.output_path
         training_args = TrainingArguments(
-            per_device_train_batch_size=self.config.get(
+            per_device_train_batch_size=self.config.train_arguments.get(
                 "per_device_train_batch_size", 4
             ),
-            gradient_accumulation_steps=self.config.get(
+            gradient_accumulation_steps=self.config.train_arguments.get(
                 "gradient_accumulation_steps", 4
             ),
-            gradient_checkpointing=self.config.get(
+            gradient_checkpointing=self.config.train_arguments.get(
                 "gradient_checkpointing", True
             ),
-            max_grad_norm=self.config.get("max_grad_norm", 0.3),
-            num_train_epochs=self.config.get("num_train_epochs", 15),
-            learning_rate=self.config.get("learning_rate", 2e-4),
-            bf16=self.config.get("bf16", False),
-            save_total_limit=self.config.get("save_total_limit", 3),
-            logging_steps=self.config.get("logging_steps", 1),
-            output_dir=self.config.get("output_dir", self.config.output_path),
-            optim=self.config.get("optim", "paged_adamw_32bit"),
-            lr_scheduler_type=self.config.get("lr_scheduler_type", "cosine"),
-            warmup_ratio=self.config.get("warmup_ratio", 0.05),
-            log_level=self.config.get('log_level', 'debug')
+            max_grad_norm=self.config.train_arguments.get(
+                "max_grad_norm", 0.3
+            ),
+            num_train_epochs=self.config.train_arguments.get(
+                "num_train_epochs", 15
+            ),
+            learning_rate=self.config.train_arguments.get(
+                "learning_rate", 2e-4
+            ),
+            bf16=self.config.train_arguments.get("bf16", False),
+            save_total_limit=self.config.train_arguments.get(
+                "save_total_limit", 3
+            ),
+            logging_steps=self.config.train_arguments.get("logging_steps", 1),
+            output_dir=output_dir,
+            optim=self.config.train_arguments.get(
+                "optim", "paged_adamw_32bit"
+            ),
+            lr_scheduler_type=self.config.train_arguments.get(
+                "lr_scheduler_type", "cosine"
+            ),
+            warmup_ratio=self.config.train_arguments.get("warmup_ratio", 0.05),
+            log_level=self.config.train_arguments.get('log_level', 'debug')
         )
 
         output_dir = self.config.output_path

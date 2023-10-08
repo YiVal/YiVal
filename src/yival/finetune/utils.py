@@ -1,10 +1,12 @@
 import json
-from typing import Dict
+from typing import Dict, List
 
 from datasets import Dataset as HgDataset
 from transformers import AutoTokenizer, PreTrainedTokenizer, PreTrainedTokenizerFast
 
-from ..schemas.experiment_config import Experiment
+from ..dataset.data_utils import evaluate_condition
+
+from ..schemas.experiment_config import Experiment, ExperimentResult
 
 
 def get_hg_tokenizer(
@@ -35,20 +37,46 @@ def extract_from_input_data(
     experiment: Experiment, prompt_key: str, completion_key: str | None,
     condition: str | None
 ) -> HgDataset:
-    result_dict: Dict = {"prompt": [], "completion": []}
-    # print(f"condition here : {condition}")
-    for rs in experiment.group_experiment_results:
-        # condition_met = evaluate_condition(condition, None)
-        # if not condition_met:
-        #     continue
-        # print(f"rs is now {rs}")
-        input_data = json.loads(rs.group_key)
-        prompt = input_data['content'][prompt_key]
-        completion = input_data['content'][
-            completion_key] if completion_key else input_data['expected_result']
+    """
+    if experiment doesn't support custom_func , extract all data from group_experiment_results
 
-        result_dict['prompt'].append(prompt)
-        result_dict['completion'].append(completion)
+    else extract data from combination_aggregated_metrics according to condition
+
+    An example of condition: 'name == openai_prompt_based_evaluator AND result >= 0 AND display_name == clarity'
+
+    """
+    result_dict: Dict = {"prompt": [], "completion": []}
+
+    if experiment.enable_custom_func:
+        for combo_result in experiment.combination_aggregated_metrics:
+            print(f"combo_result now : {combo_result}")
+            results: List[ExperimentResult] = combo_result.experiment_results
+            for rs in results:
+                if rs.evaluator_outputs:
+                    for evaluator_output in rs.evaluator_outputs:
+                        condition_met = evaluate_condition(
+                            condition, evaluator_output
+                        )
+                        print(f"conditiom_met now : {condition_met}")
+                        if condition_met:
+                            prompt = rs.input_data['content'][prompt_key]
+                            completion = rs.input_data['content'][
+                                completion_key
+                            ] if completion_key else rs.input_data[
+                                'expected_result']
+                            result_dict['prompt'].append(prompt)
+                            result_dict['completion'].append(completion)
+
+    else:
+        for rs in experiment.group_experiment_results:
+            input_data = json.loads(rs.group_key)
+            prompt = input_data['content'][prompt_key]
+            completion = input_data['content'][
+                completion_key] if completion_key else input_data[
+                    'expected_result']
+
+            result_dict['prompt'].append(prompt)
+            result_dict['completion'].append(completion)
 
     hg_dataset = HgDataset.from_dict(result_dict)
     return hg_dataset
