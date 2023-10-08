@@ -71,7 +71,7 @@ If you're looking to contribute or set up a development environment:
     ```
 
 3. **Setup with Poetry**: Initialize the Python virtual environment and install
-  dependencies using Poetry:
+  dependencies using Poetry. Make sure to run the below cmd in `/YiVal` directory:
 
     ```bash
     poetry install --sync
