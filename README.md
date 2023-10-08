@@ -14,7 +14,7 @@
 
 <!-- markdownlint-disable-next-line MD013 -->
 👉 Follow us: [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/YiValai.svg?style=social&label=Follow%20%40YiVal)](https://twitter.com/yivalloveaigc) |
-[![Discord](https://dcbadge.vercel.app/api/server/MRaXNcsB?compact=true&style=flat)](https://discord.gg/MRaXNcsB)
+[![Discord](https://dcbadge.vercel.app/api/server/HnUWVW4kth?compact=true&style=flat)](https://discord.gg/HnUWVW4kth)
 
 [![Downloads](https://static.pepy.tech/badge/YiVal/month)](https://pepy.tech/project/YiVal)
 [![License: MIT](https://img.shields.io/badge/License-Apache2.0-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -150,7 +150,7 @@ of random tech startup business names.
 If you want to contribute to YiVal, be sure to review the [contribution guidelines](https://yival.github.io/YiVal/contributing/).
 We use [GitHub issues](https://github.com/YiVal/YiVal/issues) for tracking
 requests and bugs.
-Please join [YiVal's discord channel](https://discord.gg/MRaXNcsB) for
+Please join [YiVal's discord channel](https://discord.gg/HnUWVW4kth) for
 general questions and discussion.
 Join our collaborative community where your unique expertise as researchers and
 software engineers is highly valued! Contribute to our project and be a part of
