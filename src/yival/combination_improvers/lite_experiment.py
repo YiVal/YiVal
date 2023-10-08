@@ -5,7 +5,17 @@ from tqdm import tqdm
 
 from ..experiment.evaluator import Evaluator
 from ..experiment.rate_limiter import RateLimiter
-from ..experiment.utils import generate_experiment, get_selection_strategy, run_single_input
+from ..experiment.utils import (
+    generate_experiment,
+    get_selection_strategy,
+    register_custom_data_generator,
+    register_custom_evaluators,
+    register_custom_improver,
+    register_custom_selection_strategy,
+    register_custom_variation_generators,
+    register_custom_wrappers,
+    run_single_input,
+)
 from ..logger.token_logger import TokenLogger
 from ..result_selectors.selection_context import SelectionContext
 from ..schemas.common_structures import InputData
@@ -42,6 +52,25 @@ class LiteExperimentRunner:
         self.token_logger = token_logger
         self.evaluator = evaluator
 
+    def _register_custom_components(self):
+        """
+        Register custom components based on the configureation.
+
+        If run lite experiment runner , this step is necessary
+        """
+        register_custom_wrappers(self.config.get("custom_wrappers", {}))
+        register_custom_evaluators(self.config.get("custom_evaluators", {}))
+        register_custom_data_generator(
+            self.config.get("custom_data_generators", {})
+        )
+        register_custom_selection_strategy(
+            self.config.get("custom_selection_strategy", {})
+        )
+        register_custom_improver(self.config.get("custom_improvers", {}))
+        register_custom_variation_generators(
+            self.config.get("custom_variation_generators", {})
+        )
+
     def parallel_task(self, data, all_combinations, logger, evaluator):
         """
         Execute a single input run in parallel
@@ -77,6 +106,7 @@ class LiteExperimentRunner:
                 )
 
     def run_experiment(self, enable_selector: bool) -> Experiment:
+        self._register_custom_components()
         state = ExperimentState.get_instance()
         state = ExperimentState.get_instance()
         state.clear_variations_for_experiment()
