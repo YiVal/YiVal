@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 
-from yival.schemas.varation_generator_configs import (
-    BaseVariationGeneratorConfig,
-)
+from yival.schemas.varation_generator_configs import BaseVariationGeneratorConfig
 
 
 @dataclass

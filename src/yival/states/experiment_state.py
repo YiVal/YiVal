@@ -15,9 +15,7 @@ from typing import Any, Dict, Iterator, List, Optional, Union
 
 from ..schemas.experiment_config import ExperimentConfig
 from ..schemas.varation_generator_configs import BaseVariationGeneratorConfig
-from ..variation_generators.base_variation_generator import (
-    BaseVariationGenerator,
-)
+from ..variation_generators.base_variation_generator import BaseVariationGenerator
 
 
 class ExperimentState:

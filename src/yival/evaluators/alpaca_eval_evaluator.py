@@ -13,10 +13,7 @@ from typing import List
 from alpaca_eval.annotators import PairwiseAnnotator
 
 from yival.evaluators.base_evaluator import BaseEvaluator
-from yival.schemas.evaluator_config import (
-    AlpacaEvalEvaluatorConfig,
-    EvaluatorType,
-)
+from yival.schemas.evaluator_config import AlpacaEvalEvaluatorConfig, EvaluatorType
 from yival.schemas.experiment_config import EvaluatorOutput, ExperimentResult
 
 

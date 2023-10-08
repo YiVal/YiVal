@@ -31,11 +31,11 @@ def test_generate_example_id_default(mock_reader):
     assert path in example_id
 
     # If you have a specific format in mind for the ID, you can test it here
-    # For this example, I'm assuming a format like "test_path_hash_somehashvalue"
+    # For this example, I'm assuming a format like
+    # "test_path_hash_somehashvalue"
     assert example_id.startswith(f"{path}")
 
 
-@BaseReader.register(name="RegistryTestReader")
 class RegistryTestReader(BaseReader):
     default_config = BaseReaderConfig(chunk_size=50)
 
@@ -44,6 +44,11 @@ class RegistryTestReader(BaseReader):
 
 
 def test_registry():
+    BaseReader.register_reader(
+        name="RegistryTestReader",
+        reader_cls=RegistryTestReader,
+        config_cls=BaseReaderConfig
+    )
     # Ensure that the MockReader is registered correctly
     assert BaseReader.get_reader("RegistryTestReader") == RegistryTestReader
 

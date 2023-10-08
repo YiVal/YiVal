@@ -5,22 +5,14 @@ from yival.wrappers.string_wrapper import StringWrapper
 from ..combination_improvers.openai_prompt_based_combination_improver import (
     OpenAIPromptBasedCombinationImprover,
 )
-from ..combination_improvers.optimize_by_prompt_improver import (
-    OptimizeByPromptImprover,
-)
+from ..combination_improvers.optimize_by_prompt_improver import OptimizeByPromptImprover
 from ..data.csv_reader import CSVReader
-from ..data_generators.openai_prompt_data_generator import (
-    OpenAIPromptBasedGeneratorConfig,
-)
+from ..data_generators.openai_prompt_data_generator import OpenAIPromptBasedGeneratorConfig
 from ..evaluators.bertscore_evaluator import BertScoreEvaluator
 from ..evaluators.openai_elo_evaluator import OpenAIEloEvaluator
-from ..evaluators.openai_prompt_based_evaluator import (
-    OpenAIPromptBasedEvaluator,
-)
+from ..evaluators.openai_prompt_based_evaluator import OpenAIPromptBasedEvaluator
 from ..evaluators.rouge_evaluator import RougeEvaluator
-from ..evaluators.string_expected_result_evaluator import (
-    StringExpectedResultEvaluator,
-)
+from ..evaluators.string_expected_result_evaluator import StringExpectedResultEvaluator
 from ..result_selectors.ahp_selection import AHPSelection
 from ..schemas.experiment_config import WrapperConfig, WrapperVariation
 from ..variation_generators.openai_prompt_based_variation_generator import (
@@ -28,20 +20,43 @@ from ..variation_generators.openai_prompt_based_variation_generator import (
 )
 from .utils import generate_experiment_config_yaml
 
+try:
+    from ..finetune.sft_trainer import SFTTrainer
+except ImportError:
+    # isort: skip
+    from ..finetune.back_up_trainer import BackUpTrainer as SFTTrainer  # type: ignore
+    print(
+        """[Warn] missing modules while import SFTTrainer, ignore this warn if you don't want to finetune model in yival\n 
+            solve this by 'pip install yival[trainers]' """
+    )
+
 
 def _prevent_unused_imports():
+
+    #tools
     _ = StringWrapper
+    _ = CSVReader
+
+    #DataGenerator
+    _ = OpenAIPromptBasedGeneratorConfig
+    _ = OpenAIPromptBasedVariationGenerator
+
+    #Evaluator
     _ = StringExpectedResultEvaluator
     _ = RougeEvaluator
     _ = BertScoreEvaluator
-    _ = CSVReader
-    _ = OpenAIPromptBasedGeneratorConfig
-    _ = OpenAIPromptBasedVariationGenerator
     _ = OpenAIEloEvaluator
-    _ = AHPSelection
     _ = OpenAIPromptBasedEvaluator
+
+    #Improver
     _ = OpenAIPromptBasedCombinationImprover
     _ = OptimizeByPromptImprover
+
+    #Strategy
+    _ = AHPSelection
+
+    #Trainer
+    _ = SFTTrainer
 
 
 def variation_type(arg: str):

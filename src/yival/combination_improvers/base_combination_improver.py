@@ -11,14 +11,8 @@ from typing import Any, Dict, Optional, Type
 
 from ..experiment.evaluator import Evaluator
 from ..logger.token_logger import TokenLogger
-from ..schemas.combination_improver_configs import (
-    BaseCombinationImproverConfig,
-)
-from ..schemas.experiment_config import (
-    Experiment,
-    ExperimentConfig,
-    ImproverOutput,
-)
+from ..schemas.combination_improver_configs import BaseCombinationImproverConfig
+from ..schemas.experiment_config import Experiment, ExperimentConfig, ImproverOutput
 
 
 class BaseCombinationImprover(ABC):

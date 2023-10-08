@@ -6,7 +6,7 @@ from yival.common.huggingface.hf import HFInference
 from yival.schemas.model_configs import ModelProvider, Request, Response
 
 
-def litellm_completion(
+def _litellm_completion(
     request: Request, provider: ModelProvider | None = None
 ) -> Response:
     if isinstance(request.prompt, str):
@@ -60,8 +60,22 @@ model_to_provider_maping: dict[str, str] = {
 def llm_completion(
     request: Request, provider: ModelProvider | None = None
 ) -> Response:
+    """Perform model completion based on the provided request and optional
+    model provider.
+
+    Parameters:
+        request (Request): The request object containing the model name and 
+        other details.
+        provider (ModelProvider | None, optional): The model provider object.
+        If None,  a provider will be determined based on the
+        `model_to_provider_mapping`.
+
+    Returns:
+        Response: The model completion result as a Response object.
+    """
+
     completion_method = model_inference_mapping.get(
-        request.model_name, litellm_completion
+        request.model_name, _litellm_completion
     )
     if provider is None and model_to_provider_maping.get(
         request.model_name, ""

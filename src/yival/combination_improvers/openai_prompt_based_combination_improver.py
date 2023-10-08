@@ -19,9 +19,7 @@ from ..experiment.evaluator import Evaluator
 from ..experiment.rate_limiter import RateLimiter
 from ..experiment.utils import generate_experiment, run_single_input
 from ..logger.token_logger import TokenLogger
-from ..schemas.combination_improver_configs import (
-    OpenAIPromptBasedCombinationImproverConfig,
-)
+from ..schemas.combination_improver_configs import OpenAIPromptBasedCombinationImproverConfig
 from ..schemas.common_structures import InputData
 from ..schemas.evaluator_config import OpenAIPromptBasedEvaluatorConfig
 from ..schemas.experiment_config import (
@@ -152,20 +150,20 @@ def construct_prompt(
     return prompt
 
 
-def extract_dict_from_string(input: str) -> str | None:
+def extract_dict_from_string(str_input: str) -> str | None:
     """
     Extract the outermost dictionary from a string, handling nested
     dictionaries.
     """
     open_braces = 0
-    dict_start = input.find('{')
-    for i in range(dict_start, len(input)):
-        if input[i] == '{':
+    dict_start = str_input.find('{')
+    for i in range(dict_start, len(str_input)):
+        if str_input[i] == '{':
             open_braces += 1
-        elif input[i] == '}':
+        elif str_input[i] == '}':
             open_braces -= 1
         if open_braces == 0:
-            return input[dict_start:i + 1]
+            return str_input[dict_start:i + 1]
     return None  # Return None if no matching dictionary found
 
 
@@ -280,8 +278,8 @@ class OpenAIPromptBasedCombinationImprover(BaseCombinationImprover):
                     else:
                         continue
                     break
-                except Exception as e:
-                    print("Retrying: ", e)
+                except Exception as exception:
+                    print("Retrying: ", exception)
 
             for k, v in extracted_dict.items():
                 # TODO: Support custom class value_type

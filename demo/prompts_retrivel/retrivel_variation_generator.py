@@ -14,13 +14,9 @@ from yival.evaluators.openai_prompt_based_evaluator import (
     extract_choice_from_response,
 )
 from yival.schemas.experiment_config import WrapperVariation
-from yival.variation_generators.base_variation_generator import (
-    BaseVariationGenerator,
-)
+from yival.variation_generators.base_variation_generator import BaseVariationGenerator
 
-from .retrivel_variation_generator_config import (
-    RetrivelVariationGeneratorConfig,
-)
+from .retrivel_variation_generator_config import RetrivelVariationGeneratorConfig
 
 PROMPT_GENERATION_PROMPT = """
 Your mission is to craft system prompts tailored for GPT-4. You'll be provided
