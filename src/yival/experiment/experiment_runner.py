@@ -230,7 +230,7 @@ class ExperimentRunner:
                 if output_path:
                     with open(config_output_path, 'wb') as file:
                         pickle.dump(experiment, file)
-                if display:
+                if display and results:
                     # display_results_dash(
                     #     experiment, self.config, all_combinations,
                     #     ExperimentState.get_instance(), logger, evaluator, port=base_port+idx

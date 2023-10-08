@@ -1,0 +1,17 @@
+description: Generate test data
+dataset:
+  data_generators:
+    openai_prompt_data_generator:
+      chunk_size: 100000
+      diversify: true
+      model_name: gpt-4
+      input_function:
+        description: # Description of the function
+          Given a tech startup business, generate a corresponding landing
+          page headline
+        name: headline_generation_for_business
+        parameters:
+          tech_startup_business: str # Parameter name and type
+      number_of_examples: 3
+      output_csv_path: generated_examples.csv
+  source_type: machine_generated
