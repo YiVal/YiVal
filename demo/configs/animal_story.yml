@@ -20,7 +20,7 @@ dataset:
           drawing_style: str
       number_of_examples: 2
       model_name: gpt-4
-      output_path: null
+      output_path: animal_story.pkl
   source_type: machine_generated
 
 variations:

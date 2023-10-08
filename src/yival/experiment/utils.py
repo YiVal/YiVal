@@ -22,8 +22,13 @@ from ..data.huggingface_dataset_reader import HuggingFaceDatasetReader
 from ..data_generators.base_data_generator import BaseDataGenerator
 from ..evaluators.alpaca_eval_evaluator import AlpacaEvalEvaluator
 from ..evaluators.base_evaluator import BaseEvaluator
+from ..evaluators.bertscore_evaluator import BertScoreEvaluator
 from ..evaluators.openai_elo_evaluator import OpenAIEloEvaluator
+from ..evaluators.openai_prompt_based_evaluator import (
+    OpenAIPromptBasedEvaluator,
+)
 from ..evaluators.python_validation_evaluator import PythonValidationEvaluator
+from ..evaluators.rouge_evaluator import RougeEvaluator
 from ..evaluators.string_expected_result_evaluator import (
     StringExpectedResultEvaluator,
 )
@@ -175,6 +180,9 @@ def register_custom_evaluators(custom_evaulators: Dict[str, Dict[str, Any]]):
     _ = OpenAIEloEvaluator
     _ = PythonValidationEvaluator
     _ = AlpacaEvalEvaluator
+    _ = BertScoreEvaluator
+    _ = OpenAIPromptBasedEvaluator
+    _ = RougeEvaluator
 
 
 def register_custom_wrappers(custom_wrappers: Dict[str, Dict[str, Any]]):

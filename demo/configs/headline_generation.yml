@@ -46,7 +46,7 @@ variations:
 
           role: system
 
-evaluators: 
+evaluators:
   - evaluator_type: individual
     metric_calculators:
       - method: AVERAGE
