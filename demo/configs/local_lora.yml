@@ -1,4 +1,3 @@
-custom_function: demo.translate_quiz.translate_quiz
 description: Generated experiment config
 dataset:
   data_generators:
@@ -24,15 +23,6 @@ dataset:
       output_path: english2chinese1.pkl
   source_type: machine_generated
 
-variations:
-  - name : model_name
-    variations:
-      - instantiated_value: gpt-3.5-turbo
-        value: gpt-3.5-turbo
-        value_type: str
-        variation_id: null
-
-
 trainer:
   name: sft_trainer
   model_name: PY007/TinyLlama-1.1B-Chat-v0.3
@@ -47,5 +37,6 @@ trainer:
     task_type: CAUSLA_LM
     lora_dropout: 0.05
     inference_mode: False
+  enable_bits_and_bytes: False
 
 

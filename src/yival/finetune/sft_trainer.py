@@ -5,6 +5,7 @@ This module provides an implementation of Supervised Fine-tuning trainer.
 import os
 
 from transformers import AutoModelForCausalLM, BitsAndBytesConfig, TrainingArguments
+from pprint import pprint
 
 from ..schemas.experiment_config import Experiment, ExperimentConfig, TrainerOutput
 from ..schemas.trainer_configs import DatasetConfig, SFTTrainerConfig, TrainArguments
@@ -67,15 +68,15 @@ class SFTTrainer(BaseTrainer):
         from peft import LoraConfig, get_peft_model  # type: ignore
         from trl import SFTTrainer as TRL_SFTTrainer  # type: ignore
 
-        print("[INFO][sft_trainer] train config: ", self.config)
+        pprint(f"[INFO][sft_trainer] train config:")
+        pprint(self.config.asdict())
 
+        #Extract data from experiment according to condition
         assert (isinstance(self.config.dataset_config, dict))
-        assert (isinstance(self.config.bnb_config, dict))
-        assert (isinstance(self.config.train_arguments, dict))
-
         dataset = extract_from_input_data(
             experiment, self.config.dataset_config.get("prompt_key", None),
-            self.config.dataset_config.get("completion_key", None)
+            self.config.dataset_config.get("completion_key", None),
+            self.config.dataset_config.get("condition", None)
         )
 
         #Prepare base model and tokenizer
@@ -85,17 +86,21 @@ class SFTTrainer(BaseTrainer):
         #Assemble bitsandbytes quant config
         bnb_config = None
         if self.config.enable_bits_and_bytes:
+            assert (isinstance(self.config.bnb_config, dict))
             bnb_config = BitsAndBytesConfig(
                 load_in_4bit=self.config.bnb_config.load_in_4_bit,
                 load_in_8bit=self.config.bnb_config.load_in_8_bit
             )
 
+        #Load base model from hg
         base_model = AutoModelForCausalLM.from_pretrained(
             model_name, torch_dtype=torch.half, quantization_config=bnb_config
         )
 
+        #prepare peft, lora e.g.
         peft_config = None
         if self.config.enable_lora:
+            assert (isinstance(self.config.lora_config, dict))
             peft_config = LoraConfig(
                 r=self.config.lora_config["r"],
                 lora_alpha=self.config.lora_config["lora_alpha"],
@@ -108,6 +113,7 @@ class SFTTrainer(BaseTrainer):
 
         print_trainable_parameters(base_model)
 
+        assert (isinstance(self.config.train_arguments, dict))
         # Parameters for training arguments details => https://github.com/huggingface/transformers/blob/main/src/transformers/training_args.py#L158
         training_args = TrainingArguments(
             per_device_train_batch_size=self.config.get(

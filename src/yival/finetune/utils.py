@@ -1,7 +1,7 @@
 import json
 from typing import Dict
 
-from datasets import Dataset as HgDataset  # type: ignore
+from datasets import Dataset as HgDataset
 from transformers import AutoTokenizer, PreTrainedTokenizer, PreTrainedTokenizerFast
 
 from ..schemas.experiment_config import Experiment
@@ -32,10 +32,16 @@ def print_trainable_parameters(model):
 
 
 def extract_from_input_data(
-    experiment: Experiment, prompt_key: str, completion_key: str | None
+    experiment: Experiment, prompt_key: str, completion_key: str | None,
+    condition: str | None
 ) -> HgDataset:
     result_dict: Dict = {"prompt": [], "completion": []}
+    # print(f"condition here : {condition}")
     for rs in experiment.group_experiment_results:
+        # condition_met = evaluate_condition(condition, None)
+        # if not condition_met:
+        #     continue
+        # print(f"rs is now {rs}")
         input_data = json.loads(rs.group_key)
         prompt = input_data['content'][prompt_key]
         completion = input_data['content'][
