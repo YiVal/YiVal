@@ -1,7 +1,5 @@
 # type: ignore
 import io
-import json
-import os
 import pickle
 import re
 
@@ -10,18 +8,23 @@ import streamlit as st
 from yival.combination_improvers.lite_experiment import LiteExperimentRunner
 from yival.experiment.rate_limiter import RateLimiter
 from yival.schemas.common_structures import InputData
+from yival.schemas.experiment_config import Experiment, ExperimentResult
 
 rate_limiter = RateLimiter(60 / 60)
 
 
 def extract_params(input_str):
-    pattern = r"([\w\s]+)( \(Optional\))?:\s*\{(.*?)\}"
+    """
+    Extract the parameters from the user input.
+    """
+    pattern = r"([\w\s]+)( \(Optional\))?:\s*\{(.+?)\}"
     matches = re.findall(pattern, input_str)
+    if not matches:
+        raise ValueError("Invalid input format")
     params = {match[0].strip(): match[2] for match in matches}
 
     expected_result = None
     content = {}
-    example_id = 0
     for k, v in list(params.items()):
         if k == "yival_expected_result" and v is not None:
             expected_result = v
@@ -36,6 +39,9 @@ def extract_params(input_str):
 
 
 def display_image(image_list):
+    """
+    Display the image output from the experiment.
+    """
     images = image_list
     image_data = []
     for image in images:
@@ -49,28 +55,6 @@ def display_image(image_list):
         caption=["Image 1", "Image 2", "Image 3", "Image 4"],
         use_column_width=False
     )
-
-
-def extract_params(input_str):
-    pattern = r"([\w\s]+)( \(Optional\))?:\s*\{(.*?)\}"
-    matches = re.findall(pattern, input_str)
-    params = {match[0].strip(): match[2] for match in matches}
-
-    expected_result = None
-    content = {}
-    example_id = 0
-    for k, v in list(params.items()):
-        if k == "yival_expected_result" and v is not None:
-            expected_result = v
-            example_id += 1
-            params.pop(k)
-        else:
-            if v is not None:
-                content[k] = v
-
-    input_data = InputData(content=content, expected_result=expected_result)
-
-    return input_data
 
 
 def run_experiments(
@@ -118,7 +102,7 @@ def display_results(results):
         if result.evaluator_outputs:
             bot_reply += "- Evaluator:\n \n"
             for output in result.evaluator_outputs:
-                bot_reply += f"\t- {output.name}: {output.result}\n \n"
+                bot_reply += f"\t- {output.name} \({output.display_name}\): {output.result}\n \n"
 
         st.session_state.messages.append({
             "role": "assistant",
@@ -163,15 +147,27 @@ def run_streamlit():
             "content": hint_message
         })
 
-    if prompt := st.chat_input(f"{args_message}"):
-        st.session_state.messages.append({"role": "user", "content": prompt})
+    try:
+        if prompt := st.chat_input(f"{args_message}"):
+            st.session_state.messages.append({
+                "role": "user",
+                "content": prompt
+            })
 
-        input_data = extract_params(prompt)
-        results = run_experiments(
-            selected_combinations, input_data, experiment_config, logger,
-            evaluator
-        )
-        display_results(results)
+            input_data = extract_params(prompt)
+
+            results = run_experiments(
+                selected_combinations, input_data, experiment_config, logger,
+                evaluator
+            )
+            display_results(results)
+    except ValueError as e:
+        st.session_state.messages.append({
+            "role":
+            "assistant",
+            "content":
+            f"Error: {str(e)}, please try again."
+        })
 
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
