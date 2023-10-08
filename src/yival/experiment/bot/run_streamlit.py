@@ -30,10 +30,7 @@ def extract_params(input_str):
             if v is not None:
                 content[k] = v
 
-    input_data = InputData(
-        content=content,
-        expected_result=expected_result
-    )
+    input_data = InputData(content=content, expected_result=expected_result)
 
     return input_data
 
@@ -71,10 +68,7 @@ def extract_params(input_str):
             if v is not None:
                 content[k] = v
 
-    input_data = InputData(
-        content=content,
-        expected_result=expected_result
-    )
+    input_data = InputData(content=content, expected_result=expected_result)
 
     return input_data
 

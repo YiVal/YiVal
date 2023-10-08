@@ -4,11 +4,7 @@ import pytest
 
 from yival.cli.utils import generate_experiment_config_yaml
 from yival.configs.config_utils import load_and_validate_config
-from yival.schemas.experiment_config import (
-    ExperimentConfig,
-    WrapperConfig,
-    WrapperVariation,
-)
+from yival.schemas.experiment_config import ExperimentConfig, WrapperConfig, WrapperVariation
 
 
 @pytest.mark.parametrize(

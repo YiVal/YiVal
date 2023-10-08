@@ -33,8 +33,9 @@ def greedy_search_generator(
     **model_kwargs,
 ) -> Union[GreedySearchOutput, torch.LongTensor]:
     """
-    Generates sequences for models with a language modeling head using greedy decoding.
-    Monkey patched function to create a generator for next_token - allows for token streaming
+    Generates sequences for models with a language modeling head using greedy
+    decoding. Monkey patched function to create a generator for next_token -
+    allows for token streaming
     """
     # init values
     logits_processor = logits_processor if logits_processor is not None else LogitsProcessorList(
@@ -93,8 +94,10 @@ def greedy_search_generator(
     this_peer_finished = False  # used by synced_gpus only
     while True:
         if synced_gpus:
-            # Under synced_gpus the `forward` call must continue until all gpus complete their sequence.
-            # The following logic allows an early break if all peers finished generating their sequence
+            # Under synced_gpus the `forward` call must continue until all
+            # gpus complete their sequence.
+            # The following logic allows an early break if all peers finished
+            # generating their sequence.
             this_peer_finished_flag = torch.tensor(
                 0.0 if this_peer_finished else 1.0
             ).to(input_ids.device)
@@ -174,7 +177,8 @@ def greedy_search_generator(
                      for i in eos_token_id)).long()  # type: ignore
             )
 
-        # stop when each sentence is finished, or if we exceed the maximum length
+        # stop when each sentence is finished, or if we exceed the maximum
+        # length
         if unfinished_sequences.max(
         ) == 0 or stopping_criteria(input_ids, scores):
             if not synced_gpus:

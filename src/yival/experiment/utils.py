@@ -9,13 +9,9 @@ from collections import defaultdict
 from importlib import import_module
 from typing import Any, Dict, List
 
-from yival.variation_generators.chain_of_density_prompt import (
-    ChainOfDensityPromptGenerator,
-)
+from yival.variation_generators.chain_of_density_prompt import ChainOfDensityPromptGenerator
 
-from ..combination_improvers.base_combination_improver import (
-    BaseCombinationImprover,
-)
+from ..combination_improvers.base_combination_improver import BaseCombinationImprover
 from ..data.base_reader import BaseReader
 from ..data.csv_reader import CSVReader
 from ..data.huggingface_dataset_reader import HuggingFaceDatasetReader
@@ -24,20 +20,15 @@ from ..evaluators.alpaca_eval_evaluator import AlpacaEvalEvaluator
 from ..evaluators.base_evaluator import BaseEvaluator
 from ..evaluators.bertscore_evaluator import BertScoreEvaluator
 from ..evaluators.openai_elo_evaluator import OpenAIEloEvaluator
-from ..evaluators.openai_prompt_based_evaluator import (
-    OpenAIPromptBasedEvaluator,
-)
+from ..evaluators.openai_prompt_based_evaluator import OpenAIPromptBasedEvaluator
 from ..evaluators.python_validation_evaluator import PythonValidationEvaluator
 from ..evaluators.rouge_evaluator import RougeEvaluator
-from ..evaluators.string_expected_result_evaluator import (
-    StringExpectedResultEvaluator,
-)
+from ..evaluators.string_expected_result_evaluator import StringExpectedResultEvaluator
+from ..finetune.base_trainer import BaseTrainer
 from ..logger.token_logger import TokenLogger
 from ..result_selectors.ahp_selection import AHPSelection
 from ..result_selectors.selection_strategy import SelectionStrategy
-from ..schemas.combination_improver_configs import (
-    BaseCombinationImproverConfig,
-)
+from ..schemas.combination_improver_configs import BaseCombinationImproverConfig
 from ..schemas.evaluator_config import MethodCalculationMethod
 from ..schemas.experiment_config import (
     CombinationAggregatedMetrics,
@@ -49,10 +40,9 @@ from ..schemas.experiment_config import (
     Metric,
 )
 from ..schemas.selector_strategies import BaseConfig
+from ..schemas.trainer_configs import BaseTrainerConfig
 from ..states.experiment_state import ExperimentState
-from ..variation_generators.base_variation_generator import (
-    BaseVariationGenerator,
-)
+from ..variation_generators.base_variation_generator import BaseVariationGenerator
 from ..variation_generators.openai_prompt_based_variation_generator import (
     OpenAIPromptBasedVariationGenerator,
 )
@@ -211,9 +201,7 @@ def register_custom_data_generator(
         BaseDataGenerator.register_data_generator(
             name, data_generator_cls, config_cls
         )
-    from ..data_generators.openai_prompt_data_generator import (
-        OpenAIPromptDataGenerator,
-    )
+    from ..data_generators.openai_prompt_data_generator import OpenAIPromptDataGenerator
     _ = OpenAIPromptDataGenerator
 
 
@@ -412,6 +400,46 @@ def get_improver(config: ExperimentConfig) -> BaseCombinationImprover | None:
                     BaseCombinationImproverConfig(name="")
                 )
                 return improver_instance
+    return None
+
+
+def remove_none_values(d):
+    if isinstance(d, dict):
+        return {
+            k: remove_none_values(v)
+            for k, v in d.items() if v is not None
+        }
+    else:
+        return d
+
+
+def get_trainer(config: ExperimentConfig) -> BaseTrainer | None:
+    if "trainer" not in config:  #type: ignore
+        return None
+    if config["trainer"]:  #type: ignore
+        trainer_config = config["trainer"]  #type: ignore
+        trainer_cls = BaseTrainer.get_trainer(trainer_config["name"])
+        if trainer_cls:
+            config_cls = BaseTrainer.get_config_class(trainer_config["name"])
+            default_config = BaseTrainer.get_default_config(
+                trainer_config["name"]
+            )
+            if config_cls:
+                if isinstance(trainer_config, dict):
+                    config_data = trainer_config
+                else:
+                    config_data = trainer_config.asdict()
+                #remove None value
+                config_data = remove_none_values(config_data)
+                #update data use default_config
+                default_config = default_config.asdict()  #type: ignore
+                default_config.update(config_data)  #type: ignore
+                config_instance = config_cls(**default_config)  #type: ignore
+                trainer_instance = trainer_cls(config_instance)  #type: ignore
+                return trainer_instance
+            else:
+                trainer_instance = trainer_cls(BaseTrainerConfig(name=""))
+                return trainer_instance
     return None
 
 

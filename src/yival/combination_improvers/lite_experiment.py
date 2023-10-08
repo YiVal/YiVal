@@ -5,11 +5,7 @@ from tqdm import tqdm
 
 from ..experiment.evaluator import Evaluator
 from ..experiment.rate_limiter import RateLimiter
-from ..experiment.utils import (
-    generate_experiment,
-    get_selection_strategy,
-    run_single_input,
-)
+from ..experiment.utils import generate_experiment, get_selection_strategy, run_single_input
 from ..logger.token_logger import TokenLogger
 from ..result_selectors.selection_context import SelectionContext
 from ..schemas.common_structures import InputData

@@ -2,9 +2,7 @@ from typing import Iterator, List
 
 from yival.schemas.experiment_config import WrapperVariation
 from yival.schemas.varation_generator_configs import SelfExemplarConfig
-from yival.variation_generators.base_variation_generator import (
-    BaseVariationGenerator,
-)
+from yival.variation_generators.base_variation_generator import BaseVariationGenerator
 
 
 def construct_prompt(config: SelfExemplarConfig) -> str:

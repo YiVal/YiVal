@@ -24,11 +24,7 @@ from PIL import Image
 from pyngrok import ngrok
 
 from yival.experiment.rate_limiter import RateLimiter
-from yival.experiment.utils import (
-    generate_experiment,
-    get_function_args,
-    run_single_input,
-)
+from yival.experiment.utils import generate_experiment, get_function_args, run_single_input
 from yival.schemas.experiment_config import (
     CombinationAggregatedMetrics,
     EvaluatorOutput,

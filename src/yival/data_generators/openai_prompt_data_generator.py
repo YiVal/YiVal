@@ -23,9 +23,7 @@ from yival.common import utils
 from yival.common.model_utils import llm_completion
 from yival.data_generators.base_data_generator import BaseDataGenerator
 from yival.schemas.common_structures import InputData
-from yival.schemas.data_generator_configs import (
-    OpenAIPromptBasedGeneratorConfig,
-)
+from yival.schemas.data_generator_configs import OpenAIPromptBasedGeneratorConfig
 from yival.schemas.model_configs import Request
 
 

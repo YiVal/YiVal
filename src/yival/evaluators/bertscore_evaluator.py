@@ -7,10 +7,7 @@ It has been shown to correlate with human judgment on sentence-level and system-
 from bert_score import score  # type:ignore
 
 from ..schemas.common_structures import InputData
-from ..schemas.evaluator_config import (
-    BertScoreEvaluatorConfig,
-    EvaluatorOutput,
-)
+from ..schemas.evaluator_config import BertScoreEvaluatorConfig, EvaluatorOutput
 from ..schemas.experiment_config import ExperimentResult, MultimodalOutput
 from .base_evaluator import BaseEvaluator
 

@@ -26,9 +26,9 @@
 **YiVal is a versatile platform and framework that streamlines the evaluation
 and enhancement of your Generative AI applications.**  
 It empowers you to
-generate better results, reduce latency, and decrease inference cost as easily.
+generate better results, reduce latency, and decrease inference cost easily.
 Depending on your knowledge and comfort level, YiVal will help you
-simultaneously optimize model metadata, model parameters, prompts, and
+simultaneously optimize prompts, model metadata, model parameters, and
 retrieval configurations. You can easily customize your test data, evaluation
 methods, and enhancement strategies, all in one place. Enhance and evaluate
 everything with ease!
@@ -43,7 +43,7 @@ everything with ease!
 
 ### Prerequisites
 
-- **Python Version**: Ensure you have Python 3.10 or later installed.
+- **Python Version**: Ensure you have `Python 3.10` or later installed.
 - **OpenAI API Key**: Obtain an API key from OpenAI. Once you have the key, set
 it as an environment variable named `OPENAI_API_KEY`.
 
@@ -84,7 +84,7 @@ of random tech startup business names.
 
 ### Steps to Run Your First YiVal Program
 
-1. **Navigate to the YiVal Directory**:
+1. **Navigate to the yival Directory**:
 
     ```bash
     cd /YiVal/src/yival
@@ -176,6 +176,7 @@ connected and universally accessible.
 | [BERTScore: Evaluating Text Generation with BERT](https://arxiv.org/abs/1904.09675) | [Tianyi Zhang](https://arxiv.org/search/cs?searchtype=author&query=Zhang,+T), [Varsha Kishore](https://arxiv.org/search/cs?searchtype=author&query=Kishore,+V), [Felix Wu](https://arxiv.org/search/cs?searchtype=author&query=Wu,+F) | YiVal Evaluator, bertscore, rouge | [@crazycth](https://github.com/crazycth) | - | - | [BertScoreEvaluator](https://github.com/YiVal/YiVal/blob/master/src/yival/evaluators/bertscore_evaluator.py) | - | - | - |
 | [AlpacaEval](https://github.com/tatsu-lab/alpaca_eval) | [Xuechen Li](https://arxiv.org/search/cs?searchtype=author&query=Xuechen%20Li), [Tianyi Zhang](https://arxiv.org/search/cs?searchtype=author&query=Tianyi%20Zhang), [Yann Dubois](https://arxiv.org/search/cs?searchtype=author&query=Yann%20Dubois) et. al | YiVal Evaluator | [@Tao Feng](https://github.com/oliverfeng) | - | - | [AlpacaEvalEvaluator](https://github.com/YiVal/YiVal/blob/master/src/yival/evaluators/alpaca_eval_evaluator.py) | - | - | [config](https://github.com/YiVal/YiVal/blob/master/demo/configs/alpaca_eval.yml) |
 [Chain of Density](https://arxiv.org/pdf/2309.04269.pdf) | [Griffin Adams](https://arxiv.org/search/?query=Griffin+Adam) [Alexander R. Fabbri](https://arxiv.org/search/?query=Alexander+R.+Fabbri) et. al | Prompt Engineering |[@Tao Feng](https://github.com/oliverfeng) | - | [ChainOfDensityGenerator](https://github.com/YiVal/YiVal/blob/master/src/yival/variation_generators/chain_of_density_prompt.py) | - | - | - | [config](https://github.com/YiVal/YiVal/blob/master/demo/configs/summary_config.yml)|
-[Large Language Models as Optimizers](https://arxiv.org/abs/2309.03409) | [Chengrun Yang](https://arxiv.org/search/cs?searchtype=author&query=Yang,+C) [Xuezhi Wang](https://arxiv.org/search/cs?searchtype=author&query=Wang,+X) et. al | Prompt Engineering |[@crazycth](https://github.com/crazycth) |-  | - |-  |- |[optimize_by_prompt_improver](https://github.com/YiVal/YiVal/blob/opro_implement/src/yival/combination_improvers/optimize_by_prompt_improver.py)  | [config](https://github.com/YiVal/YiVal/blob/opro_implement/demo/configs/headline_generation_improve.yml#L174)
+[Large Language Models as Optimizers](https://arxiv.org/abs/2309.03409) | [Chengrun Yang](https://arxiv.org/search/cs?searchtype=author&query=Yang,+C) [Xuezhi Wang](https://arxiv.org/search/cs?searchtype=author&query=Wang,+X) et. al | Prompt Engineering |[@crazycth](https://github.com/crazycth) |-  | - |-  |- |[optimize_by_prompt_improver](https://github.com/YiVal/YiVal/blob/opro_implement/src/yival/combination_improvers/optimize_by_prompt_improver.py)  | [config](https://github.com/YiVal/YiVal/blob/opro_implement/demo/configs/headline_generation_improve.yml#L174)| 123213 | [Chengrun Yang](https://arxiv.org/search/cs?searchtype=author&query=Yang,+C) [Xuezhi Wang](https://arxiv.org/search/cs?searchtype=author&query=Wang,+X) et. al | Prompt Engineering |[@crazycth](https://github.com/crazycth) |-  | - |-  |- |[optimize_by_prompt_improver](https://github.com/YiVal/YiVal/blob/opro_implement/src/yival/combination_improvers/optimize_by_prompt_improver.py)  | [config](https://github.com/YiVal/YiVal/blob/opro_implement/demo/configs/headline_generation_improve.yml#L174)|
+[LoRA: Low-Rank Adaptation of Large Language Models](https://arxiv.org/abs/2106.09685) | [Edward J. Hu](https://arxiv.org/search/cs?searchtype=author&query=Hu,+E+J) [Yelong Shen](https://arxiv.org/search/cs?searchtype=author&query=Shen,+Y) et. al | LLM Finetune |[@crazycth](https://github.com/crazycth) |-  | - |-  |- |[sft_trainer](https://github.com/YiVal/YiVal/blob/add_finetune_module/src/yival/finetune/sft_trainer.py#L40)  | [config](https://github.com/YiVal/YiVal/blob/add_finetune_module/src/yival/schemas/trainer_configs.py#L48)|
 
 <!--  -->

@@ -84,7 +84,7 @@ class HFInference:
 
         logger.info('device memory: {:.3f}MB'.format(device_memory))
 
-        if size_all_mb > device_memory * 0.95:  #some padding
+        if size_all_mb > device_memory * 0.95:
             raise Exception(
                 'Model size is too large for host to run inference on'
             )
@@ -101,7 +101,8 @@ class HFInference:
         repetition_penalty: float = 1
     ):
         '''
-        Generate text from prompt, using monkey patched transformers.generation.utils.GenerationMixin.greedy_search
+        Generate text from prompt, using monkey patched
+        transformers.generation.utils.GenerationMixin.greedy_search
         '''
         inputs_str = prompt.strip()
         inputs = self.tokenizer(inputs_str, return_tensors="pt")
@@ -118,8 +119,8 @@ class HFInference:
                 repetition_penalty=repetition_penalty,
                 early_stopping=False,
             )
-        except Exception as e:
-            raise Exception(f"Error generating text: {e}")
+        except Exception as exception:
+            raise Exception(f"Error generating text: {exception}")
 
         curr_token = ""
         sentence = "<|endoftext|>"
