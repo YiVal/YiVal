@@ -3,9 +3,9 @@ This module provides an implementation of Supervised Fine-tuning trainer.
 
 """
 import os
+from pprint import pprint
 
 from transformers import AutoModelForCausalLM, BitsAndBytesConfig, TrainingArguments
-from pprint import pprint
 
 from ..schemas.experiment_config import Experiment, ExperimentConfig, TrainerOutput
 from ..schemas.trainer_configs import DatasetConfig, SFTTrainerConfig, TrainArguments

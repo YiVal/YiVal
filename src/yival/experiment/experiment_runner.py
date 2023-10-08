@@ -166,7 +166,7 @@ class ExperimentRunner:
         for idx, config in enumerate(self.configs):
             self.config = config
 
-            enable_custom_func = "config" in self.config
+            enable_custom_func = "config" in self.config  #type: ignore
             config_experiment_input_path = ""
             if output_path:
                 config_output_path = f"{os.path.splitext(output_path)[0]}_{idx}.pkl"

@@ -291,7 +291,7 @@ def run_single_input(
             config["custom_function"],  # type: ignore
             **d.content,
             state=tmp_state
-        ) if "custom_function" in config else None
+        ) if "custom_function" in config else None  #type: ignore
 
         end_time = time.time()
         latency = end_time - start_time  # Time in seconds

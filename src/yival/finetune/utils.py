@@ -1,11 +1,10 @@
 import json
 from typing import Dict, List
 
-from datasets import Dataset as HgDataset
+from datasets import Dataset as HgDataset  # type: ignore
 from transformers import AutoTokenizer, PreTrainedTokenizer, PreTrainedTokenizerFast
 
 from ..dataset.data_utils import evaluate_condition
-
 from ..schemas.experiment_config import Experiment, ExperimentResult
 
 
@@ -47,7 +46,7 @@ def extract_from_input_data(
     """
     result_dict: Dict = {"prompt": [], "completion": []}
 
-    if experiment.enable_custom_func:
+    if experiment.enable_custom_func and condition:
         for combo_result in experiment.combination_aggregated_metrics:
             print(f"combo_result now : {combo_result}")
             results: List[ExperimentResult] = combo_result.experiment_results
@@ -68,8 +67,8 @@ def extract_from_input_data(
                             result_dict['completion'].append(completion)
 
     else:
-        for rs in experiment.group_experiment_results:
-            input_data = json.loads(rs.group_key)
+        for group_rs in experiment.group_experiment_results:
+            input_data = json.loads(group_rs.group_key)  #type: ignore
             prompt = input_data['content'][prompt_key]
             completion = input_data['content'][
                 completion_key] if completion_key else input_data[
