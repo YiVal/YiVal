@@ -1,0 +1,115 @@
+loaders:
+- type: python
+  search_path: [src]
+renderer:
+  type: mkdocs
+  output_directory: docs
+  pages:
+  - title: Index
+    source: README.md
+  - title: Eng Spec
+    children:
+    - title: Architecture
+      source: docs/architecture.md
+    - title: Demo
+      name: demo
+      children:
+      - title: Basic Interactive Mode
+        source: docs/basic_interactive_mode.md
+      - title: Question Answering with Expected Result
+        source: docs/qa_expected_results.md
+      - title: Auto Prompts Generation
+        source: docs/auto_prompts_generation.md
+    - title: Custom Classes
+      name: custom_parent
+      children:
+      - title: Custom Evaluator
+        source: docs/custom_classes/evaluators.md
+      - title: Custom Wrapper
+        source: docs/custom_classes/wrappers.md
+      - title: Custom Data Generator
+        source: docs/custom_classes/data_generators.md
+      - title: Custom Variation Generator
+        source: docs/custom_classes/variation_generators.md
+      - title: Custom Reader
+        source: docs/custom_classes/readers.md
+      - title: Custom Combination Improver
+        source: docs/custom_classes/improvers.md
+      - title: Custom Selection Strategy
+        source: docs/custom_classes/selection_strategy.md
+  - title: Contributing Guide
+    source: docs/contributing.md
+  - title: Code Reference
+    name: code_reference
+    children:
+    - title: Data
+      contents:
+      - yival.data.*
+    - title: Data Generators
+      contents:
+      - yival.data_generators.*
+    - title: Dataset
+      contents:
+      - yival.dataset.*
+    - title: Evaluators
+      contents:
+      - yival.evaluators.*
+    - title: Experiment
+      contents:
+      - yival.experiment.*
+    - title: Finetune
+      contents:
+      - yival.finetune.*
+    - title: Output Parsers
+      contents:
+      - yival.output_parsers.*
+    - title: Result Selectors
+      contents:
+      - yival.result_selectors.*
+    - title: Configs
+      contents:
+      - yival.schemas.*
+  mkdocs_config:
+    theme:
+      name: material
+      palette:
+        cheme: slate
+        primary: lightgreen
+        accent: purple
+      logo: https://avatars.githubusercontent.com/u/134003593?s=400&u=34efa0d11568c1b5956f2e48dec7d15d95252a73&v=4
+      favicon: fontawesome/brands/github
+      icon:
+        repo: fontawesome/brands/github
+      features:
+        - navigation.top
+        - header.autohide
+      font: false
+    repo_url: https://github.com/YiVal/YiVal
+    repo_name: YiVal/YiVal
+    site_name: YiVal
+    extra:
+      homepage: https://yival.io
+    markdown_extensions:
+      - abbr
+      - admonition
+      - attr_list
+      - extra
+      - toc:
+          permalink: true
+      - pymdownx.arithmatex:
+          generic: true
+      - pymdownx.caret
+      - pymdownx.keys
+      - pymdownx.magiclink
+      - pymdownx.mark
+      - pymdownx.snippets
+      - pymdownx.superfences:
+          custom_fences:
+            - name: mermaid
+              class: mermaid
+      - pymdownx.tabbed:
+          alternate_style: true
+      - pymdownx.tasklist:
+          custom_checkbox: true
+      - pymdownx.tilde
+  
