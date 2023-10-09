@@ -1,0 +1,70 @@
+docs_dir: content
+extra:
+  homepage: https://yival.io
+markdown_extensions:
+- abbr
+- admonition
+- attr_list
+- extra
+- toc:
+    permalink: true
+- pymdownx.arithmatex:
+    generic: true
+- pymdownx.caret
+- pymdownx.keys
+- pymdownx.magiclink
+- pymdownx.mark
+- pymdownx.snippets
+- pymdownx.superfences:
+    custom_fences:
+    - class: mermaid
+      name: mermaid
+- pymdownx.tabbed:
+    alternate_style: true
+- pymdownx.tasklist:
+    custom_checkbox: true
+- pymdownx.tilde
+nav:
+- Index: index.md
+- Eng Spec:
+  - Architecture: eng-spec/architecture.md
+  - Demo:
+    - Basic Interactive Mode: eng-spec/demo/basic-interactive-mode.md
+    - Question Answering with Expected Result: eng-spec/demo/question-answering-with-expected-result.md
+    - Auto Prompts Generation: eng-spec/demo/auto-prompts-generation.md
+  - Custom Classes:
+    - Custom Evaluator: eng-spec/custom_parent/custom-evaluator.md
+    - Custom Wrapper: eng-spec/custom_parent/custom-wrapper.md
+    - Custom Data Generator: eng-spec/custom_parent/custom-data-generator.md
+    - Custom Variation Generator: eng-spec/custom_parent/custom-variation-generator.md
+    - Custom Reader: eng-spec/custom_parent/custom-reader.md
+    - Custom Combination Improver: eng-spec/custom_parent/custom-combination-improver.md
+    - Custom Selection Strategy: eng-spec/custom_parent/custom-selection-strategy.md
+- Contributing Guide: contributing-guide.md
+- Code Reference:
+  - Data: code_reference/data.md
+  - Data Generators: code_reference/data-generators.md
+  - Dataset: code_reference/dataset.md
+  - Evaluators: code_reference/evaluators.md
+  - Experiment: code_reference/experiment.md
+  - Finetune: code_reference/finetune.md
+  - Output Parsers: code_reference/output-parsers.md
+  - Result Selectors: code_reference/result-selectors.md
+  - Configs: code_reference/configs.md
+repo_name: YiVal/YiVal
+repo_url: https://github.com/YiVal/YiVal
+site_name: My Project
+theme:
+  favicon: fontawesome/brands/github
+  features:
+  - navigation.top
+  - header.autohide
+  font: false
+  icon:
+    repo: fontawesome/brands/github
+  logo: https://avatars.githubusercontent.com/u/134003593?s=400&u=34efa0d11568c1b5956f2e48dec7d15d95252a73&v=4
+  name: material
+  palette:
+    accent: purple
+    cheme: slate
+    primary: lightgreen
