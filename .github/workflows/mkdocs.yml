@@ -28,5 +28,5 @@ jobs:
             poetry install
 
       - name: Deploy
-        run: poetry run mkdocs gh-deploy --force
+        run: poetry run mkdocs gh-deploy -f docs/mkdocs.yml --force 
         shell: bash
