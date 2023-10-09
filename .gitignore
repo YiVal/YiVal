@@ -169,3 +169,6 @@ aimebot.pem
 
 # json file
 *.jsonl
+
+# pydoc-markdown documentation
+docs/content/
