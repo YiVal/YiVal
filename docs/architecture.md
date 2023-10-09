@@ -86,3 +86,12 @@ ensures only the most vital insights are pushed forward.
 The selected results are then fine-tuned in this phase. An "Improver" is applied
 to enhance these results. This stage can loop back to the analysis stage, indicating
 an ongoing, iterative process of refinement.
+
+## Trainer
+
+Yival also supports finetuning models, and we offer two methods:
+
+- Use various dataset generators built into Yival (including Huggingface, etc.) for data upload or generation, and then finetune the model.
+- Provide a custom_func, use advanced models like GPT-4 for data generation, and customize the selection criteria. The model is then finetuned based on the selected data.
+  
+Yival supports all base models supported by Huggingface and provides advanced finetuning methods such as LoRA, 8bit/4bit quantization.
