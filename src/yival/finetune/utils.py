@@ -60,7 +60,6 @@ def extract_from_input_data(
             exit()
         else:
             for combo_result in experiment.combination_aggregated_metrics:
-                print(f"combo_result now : {combo_result}")
                 results: List[ExperimentResult
                               ] = combo_result.experiment_results
                 for rs in results:
@@ -74,7 +73,6 @@ def extract_from_input_data(
                             result_pair = transform_experiment_result_generic(
                                 code, rs
                             )
-                            print(f"result_pair now : {result_pair}")
                             result_dict['prompt'].append(result_pair['Input'])
                             result_dict['completion'].append(
                                 result_pair['Output']
