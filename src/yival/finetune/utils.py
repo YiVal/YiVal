@@ -4,7 +4,7 @@ from typing import Dict, List
 from datasets import Dataset as HgDataset  # type: ignore
 from transformers import AutoTokenizer, PreTrainedTokenizer, PreTrainedTokenizerFast
 
-from ..dataset.data_utils import evaluate_condition
+from ..dataset.data_utils import evaluate_condition, read_code_from_path_or_module, transform_experiment_result_generic
 from ..schemas.experiment_config import Experiment, ExperimentResult
 
 
@@ -44,28 +44,32 @@ def extract_from_input_data(
     An example of condition: 'name == openai_prompt_based_evaluator AND result >= 0 AND display_name == clarity'
 
     """
-    result_dict: Dict = {"prompt": [], "completion": []}
+    result_dict: Dict = {"prompt": [], "completion": [], "instruction": []}
 
     if experiment.enable_custom_func and condition:
-        for combo_result in experiment.combination_aggregated_metrics:
-            print(f"combo_result now : {combo_result}")
-            results: List[ExperimentResult] = combo_result.experiment_results
-            for rs in results:
-                if rs.evaluator_outputs:
-                    for evaluator_output in rs.evaluator_outputs:
-                        condition_met = evaluate_condition(
-                            condition, evaluator_output
-                        )
-                        print(f"conditiom_met now : {condition_met}")
-                        if condition_met:
-                            prompt = rs.input_data['content'][prompt_key]
-                            completion = rs.input_data['content'][
-                                completion_key
-                            ] if completion_key else rs.input_data[
-                                'expected_result']
-                            result_dict['prompt'].append(prompt)
-                            result_dict['completion'].append(completion)
-
+        code = read_code_from_path_or_module(
+            "demo.headline_generation_detail.headline_generation"
+        )
+        if not code:
+            print("[Error][utils] code load error")
+            exit()
+        else:
+            for combo_result in experiment.combination_aggregated_metrics:
+                print(f"combo_result now : {combo_result}")
+                results: List[ExperimentResult
+                              ] = combo_result.experiment_results
+                for rs in results:
+                    if rs.evaluator_outputs:
+                        for evaluator_output in rs.evaluator_outputs:
+                            condition_met = evaluate_condition(
+                                condition, evaluator_output
+                            )
+                            if not condition_met:
+                                continue
+                            result_pair = transform_experiment_result_generic(
+                                code, rs
+                            )
+                            print(f"result_pair: {result_pair}")
     else:
         for group_rs in experiment.group_experiment_results:
             input_data = json.loads(group_rs.group_key)  #type: ignore

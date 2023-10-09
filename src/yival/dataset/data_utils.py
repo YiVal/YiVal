@@ -1,6 +1,7 @@
 import importlib
 import os
 import re
+import inspect
 from typing import Any, Callable, Dict, List, Optional
 
 from yival.schemas.experiment_config import EvaluatorOutput, ExperimentResult
@@ -224,7 +225,7 @@ def read_code_from_path_or_module(path_or_module: str) -> Optional[str]:
     Reads the source code either from an absolute file path or from a module, refined version.
     
     Args:
-    - path_or_module (str): Either an absolute path to a Python file or a module name.
+    - path_or_module (str): Either an absolute path to a Python file or a module name followed by a function name.
     
     Returns:
     - Optional[str]: The source code if found, otherwise None.
@@ -234,17 +235,23 @@ def read_code_from_path_or_module(path_or_module: str) -> Optional[str]:
         with open(path_or_module, 'r') as file:
             return file.read()
 
-    # If it's a module, try importing and getting the source from its path
+    # If it's a module and function, try importing and getting the source from its path
     else:
         try:
-            module = importlib.import_module(path_or_module)
-            module_path = module.__file__
-            assert module_path
-            # Read the content of the module file
-            with open(module_path, 'r') as file:
-                return file.read()
-        except Exception:
+            module_name, function_name = path_or_module.rsplit('.', 1)
+            module = importlib.import_module(module_name)
+            function = getattr(module, function_name, None)
+            if function is not None:
+                source_code = inspect.getsource(function)
+                return source_code
+            else:
+                print(
+                    f"[Error] No function {function_name} found in module {module_name}"
+                )
+                return None
+        except Exception as e:
             # Failed to import or get the source, return None
+            print(f"[Error] exception: {e}")
             return None
 
 
