@@ -1,10 +1,15 @@
 import json
 from typing import Dict, List
 
+import pandas as pd
 from datasets import Dataset as HgDataset  # type: ignore
 from transformers import AutoTokenizer, PreTrainedTokenizer, PreTrainedTokenizerFast
 
-from ..dataset.data_utils import evaluate_condition, read_code_from_path_or_module, transform_experiment_result_generic
+from ..dataset.data_utils import (
+    evaluate_condition,
+    read_code_from_path_or_module,
+    transform_experiment_result_generic,
+)
 from ..schemas.experiment_config import Experiment, ExperimentResult
 
 
@@ -44,7 +49,7 @@ def extract_from_input_data(
     An example of condition: 'name == openai_prompt_based_evaluator AND result >= 0 AND display_name == clarity'
 
     """
-    result_dict: Dict = {"prompt": [], "completion": [], "instruction": []}
+    result_dict: Dict = {"prompt": [], "completion": []}
 
     if experiment.enable_custom_func and condition:
         code = read_code_from_path_or_module(
@@ -69,7 +74,11 @@ def extract_from_input_data(
                             result_pair = transform_experiment_result_generic(
                                 code, rs
                             )
-                            print(f"result_pair: {result_pair}")
+                            print(f"result_pair now : {result_pair}")
+                            result_dict['prompt'].append(result_pair['Input'])
+                            result_dict['completion'].append(
+                                result_pair['Output']
+                            )
     else:
         for group_rs in experiment.group_experiment_results:
             input_data = json.loads(group_rs.group_key)  #type: ignore
@@ -80,6 +89,12 @@ def extract_from_input_data(
 
             result_dict['prompt'].append(prompt)
             result_dict['completion'].append(completion)
-
     hg_dataset = HgDataset.from_dict(result_dict)
     return hg_dataset
+
+
+def display_dataset(dataset: HgDataset, n_items: int = 5):
+    n_items = min(n_items, len(dataset) - 1)
+    data_slice = [dataset[i] for i in range(n_items)]
+    df = pd.DataFrame(data_slice)
+    print(df)

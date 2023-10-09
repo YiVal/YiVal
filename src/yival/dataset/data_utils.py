@@ -1,7 +1,7 @@
 import importlib
+import inspect
 import os
 import re
-import inspect
 from typing import Any, Callable, Dict, List, Optional
 
 from yival.schemas.experiment_config import EvaluatorOutput, ExperimentResult

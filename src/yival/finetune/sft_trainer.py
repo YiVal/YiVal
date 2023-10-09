@@ -10,7 +10,7 @@ from transformers import AutoModelForCausalLM, BitsAndBytesConfig, TrainingArgum
 from ..schemas.experiment_config import Experiment, ExperimentConfig, TrainerOutput
 from ..schemas.trainer_configs import DatasetConfig, SFTTrainerConfig, TrainArguments
 from .base_trainer import BaseTrainer
-from .utils import extract_from_input_data, get_hg_tokenizer, print_trainable_parameters
+from .utils import extract_from_input_data, get_hg_tokenizer, print_trainable_parameters, display_dataset
 
 DEFAULT_PROMPT_FORMAT = """
 You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe. Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.
@@ -78,6 +78,7 @@ class SFTTrainer(BaseTrainer):
             self.config.dataset_config.get("completion_key", None),
             self.config.dataset_config.get("condition", None)
         )
+        display_dataset(dataset, 5)
 
         #Prepare base model and tokenizer
         model_name = self.config.model_name
