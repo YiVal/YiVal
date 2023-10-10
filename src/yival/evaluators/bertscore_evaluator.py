@@ -1,7 +1,10 @@
 """
-BERTScore is a language model evaluation metric based on the BERT language model. 
-It leverages the pre-trained contextual embeddings from BERT and matches words in candidate and reference sentences by cosine similarity. 
-It has been shown to correlate with human judgment on sentence-level and system-level evaluation.
+BERTScore is a language model evaluation metric based on the BERT language
+model.
+It leverages the pre-trained contextual embeddings from BERT and matches words
+in candidate and reference sentences by cosine similarity. 
+It has been shown to correlate with human judgment on sentence-level and
+system-level evaluation.
 """
 
 from bert_score import score  # type:ignore
