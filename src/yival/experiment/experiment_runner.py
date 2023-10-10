@@ -112,9 +112,6 @@ class ExperimentRunner:
 
         for data in data_points:
             total_combinations = len(all_combinations) * len(data)
-            if "custom_function" not in self.config or not self.config[  # type: ignore
-                "custom_function"]:
-                continue
             with tqdm(
                 total=total_combinations, desc="Processing", unit="item"
             ) as pbar:
@@ -165,6 +162,8 @@ class ExperimentRunner:
         display_threads = []
         for idx, config in enumerate(self.configs):
             self.config = config
+
+            enable_custom_func = "config" in self.config  #type: ignore
             config_experiment_input_path = ""
             if output_path:
                 config_output_path = f"{os.path.splitext(output_path)[0]}_{idx}.pkl"
@@ -204,24 +203,23 @@ class ExperimentRunner:
                         results = self._process_dataset(
                             all_combinations, logger, evaluator
                         )
-                    if results:
-                        experiment = generate_experiment(
-                            results, evaluator
-                        )  # type: ignore
-                        strategy = get_selection_strategy(self.config)
-                        if strategy:
-                            context_trade_off = SelectionContext(
-                                strategy=strategy
-                            )
-                            experiment.selection_output = context_trade_off.execute_selection( # type: ignore
-                                experiment=experiment
-                            )
 
-                        improver = get_improver(self.config)
-                        if improver:
-                            experiment.improver_output = improver.improve(
-                                experiment, self.config, evaluator, logger
-                            )
+                    #results res is None if custom_func not provided
+                    experiment = generate_experiment(
+                        results, evaluator
+                    )  # type: ignore
+                    strategy = get_selection_strategy(self.config)
+                    if strategy and enable_custom_func:
+                        context_trade_off = SelectionContext(strategy=strategy)
+                        experiment.selection_output = context_trade_off.execute_selection( # type: ignore
+                            experiment=experiment
+                        )
+
+                    improver = get_improver(self.config)
+                    if improver and enable_custom_func:
+                        experiment.improver_output = improver.improve(
+                            experiment, self.config, evaluator, logger
+                        )
 
                     trainer = get_trainer(self.config)
                     if trainer:
@@ -230,7 +228,7 @@ class ExperimentRunner:
                 if output_path:
                     with open(config_output_path, 'wb') as file:
                         pickle.dump(experiment, file)
-                if display and results:
+                if display and enable_custom_func:
                     # display_results_dash(
                     #     experiment, self.config, all_combinations,
                     #     ExperimentState.get_instance(), logger, evaluator, port=base_port+idx
