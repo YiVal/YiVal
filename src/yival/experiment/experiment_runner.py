@@ -112,9 +112,6 @@ class ExperimentRunner:
 
         for data in data_points:
             total_combinations = len(all_combinations) * len(data)
-            # if "custom_function" not in self.config or not self.config[  # type: ignore
-            #     "custom_function"]:
-            #     continue
             with tqdm(
                 total=total_combinations, desc="Processing", unit="item"
             ) as pbar:

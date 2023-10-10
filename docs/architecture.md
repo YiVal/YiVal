@@ -39,6 +39,12 @@ flowchart TD
     F --> F1[Improver]
     F1 --> C
 
+    %% Trainer Stage
+    E --> |Finetune| G
+    A1 --> |Finetune| G
+    G --> G1[Trainer]
+
+
     %% Styling
     style A fill:#f9d77e,stroke:#f96e5b
     style B fill:#a1d4c6,stroke:#f96e5b
@@ -46,6 +52,8 @@ flowchart TD
     style D fill:#b2b1cf,stroke:#f96e5b
     style E fill:#f9efaa,stroke:#f96e5b
     style F fill:#f2a3b3,stroke:#f96e5b
+    style G fill:#a3a3a3,stroke:#f96e5b
+
 ```
 
 ## Data Generation
@@ -91,7 +99,11 @@ an ongoing, iterative process of refinement.
 
 Yival also supports finetuning models, and we offer two methods:
 
-- Use various dataset generators built into Yival (including Huggingface, etc.) for data upload or generation, and then finetune the model.
-- Provide a custom_func, use advanced models like GPT-4 for data generation, and customize the selection criteria. The model is then finetuned based on the selected data.
+- Use various dataset generators built into Yival (including Huggingface, etc.) for
+  data upload or generation, and then finetune the model.
+- Provide a custom_func, use advanced models like GPT-4 for data generation, and
+   customize the selection criteria. The model is then finetuned based on the
+ selected data.
   
-Yival supports all base models supported by Huggingface and provides advanced finetuning methods such as LoRA, 8bit/4bit quantization.
+Yival supports all base models supported by Huggingface and provides advanced
+finetuning methods such as LoRA, 8bit/4bit quantization.
