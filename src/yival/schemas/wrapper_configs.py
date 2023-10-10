@@ -16,5 +16,3 @@ class StringWrapperConfig(BaseWrapperConfig):
     """
     Configuration specific to the StringWrapper.
     """
-
-    pass
