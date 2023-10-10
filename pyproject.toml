@@ -53,6 +53,7 @@ bitsandbytes = { version = "^0.41.1", optional = true }
 scipy = { version = "^1.11.3", optional = true}
 streamlit = "^1.27.2"
 pydoc-markdown = "^4.8.2"
+pandas-stubs = "^2.1.1.230928"
 
 [tool.poetry.extras]
 trainers = ["peft","trl","bitsandbytes","scipy"]

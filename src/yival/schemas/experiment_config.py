@@ -260,6 +260,14 @@ class ExperimentSummary:
 
 
 @dataclass
+class Context:
+    """
+    Custom function context that will be used for evlaution
+    """
+    text_context: Dict[str, str] = field(default_factory=dict)
+
+
+@dataclass
 class MultimodalOutput:
     """
     Multimodal output that can include a string, a PIL Image, or both.
@@ -270,6 +278,7 @@ class MultimodalOutput:
     """
     text_output: Optional[str] = None
     image_output: Optional[List[Image.Image]] = None
+    context: Optional[Context] = None
 
     def asdict(self) -> Dict[str, Any]:
         return {
@@ -381,6 +390,24 @@ class FunctionMetadata:
 
 @dataclass
 class ImproverOutput:
+    """
+    Represents the outputs related to the "improver" component of the
+    experiment.
+    
+    The improver's role is to enhance or optimize certain aspects of the
+    experiment. 
+    This dataclass captures the results, metrics, and decisions made by the
+    improver.
+
+    Attributes:
+        group_experiment_results (List[GroupedExperimentResult]): List of
+        grouped results after improvement.
+        combination_aggregated_metrics (List[CombinationAggregatedMetrics]):
+        Aggregated metrics post-improvement.
+        original_best_combo_key (str): The best combination key before the
+        improver made optimizations.
+
+    """
     group_experiment_results: List[GroupedExperimentResult]
     combination_aggregated_metrics: List[CombinationAggregatedMetrics]
     original_best_combo_key: str
@@ -394,11 +421,26 @@ class TrainerOutput:
 @dataclass
 class Experiment:
     """
-    Represents an entire experiment.
+    Represents the entirety of an experiment run.
+
+    This dataclass encapsulates the results, metrics, and configurations used
+    and generated during the experiment. 
+    It is a comprehensive view of everything related to a specific experiment
+    run.
+
+    Attributes:
+        group_experiment_results (List[GroupedExperimentResult]): List of
+        results grouped by test cases.
+        combination_aggregated_metrics (List[CombinationAggregatedMetrics]):
+        Metrics aggregated for specific combinations.
+        selection_output (Optional[SelectionOutput]): Output from the
+        selection strategy. improver_output (Optional[ImproverOutput]):
+        Output from the improver component, if used.
 
     """
     group_experiment_results: List[GroupedExperimentResult]
     combination_aggregated_metrics: List[CombinationAggregatedMetrics]
+    enable_custom_func: bool = False
     selection_output: Optional[SelectionOutput] = None
     improver_output: Optional[ImproverOutput] = None
 

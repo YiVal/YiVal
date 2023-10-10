@@ -291,7 +291,8 @@ def run_single_input(
             config["custom_function"],  # type: ignore
             **d.content,
             state=tmp_state
-        )
+        ) if "custom_function" in config else None  #type: ignore
+
         end_time = time.time()
         latency = end_time - start_time  # Time in seconds
 
@@ -466,6 +467,10 @@ def generate_experiment(
                 grouped_experiment_result.experiment_results
             )
 
+    enable_custom_func = False
+    if results[0].raw_output:
+        enable_custom_func = True
+
     combo_metrics = defaultdict(list)
     for item in results:
         combo_str = json.dumps(item.combination)
@@ -489,9 +494,11 @@ def generate_experiment(
         )
 
     experiment = Experiment(
+        enable_custom_func=enable_custom_func,
         group_experiment_results=grouped_experiment_results,
         combination_aggregated_metrics=cobo_aggregated_metrics
     )
+
     if evaluate_all:
         er = [experiment]
         evaluator.evaluate_based_on_all_results(er)
