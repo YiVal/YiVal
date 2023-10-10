@@ -260,6 +260,14 @@ class ExperimentSummary:
 
 
 @dataclass
+class Context:
+    """
+    Custom function context that will be used for evlaution
+    """
+    text_context: Dict[str, str] = field(default_factory=dict)
+
+
+@dataclass
 class MultimodalOutput:
     """
     Multimodal output that can include a string, a PIL Image, or both.
@@ -270,6 +278,7 @@ class MultimodalOutput:
     """
     text_output: Optional[str] = None
     image_output: Optional[List[Image.Image]] = None
+    context: Optional[Context] = None
 
     def asdict(self) -> Dict[str, Any]:
         return {
