@@ -9,24 +9,34 @@ from yival.schemas.model_configs import Request
 from yival.states.experiment_state import ExperimentState
 from yival.wrappers.string_wrapper import StringWrapper
 
+# Initialize the OpenAI API key once when the module is imported
+openai.api_key = os.getenv("OPENAI_API_KEY")
+if not openai.api_key:
+    raise EnvironmentError(
+        "The OPENAI_API_KEY environment variable is not set."
+    )
+
 
 def translate_quiz(
     teacher_quiz: str, state: ExperimentState
 ) -> MultimodalOutput:
     logger = TokenLogger()
     logger.reset()
-    # Ensure you have your OpenAI API key set up
-    openai.api_key = os.getenv("OPENAI_API_KEY")
 
-    prompt = f"Instruction: Translate this English text to Chinese: \n {teacher_quiz}"
+    translation_prompt = f"Instruction: Translate this English text to Chinese: \n {teacher_quiz}"
     model_name = str(StringWrapper("", name="model_name", state=state))
-    # Use the chat-based completion
-    response = llm_completion(
-        Request(model_name=model_name, prompt=prompt)
-    ).output
-    res = MultimodalOutput(
-        text_output=response['choices'][0]['message']['content'],
-    )
-    token_usage = response['usage']['total_tokens']
-    logger.log(token_usage)
-    return res
+
+    try:
+        # Use the chat-based completion
+        response = llm_completion(
+            Request(model_name=model_name, prompt=translation_prompt)
+        ).output
+        translated_text = response['choices'][0]['message']['content']
+        token_usage = response['usage']['total_tokens']
+        logger.log(token_usage)
+
+        return MultimodalOutput(text_output=translated_text)
+
+    except openai.error.OpenAIError as e:
+        # Handle any error that occurs during the API call
+        raise ValueError(f"An error occurred while translating: {e}")
