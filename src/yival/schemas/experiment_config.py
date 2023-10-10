@@ -1,8 +1,8 @@
 """
 Module for experiment configuration structures.
 
-This module provides data structures to capture configurations required to run an
-experiment.
+This module provides data structures to capture configurations required to run
+an experiment.
 """
 from dataclasses import asdict, dataclass, field
 from typing import Any, Callable, Dict, List, Optional, Tuple, Type, Union
@@ -125,7 +125,8 @@ class HumanRating:
     Attributes:
     - aspect (str): Aspect being rated.
     - rating (float): Rating value.
-    - scale (Tuple[float, float]): Minimum and maximum value of the rating scale.
+    - scale (Tuple[float, float]): Minimum and maximum value of the rating
+            scale.
     """
 
     aspect: str
@@ -206,9 +207,9 @@ class ExperimentConfig:
                 if hasattr(h, 'asdict')
             ]
 
-        # Note: For the custom_reader, custom_wrappers, custom_evaluators attributes,
-        # you'd need additional logic if their nested dictionaries also contain objects
-        # that need to be converted using asdict.
+        # Note: For the custom_reader, custom_wrappers, custom_evaluators
+        # attributes, you'd need additional logic if their nested dictionaries
+        # also contain objects that need to be converted using asdict.
 
         return result
 
@@ -242,7 +243,8 @@ class ExperimentSummary:
 
     Attributes:
     - aggregated_metrics (Dict[str, Dict[str, Metric]]): 
-      A dictionary where keys are evaluator names and values are dictionaries mapping metric names to their values.
+      A dictionary where keys are evaluator names and values are dictionaries
+      mapping metric names to their values.
     - ... (other summary attributes)
     """
     aggregated_metrics: Dict[str, Dict[str, Metric]]
@@ -291,17 +293,18 @@ class MultimodalOutput:
 @dataclass
 class ExperimentResult:
     """
-    Result for a single example based on a specific combination of active variations
-    across wrappers.
+    Result for a single example based on a specific combination of active
+    variations across wrappers.
 
     Attributes:
-    - combination (Dict[str, str]): The combination of wrapper names and their active
-      variation_ids for this example.
+    - combination (Dict[str, str]): The combination of wrapper names and their
+      active variation_ids for this example.
     - raw_output (Any): Raw output for this example. Support str and PILimage
     - latency (float): Latency for producing the output for this example
       (in milliseconds or appropriate unit).
     - token_usage (int): Number of tokens used for this example.
-    - evaluator_outputs (List[EvaluatorOutput]): Evaluator outputs for this example.
+    - evaluator_outputs (List[EvaluatorOutput]): Evaluator outputs for this
+      example.
     - human_rating (Optional[HumanRating]): Human rating for this example.
     - intermediate_logs (List[str]): Logs captured during the experiment.
     """
