@@ -4,7 +4,7 @@ from yival.output_parsers.utils import capture_and_parse_with_base_registry
 
 class TestParser(BaseParserWithRegistry):
 
-    def parse(self, output):
+    def parse(self, output: str) -> list[str]:
         return ["Parsed: " + output]
 
 
@@ -15,9 +15,6 @@ def test_decorator_with_parser_diagnostic():
     def function_with_parser():
         print("Message from function_with_parser")
         return "Return Value from function_with_parser"
-
-    def parse():
-        print("Parsed: Message from function_with_parser")
 
     original_output, logs = function_with_parser()
     print(f"Captured Logs (With Parser): {logs}")  # Diagnostic print
