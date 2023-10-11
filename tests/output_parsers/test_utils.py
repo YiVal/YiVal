@@ -16,6 +16,9 @@ def test_decorator_with_parser_diagnostic():
         print("Message from function_with_parser")
         return "Return Value from function_with_parser"
 
+    def parse():
+        print("Parsed: Message from function_with_parser")
+
     original_output, logs = function_with_parser()
     print(f"Captured Logs (With Parser): {logs}")  # Diagnostic print
     assert original_output == "Return Value from function_with_parser"
