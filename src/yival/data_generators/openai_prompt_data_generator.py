@@ -113,9 +113,10 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                 self.config.input_function
             )
             if self.config.diversify and all_data_content:
-                content += f"\n\n Given the last {min(len(all_data_content), 10)} examples, please generate diverse results to ensure comprehensive evaluation. \n\n" + join_dicts_to_string(
+                content += f"\n\n Given the last {min(len(all_data_content), 10)} examples, please generate diverse results to ensure comprehensive evaluation. \nREMEMBER DON‘T GENERATE THE SAME SAMPLE AS BELOW! \n\n" + join_dicts_to_string(
                     all_data_content
                 )
+            print(f"[INFO] content: {content}")
             return [{"role": "user", "content": content}]
 
         messages = self.config.prompt
@@ -124,7 +125,7 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                 "role":
                 "user",
                 "content":
-                f"\n\n Given the last {min(len(all_data_content), 10)} examples, please generate diverse results to ensure comprehensive evaluation. \n\n"
+                f"\n\n Given the last {min(len(all_data_content), 10)} examples, please generate diverse results to ensure comprehensive evaluation.\nREMEMBER DON‘T GENERATE THE SAME SAMPLE AS BELOW!  \n\n"
                 + join_dicts_to_string(all_data_content)
             })
 
