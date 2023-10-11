@@ -1,10 +1,6 @@
 from yival.schemas.experiment_config import WrapperVariation
-from yival.schemas.varation_generator_configs import (
-    BaseVariationGeneratorConfig,
-)
-from yival.variation_generators.base_variation_generator import (
-    BaseVariationGenerator,
-)
+from yival.schemas.varation_generator_configs import BaseVariationGeneratorConfig
+from yival.variation_generators.base_variation_generator import BaseVariationGenerator
 
 
 class DummyVariationGenerator(BaseVariationGenerator):
