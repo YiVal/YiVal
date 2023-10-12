@@ -3,7 +3,7 @@ description: Generated experiment config
 dataset:
   data_generators:
     openai_prompt_data_generator:
-      chunk_size: 2
+      chunk_size: 1000
       diversify: true
       prompt:
           "Please provide a concrete and realistic test case as a dictionary for function invocation using the ** operator.
@@ -20,7 +20,6 @@ dataset:
           drawing_style: str
       number_of_examples: 2
       model_name: gpt-4
-      output_path: animal_story.pkl
   source_type: machine_generated
 
 variations:
@@ -29,7 +28,7 @@ variations:
     generator_config:
       model_name: gpt-4
       number_of_variations: 2
-      diversify: true
+      diversify: false
       max_tokens: 2000
       variables: null
       prompt: 
@@ -40,12 +39,12 @@ variations:
               -   The story must be kept lively and as short, short, short, short, short as possible. The story should have a variety of backgrounds + drawing styles and fully emphasize the location where the story takes place; it can be dreamlike and generally bizarre.
               -  Be sure to use words that are as easy to understand as possible so TEENAGERS can easily understand the story.
               -   Please limit the output to within 300 words
-            - {animal_species} represent the species of the animal
-            - {animal_character} represent the character of the animal
-            - At all times, gpt-4 must give a response as an animal story
+              - {animal_species} represent the specs of the animal
+              - {animal_character} represent the character of the animal
+              - At all times, GPT-4 must give a response as an animal story
 
             Craft your instruction Ensure that GPT-4 is able to fully understand the types and personalities of small animals and write engaging and fully pictorial stories.
-            keep your output crisp: only the prompt, devoid of any extraneous content. Let's take a deep breathe. 
+            keep your output crisp: only the prompt, devoid of any extraneous content.
 
           role: system
 
@@ -103,7 +102,7 @@ selection_strategy:
       "openai_prompt_based_evaluator: story_quality": 1
       average_latency: 0.0
       average_token_usage: 0.0
-    # normalize_func: "z-score"
+    normalize_func: "z-score"
 
 improver:
   name: "optimize_by_prompt_improver"

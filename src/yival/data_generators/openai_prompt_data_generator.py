@@ -116,7 +116,6 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                 content += f"\n\n Given the last {min(len(all_data_content), 10)} examples, please generate diverse results to ensure comprehensive evaluation. \nREMEMBER DON‘T GENERATE THE SAME SAMPLE AS BELOW! \n\n" + join_dicts_to_string(
                     all_data_content
                 )
-            print(f"[INFO] content: {content}")
             return [{"role": "user", "content": content}]
 
         messages = self.config.prompt
