@@ -680,7 +680,11 @@ def create_dash_app(
         for col in sample_columns:
             df[col] = df[col].apply(
                 lambda x: html.Div([
-                    html.P(f'<text_output> {x.text_output} </text_output>'),
+                    html.Div(
+                        DangerouslySetInnerHTML(
+                            f'<details><summary>{x.text_output[:250]}...</summary><text_output> {x.text_output} </text_output></details>'
+                        )
+                    ),
                     html.Div(
                         html.Img(
                             src=pil_image_to_base64(x.image_output[0]),
@@ -1829,4 +1833,4 @@ def display_results_dash(
         print(f"Access Yival from this public URL :{public_url}")
         app.run(debug=False, port=port)
     else:
-        app.run(debug=False, port=port)
+        app.run(debug=True, port=port)
