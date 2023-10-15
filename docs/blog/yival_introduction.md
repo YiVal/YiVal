@@ -42,9 +42,9 @@ flowchart TD
     %% Select Stage
     D --> |Selection| E
 
-    %% Improver Stage
-    E --> |Improvement| F
-    F --> F1[Improver]
+    %% Enhancer Stage
+    E --> |Enhancement| F
+    F --> F1[Enhancer]
     F1 --> C
 
     %% Styling
@@ -81,9 +81,9 @@ A closer look at Yival's structured components:
 **4. Selection:** Filters and emphasizes the most relevant outputs, ensuring focused
  results.
 
-**5. Improvement:** The framework offers tools to refine results:
+**5. Enhancement:** The framework offers tools to refine results:
 
-- **Model-driven Improvement:** Uses models like LLM for enhancement.
+- **Model-driven Enhancement:** Uses models like LLM for enhancement.
 - **Human-guided Refinement:** Offers manual refinement options for specific needs.
 
 One of Yival's distinguishing features is its adaptability. Its components are

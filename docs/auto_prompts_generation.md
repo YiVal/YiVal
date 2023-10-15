@@ -39,9 +39,9 @@ flowchart TD
     E --> E1[Selection Strategy]
     E1 --> E2[AHP Selection Strategy]
 
-    %% Improver Stage
+    %% Enhancer Stage
     E --> |Improvement| F
-    F --> F1[OpenAI PromptBased Combination Improver]
+    F --> F1[OpenAI PromptBased Combination Enhancer]
     F1 --> C
 
     %% Styling
@@ -304,18 +304,18 @@ selection_strategy:
 
 ---
 
-### Auto Improver
+### Auto Enhancer
 
 Certainly! Here's the enhanced description, incorporating the additional information:
 
 ---
 
-### Auto Improver Configuration
+### Auto Enhancer Configuration
 
-Below is the setup detailing the auto improver strategy:
+Below is the setup detailing the auto enhancer strategy:
 
 ```yaml
-improver:
+enhancer:
   name: openai_prompt_based_combination_enhancer
   max_iterations: 2
   openai_model_name: gpt-4
@@ -327,7 +327,7 @@ improver:
 
 **Explanation:**
 
-- **name**: Specifies the identifier or the class of the improver.
+- **name**: Specifies the identifier or the class of the enhancer.
     In this instance, `openai_prompt_based_combination_enhancer` is utilized.
 - **max_iterations**: Designates the upper limit for the number of improvement cycles.
     The process will not exceed 2 iterations, irrespective of other conditions.
@@ -335,7 +335,7 @@ improver:
     Indicates the model to be utilized for the improvement process,
     which here is `gpt-4`.
 - **stop_conditions**:
-    Outlines conditions under which the improver should halt its operations
+    Outlines conditions under which the Enhancer should halt its operations
     before reaching the maximum iteration count.
     The improvement process will terminate if the average score
     from any of the specified evaluators surpasses 3.
