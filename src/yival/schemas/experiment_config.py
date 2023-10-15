@@ -9,7 +9,7 @@ from typing import Any, Callable, Dict, List, Optional, Tuple, Type, Union
 
 from PIL import Image
 
-from .combination_improver_configs import BaseCombinationImproverConfig
+from .combination_enhancer_configs import BaseCombinationEnhancerConfig
 from .common_structures import InputData
 from .dataset_config import DatasetConfig
 from .evaluator_config import (
@@ -161,7 +161,7 @@ class ExperimentConfig:
     combinations_to_run: Optional[List[Tuple[str, Any]]] = None
     evaluators: Optional[List[Union[EvaluatorConfig, ComparisonEvaluatorConfig,
                                     GlobalEvaluatorConfig]]] = None
-    improver: Optional[BaseCombinationImproverConfig] = None
+    enhancer: Optional[BaseCombinationEnhancerConfig] = None
     trainer: Optional[BaseTrainerConfig] = None
     output: Optional[OutputConfig] = None
     human_rating_configs: Optional[List[HumanRatingConfig]] = None
@@ -170,13 +170,13 @@ class ExperimentConfig:
     output_parser: Optional[str] = None
     metadata: Optional[Dict[str, Any]] = None
     custom_reader: Optional[Dict[str, Dict[str, Any]]] = None
-    custom_combination_improver: Optional[Dict[str, Dict[str, Any]]] = None
+    custom_combination_enhancer: Optional[Dict[str, Dict[str, Any]]] = None
     custom_data_generators: Optional[Dict[str, Dict[str, Any]]] = None
     custom_wrappers: Optional[Dict[str, Dict[str, Any]]] = None
     custom_evaluators: Optional[Dict[str, Dict[str, Any]]] = None
     custom_variation_generators: Optional[Dict[str, Dict[str, Any]]] = None
     custom_selection_strategies: Optional[Dict[str, Dict[str, Any]]] = None
-    custom_improvers: Optional[Dict[str, Dict[str, Any]]] = None
+    custom_enhancers: Optional[Dict[str, Dict[str, Any]]] = None
 
     def asdict(self) -> Dict[str, Any]:
         # Convert the dataclass instance to a dictionary
@@ -394,23 +394,23 @@ class FunctionMetadata:
 
 
 @dataclass
-class ImproverOutput:
+class EnhancerOutput:
     """
-    Represents the outputs related to the "improver" component of the
+    Represents the outputs related to the "enhancer" component of the
     experiment.
     
-    The improver's role is to enhance or optimize certain aspects of the
+    The enhancer's role is to enhance or optimize certain aspects of the
     experiment. 
     This dataclass captures the results, metrics, and decisions made by the
-    improver.
+    enhancer.
 
     Attributes:
         group_experiment_results (List[GroupedExperimentResult]): List of
-        grouped results after improvement.
+        grouped results after enhancement.
         combination_aggregated_metrics (List[CombinationAggregatedMetrics]):
-        Aggregated metrics post-improvement.
+        Aggregated metrics post-enhancement.
         original_best_combo_key (str): The best combination key before the
-        improver made optimizations.
+        enhancer made optimizations.
 
     """
     group_experiment_results: List[GroupedExperimentResult]
@@ -439,15 +439,15 @@ class Experiment:
         combination_aggregated_metrics (List[CombinationAggregatedMetrics]):
         Metrics aggregated for specific combinations.
         selection_output (Optional[SelectionOutput]): Output from the
-        selection strategy. improver_output (Optional[ImproverOutput]):
-        Output from the improver component, if used.
+        selection strategy. enhancer_output (Optional[enhancerOutput]):
+        Output from the enhancer component, if used.
 
     """
     group_experiment_results: List[GroupedExperimentResult]
     combination_aggregated_metrics: List[CombinationAggregatedMetrics]
     enable_custom_func: bool = False
     selection_output: Optional[SelectionOutput] = None
-    improver_output: Optional[ImproverOutput] = None
+    enhancer_output: Optional[EnhancerOutput] = None
 
     def asdict(self) -> Dict[str, Any]:
         return {

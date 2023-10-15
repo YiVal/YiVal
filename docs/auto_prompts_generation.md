@@ -316,7 +316,7 @@ Below is the setup detailing the auto improver strategy:
 
 ```yaml
 improver:
-  name: openai_prompt_based_combination_improver
+  name: openai_prompt_based_combination_enhancer
   max_iterations: 2
   openai_model_name: gpt-4
   stop_conditions:
@@ -328,7 +328,7 @@ improver:
 **Explanation:**
 
 - **name**: Specifies the identifier or the class of the improver.
-    In this instance, `openai_prompt_based_combination_improver` is utilized.
+    In this instance, `openai_prompt_based_combination_enhancer` is utilized.
 - **max_iterations**: Designates the upper limit for the number of improvement cycles.
     The process will not exceed 2 iterations, irrespective of other conditions.
 - **openai_model_name**:

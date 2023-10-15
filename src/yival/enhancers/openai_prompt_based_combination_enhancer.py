@@ -1,12 +1,12 @@
 """
-This module provides an implementation of a combination improver using OpenAI's
-model to suggest improvements.
+This module provides an implementation of a combination enhancer using OpenAI's
+model to suggest enhancements.
 The primary goal of this module is to leverage the capabilities of OpenAI's
 language model to analyze the results of an experiment and provide suggestions
-on how to improve the combination of parameters. This module offers a
+on how to enhance the combination of parameters. This module offers a
 prompt-based mechanism, where the language model is prompted with structured
 information about the experiment and its results, and the model responds with
-potential improvements.
+potential enhancements.
 """
 import copy
 from concurrent.futures import ThreadPoolExecutor
@@ -19,24 +19,24 @@ from ..experiment.evaluator import Evaluator
 from ..experiment.rate_limiter import RateLimiter
 from ..experiment.utils import generate_experiment, run_single_input
 from ..logger.token_logger import TokenLogger
-from ..schemas.combination_improver_configs import OpenAIPromptBasedCombinationImproverConfig
+from ..schemas.combination_enhancer_configs import OpenAIPromptBasedCombinationEnhancerConfig
 from ..schemas.common_structures import InputData
 from ..schemas.evaluator_config import OpenAIPromptBasedEvaluatorConfig
 from ..schemas.experiment_config import (
     CombinationAggregatedMetrics,
+    EnhancerOutput,
     Experiment,
     ExperimentConfig,
     ExperimentResult,
-    ImproverOutput,
     WrapperConfig,
     WrapperVariation,
 )
 from ..states.experiment_state import ExperimentState
-from .base_combination_improver import BaseCombinationImprover
+from .base_combination_enhancer import BaseCombinationEnhancer
 
 PROMPT = """
 Given the evaluator results, scales, and descriptions, please analyze and
-suggest improvements to the provided combinations. The combinations are
+suggest enhancements to the provided combinations. The combinations are
 presented in the format {key: value}, where 'value' can represent prompts or
 other parameters. You can define the specifics of the value as needed.
 After your analysis, the combination will be re-evaluated by the evaluators,
@@ -170,12 +170,12 @@ def extract_dict_from_string(str_input: str) -> str | None:
 rate_limiter = RateLimiter(10 / 60)
 
 
-class OpenAIPromptBasedCombinationImprover(BaseCombinationImprover):
+class OpenAIPromptBasedCombinationEnhancer(BaseCombinationEnhancer):
     """
-    Combination improver that uses OpenAI's model to improve the combination.
+    Combination enhancer that uses OpenAI's model to enhance the combination.
     """
-    default_config = OpenAIPromptBasedCombinationImproverConfig(
-        name="openai_prompt_based_combination_improver",
+    default_config = OpenAIPromptBasedCombinationEnhancerConfig(
+        name="openai_prompt_based_combination_enhancer",
         openai_model_name="gpt-4",
         max_iterations=3,
         stop_conditions={
@@ -185,7 +185,7 @@ class OpenAIPromptBasedCombinationImprover(BaseCombinationImprover):
         }
     )
 
-    def __init__(self, config: OpenAIPromptBasedCombinationImproverConfig):
+    def __init__(self, config: OpenAIPromptBasedCombinationEnhancerConfig):
         super().__init__(config)
         self.config = config
 
@@ -204,7 +204,7 @@ class OpenAIPromptBasedCombinationImprover(BaseCombinationImprover):
 
     def check_if_done(self, experiment: Experiment) -> bool:
         """
-        Check if the iterative improvement process should stop.
+        Check if the iterative enhancement process should stop.
 
         Evaluates predefined stop conditions or average score thresholds to
         determine if the iterative process should halt.
@@ -230,10 +230,10 @@ class OpenAIPromptBasedCombinationImprover(BaseCombinationImprover):
             return True
         return False
 
-    def improve(
+    def enhance(
         self, experiment: Experiment, config: ExperimentConfig,
         evaluator: Evaluator, token_logger: TokenLogger
-    ) -> ImproverOutput:
+    ) -> EnhancerOutput:
         experiments: List[Experiment] = []
         prior_iterations: List[str] = []
         self.updated_config = copy.deepcopy(config)
@@ -333,17 +333,17 @@ class OpenAIPromptBasedCombinationImprover(BaseCombinationImprover):
         experiment = generate_experiment(
             results, evaluator, evaluate_group=False, evaluate_all=False
         )
-        improver_output = ImproverOutput(
+        enhancer_output = EnhancerOutput(
             group_experiment_results=experiment.group_experiment_results,
             combination_aggregated_metrics=experiment.
             combination_aggregated_metrics,
             original_best_combo_key=original_combo_key
         )
-        return improver_output
+        return enhancer_output
 
 
-BaseCombinationImprover.register_combination_improver(
-    "openai_prompt_based_combination_improver",
-    OpenAIPromptBasedCombinationImprover,
-    OpenAIPromptBasedCombinationImproverConfig
+BaseCombinationEnhancer.register_enhancer(
+    "openai_prompt_based_combination_enhancer",
+    OpenAIPromptBasedCombinationEnhancer,
+    OpenAIPromptBasedCombinationEnhancerConfig
 )

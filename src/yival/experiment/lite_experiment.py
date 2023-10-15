@@ -20,8 +20,8 @@ from .utils import (
     generate_experiment,
     get_selection_strategy,
     register_custom_data_generator,
+    register_custom_enhancer,
     register_custom_evaluators,
-    register_custom_improver,
     register_custom_selection_strategy,
     register_custom_variation_generators,
     register_custom_wrappers,
@@ -66,7 +66,7 @@ class LiteExperimentRunner:
         register_custom_selection_strategy(
             self.config.get("custom_selection_strategy", {})
         )
-        register_custom_improver(self.config.get("custom_improvers", {}))
+        register_custom_enhancer(self.config.get("custom_enhancers", {}))
         register_custom_variation_generators(
             self.config.get("custom_variation_generators", {})
         )

@@ -62,8 +62,8 @@ evaluators:
       [Result]: {raw_output}
       Answer the question by selecting one of the following options:
       A The story is of very low quality and lacks coherence and engagement.
-      B The story has some issues with coherence and engagement, but has potential for improvement.
-      C The story is of satisfactory quality, but there is room for improvement.
+      B The story has some issues with coherence and engagement, but has potential for enhancement.
+      C The story is of satisfactory quality, but there is room for enhancement.
       D The story is well-written and demonstrates good coherence and engagement.
       E The story is exceptionally well-written, demonstrating strong coherence and engagement.
     choices: ["A", "B", "C", "D", "E"]
@@ -104,11 +104,11 @@ selection_strategy:
       average_token_usage: 0.0
     normalize_func: "z-score"
 
-improver:
-  name: "optimize_by_prompt_improver"
+enhancer:
+  name: "optimize_by_prompt_enhancer"
   model_name: "gpt-4"
   max_iterations: 2
-  improve_var: ["task"]
+  enhance_var: ["task"]
   head_meta_instruction: |
     Now you will help me generate a prompt which is used to generate a corresponding
     story according to the species of an animal which is [animal_species] and its character [animal_character]. 

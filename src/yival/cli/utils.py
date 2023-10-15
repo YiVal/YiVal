@@ -3,9 +3,9 @@ from typing import Any, Dict, List, Optional, Type
 
 import yaml
 
-from ..combination_improvers.base_combination_improver import BaseCombinationImprover
 from ..data.base_reader import BaseReader
 from ..data_generators.base_data_generator import BaseDataGenerator
+from ..enhancers.base_combination_enhancer import BaseCombinationEnhancer
 from ..evaluators.base_evaluator import BaseEvaluator
 from ..result_selectors.selection_strategy import SelectionStrategy
 from ..schemas.experiment_config import WrapperConfig
@@ -72,10 +72,10 @@ def generate_dataset_section(source_type, reader_name,
     return dataset_section
 
 
-def generate_impprover_config(improver_name) -> Optional[Dict[str, Any]]:
-    """Generate the improved section of the experiment config."""
+def generate_enhancer_config(enhancer_name) -> Optional[Dict[str, Any]]:
+    """Generate the enhanced section of the experiment config."""
     return get_config_for_component(
-        improver_name, BaseCombinationImprover.get_combination_improver
+        enhancer_name, BaseCombinationEnhancer.get_enhancer
     )
 
 
@@ -123,7 +123,7 @@ def generate_experiment_config_yaml(
     source_type: str = "dataset",
     evaluator_names: Optional[List[str]] = None,
     reader_name: Optional[str] = None,
-    improver_name: Optional[str] = None,
+    enhancer_name: Optional[str] = None,
     wrapper_names: Optional[List[str]] = None,
     data_generator_names: Optional[List[str]] = None,
     selection_strategy_name: Optional[str] = None,
@@ -134,7 +134,7 @@ def generate_experiment_config_yaml(
     custom_data_generators: Optional[Dict[str, Dict[str, Any]]] = None,
     custom_variation_generators: Optional[Dict[str, Dict[str, Any]]] = None,
     custom_selection_strategy: Optional[Dict[str, Dict[str, Any]]] = None,
-    custom_improver: Optional[Dict[str, Dict[str, Any]]] = None
+    custom_enhancer: Optional[Dict[str, Dict[str, Any]]] = None
 ) -> str:
 
     experiment_config = {
@@ -148,10 +148,10 @@ def generate_experiment_config_yaml(
         custom_function
     }
 
-    if improver_name:
-        config = generate_impprover_config(improver_name)
+    if enhancer_name:
+        config = generate_enhancer_config(enhancer_name)
         if config:
-            experiment_config["improver"] = config
+            experiment_config["enhancer"] = config
 
     # Add selection strategy
     if selection_strategy_name:
@@ -162,7 +162,7 @@ def generate_experiment_config_yaml(
     # Add custom sections if they exist
     custom_sections = {
         "custom_reader": custom_reader,
-        "custom_improver": custom_improver,
+        "custom_enhancer": custom_enhancer,
         "custom_wrappers": custom_wrappers,
         "custom_evaluators": custom_evaluators,
         "custom_data_generators": custom_data_generators,

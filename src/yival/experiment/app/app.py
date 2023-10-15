@@ -305,7 +305,7 @@ def create_dash_app(
             if hashlib.sha256(group_key.encode()
                               ).hexdigest() == hashed_group_key:
                 return group_result
-        for group_result in experiment_data.improver_output.group_experiment_results:
+        for group_result in experiment_data.enhancer_output.group_experiment_results:
             group_key = sanitize_group_key(group_result.group_key)
             if hashlib.sha256(group_key.encode()
                               ).hexdigest() == hashed_group_key:
@@ -569,12 +569,12 @@ def create_dash_app(
         ])
 
     def improver_experiment_results_layout():
-        if not experiment_data.improver_output:
+        if not experiment_data.enhancer_output:
             return html.Div([html.H3("No Improver Output data available.")])
 
         df_improver = generate_combo_metrics_data(
-            experiment_data.improver_output.combination_aggregated_metrics,
-            experiment_data.improver_output.group_experiment_results
+            experiment_data.enhancer_output.combination_aggregated_metrics,
+            experiment_data.enhancer_output.group_experiment_results
         )
 
         csv_string = df_improver.to_csv(index=False, encoding='utf-8')
@@ -646,7 +646,7 @@ def create_dash_app(
                         className="row")
 
     def improver_combo_page_layout():
-        if not experiment_data.improver_output:
+        if not experiment_data.enhancer_output:
             return html.Div([html.H3("No Improver Output data available.")])
         return html.Div([
             html.H3(
@@ -654,8 +654,8 @@ def create_dash_app(
                 style={'textAlign': 'center'}
             ),
             group_key_combination_layout(
-                experiment_data.improver_output.group_experiment_results,
-                highlight_key=experiment_data.improver_output.
+                experiment_data.enhancer_output.group_experiment_results,
+                highlight_key=experiment_data.enhancer_output.
                 original_best_combo_key
             ),
             dcc.Link(
@@ -1672,7 +1672,7 @@ def create_dash_app(
 
         if is_from_improver:
             results = []
-            for e in experiment_data.improver_output.group_experiment_results:
+            for e in experiment_data.enhancer_output.group_experiment_results:
                 for r in e.experiment_results:
                     results.append(r)
             r = generate_experiment(
@@ -1681,7 +1681,7 @@ def create_dash_app(
                 evaluate_all=False,
                 evaluate_group=False
             )
-            experiment_data.improver_output.combination_aggregated_metrics = r.combination_aggregated_metrics
+            experiment_data.enhancer_output.combination_aggregated_metrics = r.combination_aggregated_metrics
         else:
             results = []
             for e in experiment_data.group_experiment_results:
@@ -1916,7 +1916,7 @@ def create_dash_app(
 
         if "improver" in use_improver:
             # Use improver combinations
-            for group in experiment_data.improver_output.group_experiment_results:
+            for group in experiment_data.enhancer_output.group_experiment_results:
                 for result in group.experiment_results:
                     if str(result.combination) not in unique_combination:
                         unique_combination[str(result.combination)
@@ -2021,8 +2021,8 @@ def display_results_dash(
     interactive=False,
     port=8073
 ):
-    if experiment_data.improver_output:
-        for group_result in experiment_data.improver_output.group_experiment_results:
+    if experiment_data.enhancer_output:
+        for group_result in experiment_data.enhancer_output.group_experiment_results:
             experiment_results = []
             seen = set()
             for r in group_result.experiment_results:

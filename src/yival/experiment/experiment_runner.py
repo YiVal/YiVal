@@ -22,12 +22,12 @@ from .rate_limiter import RateLimiter
 from .utils import (
     arun_single_input,
     generate_experiment,
-    get_improver,
+    get_enhancer,
     get_selection_strategy,
     get_trainer,
     register_custom_data_generator,
+    register_custom_enhancer,
     register_custom_evaluators,
-    register_custom_improver,
     register_custom_readers,
     register_custom_selection_strategy,
     register_custom_variation_generators,
@@ -53,7 +53,7 @@ class ExperimentRunner:
         register_custom_selection_strategy(
             self.config.get("custom_selection_strategy", {})
         )
-        register_custom_improver(self.config.get("custom_improvers", {}))
+        register_custom_enhancer(self.config.get("custom_enhancers", {}))
         register_custom_variation_generators(
             self.config.get("custom_variation_generators", {})
         )
@@ -215,9 +215,9 @@ class ExperimentRunner:
                             experiment=experiment
                         )
 
-                    improver = get_improver(self.config)
-                    if improver and enable_custom_func:
-                        experiment.improver_output = improver.improve(
+                    enhancer = get_enhancer(self.config)
+                    if enhancer and enable_custom_func:
+                        experiment.enhancer_output = enhancer.enhance(
                             experiment, self.config, evaluator, logger
                         )
 
