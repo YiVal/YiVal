@@ -26,10 +26,10 @@
 **YiVal is a versatile platform and framework that streamlines the evaluation
 and enhancement of your Generative AI applications.**  
 It empowers you to
-generate better results, reduce latency, and decrease inference cost easily.
+generate **better results**, reduce **latency**, and decrease inference **cost** easily.
 Depending on your knowledge and comfort level, YiVal will help you
-simultaneously optimize prompts, model metadata, model parameters, and
-retrieval configurations. You can easily customize your test data, evaluation
+simultaneously optimize **prompts**, **model metadata**, model parameters(**fine-tune**), and
+retrieval configurations(**RAG**). You can easily customize your test data, evaluation
 methods, and enhancement strategies, all in one place. Enhance and evaluate
 everything with ease!
 
