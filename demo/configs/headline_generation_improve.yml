@@ -32,6 +32,24 @@ variations:
         value: Generate landing page headline for {tech_startup_business}, company business is {business}, target_people is {target_people}
         value_type: str
         variation_id: null
+    generator_name: openai_prompt_based_variation_generator
+    generator_config:
+     #model_name specify the llm model , e.g. a16z-infra/llama-2-13b-chat:9dff94b1bed5af738655d4a7cbcdcde2bd503aa85c94334fe1f42af7f3dd5ee3
+      model_name: gpt-4
+      number_of_variations: 2
+      diversify: false
+      variables: null
+      prompt: 
+        - content: |-
+            Your objective is to construct a concise instruction prompt for GPT-4.
+            Points to emphasize in your instruction:
+            - Given an tech startup business,company business and target people, generate one corresponding landing page headline which is really attracting.
+            - {tech_startup_business} represent tech startup business the nature of its business 
+            - {business} represent the nature of company's business
+            - {target_people} represent company's target audience
+            - keep your output crisp: only the prompt, devoid of any extraneous content.
+
+          role: system
 
 evaluators:
   - evaluator_type: individual
@@ -146,6 +164,11 @@ selection_strategy:
       average_latency: 0.0
       average_token_usage: 0.0
     # normalize_func: "z-score"
+
+human_rating_configs:
+  - name: comprehensibility
+    instructions: Rate the degree to which the headline is easy to understand.
+    scale: [1, 5]
 
 improver:
   name: "optimize_by_prompt_improver"
