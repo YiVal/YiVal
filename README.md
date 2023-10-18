@@ -25,13 +25,7 @@
 
 **YiVal is a versatile platform and framework that streamlines the evaluation
 and enhancement of your Generative AI applications.**  
-It empowers you to
-generate better results, reduce latency, and decrease inference cost easily.
-Depending on your knowledge and comfort level, YiVal will help you
-simultaneously optimize prompts, model metadata, model parameters, and
-retrieval configurations. You can easily customize your test data, evaluation
-methods, and enhancement strategies, all in one place. Enhance and evaluate
-everything with ease!
+Just as Weights & Biases optimizes your ML workflow, YiVal enables you to simultaneously and seamlessly tune your GenAI app prompts, adjust Retrieval(RAG) configurations, and fine-tune model parameters. This empowers you to achieve improved results, minimize latency, and reduce inference costs with ease!
 
 [Check out our quickstart guide!][1]
 
@@ -169,7 +163,7 @@ connected and universally accessible.
 
 ## Paper / Algorithm Implementation
 
-| **Paper** | **Author** | **Topics** | **YiVal Contributor** | **Data Generator** | **Variation Generator** | **Evaluator** | **Selector** | **Evolver** | **Config** |
+| **Paper** | **Author** | **Topics** | **YiVal Contributor** | **Data Generator** | **Variation Generator** | **Evaluator** | **Selector** | **Enhancer** | **Config** |
 |---|---|---|---|---|---|---|---|---|---|
 | [Large Language Models Are Human-Level Prompt Engineers](https://arxiv.org/abs/2211.01910) | [Yongchao Zhou](https://arxiv.org/search/cs?searchtype=author&query=Zhou,+Y), [Andrei Ioan Muresanu](https://arxiv.org/search/cs?searchtype=author&query=Muresanu,+A+I), [Ziwen Han](https://arxiv.org/search/cs?searchtype=author&query=Han,+Z) | YiVal Evolver, Auto-Prompting | [@Tao Feng](https://github.com/oliverfeng) | [OpenAIPromptDataGenerator](https://github.com/YiVal/YiVal/blob/master/src/yival/data_generators/openai_prompt_data_generator.py) | [OpenAIPromptVariationGenerator](https://github.com/YiVal/YiVal/blob/master/src/yival/variation_generators/openai_prompt_based_variation_generator.py) | [OpenAIPromptEvaluator](https://github.com/YiVal/YiVal/blob/master/src/yival/evaluators/openai_prompt_based_evaluator.py), [OpenAIEloEvaluator](https://github.com/YiVal/YiVal/blob/master/src/yival/evaluators/openai_elo_evaluator.py) | [AHPSelector](https://github.com/YiVal/YiVal/blob/master/src/yival/result_selectors/ahp_selection.py) | [OpenAIPromptBasedCombinationImprover](https://github.com/YiVal/YiVal/blob/master/src/yival/combination_improvers/openai_prompt_based_combination_improver.py) | [config](https://github.com/YiVal/YiVal/blob/master/demo/configs/headline_generation_improve.yml) |
 | [BERTScore: Evaluating Text Generation with BERT](https://arxiv.org/abs/1904.09675) | [Tianyi Zhang](https://arxiv.org/search/cs?searchtype=author&query=Zhang,+T), [Varsha Kishore](https://arxiv.org/search/cs?searchtype=author&query=Kishore,+V), [Felix Wu](https://arxiv.org/search/cs?searchtype=author&query=Wu,+F) | YiVal Evaluator, bertscore, rouge | [@crazycth](https://github.com/crazycth) | - | - | [BertScoreEvaluator](https://github.com/YiVal/YiVal/blob/master/src/yival/evaluators/bertscore_evaluator.py) | - | - | - |
