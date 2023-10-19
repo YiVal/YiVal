@@ -25,7 +25,10 @@
 
 **YiVal is a versatile platform and framework that streamlines the evaluation
 and enhancement of your Generative AI applications.**  
-Just as Weights & Biases optimizes your ML workflow, YiVal enables you to simultaneously and seamlessly tune your GenAI app prompts, adjust Retrieval(RAG) configurations, and fine-tune model parameters. This empowers you to achieve improved results, minimize latency, and reduce inference costs with ease!
+Just as Weights & Biases optimizes your ML workflow, YiVal enables you to simultaneously 
+and seamlessly tune your GenAI app prompts, adjust Retrieval(RAG) configurations, and 
+fine-tune model parameters. This empowers you to achieve improved results, minimize latency, 
+and reduce inference costs with ease!
 
 [Check out our quickstart guide!][1]
 
