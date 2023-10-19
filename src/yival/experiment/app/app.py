@@ -982,8 +982,7 @@ def create_dash_app(
                 dcc.Link('Go to Data Analysis', href='/data-analysis'),
                 html.Br()
             ])
-        # TODO video
-        elif True:
+        elif include_video(data_dict):
             new_data_dict = extract_and_decode_video(data_dict)
             return html.Div([
                 html.A(
