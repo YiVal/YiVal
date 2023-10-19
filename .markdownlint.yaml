@@ -6,5 +6,4 @@ MD007:
   # Spaces for indent
   indent: 4
 
-MD013:
-  tables: false
+MD013: false
