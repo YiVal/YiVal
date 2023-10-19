@@ -114,9 +114,9 @@ def generate_group_key_combination_data(
                 process_raw_output(
                     getattr(exp_result.raw_output, 'image_output', None)
                 ),
-                "vedio_output":
+                "video_output":
                 process_raw_output(
-                    getattr(exp_result.raw_output, 'vedio_output', None)
+                    getattr(exp_result.raw_output, 'video_output', None)
                 ),
                 "evaluator_outputs":
                 "\n".join([
@@ -124,11 +124,11 @@ def generate_group_key_combination_data(
                     for e in exp_result.evaluator_outputs
                 ]) if exp_result.evaluator_outputs else None
             }
-            vedio_text = ''
-            for vedio_url in nested_output['vedio_output']:
-                vedio_text += f"<yival_vedio_output>{vedio_url}</yival_vedio_output>"
+            video_text = ''
+            for video_url in nested_output['video_output']:
+                video_text += f"<yival_video_output>{video_url}</yival_video_output>"
 
-            formatted_output = f"<yival_raw_output>{nested_output['text_output']}</yival_raw_output>{nested_output['image_output']}{vedio_text}\n{nested_output['evaluator_outputs']}"
+            formatted_output = f"<yival_raw_output>{nested_output['text_output']}</yival_raw_output>{nested_output['image_output']}{video_text}\n{nested_output['evaluator_outputs']}"
             row_dict[combo_str] = formatted_output
             all_combos.add(combo_str)
         data_list.append(row_dict)

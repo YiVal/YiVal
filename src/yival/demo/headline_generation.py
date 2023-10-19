@@ -50,7 +50,7 @@ def headline_generation(
     )
     res = MultimodalOutput(
         text_output=response['choices'][0]['message']['content'],
-        vedio_output=["https://www.w3schools.com/html/mov_bbb.mp4"]
+        video_output=["https://www.w3schools.com/html/mov_bbb.mp4"]
     )
     token_usage = response['usage']['total_tokens']
     logger.log(token_usage)
