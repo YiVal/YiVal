@@ -178,3 +178,10 @@ class BertScoreEvaluatorConfig(EvaluatorConfig):
     description: str = " This is the description of the evaluator"
     lan: str = 'zh'
     indicator: str = 'p'  # p,r,f
+
+@dataclass
+class Rags_EvaluatorConfig(EvaluatorConfig):
+    evaluator_type: EvaluatorType = EvaluatorType.INDIVIDUAL
+    desciption: str=" This is the description of the evaluator"
+    
+    metric_type: str = ''

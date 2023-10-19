@@ -6,11 +6,10 @@ from ..schemas.evaluator_config import EvaluatorOutput, Rags_EvaluatorConfig
 from ..schemas.experiment_config import ExperimentResult
 
 from ragas import evaluate
-from ragas.metrics import answer_relevancy,faithfulness
+from ragas.metrics import answer_relevancy,faithfulness,context_precision
 from datasets import Dataset
-from ragas.metrics import answer_relevance,faithfulness
 from .base_evaluator import BaseEvaluator
-
+import numpy as np
 
 class RAGSEvaluator(BaseEvaluator):
     
@@ -28,27 +27,28 @@ class RAGSEvaluator(BaseEvaluator):
         output,context=format_dict['raw_output'].split('\r')
         question=[format_dict['input']]
         answer=[output]
-        context=[[context]]
+        contexts=[context.split('---')]
         ds = Dataset.from_dict(
             {
                 'question': question,
                 'answer': answer,
-                'context': context,
+                'contexts': contexts,
             }
         )
         metrics=[]
         metric_types=self.config.metric_type.split(',')
         if 'answer_relevancy' in metric_types:
             metrics.append(answer_relevancy)
-        elif 'faithfulness' in metric_types:
+        if 'faithfulness' in metric_types:
             metrics.append(faithfulness)
-
+        if 'context_precision' in metric_types:
+            metrics.append(context_precision)
         result=evaluate(ds, metrics=metrics)
-        print(result)
+        f_res=np.array([result[metric] for metric in metric_types])
         return EvaluatorOutput(
             name=self.config.name,
-            result=result[metric_types[0]],
-            display_name=metric_types[0],
+            result=f_res,
+            display_name=str(metric_types),
             metric_calculators=self.config.metric_calculators
         )
 BaseEvaluator.register_evaluator(

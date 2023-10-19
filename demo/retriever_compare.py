@@ -146,15 +146,11 @@ def retriever_method(input: str, method: str)-> str:
         pass
     elif method[0] == 'llamaindex' and llamaindex==None:
         llamaindex=False
-        print('line:149')
         doc = SimpleDirectoryReader(input_files=[file_path])
         print(doc)
         documents=doc.load_data()
-        print('line:151')
         index = VectorStoreIndex.from_documents(documents)
-        print('line:153')
         llamaindex = index.as_query_engine()
-        print('line:155')
         print(isinstance(llamaindex,RetrieverQueryEngine))
         pass
     

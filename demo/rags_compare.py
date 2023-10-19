@@ -41,10 +41,12 @@ from langchain.chains import RetrievalQA
 class retriever_model_prompt:
     retrievers :dict
 
-    def __init__(self,pdf_path="../try/2307.03109.pdf"):
+    def __init__(self,pdf_path="../simple.pdf"):
         self.retrievers=dict()
         self.model_prompt=dict()
         self.data = PyPDFLoader(pdf_path).load()
+        self.pdf_path=pdf_path
+        self.pdf_path_2="../abstract.pdf"
     def add_retriever(self,name:str,retriever:Any):
         self.retrievers[name]=retriever
 
@@ -87,8 +89,8 @@ class retriever_model_prompt:
         return ensemble_retriever
     
     def init_MultiVector_Retriever(self)->MultiVectorRetriever:
-        loaders=[ PyPDFLoader("../try/2307.03109.pdf")
-             ,PyPDFLoader("../try/2307.03109_1.pdf")]
+        loaders=[ PyPDFLoader(self.pdf_path)
+             ,PyPDFLoader(self.pdf_path_2)]
         docs = []
         for l in loaders:
             docs.extend(l.load())
@@ -119,8 +121,8 @@ class retriever_model_prompt:
         MultiVector_retriever=copy.copy(retriever)
         return MultiVector_retriever
     def init_Parent_Document_Retriever(self)->ParentDocumentRetriever:
-        loaders=[ PyPDFLoader("../try/2307.03109.pdf")
-            ,PyPDFLoader("../try/2307.03109_1.pdf")]
+        loaders=[ PyPDFLoader(self.pdf_path)
+            ,PyPDFLoader(self.pdf_path_2)]
         docs = []
         for l in loaders:
             docs.extend(l.load())
@@ -162,16 +164,19 @@ class retriever_model_prompt:
             pass
         elif retriever == 'llamaindex' and 'llamaindex' not in self.retrievers:
             self.retrievers[retriever]=False
-            documents = SimpleDirectoryReader(input_files=['../try/2307.03109.pdf']).load_data()
+            print('line:167')
+            documents = SimpleDirectoryReader(input_files=[self.pdf_path]).load_data()
+            print('line:169')
             index = VectorStoreIndex.from_documents(documents)
-            print('line:166')
+            print('line:171')
             llamaindex = index.as_retriever()
-            print('line:168')
-            print(type(llamaindex))
+            # print(type(llamaindex))
             self.add_retriever(retriever,llamaindex)
             pass
-
-    
+def langchain_docs_to_string(docs:List)-> str:
+    return f"---".join([f"Document {i+1}:\n\n" + d.page_content for i, d in enumerate(docs)])
+def llamaindex_docs_to_string(docs:List)-> str:
+    return f"---".join([f"Document {i+1}:\n\n" + d.text for i, d in enumerate(docs)])
 r_m_ps=retriever_model_prompt()
 def retriever_method(input: str, retriever: str)-> str:
     res=""
@@ -184,44 +189,45 @@ def retriever_method(input: str, retriever: str)-> str:
         while not isinstance(r_m_ps.retrievers[retriever],MultiQueryRetriever):
             time.sleep(1)
         docs = r_m_ps.retrievers[retriever].get_relevant_documents(query=input)
-        res=f"\n\n".join([f"Document {i+1}:\n\n" + d.page_content for i, d in enumerate(docs)])
+        res=langchain_docs_to_string(docs=docs)
         pass
     elif retriever == 'Contextual_compression':
         while not isinstance(r_m_ps.retrievers[retriever],ContextualCompressionRetriever):
             time.sleep(1)
         docs = r_m_ps.retrievers[retriever].get_relevant_documents(input)
-        res=f"\n{'-' * 100}\n".join([f"Document {i+1}:\n\n" + d.page_content for i, d in enumerate(docs)])
+        res=langchain_docs_to_string(docs=docs)
         pass
     elif retriever == 'Ensemble_Retriever':
         while not isinstance(r_m_ps.retrievers[retriever],EnsembleRetriever):
             time.sleep(1)
         docs = r_m_ps.retrievers[retriever].get_relevant_documents(input)
-        res=f"\n{'-' * 100}\n".join([f"Document {i+1}:\n\n" + d.page_content for i, d in enumerate(docs)])
+        res=langchain_docs_to_string(docs=docs)
         pass
     elif retriever == 'MultiVector_Retriever':
         while not isinstance(r_m_ps.retrievers[retriever],MultiVectorRetriever):
             time.sleep(1)
         docs=r_m_ps.retrievers[retriever].vectorstore.similarity_search(input)
-        res=f"\n{'-' * 100}\n".join([f"Document {i+1}:\n\n" + d.page_content for i, d in enumerate(docs)])
+        res=langchain_docs_to_string(docs=docs)
         pass
     elif retriever == 'Parent_Document_Retriever':
         while not isinstance(r_m_ps.retrievers[retriever],ParentDocumentRetriever):
             time.sleep(1)
         docs=r_m_ps.retrievers[retriever].vectorstore.similarity_search(input)
-        res=f"\n{'-' * 100}\n".join([f"Document {i+1}:\n\n" + d.page_content for i, d in enumerate(docs)])
+        res=langchain_docs_to_string(docs=docs)
         pass
     elif retriever == 'llamaindex':
         while not isinstance(r_m_ps.retrievers[retriever],VectorIndexRetriever):
+            print('line:217')
             time.sleep(1)
         docs=r_m_ps.retrievers[retriever].retrieve(input)
-        print(docs)
-        res=f"\n{'-' * 100}\n".join([f"Document {i+1}:\n\n" + d.text for i, d in enumerate(docs)])
+        # print(docs)
+        res=llamaindex_docs_to_string(docs=docs)
         pass
     if res=='':
         res='No result!'
     return res
 
-def retriever_compare(input: str, state: ExperimentState) -> MultimodalOutput:
+def rags_compare(input: str, state: ExperimentState) -> MultimodalOutput:
     res=""
     # print(state.current_variations)
     '''
