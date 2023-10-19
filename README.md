@@ -26,7 +26,11 @@ us: [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/YiValai.svg
 
 **YiVal is a versatile platform and framework that streamlines the evaluation
 and enhancement of your Generative AI applications.**  
-Just as AWS SageMaker optimizes your ML workflow, YiVal enables you to simultaneously and seamlessly tune your GenAI app prompts, adjust Retrieval(RAG) configurations, and fine-tune model parameters. This empowers you to achieve improved results, minimize latency, and reduce inference costs with ease!
+Tune your prompts like how professional machine learning engineers tune their neural model parameters.
+With YiVal, you can simultaneously and seamlessly adjust your GenAI app prompts, 
+modify Retrieval(RAG) configurations, and fine-tune model parameters. 
+This data-driven approach empowers you to achieve improved results, minimize latency,
+and reduce inference costs with ease!"
 
 [Check out our quickstart guide!][1]
 
