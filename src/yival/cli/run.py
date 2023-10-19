@@ -36,7 +36,7 @@ def add_arguments_to(subparser):
     parser.add_argument(
         "--interactive",
         action="store_true",
-        default=False,
+        default=True,
         help="Open interactive mode to use a chatbot."
     )
 

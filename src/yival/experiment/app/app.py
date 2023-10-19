@@ -56,6 +56,16 @@ def include_image_base64(data_dict):
                     return True
     return False
 
+def include_vedio(data_dict):
+    """Check if a string includes a vedio."""
+    pattern = r'<yival_vedio_output>'
+    for item in data_dict:
+        for record in item:
+            for value in record.values():
+                if re.search(pattern, value):
+                    return True
+    return False
+
 
 def is_base64_image(value):
     """Check if a string is a base64 encoded image."""
@@ -85,11 +95,36 @@ def extract_and_decode_image_from_string(data_string):
         image_output_string = image_output_string_match.group(1)
         evaluate_match = re.search(r"\](.*)", data_string, re.DOTALL)
         evaluate = evaluate_match.group(1).strip()
-        # Check if image_output_string is base64 image
+        # # Check if image_output_string is base64 image
         image_output = base64_to_img(image_output_string)
         return {
             "text_output": text_output,
             "image_output": image_output,
+            "evaluate": evaluate
+        }
+    else:
+        return None
+
+def extract_and_decode_vedio_from_string(data_string):
+    """Extract and decode the first vedio from a string include vedio urls and return a dictionary."""
+    # Extract text_output, image_output and evaluate part
+    vedio_output_string_match = re.search(
+        r"<yival_vedio_output>(.*?)</yival_vedio_output>", data_string, re.DOTALL
+    )
+    if vedio_output_string_match:
+        text_output_match = re.search(
+            r'<yival_raw_output>\n(.*?)\n</yival_raw_output>', data_string,
+            re.DOTALL
+        )
+        text_output = text_output_match.group(1)
+        vedio_output = vedio_output_string_match.group(1)
+        evaluate_match = re.search(r"</yival_vedio_output>(.*)", data_string, re.DOTALL)
+        evaluate = evaluate_match.group(1).strip()
+        # Check if image_output_string is base64 image
+        # image_output = base64_to_img(image_output_string)
+        return {
+            "text_output": text_output,
+            "vedio_output": vedio_output,
             "evaluate": evaluate
         }
     else:
@@ -107,6 +142,24 @@ def extract_and_decode_image(data_dict):
                     image = extract_and_decode_image_from_string(value)
                     if image is not None:
                         new_record[key] = image
+                    else:
+                        new_record[key] = value
+                else:
+                    new_record[key] = value
+            new_data_dict.append(new_record)
+    return new_data_dict
+
+def extract_and_decode_vedio(data_dict):
+    """Extract and decode vedio from a dictionary include vedio url."""
+    new_data_dict = []
+    for item in data_dict:
+        for record in item:
+            new_record = {}
+            for key, value in record.items():
+                if isinstance(value, str):
+                    vedio = extract_and_decode_vedio_from_string(value)
+                    if vedio is not None:
+                        new_record[key] = vedio
                     else:
                         new_record[key] = value
                 else:
@@ -144,7 +197,48 @@ def create_table(data):
                 )
                 text = html.P(value["text_output"])
                 cell = html.Td([
-                    text, html.Br(), img,
+                    text, html.Br(), img, html.Br(), vedio,
+                    html.Br(), value["evaluate"]
+                ])
+            else:
+                cell = html.Td(value)
+            row.append(cell)
+        table_rows.append(html.Tr(row))
+    return table_rows
+
+
+def create_vedio_table(data):
+    """Create an HTML table from a list of dictionaries, where the values can be strings or PIL images."""
+    # Create the header row
+    header_row = [
+        html.Th(key if key != "Hashed Group Key" else "Human Rating")
+        for key in data[0].keys()
+    ]
+    table_rows = [html.Tr(header_row)]
+
+    # Create the data rows
+    for record in data:
+        row = []
+        for key, value in record.items():
+            if key == "Hashed Group Key":
+                # Convert the hashed group key to a hyperlink
+                href = f"/rating-result/{value}"
+                cell = html.Td(
+                    dcc.Link("Link", href=href)
+                )  # Replace "Link text" with the text you want to display
+            elif isinstance(value, dict):
+                text = html.P(value["text_output"])
+                vedio = html.Div(children=html.Video(
+                        controls = True,
+                        id = 'movie_player',
+                        src = value["vedio_output"],
+                        autoPlay=False),
+                        style={
+                            'height': '200px',
+                            'width': '200px',
+                        })
+                cell = html.Td([
+                    text, html.Br(), vedio,
                     html.Br(), value["evaluate"]
                 ])
             else:
@@ -367,15 +461,28 @@ def create_dash_app(
                 not None
             ).any() for col in sample_columns
         )
+        contains_vedios = any(
+            df[col].apply(
+                lambda x: isinstance(x, MultimodalOutput) and x.vedio_output is
+                not None
+            ).any() for col in sample_columns
+        )
+
+        multi_div = None
+
+        if contains_images:
+            multi_div = image_combo_aggregated_metrics_layout(df)
+        elif contains_vedios:
+            multi_div = vedio_combo_aggregated_metrics_layout(df)
+        else:
+            combo_aggregated_metrics_layout(df)
+
         return html.Div([
             html.H3(
                 "Experiment Results Analysis", style={'textAlign': 'center'}
             ),
             html.Hr(),
-            html.Div([
-                image_combo_aggregated_metrics_layout(df)
-                if contains_images else combo_aggregated_metrics_layout(df)
-            ],
+            html.Div([multi_div],
                      style={
                          'overflowY': 'auto',
                          'overflowX': 'auto'
@@ -720,6 +827,52 @@ def create_dash_app(
         )
 
         return table
+    
+    def vedio_combo_aggregated_metrics_layout(df):
+        sample_columns = [col for col in df.columns if "Sample" in col]
+
+        # Process each column with MultimodalOutput
+        for col in sample_columns:
+            df[col] = df[col].apply(
+                lambda x: html.Div([
+                    html.P(f'<text_output> {x.text_output} </text_output>'),
+                    html.Div(children = [
+                        html.Video(
+                            controls = True,
+                            id = 'movie_player',
+                            src = x.vedio_output[0],
+                            autoPlay=False
+                        )],
+                        style={
+                            'height': '200px',
+                            'width': '200px',
+                            'display': 'flex',
+                            # 'justifyContent': 'center',
+                            # 'alignItems': 'center',
+                            # 'overflow': 'hidden'
+                        }
+                    )
+                ]) if isinstance(x, MultimodalOutput) and x.vedio_output is
+                not None else x
+            )
+
+        # Create html.Table
+        table = html.Table(
+            # Header
+            [html.Tr([html.Th(col) for col in df.columns])] +
+
+            # Body
+            [
+                html.Tr([
+                    DangerouslySetInnerHTML(
+                        f'<details><summary>{row[col][:250]}...</summary>{row[col]}</details>'
+                    ) if col_index == 0 else html.Td(row[col])
+                    for col_index, col in enumerate(df.columns)
+                ]) for index, row in df.iterrows()
+            ]
+        )
+
+        return table
 
     def format_with_tags(cell):
         # Split the cell content using the yival_raw_output tags
@@ -823,6 +976,30 @@ def create_dash_app(
                 html.Br(),
                 html.Table(
                     create_table(new_data_dict), id='group-key-combo-table'
+                ),
+                html.Hr(),
+                dcc.Link(
+                    'Go back to Experiment Results Analysis',
+                    href='/experiment-results'
+                ),
+                html.Br(),
+                dcc.Link('Go to Data Analysis', href='/data-analysis'),
+                html.Br()
+            ])
+        # TODO vedio
+        elif True:
+            new_data_dict = extract_and_decode_vedio(data_dict)
+            return html.Div([
+                html.A(
+                    'Export to CSV',
+                    id='export-link-group-key-combo',
+                    download="group_key_combo.csv",
+                    href=csv_data_url,
+                    target="_blank"
+                ),
+                html.Br(),
+                html.Table(
+                    create_vedio_table(new_data_dict), id='group-key-combo-table'
                 ),
                 html.Hr(),
                 dcc.Link(
@@ -1122,6 +1299,34 @@ def create_dash_app(
                            }  # Make the text span 4 columns
                 ) if exp_result.raw_output.text_output else None
                 content = html.Div([text] + images,
+                                   style={
+                                       'display': 'grid',
+                                       'grid-template-columns':
+                                       'repeat(4, 1fr)',
+                                       'justify-content': 'center',
+                                       'align-items': 'center'
+                                   })
+            elif exp_result.raw_output.vedio_output:
+                videos = []
+                for video in exp_result.raw_output.vedio_output:
+                    vid = html.Video(
+                        controls = True,
+                        id = 'movie_player',
+                        src = video,
+                        autoPlay=False ,                       
+                        style={
+                            'width': '200px',
+                            'height': '200px',
+                            'margin': 'auto'
+                        }
+                    )
+                    videos.append(vid)
+                text = html.P(
+                    exp_result.raw_output.text_output,
+                    style={'grid-column': 'span 4'
+                           }  # Make the text span 4 columns
+                ) if exp_result.raw_output.text_output else None
+                content = html.Div([text] + videos,
                                    style={
                                        'display': 'grid',
                                        'grid-template-columns':

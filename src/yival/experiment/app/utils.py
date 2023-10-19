@@ -114,13 +114,21 @@ def generate_group_key_combination_data(
                 process_raw_output(
                     getattr(exp_result.raw_output, 'image_output', None)
                 ),
+                "vedio_output":
+                process_raw_output(
+                    getattr(exp_result.raw_output, 'vedio_output', None)
+                ),
                 "evaluator_outputs":
                 "\n".join([
                     f"{e.name} : {e.display_name} = {e.result}"
                     for e in exp_result.evaluator_outputs
                 ]) if exp_result.evaluator_outputs else None
             }
-            formatted_output = f"<yival_raw_output>{nested_output['text_output']}</yival_raw_output>{nested_output['image_output']}\n{nested_output['evaluator_outputs']}"
+            vedio_text = ''
+            for vedio_url in nested_output['vedio_output']:
+                vedio_text += f"<yival_vedio_output>{vedio_url}</yival_vedio_output>"
+
+            formatted_output = f"<yival_raw_output>{nested_output['text_output']}</yival_raw_output>{nested_output['image_output']}{vedio_text}\n{nested_output['evaluator_outputs']}"
             row_dict[combo_str] = formatted_output
             all_combos.add(combo_str)
         data_list.append(row_dict)
