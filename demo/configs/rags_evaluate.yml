@@ -1,0 +1,72 @@
+custom_function: demo.retriever_compare.retriever_compare
+dataset:
+  file_path: demo/data/retriever_compare.csv
+  reader: csv_reader
+  source_type: dataset
+  reader_config:
+    expected_result_column: expected_result
+description: Configuration fo question answering with expected results.
+
+variations:
+  - name: retriever_name
+    variations:
+      
+      # - instantiated_value: "void"
+      #   value: "MultiQueryRetriever"
+      #   value_type: str
+      #   variation_id: null
+      - instantiated_value: "MultiQueryRetriever"
+        value: "MultiQueryRetriever"
+        value_type: str
+        variation_id: null
+      # - instantiated_value: "Contextual_compression"
+      #   value: "Contextual_compression"
+      #   value_type: str
+      #   variation_id: null
+      # - instantiated_value: "Ensemble_Retriever"
+      #   value: "Ensemble_Retriever"
+      #   value_type: str
+      #   variation_id: null
+      # - instantiated_value: "MultiVector_Retriever"
+      #   value: "MultiVector_Retriever"
+      #   value_type: str
+      #   variation_id: null
+      # - instantiated_value: "Parent_Document_Retriever"
+      #   value: "Parent_Document_Retriever"
+      #   value_type: str
+      #   variation_id: null
+      - instantiated_value: "llamaindex"
+        value: "llamaindex"
+        value_type: str
+        variation_id: null
+  - name: prompts
+    variations:
+      - instantiated_value: "Answer question '{question}' based on the content of '{context}'"
+        value: "Answer question '{question}' based on the content of '{context}'"
+        value_type: str
+        variation_id: null
+  - name: model_name
+    variations:
+      - instantiated_value: "gpt-3.5-turbo"
+        value: "gpt-3.5-turbo"
+        value_type: str
+        variation_id: null
+      # - instantiated_value: "gpt-4"
+      #   value: "gpt-4"
+      #   value_type: str
+      #   variation_id: null
+
+evaluators:
+  - evaluator_type: individual
+    metric_type: answer_relevancy
+    metric_calculators:
+      - method: AVERAGE
+    name: rags_evaluator
+ 
+
+
+human_rating_configs:
+  - name: answer_quility
+    instructions: Please rate the quality of the answer provided by the model
+    scale: [1, 5]
+

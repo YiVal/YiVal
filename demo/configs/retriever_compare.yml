@@ -30,6 +30,10 @@ variations:
         value: "Parent_Document_Retriever"
         value_type: str
         variation_id: null
+      - instantiated_value: "llamaindex"
+        value: "llamaindex"
+        value_type: str
+        variation_id: null
 
 
 human_rating_configs:
