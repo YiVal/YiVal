@@ -14,7 +14,8 @@
 
 <!-- markdownlint-disable-next-line MD013 -->
 👉 Follow
-us: [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/YiValai.svg?style=social&label=Follow%20%40YiVal)](https://twitter.com/yivalloveaigc) |
+us: [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/YiValai.svg?style=social&label\
+=Follow%20%40YiVal)](https://twitter.com/yivalloveaigc) |
 [![Discord](https://dcbadge.vercel.app/api/server/HnUWVW4kth?compact=true&style=flat)](https://discord.gg/HnUWVW4kth)
 
 [![Downloads](https://static.pepy.tech/badge/YiVal/month)](https://pepy.tech/project/YiVal)
@@ -26,9 +27,10 @@ us: [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/YiValai.svg
 
 **YiVal is a versatile platform and framework that streamlines the evaluation
 and enhancement of your Generative AI applications.**  
-Just as AWS SageMaker optimizes your ML workflow, YiVal enables you to simultaneously and seamlessly tune your GenAI app
-prompts, adjust Retrieval(RAG) configurations, and fine-tune model parameters. This empowers you to achieve improved
-results, minimize latency, and reduce inference costs with ease!
+Just as AWS SageMaker optimizes your ML workflow, YiVal enables you to simultane\
+ously and seamlessly tune your GenAI app prompts, adjust Retrieval(RAG) configura\
+tions, and fine-tune model parameters. This empowers you to achieve improved re\
+sults, minimize latency, and reduce inference costs with ease!
 
 [Check out our quickstart guide!][1]
 
