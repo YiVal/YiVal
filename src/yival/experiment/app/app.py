@@ -56,6 +56,7 @@ def include_image_base64(data_dict):
                     return True
     return False
 
+
 def include_video(data_dict):
     """Check if a string includes a video."""
     pattern = r'<yival_video_output>'
@@ -65,6 +66,7 @@ def include_video(data_dict):
                 if re.search(pattern, value):
                     return True
     return False
+
 
 def is_base64_image(value):
     """Check if a string is a base64 encoded image."""
@@ -104,11 +106,13 @@ def extract_and_decode_image_from_string(data_string):
     else:
         return None
 
+
 def extract_and_decode_video_from_string(data_string):
     """Extract and decode the first video from a string include video urls and return a dictionary."""
     # Extract text_output, video_output and evaluate part
     video_output_string_match = re.search(
-        r"<yival_video_output>(.*?)</yival_video_output>", data_string, re.DOTALL
+        r"<yival_video_output>(.*?)</yival_video_output>", data_string,
+        re.DOTALL
     )
     if video_output_string_match:
         text_output_match = re.search(
@@ -117,7 +121,9 @@ def extract_and_decode_video_from_string(data_string):
         )
         text_output = text_output_match.group(1)
         video_output = video_output_string_match.group(1)
-        evaluate_match = re.search(r"</yival_video_output>(.*)", data_string, re.DOTALL)
+        evaluate_match = re.search(
+            r"</yival_video_output>(.*)", data_string, re.DOTALL
+        )
         evaluate = evaluate_match.group(1).strip()
         return {
             "text_output": text_output,
@@ -126,6 +132,7 @@ def extract_and_decode_video_from_string(data_string):
         }
     else:
         return None
+
 
 def extract_and_decode_image(data_dict):
     """Extract and decode image from a dictionary include base64 encoded."""
@@ -144,6 +151,7 @@ def extract_and_decode_image(data_dict):
                     new_record[key] = value
             new_data_dict.append(new_record)
     return new_data_dict
+
 
 def extract_and_decode_video(data_dict):
     """Extract and decode video from a dictionary include video url."""
@@ -224,15 +232,18 @@ def create_video_table(data):
                 )  # Replace "Link text" with the text you want to display on UI
             elif isinstance(value, dict):
                 text = html.P(value["text_output"])
-                video = html.Div(children=html.Video(
-                        controls = True,
-                        id = 'movie_player',
-                        src = value["video_output"],
-                        autoPlay=False),
-                        style={
-                            'height': '200px',
-                            'width': '200px',
-                        })
+                video = html.Div(
+                    children=html.Video(
+                        controls=True,
+                        id='movie_player',
+                        src=value["video_output"],
+                        autoPlay=False
+                    ),
+                    style={
+                        'height': '200px',
+                        'width': '200px',
+                    }
+                )
                 cell = html.Td([
                     text, html.Br(), video,
                     html.Br(), value["evaluate"]
@@ -823,7 +834,7 @@ def create_dash_app(
         )
 
         return table
-    
+
     def video_combo_aggregated_metrics_layout(df):
         sample_columns = [col for col in df.columns if "Sample" in col]
 
@@ -832,13 +843,15 @@ def create_dash_app(
             df[col] = df[col].apply(
                 lambda x: html.Div([
                     html.P(f'<text_output> {x.text_output} </text_output>'),
-                    html.Div(children = [
-                        html.Video(
-                            controls = True,
-                            id = 'movie_player',
-                            src = x.video_output[0],
-                            autoPlay=False
-                        )],
+                    html.Div(
+                        children=[
+                            html.Video(
+                                controls=True,
+                                id='movie_player',
+                                src=x.video_output[0],
+                                autoPlay=False
+                            )
+                        ],
                         style={
                             'height': '200px',
                             'width': '200px',
@@ -994,7 +1007,8 @@ def create_dash_app(
                 ),
                 html.Br(),
                 html.Table(
-                    create_video_table(new_data_dict), id='group-key-combo-table'
+                    create_video_table(new_data_dict),
+                    id='group-key-combo-table'
                 ),
                 html.Hr(),
                 dcc.Link(
@@ -1305,10 +1319,10 @@ def create_dash_app(
                 videos = []
                 for video in exp_result.raw_output.video_output:
                     vid = html.Video(
-                        controls = True,
-                        id = 'movie_player',
-                        src = video,
-                        autoPlay=False ,                       
+                        controls=True,
+                        id='movie_player',
+                        src=video,
+                        autoPlay=False,
                         style={
                             'width': '200px',
                             'height': '200px',

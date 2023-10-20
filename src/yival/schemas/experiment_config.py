@@ -288,8 +288,7 @@ class MultimodalOutput:
             "text_output": self.text_output,
             "image_output": "PIL Image List" if self.image_output else
             None,  # You might want to serialize the image differently
-            "video_output": "video URL List" if self.video_output else
-            None
+            "video_output": "video URL List" if self.video_output else None
         }
 
 
