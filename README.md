@@ -24,13 +24,32 @@ us: [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/YiValai.svg
 
 ## What is YiVal?
 
+## What is YiVal?
+
 **YiVal is a versatile platform and framework that streamlines the evaluation
 and enhancement of your Generative AI applications.**  
-Tune your prompts like how professional machine learning engineers tune their
-neural model parameters. With YiVal, you can simultaneously and seamlessly adjust
-your GenAI app prompts, modify Retrieval(RAG) configurations, and fine-tune model
-parameters. This data-driven approach empowers you to achieve improved results,
-minimize latency,and reduce inference costs with ease!"
+YiVal: Your Auto-tuning Assistant for GenAI Applications
+YiVal is a state-of-the-art tool designed to streamline the tuning process for
+your GenAI app prompts and **ANY** configs in the loop. With YiVal, manual adjustments
+are a thing of the past. This **data-driven and evaluation-centric** approach ensures
+optimal prompts, precise RAG configurations, and fine-tuned model parameters.
+Empower your applications to achieve
+**enhanced results, reduce latency, and minimize inference costs**
+effortlessly with YiVal!
+
+**Problems YiVal trying to tackle:**
+
+1. Prompt Development Challenge: "I can't create a better prompt. A score of 60
+    for my current prompt isn't helpful at all🤔."
+2. Fine-tuning Difficulty: "I don't know how to fine-tune; the terminology and
+   numerous fine-tune algorithms are overwhelming😵."
+3. Confidence and Scalability: "I learned tutorials to build agents from Langchain
+   and LlamaIndex, but am I doing it right? Will the bot burn through my money
+    when I launch? Will users like my GenAI app🤯?"
+4. Models and Data Drift: "Models and data keep changing; I worry a well-performing
+   GenAI app now may fail later😰."
+5. Relevant Metrics and Evaluators: "Which metrics and evaluators should I focus
+   on for my use case📊?"
 
 [Check out our quickstart guide!][1]
 
