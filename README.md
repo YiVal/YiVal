@@ -24,8 +24,6 @@ us: [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/YiValai.svg
 
 ## What is YiVal?
 
-## What is YiVal?
-
 **YiVal is a versatile platform and framework that streamlines the evaluation
 and enhancement of your Generative AI applications.**  
 YiVal: Your Auto-tuning Assistant for GenAI Applications
