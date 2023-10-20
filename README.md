@@ -24,9 +24,7 @@ us: [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/YiValai.svg
 
 ## What is YiVal?
 
-**YiVal is a versatile platform and framework that streamlines the evaluation
-and enhancement of your Generative AI applications.**  
-YiVal: Your Auto-tuning Assistant for GenAI Applications
+**YiVal: Your Auto-tuning Assistant for GenAI Applications**  
 YiVal is a state-of-the-art tool designed to streamline the tuning process for
 your GenAI app prompts and **ANY** configs in the loop. With YiVal, manual adjustments
 are a thing of the past. This **data-driven and evaluation-centric** approach ensures
