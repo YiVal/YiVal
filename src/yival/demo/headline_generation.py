@@ -49,8 +49,7 @@ def headline_generation(
         model="gpt-3.5-turbo", messages=messages
     )
     res = MultimodalOutput(
-        text_output=response['choices'][0]['message']['content'],
-        video_output=["https://www.w3schools.com/html/mov_bbb.mp4"]
+        text_output=response['choices'][0]['message']['content']
     )
     token_usage = response['usage']['total_tokens']
     logger.log(token_usage)
