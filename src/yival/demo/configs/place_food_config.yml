@@ -1,19 +1,18 @@
-description: generate vedio for stable-diffusion-vedio with place and season
+description: generate video for stable-diffusion-video with place and season
 
-custom_function: yival.demo.place_food_generation.vedio_generation
+custom_function: yival.demo.place_food_generation.video_generation
 dataset:
   data_generators:
     openai_prompt_data_generator:
       chunk_size: 100
       diversify: true
       prompt:
-          "Please provide a concrete and realistic test case as a dictionary for function invocation using the ** operator.
-          Only include parameters, excluding description and name.
-          Ensure it's succinct and well-structured.
-          **Only provide the dictionary.**"
+        "Please provide a concrete and realistic test case as a dictionary for function invocation using the ** operator.
+        Only include parameters, excluding description and name.
+        Ensure it's succinct and well-structured.
+        **Only provide the dictionary.**"
       input_function:
-        description:
-          Given the names and season of different places, generate 2-4 different local dish names from that place in the season.
+        description: Given the names and season of different places, generate 2-4 different local dish names from that place in the season.
         name: headline_generation_for_business
         parameters:
           place_name: str
@@ -41,9 +40,8 @@ variations:
                -  Please limit the output to within 20 words
 
              keep your output crisp: only the prompt, devoid of any extraneous content.
-          
-          role: user
 
+          role: user
 
 evaluators:
   - evaluator_type: individual
@@ -68,7 +66,7 @@ evaluators:
       E It meets the criterion exceptionally well, with little to no room for improvement.
     choices: ["A", "B", "C", "D", "E"]
     model_name: gpt-3.5-turbo
-    description: "evaluate the quality of the stable-diffusion vedio"
+    description: "evaluate the quality of the stable-diffusion video"
     scale_description: "0-4"
     choice_scores:
       A: 0
@@ -79,14 +77,14 @@ evaluators:
 
 human_rating_configs:
   - name: relevance
-    instructions: Rate the relevance of the vedio to the prompt.
+    instructions: Rate the relevance of the video to the prompt.
     scale: [1, 5]
 
-  - name: vedio_quanlity
-    instructions: Rate the quality of the generated vedio.
+  - name: video_quanlity
+    instructions: Rate the quality of the generated video.
     scale: [1, 5]
 
-  - name: vedio
+  - name: video
     instructions: Rate the quanlity of the generated prompt.
     scale: [1, 5]
 
@@ -106,15 +104,13 @@ selection_strategy:
       average_token_usage: 0.2
     normalize_func: "z-score"
 
-
-
 improver:
   name: "optimize_by_prompt_improver"
   model_name: "gpt-3.5-turbo"
   max_iterations: 2
   improve_var: ["task"]
   head_meta_instruction: |
-    Now you will help me generate a prompt which is used to generate a corresponding stable diffusion vedio prompt according to the name of place which is [place_name] and season [season].
+    Now you will help me generate a prompt which is used to generate a corresponding stable diffusion video prompt according to the name of place which is [place_name] and season [season].
     The generated prompt should follow the format like "xx | xx | xx"
     I already have some prompt and its evaluation results :
 

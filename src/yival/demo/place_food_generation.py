@@ -30,6 +30,7 @@ HEADERS = {
 
 s = requests.session()
 
+
 def resize_image(image_content, max_size):
     image = PILImage.open(BytesIO(image_content))
     image.thumbnail(max_size)
@@ -46,9 +47,7 @@ def prompt_generation(prompt: str) -> str:
         temperature=1.0,
         max_tokens=3000
     )
-    res = str(
-        response['choices'][0]['message']['content'][:1000]
-    )
+    res = str(response['choices'][0]['message']['content'][:1000])
     return res
 
 
@@ -72,7 +71,9 @@ def get_request(messageId):
     return response.json()
 
 
-def vedio_generation(place_name: str, season: str, state: ExperimentState)-> MultimodalOutput:
+def video_generation(
+    place_name: str, season: str, state: ExperimentState
+) -> MultimodalOutput:
     logger = TokenLogger()
     logger.reset()
     # Ensure you have your OpenAI API key set up
@@ -82,7 +83,7 @@ def vedio_generation(place_name: str, season: str, state: ExperimentState)-> Mul
         "role":
         "system",
         "content":
-        "You are a helpful assistant that generate stable-diffusion-vedio prompt."
+        "You are a helpful assistant that generate stable-diffusion-video prompt."
     }, {
         "role":
         "user",
@@ -113,7 +114,7 @@ def vedio_generation(place_name: str, season: str, state: ExperimentState)-> Mul
     )
     res = MultimodalOutput(
         text_output=response['choices'][0]['message']['content'],
-        vedio_output=[output]
+        video_output=[output]
     )
     token_usage = response['usage']['total_tokens']
     logger.log(token_usage)
