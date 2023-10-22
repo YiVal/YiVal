@@ -170,8 +170,8 @@ human_rating_configs:
     instructions: Rate the degree to which the headline is easy to understand.
     scale: [1, 5]
 
-improver:
-  name: "optimize_by_prompt_improver"
+enhancer:
+  name: "optimize_by_prompt_enhancer"
   model_name: "gpt-4"
   max_iterations: 2
   enhance_var: ["task"]
