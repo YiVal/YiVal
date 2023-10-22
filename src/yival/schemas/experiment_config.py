@@ -280,13 +280,15 @@ class MultimodalOutput:
     """
     text_output: Optional[str] = None
     image_output: Optional[List[Image.Image]] = None
+    video_output: Optional[List[str]] = None
     context: Optional[Context] = None
 
     def asdict(self) -> Dict[str, Any]:
         return {
             "text_output": self.text_output,
             "image_output": "PIL Image List" if self.image_output else
-            None  # You might want to serialize the image differently
+            None,  # You might want to serialize the image differently
+            "video_output": "video URL List" if self.video_output else None
         }
 
 

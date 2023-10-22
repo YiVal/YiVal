@@ -1,0 +1,118 @@
+description: generate video for stable-diffusion-video with place and season
+
+custom_function: yival.demo.place_food_generation.video_generation
+dataset:
+  data_generators:
+    openai_prompt_data_generator:
+      chunk_size: 100
+      diversify: true
+      prompt:
+        "Please provide a concrete and realistic test case as a dictionary for function invocation using the ** operator.
+        Only include parameters, excluding description and name.
+        Ensure it's succinct and well-structured.
+        **Only provide the dictionary.**"
+      input_function:
+        description: Given the names and season of different places, generate 2-4 different local dish names from that place in the season.
+        name: headline_generation_for_business
+        parameters:
+          place_name: str
+          season: str
+      number_of_examples: 2
+      model_name: gpt-3.5-turbo
+      output_csv_path: place_season_food.csv
+  source_type: machine_generated
+
+variations:
+  - name: task
+    generator_name: openai_prompt_based_variation_generator
+    generator_config:
+      model_name: gpt-3.5-turbo
+      number_of_variations: 2
+      max_tokens: 200
+      diversify: false
+      variables: null
+      prompt:
+        - content: |-
+            Your object is to construct a concise instruction prompt for GPT-4. This prompt will instruct GPT-4 as a gentle, imaginative stable diffusion prompter to generate 2-4 dishes based on the given place name and season with the format  "dish1 | dish2 | dish3". 
+            Points to emphasize in your instruction:
+               - {place_name} represent the name of place
+               - {season} represent the season of place
+               -  Please limit the output to within 20 words
+
+             keep your output crisp: only the prompt, devoid of any extraneous content.
+
+          role: user
+
+evaluators:
+  - evaluator_type: individual
+    metric_calculators:
+      - method: AVERAGE
+    name: openai_prompt_based_evaluator
+    display_name: format
+    prompt: |-
+      You are assessing a submitted answer on a given task based on a criterion.
+      - Task: Given the place name and season, generate dishes come from the place and season.
+      - The generated sentence should meet the following requirements:
+            1. Do people can eat one of these dished in the given season ?
+            2. Does one of the dishes come from the give place ?
+            3. Does the sentence strictly follow the format like "xxx | xxx | xxx" ?
+      [Input]: place: {place_name}, season: {season}
+      [Result]: {raw_output}
+      Answer the question by selecting one of the following options:
+      A It fails to meet the criterion at all.
+      B It somewhat meets the criterion, but there is significant room for improvement.
+      C It meets the criterion to a satisfactory degree.
+      D It meets the criterion very well.
+      E It meets the criterion exceptionally well, with little to no room for improvement.
+    choices: ["A", "B", "C", "D", "E"]
+    model_name: gpt-3.5-turbo
+    description: "evaluate the quality of the stable-diffusion video"
+    scale_description: "0-4"
+    choice_scores:
+      A: 0
+      B: 1
+      C: 2
+      D: 3
+      E: 4
+
+human_rating_configs:
+  - name: relevance
+    instructions: Rate the relevance of the video to the prompt.
+    scale: [1, 5]
+
+  - name: video_quanlity
+    instructions: Rate the quality of the generated video.
+    scale: [1, 5]
+
+  - name: video
+    instructions: Rate the quanlity of the generated prompt.
+    scale: [1, 5]
+
+selection_strategy:
+  ahp_selection:
+    criteria:
+      - "openai_prompt_based_evaluator: format"
+      - average_token_usage
+      - average_latency
+    criteria_maximization:
+      "openai_prompt_based_evaluator: format": true
+      average_latency: false
+      average_token_usage: false
+    criteria_weights:
+      "openai_prompt_based_evaluator: format": 0.6
+      average_latency: 0.2
+      average_token_usage: 0.2
+    normalize_func: "z-score"
+
+improver:
+  name: "optimize_by_prompt_improver"
+  model_name: "gpt-3.5-turbo"
+  max_iterations: 2
+  improve_var: ["task"]
+  head_meta_instruction: |
+    Now you will help me generate a prompt which is used to generate a corresponding stable diffusion video prompt according to the name of place which is [place_name] and season [season].
+    The generated prompt should follow the format like "xx | xx | xx"
+    I already have some prompt and its evaluation results :
+
+  end_meta_instruction: |
+    Give me a new prompt that is different from all pairs above, and has a evaluation value higher than any of above.
