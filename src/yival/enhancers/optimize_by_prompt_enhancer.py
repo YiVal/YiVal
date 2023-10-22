@@ -1,8 +1,8 @@
 """
-This module provides an implementation of Large Language models as improvers, 
+This module provides an implementation of Large Language models as enhancers, 
 https://arxiv.org/pdf/2309.03409.pdf , which is /opro/ for short
 
-The goal of this module is to improve and auto-generate the prompt with the 
+The goal of this module is to enhance and auto-generate the prompt with the 
 ability of llms.
 
 We construct the Prompt used to generate better prompt as follow:
@@ -17,7 +17,7 @@ END_META_INSTRUCTION
 and after each iteration , the new propmt with evaluator score will be added to 
 the SOLUTION_SCORE_PAIRS part.
 
-You can find an example in demo/configs/headline_generation_improve.yml,
+You can find an example in demo/configs/headline_generation_enhance.yml,
 and more examples in paper appendix
 """
 
@@ -32,16 +32,16 @@ from ..experiment.lite_experiment import LiteExperimentRunner
 from ..experiment.rate_limiter import RateLimiter
 from ..experiment.utils import generate_experiment
 from ..logger.token_logger import TokenLogger
-from ..schemas.combination_improver_configs import OptimizeByPromptImproverConfig
+from ..schemas.combination_enhancer_configs import OptimizeByPromptEnhancerConfig
 from ..schemas.common_structures import InputData
 from ..schemas.experiment_config import (
+    EnhancerOutput,
     Experiment,
     ExperimentConfig,
     ExperimentResult,
-    ImproverOutput,
 )
 from ..schemas.model_configs import Request
-from .base_combination_improver import BaseCombinationImprover
+from .base_combination_enhancer import BaseCombinationEnhancer
 from .utils import construct_output_format, format_input_from_dict, scratch_variations_from_str
 
 rate_limiter = RateLimiter(60 / 60)
@@ -78,7 +78,7 @@ def find_origin_combo_key(experiment: Experiment) -> str:
 
 
 def construct_solution_score_pairs(
-    cache: List[Tuple[Dict, Dict]], improve_var: List[str]
+    cache: List[Tuple[Dict, Dict]], enhance_var: List[str]
 ) -> str:
     """
     Construct the solution_score_pairs for the full prompt.
@@ -89,7 +89,7 @@ def construct_solution_score_pairs(
     prompt = ""
     for prompt_dict, eval_dict in cache[-5:]:
         prompt += 'Input:\n'
-        prompt += format_input_from_dict(prompt_dict, improve_var)
+        prompt += format_input_from_dict(prompt_dict, enhance_var)
         prompt += 'Evaluation:\n'
         for evaluator_name, score in eval_dict.items():
             display = evaluator_name.split(":")[-1].strip()
@@ -104,7 +104,7 @@ def construct_solution_score_pairs(
 def construct_opro_full_prompt(
     cache: List[Tuple[Dict, Dict]], head_meta_instruction: str,
     optimation_task_format: str | None, end_meta_instruction: str,
-    improve_var: List[str]
+    enhance_var: List[str]
 ) -> str:
     """
     Construct full opro prompt , which has a format as follow
@@ -115,18 +115,18 @@ def construct_opro_full_prompt(
     """
 
     full_prompt = head_meta_instruction + '\n'
-    full_prompt += (construct_solution_score_pairs(cache, improve_var) + '\n')
+    full_prompt += (construct_solution_score_pairs(cache, enhance_var) + '\n')
     if optimation_task_format:
         full_prompt += (optimation_task_format + '\n')
     full_prompt += (end_meta_instruction + '\n')
-    full_prompt += construct_output_format(improve_var)
+    full_prompt += construct_output_format(enhance_var)
 
     return full_prompt
 
 
 def fetch_next_variations(prompt: str, model_name="gpt-4") -> str:
     """
-    improve prompt according to opro improver
+    enhance prompt according to opro enhancer
     fetch the next variations from llm output
     """
     response = llm_completion(
@@ -150,28 +150,28 @@ def collect_all_data(experiment: Experiment) -> List[InputData]:
     return datas
 
 
-class OptimizeByPromptImprover(BaseCombinationImprover):
+class OptimizeByPromptEnhancer(BaseCombinationEnhancer):
     """
-    Optimization by PROmpting improver to improve and auto-generate combination.
+    Optimization by PROmpting enhancer to enhance and auto-generate combination.
     """
 
-    default_config = OptimizeByPromptImproverConfig(
-        name="optimize_by_prompt_improver",
+    default_config = OptimizeByPromptEnhancerConfig(
+        name="optimize_by_prompt_enhancer",
         head_meta_instruction="",
         end_meta_instruction="",
         optimation_task_format="",
-        improve_var=["task"],
+        enhance_var=["task"],
         model_name="gpt-4",
         max_iterations=3
     )
 
-    def __init__(self, config: OptimizeByPromptImproverConfig):
+    def __init__(self, config: OptimizeByPromptEnhancerConfig):
         super().__init__(config)
-        self.config: OptimizeByPromptImproverConfig = config
+        self.config: OptimizeByPromptEnhancerConfig = config
 
     def fetch_next_variations(self, prompt: str) -> Dict:
         """
-        improve variations according to opro
+        enhance variations according to opro
         
         make sure llm response format is valid and return new varations
         """
@@ -188,15 +188,15 @@ class OptimizeByPromptImprover(BaseCombinationImprover):
         ).strip('"')  #type: ignore
 
         variations = scratch_variations_from_str(
-            llm_output_str, self.config.improve_var
+            llm_output_str, self.config.enhance_var
         )
 
         return variations
 
-    def improve(
+    def enhance(
         self, experiment: Experiment, config: ExperimentConfig,
         evaluator: Evaluator, token_logger: TokenLogger
-    ) -> ImproverOutput:
+    ) -> EnhancerOutput:
         experiments: List[Experiment] = []
         results: List[ExperimentResult] = []
         cache: List[Tuple[Dict, Dict]] = []
@@ -206,8 +206,8 @@ class OptimizeByPromptImprover(BaseCombinationImprover):
         #init cache with the best combo
         best_combo, score = find_combo_with_score(experiment)
 
-        #ensure that all variation in improve_var appears best_combo
-        assert set(self.config.improve_var).issubset(set(best_combo.keys()))
+        #ensure that all variation in enhance_var appears best_combo
+        assert set(self.config.enhance_var).issubset(set(best_combo.keys()))
 
         variations_now = best_combo
         logging.info(f"[INFO][opro] first variations is {variations_now}")
@@ -223,7 +223,7 @@ class OptimizeByPromptImprover(BaseCombinationImprover):
         #optimize by prompt for max_iterations times
         for i in range(self.config.max_iterations + 1):
             logging.info(
-                f"[INFO][optimize_by_prompt_improver] start iteration [{i}]"
+                f"[INFO][optimize_by_prompt_enhancer] start iteration [{i}]"
             )
 
             #update variations and run experiment
@@ -244,18 +244,18 @@ class OptimizeByPromptImprover(BaseCombinationImprover):
             opro_prompt = construct_opro_full_prompt(
                 cache, self.config.head_meta_instruction,
                 self.config.optimation_task_format,
-                self.config.end_meta_instruction, self.config.improve_var
+                self.config.end_meta_instruction, self.config.enhance_var
             )
 
             gen_variations = self.fetch_next_variations(opro_prompt)
 
             if not gen_variations:
                 logging.info(
-                    f"[INFO][optimize_by_prompt_improver] fetch next variations error"
+                    f"[INFO][optimize_by_prompt_enhancer] fetch next variations error"
                 )
             else:
                 logging.info(
-                    f"[INFO][optimize_by_prompt_improver] generate new variations: {gen_variations}"
+                    f"[INFO][optimize_by_prompt_enhancer] generate new variations: {gen_variations}"
                 )
                 variations_now = gen_variations
 
@@ -267,17 +267,17 @@ class OptimizeByPromptImprover(BaseCombinationImprover):
             results, evaluator, evaluate_group=False, evaluate_all=False
         )
 
-        improver_output = ImproverOutput(
+        enhancer_output = EnhancerOutput(
             group_experiment_results=experiment.group_experiment_results,
             combination_aggregated_metrics=experiment.
             combination_aggregated_metrics,
             original_best_combo_key=original_combo_key
         )
 
-        return improver_output
+        return enhancer_output
 
 
-BaseCombinationImprover.register_combination_improver(
-    "optimize_by_prompt_improver", OptimizeByPromptImprover,
-    OptimizeByPromptImproverConfig
+BaseCombinationEnhancer.register_enhancer(
+    "optimize_by_prompt_enhancer", OptimizeByPromptEnhancer,
+    OptimizeByPromptEnhancerConfig
 )

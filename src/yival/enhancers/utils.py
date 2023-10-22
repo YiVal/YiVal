@@ -1,19 +1,19 @@
 from typing import Dict, List
 
 
-def format_input_from_dict(input_dict: Dict, improve_var: List[str]) -> str:
+def format_input_from_dict(input_dict: Dict, enhance_var: List[str]) -> str:
     """
     construct input str
 
     e.g.
-    input_dict = {"var1":"hello world", "var2":"bye"} , improve_var=["var1","var2"]
+    input_dict = {"var1":"hello world", "var2":"bye"} , enhance_var=["var1","var2"]
     
     result:
         var1=hello world
         var2=bye
     """
     result = ""
-    for var in improve_var:
+    for var in enhance_var:
         result = result + f"{var}={input_dict[var]}\n"
     return result
 

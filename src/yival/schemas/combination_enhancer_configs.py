@@ -5,9 +5,9 @@ from .selector_strategies import SelectionOutput
 
 
 @dataclass
-class BaseCombinationImproverConfig:
+class BaseCombinationEnhancerConfig:
     """
-    Base configuration class for all combination improvers.
+    Base configuration class for all combination enhancers.
     """
     name: str
 
@@ -16,8 +16,8 @@ class BaseCombinationImproverConfig:
 
 
 @dataclass
-class OpenAIPromptBasedCombinationImproverConfig(
-    BaseCombinationImproverConfig
+class OpenAIPromptBasedCombinationEnhancerConfig(
+    BaseCombinationEnhancerConfig
 ):
     openai_model_name: str = "gpt-4"
     max_iterations: int = 3
@@ -30,8 +30,8 @@ class OpenAIPromptBasedCombinationImproverConfig(
 
 
 @dataclass
-class OptimizeByPromptImproverConfig(BaseCombinationImproverConfig):
-    improve_var: List[str]
+class OptimizeByPromptEnhancerConfig(BaseCombinationEnhancerConfig):
+    enhance_var: List[str]
     head_meta_instruction: str
     end_meta_instruction: str
     optimation_task_format: Optional[str] = None

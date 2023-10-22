@@ -38,7 +38,7 @@ nav:
     - Custom Data Generator: eng-spec/custom_parent/custom-data-generator.md
     - Custom Variation Generator: eng-spec/custom_parent/custom-variation-generator.md
     - Custom Reader: eng-spec/custom_parent/custom-reader.md
-    - Custom Combination Improver: eng-spec/custom_parent/custom-combination-improver.md
+    - Custom Combination Enhancer: eng-spec/custom_parent/custom-combination-improver.md
     - Custom Selection Strategy: eng-spec/custom_parent/custom-selection-strategy.md
 - Contributing Guide: contributing-guide.md
 - Code Reference:

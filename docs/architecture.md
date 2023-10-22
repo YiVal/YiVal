@@ -34,9 +34,9 @@ flowchart TD
     %% Select Stage
     D --> |Selection| E
 
-    %% Improver Stage
-    E --> |Improvement| F
-    F --> F1[Improver]
+    %% Enhancer Stage
+    E --> |Enhancement| F
+    F --> F1[Enhancer]
     F1 --> C
 
     %% Trainer Stage
@@ -89,9 +89,9 @@ can be applied to grasp and gauge the data's behavior deeply.
 From the evaluations, the most promising results are selected. This process
 ensures only the most vital insights are pushed forward.
 
-## Improvement
+## Enhancement
 
-The selected results are then fine-tuned in this phase. An "Improver" is applied
+The selected results are then fine-tuned in this phase. An "Enhancer" is applied
 to enhance these results. This stage can loop back to the analysis stage, indicating
 an ongoing, iterative process of refinement.
 
