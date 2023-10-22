@@ -104,11 +104,11 @@ selection_strategy:
       average_token_usage: 0.2
     normalize_func: "z-score"
 
-improver:
-  name: "optimize_by_prompt_improver"
+enhancer:
+  name: "optimize_by_prompt_enhancer"
   model_name: "gpt-3.5-turbo"
   max_iterations: 2
-  improve_var: ["task"]
+  enhance_var: ["task"]
   head_meta_instruction: |
     Now you will help me generate a prompt which is used to generate a corresponding stable diffusion video prompt according to the name of place which is [place_name] and season [season].
     The generated prompt should follow the format like "xx | xx | xx"
