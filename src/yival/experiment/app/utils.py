@@ -125,8 +125,10 @@ def generate_group_key_combination_data(
                 ]) if exp_result.evaluator_outputs else None
             }
             video_text = ''
-            for video_url in nested_output['video_output']:
-                video_text += f"<yival_video_output>{video_url}</yival_video_output>"
+            video_output = nested_output['video_output']
+            if video_output is not None:
+                for video_url in nested_output['video_output']:
+                    video_text += f"<yival_video_output>{video_url}</yival_video_output>"
 
             formatted_output = f"<yival_raw_output>{nested_output['text_output']}</yival_raw_output>{nested_output['image_output']}{video_text}\n{nested_output['evaluator_outputs']}"
             row_dict[combo_str] = formatted_output
