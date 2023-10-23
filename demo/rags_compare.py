@@ -35,28 +35,63 @@ from langchain.chains import LLMChain
 from typing import Any,Dict,List,Optional
 
 from langchain.chains import RetrievalQA
+from langchain.schema import Document
 
-
-
+def deal_context(context):
+    data=context['sentences']
+    res=[]
+    for part in data:
+        res.append(Document(page_content='.'.join(part),metadata={'source': '../abstract.pdf', 'page': 0}))
+    return res
+def deal_llamaindex(context):
+    from llama_index import Document
+    data=context['sentences']
+    res=[]
+    for part in data:
+        s=' '.join(part)
+        res.append(Document(text=s))
+    return res
 class retriever_model_prompt:
     retrievers :dict
-
-    def __init__(self,pdf_path="../simple.pdf"):
+    timer :dict
+    data :dict
+    cnt :dict
+    def __init__(self,pdf_path=None):
         self.retrievers=dict()
         self.model_prompt=dict()
-        self.data = PyPDFLoader(pdf_path).load()
-        self.pdf_path=pdf_path
-        self.pdf_path_2="../abstract.pdf"
+        self.pdf_path=None
+        self.pdf_path_2=None
+        self.cnt=dict()
+        self.timer=dict()
+        self.data=dict()
+        if not pdf_path == None:
+            self.data = PyPDFLoader(pdf_path).load()
+            print(self.data)
+            self.pdf_path=pdf_path
+            self.pdf_path_2="../abstract.pdf"
+        self.WaitTime=2
+
     def add_retriever(self,name:str,retriever:Any):
         self.retrievers[name]=retriever
 
     def add_model_prompt(self,model:str,prompt:str,model_prompt:Any):
         self.model_prompt[[model,prompt]]=model_prompt
     
-    def init_MultiQueryRetriever(self)-> MultiQueryRetriever:
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=0)
-        splits = text_splitter.split_documents(self.data)
-
+    def init_MultiQueryRetriever(self,context=None)-> MultiQueryRetriever:
+        splits=None
+        if not self.pdf_path==None:
+            text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=0)
+            splits = text_splitter.split_documents(self.data)
+        elif not context==None:
+            name='MultiQueryRetriever'
+            self.data[name]=context
+            self.timer[name]=time.time()
+            cur_time=self.timer[name]
+            while(cur_time-self.timer[name]<self.WaitTime):
+                time.sleep(1)
+                cur_time=time.time()
+            splits=self.data[name]
+        
         embedding = OpenAIEmbeddings()
         vectordb = Chroma.from_documents(documents=splits, embedding=embedding).as_retriever()
         llm = ChatOpenAI(temperature=0)
@@ -65,18 +100,40 @@ class retriever_model_prompt:
         )
         return retriever_from_llm
     
-    def init_Contextual_comporession(self)->ContextualCompressionRetriever:
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=0)
-        splits = text_splitter.split_documents(self.data)
-        
+    def init_Contextual_comporession(self,context=None)->ContextualCompressionRetriever:
+        splits=None
+        if not self.pdf_path==None:
+            text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=0)
+            splits = text_splitter.split_documents(self.data)
+        elif not context==None:
+            name='ContextualCompressionRetrieve'
+            self.data[name]=context
+            self.timer[name]=time.time()
+            cur_time=self.timer[name]
+            while(cur_time-self.timer[name]<self.WaitTime):
+                time.sleep(1)
+                cur_time=time.time()
+            splits=self.data[name]
+
         retriever = FAISS.from_documents(splits, OpenAIEmbeddings()).as_retriever()
         llm = OpenAI(temperature=0)
         compressor = LLMChainExtractor.from_llm(llm)
         compression_retriever = ContextualCompressionRetriever(base_compressor=compressor, base_retriever=retriever)
         return compression_retriever
-    def init_Ensemble_Retriever(self)->EnsembleRetriever:
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=0)
-        splits = text_splitter.split_documents(self.data)
+    def init_Ensemble_Retriever(self,context=None)->EnsembleRetriever:
+        splits=None
+        if not self.pdf_path==None:
+            text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=0)
+            splits = text_splitter.split_documents(self.data)
+        elif not context==None:
+            name='ContextualCompressionRetrieve'
+            self.data[name]=context
+            self.timer[name]=time.time()
+            cur_time=self.timer[name]
+            while(cur_time-self.timer[name]<self.WaitTime):
+                time.sleep(1)
+                cur_time=time.time()
+            splits=self.data[name]
         
         doc_list = [i.page_content for i in splits]
         bm25_retriever = BM25Retriever.from_texts(doc_list)
@@ -88,12 +145,23 @@ class retriever_model_prompt:
         ensemble_retriever = EnsembleRetriever(retrievers=[bm25_retriever, faiss_retriever], weights=[0.5, 0.5])
         return ensemble_retriever
     
-    def init_MultiVector_Retriever(self)->MultiVectorRetriever:
-        loaders=[ PyPDFLoader(self.pdf_path)
-             ,PyPDFLoader(self.pdf_path_2)]
+    def init_MultiVector_Retriever(self,context)->MultiVectorRetriever:
         docs = []
-        for l in loaders:
-            docs.extend(l.load())
+        if not self.pdf_path == None:
+            loaders=[ PyPDFLoader(self.pdf_path)
+                ,PyPDFLoader(self.pdf_path_2)]
+            for l in loaders:
+                docs.extend(l.load())
+        elif not context == None:
+            name='ContextualCompressionRetrieve'
+            self.data[name]=context
+            self.timer[name]=time.time()
+            cur_time=self.timer[name]
+            while(cur_time-self.timer[name]<self.WaitTime):
+                time.sleep(1)
+                cur_time=time.time()
+            docs=self.data[name]
+
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000)
         splits = text_splitter.split_documents(docs)
         vectorstore = Chroma(
@@ -120,12 +188,23 @@ class retriever_model_prompt:
         retriever.docstore.mset(list(zip(doc_ids, docs)))
         MultiVector_retriever=copy.copy(retriever)
         return MultiVector_retriever
-    def init_Parent_Document_Retriever(self)->ParentDocumentRetriever:
-        loaders=[ PyPDFLoader(self.pdf_path)
-            ,PyPDFLoader(self.pdf_path_2)]
+    def init_Parent_Document_Retriever(self,context)->ParentDocumentRetriever:
         docs = []
-        for l in loaders:
-            docs.extend(l.load())
+        if not self.pdf_path == None:
+            loaders=[ PyPDFLoader(self.pdf_path)
+                ,PyPDFLoader(self.pdf_path_2)]
+            for l in loaders:
+                docs.extend(l.load())
+        elif not context == None:
+            name='ContextualCompressionRetrieve'
+            self.data[name]=context
+            self.timer[name]=time.time()
+            cur_time=self.timer[name]
+            while(cur_time-self.timer[name]<self.WaitTime):
+                time.sleep(1)
+                cur_time=time.time()
+            docs=self.data[name]
+        
         child_splitter = RecursiveCharacterTextSplitter(chunk_size=400)
         vectorstore = Chroma(
             collection_name="full_documents",
@@ -141,83 +220,135 @@ class retriever_model_prompt:
         PDR_retriever=copy.copy(retriever)
         return PDR_retriever
 
-    def init_retriever(self,retriever:str):
+    def init_retriever(self,retriever:str,context:dict=None):
+        
         if retriever == 'MultiQueryRetriever' and 'MultiQueryRetriever' not in self.retrievers:
             self.retrievers[retriever]=False
-            self.add_retriever(retriever,self.init_MultiQueryRetriever())
+            self.cnt[retriever]=10
+            self.add_retriever(retriever,self.init_MultiQueryRetriever(context=context))
             pass
         elif retriever == 'Contextual_compression' and 'Contextual_compression' not in self.retrievers:
             self.retrievers[retriever]=False
-            self.add_retriever(retriever,self.init_Contextual_comporession())
+            self.cnt[retriever]=10
+            self.add_retriever(retriever,self.init_Contextual_comporession(context=context))
             pass
         elif retriever == 'Ensemble_Retriever' and 'Ensemble_Retriever' not in self.retrievers:
             self.retrievers[retriever]=False
-            self.add_retriever(retriever,self.init_Ensemble_Retriever())
+            self.cnt[retriever]=10
+            self.add_retriever(retriever,self.init_Ensemble_Retriever(context=context))
             pass
         elif retriever == 'MultiVector_Retriever' and 'MultiVector_Retriever' not in self.retrievers:
             self.retrievers[retriever]=False
-            self.add_retriever(retriever,self.init_MultiVector_Retriever())
+            self.cnt[retriever]=10
+            self.add_retriever(retriever,self.init_MultiVector_Retriever(context=context))
             pass
         elif retriever == 'Parent_Document_Retriever' and 'Parent_Document_Retriever' not in self.retrievers:
             self.retrievers[retriever]=False
-            self.add_retriever(retriever,self.init_Parent_Document_Retriever())
+            self.cnt[retriever]=10
+            self.add_retriever(retriever,self.init_Parent_Document_Retriever(context=context))
             pass
         elif retriever == 'llamaindex' and 'llamaindex' not in self.retrievers:
             self.retrievers[retriever]=False
-            print('line:167')
-            documents = SimpleDirectoryReader(input_files=[self.pdf_path]).load_data()
-            print('line:169')
+            self.cnt[retriever]=10
+            documents=[]
+            if not self.pdf_path==None:
+                documents = SimpleDirectoryReader(input_files=[self.pdf_path]).load_data()
+            elif not context==None:
+                name='llamaindex'
+                self.data[name]=context
+                self.timer[name]=time.time()
+                cur_time=self.timer[name]
+                while(cur_time-self.timer[name]<self.WaitTime):
+                    time.sleep(1)
+                    cur_time=time.time()
+                documents=self.data[name]
             index = VectorStoreIndex.from_documents(documents)
-            print('line:171')
             llamaindex = index.as_retriever()
-            # print(type(llamaindex))
             self.add_retriever(retriever,llamaindex)
             pass
 def langchain_docs_to_string(docs:List)-> str:
     return f"---".join([f"Document {i+1}:\n\n" + d.page_content for i, d in enumerate(docs)])
 def llamaindex_docs_to_string(docs:List)-> str:
     return f"---".join([f"Document {i+1}:\n\n" + d.text for i, d in enumerate(docs)])
+
 r_m_ps=retriever_model_prompt()
-def retriever_method(input: str, retriever: str)-> str:
+
+def retriever_method(input: str, retriever: str,context:dict=None)-> str:
     res=""
     global r_m_ps
 
     print(retriever,input)
-    r_m_ps.init_retriever(retriever=retriever)
+    if not context == None:
+        if retriever=='llamaindex':
+            context=deal_llamaindex(context=context)
+        else:
+            context=deal_context(context=context)
+    r_m_ps.init_retriever(retriever=retriever,context=context)
 
     if retriever == 'MultiQueryRetriever':
+        flag=1
         while not isinstance(r_m_ps.retrievers[retriever],MultiQueryRetriever):
+            print('line:260')
+            if flag==1 and retriever in r_m_ps.data:
+                r_m_ps.timer[retriever]=time.time()
+                
+                r_m_ps.data[retriever]+=context
+                flag=0
             time.sleep(1)
         docs = r_m_ps.retrievers[retriever].get_relevant_documents(query=input)
         res=langchain_docs_to_string(docs=docs)
         pass
     elif retriever == 'Contextual_compression':
+        flag=1
         while not isinstance(r_m_ps.retrievers[retriever],ContextualCompressionRetriever):
+            if flag==1 and retriever in r_m_ps.data:
+                r_m_ps.timer[retriever]=time.time()
+                r_m_ps.data[retriever].append(context)
+                flag=0
             time.sleep(1)
         docs = r_m_ps.retrievers[retriever].get_relevant_documents(input)
         res=langchain_docs_to_string(docs=docs)
         pass
     elif retriever == 'Ensemble_Retriever':
+        flag=1
         while not isinstance(r_m_ps.retrievers[retriever],EnsembleRetriever):
+            if flag==1 and retriever in r_m_ps.data:
+                r_m_ps.timer[retriever]=time.time()
+                r_m_ps.data[retriever].append(context)
+                flag=0
             time.sleep(1)
         docs = r_m_ps.retrievers[retriever].get_relevant_documents(input)
         res=langchain_docs_to_string(docs=docs)
         pass
     elif retriever == 'MultiVector_Retriever':
+        flag=0
         while not isinstance(r_m_ps.retrievers[retriever],MultiVectorRetriever):
+            if flag==1 and retriever in r_m_ps.data:
+                r_m_ps.timer[retriever]=time.time()
+                r_m_ps.data[retriever].append(context)
+                flag=0
             time.sleep(1)
         docs=r_m_ps.retrievers[retriever].vectorstore.similarity_search(input)
         res=langchain_docs_to_string(docs=docs)
         pass
     elif retriever == 'Parent_Document_Retriever':
+        flag=0
         while not isinstance(r_m_ps.retrievers[retriever],ParentDocumentRetriever):
+            if flag==1 and retriever in r_m_ps.data:
+                r_m_ps.timer[retriever]=time.time()
+                r_m_ps.data[retriever].append(context)
+                flag=0
             time.sleep(1)
         docs=r_m_ps.retrievers[retriever].vectorstore.similarity_search(input)
         res=langchain_docs_to_string(docs=docs)
         pass
     elif retriever == 'llamaindex':
+        flag=0
         while not isinstance(r_m_ps.retrievers[retriever],VectorIndexRetriever):
-            print('line:217')
+            if flag==1 and retriever in r_m_ps.data:
+                r_m_ps.timer[retriever]=time.time()
+                r_m_ps.data[retriever].append(context)
+                flag=0
             time.sleep(1)
         docs=r_m_ps.retrievers[retriever].retrieve(input)
         # print(docs)
@@ -227,8 +358,12 @@ def retriever_method(input: str, retriever: str)-> str:
         res='No result!'
     return res
 
-def rags_compare(input: str, state: ExperimentState) -> MultimodalOutput:
+def rags_compare(question: str,context:Dict=None, state: ExperimentState=None) -> MultimodalOutput:
+     
+
     res=""
+    print(question)
+    print('-'*100)
     # print(state.current_variations)
     '''
     {
@@ -238,7 +373,14 @@ def rags_compare(input: str, state: ExperimentState) -> MultimodalOutput:
     }
     '''
     if state.current_variations['retriever_name']:
-        res=retriever_method(input,state.current_variations['retriever_name'][0])
+        retriever_name=state.current_variations['retriever_name'][0]
+        if retriever_name in r_m_ps.cnt:
+            r_m_ps.cnt[retriever_name] -= 1
+            if r_m_ps.cnt[retriever_name] <= 0:
+                return MultimodalOutput(
+                        text_output="No result\rNo context"
+                    )
+        res=retriever_method(question,retriever_name,context=context)
     prompts=state.current_variations['prompts'][0]
 
     # print(res)
@@ -248,7 +390,7 @@ def rags_compare(input: str, state: ExperimentState) -> MultimodalOutput:
             model_name=str(
                 StringWrapper("gpt-3.5-turbo", name="model_name", state=state)
             ),
-            prompt=prompts.format(question=input,context=res)
+            prompt=prompts.format(question=question,context=res)
         )
     ).output
 

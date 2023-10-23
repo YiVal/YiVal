@@ -25,7 +25,7 @@ class RAGSEvaluator(BaseEvaluator):
         format_dict = copy.deepcopy(experiment_result.input_data.content)
         format_dict['raw_output']=experiment_result.raw_output.text_output
         output,context=format_dict['raw_output'].split('\r')
-        question=[format_dict['input']]
+        question=[format_dict['question']]
         answer=[output]
         contexts=[context.split('---')]
         ds = Dataset.from_dict(

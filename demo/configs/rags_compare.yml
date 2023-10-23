@@ -1,10 +1,19 @@
 custom_function: demo.rags_compare.rags_compare
 dataset:
-  file_path: demo/data/rags_compare.csv
-  reader: csv_reader
+  # file_path: demo/data/rags_compare.csv
+  # reader: csv_reader
+  # source_type: dataset
+  # reader_config:
+  #   expected_result_column: expected_result
+  file_path: https://datasets-server.huggingface.co/rows?dataset=hotpot_qa&config=distractor&split=train&offset=0&length=100
+  reader: huggingface_dataset_reader
   source_type: dataset
   reader_config:
-    expected_result_column: expected_result
+    example_limit: 2
+    output_mapping:
+      question: question
+      context: context
+
 description: Configuration fo question answering with expected results.
 
 variations:
