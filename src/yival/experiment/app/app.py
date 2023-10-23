@@ -482,7 +482,7 @@ def create_dash_app(
         elif contains_videos:
             multi_div = video_combo_aggregated_metrics_layout(df)
         else:
-            combo_aggregated_metrics_layout(df)
+            multi_div = combo_aggregated_metrics_layout(df)
 
         return html.Div([
             html.H3(
