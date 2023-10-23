@@ -107,7 +107,7 @@ selection_strategy:
 enhancer:
   name: "optimize_by_prompt_enhancer"
   model_name: "gpt-4"
-  max_iterations: 1
+  max_iterations: 2
   enhance_var: ["task"]
   head_meta_instruction: |
     Now you will help me generate a prompt which is used to generate a corresponding
