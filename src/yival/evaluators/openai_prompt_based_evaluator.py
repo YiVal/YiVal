@@ -115,6 +115,7 @@ class OpenAIPromptBasedEvaluator(BaseEvaluator):
         format_dict = copy.deepcopy(experiment_result.input_data.content)
         format_dict["raw_output"] = experiment_result.raw_output.text_output
 
+
         prompt = format_template(self.config.prompt, format_dict)
         if isinstance(prompt, str):
             prompt = [{"role": "user", "content": prompt}]
@@ -127,7 +128,7 @@ class OpenAIPromptBasedEvaluator(BaseEvaluator):
             Request(
                 model_name=self.config.model_name,
                 prompt=prompt,
-                params={"temperature": 0.0}
+                params={"temperature": 0.5}
             )
         ).output
         response_content = response['choices'][0]['message']['content']

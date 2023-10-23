@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
@@ -69,9 +69,13 @@ class EvaluatorConfig(BaseEvaluatorConfig):
 
     def asdict(self) -> Dict[str, Any]:
         base_dict = super().asdict()
-        base_dict["metric_calculators"] = [
-            mc.asdict() for mc in self.metric_calculators
-        ]
+        mcs = []
+        for mc in self.metric_calculators:
+            if isinstance(mc, MetricCalculatorConfig):
+                mcs.append(mc.asdict())
+            else:
+                mcs.append(mc)
+        base_dict["metric_calculators"] = mcs
         return base_dict
 
 
@@ -164,6 +168,8 @@ class OpenAIPromptBasedEvaluatorConfig(EvaluatorConfig):
     scale_description: str = "0-4"
     choice_scores: Optional[Dict[str, float]] = None
 
+    def asdict(self) -> Dict[str, Any]:
+        return asdict(self)
 
 @dataclass
 class RougeEvaluatorConfig(EvaluatorConfig):

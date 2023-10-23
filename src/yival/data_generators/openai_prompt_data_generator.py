@@ -113,9 +113,10 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                 self.config.input_function
             )
             if self.config.diversify and all_data_content:
-                content += f"\n\n Given the last {min(len(all_data_content), 10)} examples, please generate diverse results to ensure comprehensive evaluation. \nREMEMBER DON‘T GENERATE THE SAME SAMPLE AS BELOW! \n\n" + join_dicts_to_string(
+                content += f"\n\n Given the last {min(len(all_data_content), 10)} examples, please generate diverse results to ensure comprehensive evaluation. \nREMEMBER DON'T GENERATE THE SAME SAMPLE AS BELOW! \n\n" + join_dicts_to_string(
                     all_data_content
                 )
+
             return [{"role": "user", "content": content}]
 
         messages = self.config.prompt
@@ -132,7 +133,7 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
 
     def process_output(
         self, output_content: str, all_data: List[InputData],
-        chunk: List[InputData]
+        chunk: List[InputData], fixed_input: Dict[str, Any] = None
     ):
         """Process the output from GPT API and update data lists."""
         generated_example = extract_dict_from_gpt_output(output_content)
@@ -158,6 +159,8 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
 
         if expected_value:
             generated_example.pop(self.config.expected_param_name)
+        if fixed_input:
+            generated_example.update(fixed_input)
         input_data_instance = InputData(
             example_id=super().generate_example_id(output_content),
             content=generated_example,
@@ -178,9 +181,9 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
         chunk: List[InputData] = []
         all_data_content: List[Dict[str, Any]] = []
 
-        while len(all_data) < self.config.number_of_examples:
-            messages = self.prepare_messages(all_data_content)
-            if not self.config.diversify:
+        if not self.config.diversify:
+            while len(all_data) < self.config.number_of_examples:
+                messages = self.prepare_messages(all_data_content)
                 message_batches = [
                     messages
                 ] * (self.config.number_of_examples - len(all_data))
@@ -199,15 +202,18 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                     )
                 for r in responses:
                     self.process_output(
-                        r["choices"][0]["message"]["content"], all_data, chunk
+                        r["choices"][0]["message"]["content"], all_data, chunk, self.config.fixed_input
                     )
-            else:
-                with tqdm(
-                    total=self.config.number_of_examples,
-                    desc="Generating Examples",
-                    unit="example"
-                ) as pbar:
-                    # call_option = self.config.call_option if self.config.call_option else {}
+        else:
+            with tqdm(
+                total=self.config.number_of_examples,
+                desc="Generating Examples",
+                unit="example"
+            ) as pbar:
+                last_len = len(all_data)
+                # call_option = self.config.call_option if self.config.call_option else {}
+                while len(all_data) < self.config.number_of_examples:
+                    messages = self.prepare_messages(all_data_content)
                     output = llm_completion(
                         Request(
                             model_name=self.config.model_name,
@@ -216,14 +222,16 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                         )
                     ).output
                     self.process_output(
-                        output.choices[0].message.content, all_data, chunk
+                        output.choices[0].message.content, all_data, chunk, self.config.fixed_input
                     )
+                    if len(all_data) > last_len:
+                        last_len = len(all_data)
+                        pbar.update(1)
                     c = extract_dict_from_gpt_output(
                         output.choices[0].message.content
                     )
                     if c:
                         all_data_content.append(c)
-                    pbar.update(1)
             if chunk and len(chunk) >= self.config.chunk_size:
                 yield chunk
                 chunk = []
