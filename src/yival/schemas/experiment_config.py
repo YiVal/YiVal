@@ -411,11 +411,13 @@ class EnhancerOutput:
         Aggregated metrics post-enhancement.
         original_best_combo_key (str): The best combination key before the
         enhancer made optimizations.
+        selection_output (Optional[SelectionOutput]): Output from the selection
 
     """
     group_experiment_results: List[GroupedExperimentResult]
     combination_aggregated_metrics: List[CombinationAggregatedMetrics]
     original_best_combo_key: str
+    selection_output: Optional[SelectionOutput] = None
 
 
 @dataclass

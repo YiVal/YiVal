@@ -24,7 +24,12 @@ from PIL import Image
 from pyngrok import ngrok
 
 from yival.experiment.rate_limiter import RateLimiter
-from yival.experiment.utils import generate_experiment, get_function_args, run_single_input
+from yival.experiment.utils import (
+    call_function_from_string,
+    generate_experiment,
+    get_function_args,
+    run_single_input,
+)
 from yival.schemas.experiment_config import (
     CombinationAggregatedMetrics,
     EvaluatorOutput,
@@ -353,6 +358,12 @@ def create_dash_app(
                     dbc.NavLink(
                         "Interactive Mode",
                         href="/interactive",
+                    )
+                ),
+                dbc.NavItem(
+                    dbc.NavLink(
+                        "Use Best Combinations",
+                        href="/use-best-result",
                     )
                 ),
             ],
@@ -1230,6 +1241,104 @@ def create_dash_app(
             dbc.Container(fluid=True, className="p-3")
         ])
 
+    def use_best_result_layout():
+        if experiment_data.enhancer_output:
+            best_combination = experiment_data.enhancer_output.selection_output.best_combination
+        elif experiment_data.selection_output:
+            best_combination = experiment_data.selection_output.best_combination
+        else:
+            best_combination = experiment_data.group_experiment_results[
+                0].experiment_results[0].combination
+        best_combination = str(best_combination)
+
+        return html.Div([
+            dbc.Row([
+                dbc.Col(
+                    [
+                        dbc.Card(
+                            [
+                                dbc.CardHeader(
+                                    html.
+                                    H4("Parameters", className="text-center"),
+                                    className="bg-light"
+                                ),
+                                dbc.CardBody([
+                                    html.Div([
+                                        dbc.Label(
+                                            key,
+                                            className="mr-2 font-weight-bold",
+                                            width=4
+                                        ),
+                                        dbc.Col(
+                                            dbc.Input(
+                                                id=f"input-{key}",
+                                                type=value,
+                                                placeholder=key
+                                            ),
+                                            width=8
+                                        )
+                                    ],
+                                             className=
+                                             "d-flex align-items-center mb-4")
+                                    for key, value in
+                                    list(function_args.items())[:-1]
+                                ],
+                                             className="p-4"),
+                                dbc.Button(
+                                    "Run",
+                                    id="best-result-btn",
+                                    color="primary",
+                                    className="mt-2 mb-4 w-100"
+                                ),
+                                # Enhanced Section for Combinations Selection
+                                html.Hr(),
+                                html.Div([
+                                    html.H5(
+                                        "Best Combination",
+                                        className="text-center mt-2"
+                                    ),
+                                    html.P(
+                                        "This is the best combination from the available combinations.",
+                                        className="text-muted small text-center"
+                                    ),
+                                    html.P(
+                                        best_combination,
+                                        id="best-combination",
+                                        style={
+                                            "border": "1px solid #ced4da",
+                                            "border-radius": "4px",
+                                            "padding": "5px",
+                                            "margin-bottom": "20px"
+                                        }
+                                    )
+                                ],
+                                         style={"padding": "10px"}),
+                            ],
+                            className="m-4 shadow-sm rounded"
+                        ),
+                    ],
+                    width=3
+                ),
+                dbc.Col([
+                    dbc.Card([
+                        dbc.CardHeader(
+                            html.H4("Results", className="text-center"),
+                            className="bg-light"
+                        ),
+                        dcc.Loading(
+                            id="loading-results",
+                            type="default",
+                            children=html.
+                            Div(id="best-results-section", className="p-4")
+                        )
+                    ],
+                             className="m-4 shadow-sm rounded")
+                ],
+                        width=9)
+            ]),
+            dbc.Container(fluid=True, className="p-3")
+        ])
+
     def display_group_experiment_result_layout(
         hashed_group_key, experiment_config, is_from_improver=False
     ):
@@ -1508,6 +1617,8 @@ def create_dash_app(
             return improver_combo_page_layout()
         elif pathname == '/interactive':
             return input_page_layout()
+        elif pathname == '/use-best-result':
+            return use_best_result_layout()
         else:
             return index_page()
 
@@ -1901,6 +2012,82 @@ def create_dash_app(
 
         all_results.insert(0, current_result_card)
 
+        return all_results
+
+    @app.callback(
+        Output("best-results-section", "children"),
+        Input("best-result-btn", "n_clicks"),
+        [
+            State(f"input-{key}", "value")
+            for key in list(function_args.keys())[:-1]
+        ] + [State("best-combination", "children")],
+        prevent_initial_call=True
+    )
+    def update_best_results(n_clicks, *input_values_and_combinations):
+        if not n_clicks:
+            return []
+        *input_values, best_combination = input_values_and_combinations
+        # Create a new InputData instance
+        input_data = InputData(
+            dict(zip(list(function_args.keys())[:-1], input_values))
+        )
+        missing_fields = [
+            key for i, key in enumerate(list(function_args.keys())[:-1])
+            if input_values[i] is None
+            and key != "yival_expected_result (Optional)"
+        ]
+        if missing_fields:
+            return html.Div(
+                f"Please fill out the following required fields: {', '.join(missing_fields)}",
+                style={"color": "red"}
+            )
+
+        res = call_function_from_string(
+            experiment_config["custom_function"],  # type: ignore
+            **input_data.content,
+            state=state
+        ) if "custom_function" in experiment_config else None  #type: ignore
+        current_result = [
+            html.Div([
+                html.Ul([
+                    html.Li("Text Raw Output:"),
+                    html.Div(
+                        handle_output(res.text_output), className="raw-output"
+                    ),
+                ] + ([
+                    html.Li("Image Raw Output:"),
+                    html.Div(
+                        handle_output(res.image_output),
+                        className="raw-output"
+                    )
+                ] if res.image_output is not None else []))
+            ])
+        ]
+
+        input_summary = ", ".join([
+            f"{key}: {value}" for key, value in
+            zip(list(function_args.keys())[:-1], input_values)
+        ])
+        toggle_id = {"type": "toggle", "index": n_clicks}
+        collapse_id = {"type": "collapse", "index": n_clicks}
+        current_result_card = html.Div([
+            dbc.Button(
+                input_summary,
+                id=toggle_id,
+                className="mb-2 w-100",
+                color="info"
+            ),
+            dbc.Collapse([
+                item for sublist in [[res, html.Hr()]
+                                     for res in current_result]
+                for item in sublist
+            ],
+                         id=collapse_id,
+                         is_open=True)
+        ],
+                                       className="mb-3")
+
+        all_results.insert(0, current_result_card)
         return all_results
 
     def truncate_text(text, max_length=60):  # Adjust max_length as needed
