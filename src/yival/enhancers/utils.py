@@ -28,22 +28,33 @@ def scratch_variations_from_str(
     target_str:
         This is the generated new output
         var1: hello world
+        hello world
         var2: bye
     
     variations: ["var1", "var2"]
 
     function result:
     {
-        "var1": "hello world"
+        "var1": "hello world\nhello world"
         "var2": "bye"
     }
     """
     result = {}
     lines = target_str.split('\n')
+    var_detect = False
+    var_now = ""
     for line in lines:
+        var_line = False
         for var in variations:
             if line.startswith(var + '='):
+                var_detect = True
                 result[var] = line[len(var) + 1:].strip().strip("'").strip('"')
+                var_line = True
+                var_now = var
+        if var_line:
+            continue
+        if var_detect:
+            result[var_now] += ('\n' + line)
     return result
 
 
@@ -63,5 +74,5 @@ def construct_output_format(variations: List[str]) -> str:
 
     prompt = "Do not write code. Please response with given format:\n"
     for var in variations:
-        prompt += f"{var}= \n"
+        prompt += (var + '=' + '{' + "your generated " + f"{var}" + '}')
     return prompt
