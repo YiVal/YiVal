@@ -41,6 +41,7 @@ from yival.schemas.experiment_config import (
 )
 
 from ...schemas.common_structures import InputData
+from ...states.experiment_state import ExperimentState
 from .hexagram import HEXAGRAMS, generate_hexagram_figure
 from .utils import (
     generate_group_key_combination_data,
@@ -2042,11 +2043,17 @@ def create_dash_app(
                 style={"color": "red"}
             )
 
+        state.active = True
+        best_varation = json.loads(best_combination)
+        for key in best_varation:
+            best_varation[key] = [best_varation[key]]
+        state.current_variations = best_varation
         res = call_function_from_string(
             experiment_config["custom_function"],  # type: ignore
             **input_data.content,
             state=state
         ) if "custom_function" in experiment_config else None  #type: ignore
+        
         current_result = [
             html.Div([
                 html.Ul([
