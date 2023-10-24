@@ -93,6 +93,7 @@ def load_image(response):
 def image_generation(
     species, character, drawing_style, state: ExperimentState
 ):
+    print(f"[INFO] INTO CUSTOM FUNC")
     payload = json.dumps({
         "msg":
         prompt_generation(

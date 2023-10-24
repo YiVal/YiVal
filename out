@@ -1,0 +1,1438 @@
+[10/23/23 08:29:43] WARNING  pyproject.toml does not contain a setuptools.py:119
+                             tool.setuptools_scm section                        
+Generating Variations:   0%|          | 0/2 [00:00<?, ?variation/s]Generating Variations:  50%|█████     | 1/2 [00:04<00:04,  4.20s/variation]Generating Variations: 100%|██████████| 2/2 [00:05<00:00,  2.46s/variation]Generating Variations: 100%|██████████| 2/2 [00:05<00:00,  2.72s/variation]
+Generating Examples:   0%|          | 0/3 [00:00<?, ?example/s]Generating Examples:  33%|███▎      | 1/3 [00:04<00:08,  4.42s/example]Generating Examples:  67%|██████▋   | 2/3 [00:04<00:01,  1.91s/example]Generating Examples: 100%|██████████| 3/3 [00:05<00:00,  1.60s/example]Generating Examples: 100%|██████████| 3/3 [00:05<00:00,  1.94s/example]
+Processing:   0%|          | 0/9 [00:00<?, ?item/s]Processing:  33%|███▎      | 3/9 [02:35<05:11, 51.85s/item]Processing:  67%|██████▋   | 6/9 [02:47<01:11, 23.73s/item]Processing: 100%|██████████| 9/9 [02:47<00:00, 18.63s/item]
+INFO:root:[INFO][opro] first variations is {'task': 'Given a tech startup company described as {tech_startup_business}, a general business described as {business}, and targeted people described as {target_people}, craft an attractive and engaging landing page headline.'}
+INFO:root:[INFO][optimize_by_prompt_improver] start iteration [0]
+[lite_experiment_runner] Processing:   0%|          | 0/3 [00:00<?, ?item/s][lite_experiment_runner] Processing:  33%|███▎      | 1/3 [00:56<01:53, 56.67s/item][lite_experiment_runner] Processing: 100%|██████████| 3/3 [00:56<00:00, 18.89s/item]
+INFO:root:[INFO][optimize_by_prompt_improver] generate new variations: {'task': 'Design a compelling and captivating landing page headline for a tech startup firm known as {tech_startup_business}, operating in the {business} industry and mainly focusing on {target_people}.'}
+INFO:root:[INFO][optimize_by_prompt_improver] start iteration [1]
+[lite_experiment_runner] Processing:   0%|          | 0/3 [00:00<?, ?item/s][lite_experiment_runner] Processing:  33%|███▎      | 1/3 [00:56<01:52, 56.15s/item][lite_experiment_runner] Processing: 100%|██████████| 3/3 [00:56<00:00, 14.83s/item][lite_experiment_runner] Processing: 100%|██████████| 3/3 [00:56<00:00, 18.96s/item]
+INFO:root:[INFO][optimize_by_prompt_improver] generate new variations: {'task': 'Create a catchy, relevant, and clear headline for the landing page of {tech_startup_business}, a technology startup that excels in the {business} and aims to cater to the needs of {target_people}.'}
+INFO:root:[INFO][optimize_by_prompt_improver] start iteration [2]
+[lite_experiment_runner] Processing:   0%|          | 0/3 [00:00<?, ?item/s][lite_experiment_runner] Processing:  33%|███▎      | 1/3 [00:51<01:43, 51.86s/item]WARNING:urllib3.connectionpool:Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'RemoteDisconnected('Remote end closed connection without response')': /v1/chat/completions
+[lite_experiment_runner] Processing:  67%|██████▋   | 2/3 [01:49<00:55, 55.40s/item][lite_experiment_runner] Processing: 100%|██████████| 3/3 [01:49<00:00, 36.58s/item]
+INFO:root:[INFO][optimize_by_prompt_improver] generate new variations: {'task': 'Devise a striking and attention-grabbing headline for the landing page of the tech startup, {tech_startup_business}, renowned for its work in the field of {business} and specifically aimed at serving {target_people}.'}
+INFO:pyngrok.ngrok:Opening tunnel named: http-8073-cd45c84f-50dc-4369-aa8c-4d426c87fe4a
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:36:44+0000 lvl=info msg="no configuration paths supplied"
+WARNING:pyngrok.process.ngrok:t=2023-10-23T08:36:44+0000 lvl=warn msg="ngrok config file found at legacy location, move to XDG location" xdg_path=/root/.config/ngrok/ngrok.yml legacy_path=/root/.ngrok2/ngrok.yml
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:36:44+0000 lvl=info msg="using configuration at default config path" path=/root/.ngrok2/ngrok.yml
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:36:44+0000 lvl=info msg="open config file" path=/root/.ngrok2/ngrok.yml err=nil
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:36:44+0000 lvl=info msg="starting web service" obj=web addr=127.0.0.1:4040 allow_hosts=[]
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:36:45+0000 lvl=info msg="client session established" obj=tunnels.session obj=csess id=3793b5235703
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:36:45+0000 lvl=info msg="tunnel session started" obj=tunnels.session
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:36:45+0000 lvl=info msg=start pg=/api/tunnels id=5b481e4cd7d597f1
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:36:45+0000 lvl=info msg=end pg=/api/tunnels id=5b481e4cd7d597f1 status=200 dur=232.48µs
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:36:45+0000 lvl=info msg=start pg=/api/tunnels id=d67d7e0efc81a23d
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:36:45+0000 lvl=info msg=end pg=/api/tunnels id=d67d7e0efc81a23d status=200 dur=129.523µs
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:36:45+0000 lvl=info msg=start pg=/api/tunnels id=49ecc0c620a2f510
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:36:45+0000 lvl=info msg="started tunnel" obj=tunnels name=http-8073-cd45c84f-50dc-4369-aa8c-4d426c87fe4a addr=http://localhost:8073 url=https://1721-202-120-234-14.ngrok-free.app
+Access Yival from this public URL :NgrokTunnel: "https://1721-202-120-234-14.ngrok-free.app" -> "http://localhost:8073"
+Dash is running on http://127.0.0.1:8073/
+
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:36:45+0000 lvl=info msg=end pg=/api/tunnels id=49ecc0c620a2f510 status=201 dur=264.937974ms
+INFO:dash.dash:Dash is running on http://127.0.0.1:8073/
+
+ * Serving Flask app 'yival.experiment.app.app'
+ * Debug mode: off
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8073
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:36:56+0000 lvl=info msg="join connections" obj=join id=8798bed4bd78 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:36:56] "GET / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:36:57+0000 lvl=info msg="join connections" obj=join id=79ce53eb7b71 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:36:57+0000 lvl=info msg="join connections" obj=join id=eb5deed2361a l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:36:57] "GET /_dash-component-suites/dash/html/dash_html_components.v2_0_14m1698038291.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:36:57+0000 lvl=info msg="join connections" obj=join id=3715a94080ab l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:36:57+0000 lvl=info msg="join connections" obj=join id=62a00b3fb0f5 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:36:57+0000 lvl=info msg="join connections" obj=join id=0e9b60863f8d l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:36:57] "GET /_dash-component-suites/dash/deps/polyfill@7.v2_13_0m1698038291.12.1.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:36:57] "GET /assets/styles.css?m=1698037976.7453413 HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:36:57+0000 lvl=info msg="join connections" obj=join id=c06075acba0b l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:36:57] "GET /_dash-component-suites/dash/deps/react-dom@16.v2_13_0m1698038291.14.0.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:36:57] "GET /_dash-component-suites/dash/dcc/dash_core_components-shared.v2_12_0m1698038290.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:36:57] "GET /_dash-component-suites/dash/dash-renderer/build/dash_renderer.v2_13_0m1698038290.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:36:57+0000 lvl=info msg="join connections" obj=join id=087102546279 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:36:57+0000 lvl=info msg="join connections" obj=join id=969b857503f1 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:36:57] "GET /_dash-component-suites/dash/deps/prop-types@15.v2_13_0m1698038291.8.1.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:36:57] "GET /_dash-component-suites/dash/dash_table/bundle.v5_2_7m1698038290.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:36:57+0000 lvl=info msg="join connections" obj=join id=53cea9877c6e l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:36:57] "GET /_dash-component-suites/dash_bootstrap_components/_components/dash_bootstrap_components.v1_5_0m1698038292.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:36:57] "GET /_dash-component-suites/dash_dangerously_set_inner_html/bundle.v0_0_2m1698038295.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:36:57] "GET /_dash-component-suites/dash/deps/react@16.v2_13_0m1698038291.14.0.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:36:57+0000 lvl=info msg="join connections" obj=join id=c9b39b1a18db l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:36:57] "GET /_dash-component-suites/dash/dcc/dash_core_components.v2_12_0m1698038290.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:36:57+0000 lvl=info msg="join connections" obj=join id=5d315603d1f7 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:36:57+0000 lvl=info msg="join connections" obj=join id=9a55aa420308 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:09+0000 lvl=info msg="join connections" obj=join id=88b6d3fff28f l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:09] "GET /_dash-layout HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:09+0000 lvl=info msg="join connections" obj=join id=0c8da6eb9fa9 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:09] "GET /_favicon.ico?v=2.13.0 HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:10+0000 lvl=info msg="join connections" obj=join id=dcfeb7703359 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:10] "GET /_dash-dependencies HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:11+0000 lvl=info msg="join connections" obj=join id=6cde913e2fe7 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:11+0000 lvl=info msg="join connections" obj=join id=4f847a5ecd9a l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:11] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:11] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:11+0000 lvl=info msg="join connections" obj=join id=d7bcab8d56b1 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:11+0000 lvl=info msg="join connections" obj=join id=b0a7081892c8 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:11] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:11] "GET /_favicon.ico?v=2.13.0 HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:11+0000 lvl=info msg="join connections" obj=join id=1dd710d7c41f l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:11] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:17+0000 lvl=info msg="join connections" obj=join id=2ba62f27debb l=127.0.0.1:8073 r=66.90.98.166:41637
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:17] "GET / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:18+0000 lvl=info msg="join connections" obj=join id=14fffcf08b9c l=127.0.0.1:8073 r=66.90.98.166:41637
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:18+0000 lvl=info msg="join connections" obj=join id=92c3c9b4e280 l=127.0.0.1:8073 r=66.90.98.166:41637
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:18] "GET /_dash-component-suites/dash/deps/react-dom@16.v2_13_0m1698038291.14.0.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:18] "GET /_dash-component-suites/dash_dangerously_set_inner_html/bundle.v0_0_2m1698038295.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:18+0000 lvl=info msg="join connections" obj=join id=67a32b65f85d l=127.0.0.1:8073 r=66.90.98.166:41637
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:18] "GET /_dash-component-suites/dash/deps/react@16.v2_13_0m1698038291.14.0.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:18+0000 lvl=info msg="join connections" obj=join id=2e794cc83482 l=127.0.0.1:8073 r=66.90.98.166:41637
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:18+0000 lvl=info msg="join connections" obj=join id=b597abcc160c l=127.0.0.1:8073 r=66.90.98.166:41637
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:18+0000 lvl=info msg="join connections" obj=join id=96603198454e l=127.0.0.1:8073 r=66.90.98.166:41637
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:18+0000 lvl=info msg="join connections" obj=join id=2ef61b01ec4b l=127.0.0.1:8073 r=66.90.98.166:41637
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:18] "GET /_dash-component-suites/dash/dcc/dash_core_components.v2_12_0m1698038290.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:18+0000 lvl=info msg="join connections" obj=join id=3d8b40df3669 l=127.0.0.1:8073 r=66.90.98.166:41637
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:18] "GET /_dash-component-suites/dash/dash-renderer/build/dash_renderer.v2_13_0m1698038290.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:18+0000 lvl=info msg="join connections" obj=join id=76d0f7744153 l=127.0.0.1:8073 r=66.90.98.166:41637
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:18] "GET /assets/styles.css?m=1698037976.7453413 HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:18+0000 lvl=info msg="join connections" obj=join id=a6090d5a5ba1 l=127.0.0.1:8073 r=66.90.98.166:41637
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:18] "GET /_dash-component-suites/dash/dash_table/bundle.v5_2_7m1698038290.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:18] "GET /_dash-component-suites/dash/html/dash_html_components.v2_0_14m1698038291.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:18] "GET /_dash-component-suites/dash/deps/prop-types@15.v2_13_0m1698038291.8.1.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:18+0000 lvl=info msg="join connections" obj=join id=d15290121f2c l=127.0.0.1:8073 r=66.90.98.166:41637
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:18] "GET /_dash-component-suites/dash/dcc/dash_core_components-shared.v2_12_0m1698038290.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:18+0000 lvl=info msg="join connections" obj=join id=f51d02659963 l=127.0.0.1:8073 r=66.90.98.166:41637
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:18] "GET /_dash-component-suites/dash/deps/polyfill@7.v2_13_0m1698038291.12.1.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:18] "GET /_dash-component-suites/dash_bootstrap_components/_components/dash_bootstrap_components.v1_5_0m1698038292.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:21+0000 lvl=info msg="join connections" obj=join id=e346e4338e1b l=127.0.0.1:8073 r=66.90.98.166:41637
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:21] "GET /_dash-dependencies HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:21+0000 lvl=info msg="join connections" obj=join id=cbee7ba3a010 l=127.0.0.1:8073 r=66.90.98.166:41637
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:21] "GET /_favicon.ico?v=2.13.0 HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:21+0000 lvl=info msg="join connections" obj=join id=5b813883fbbd l=127.0.0.1:8073 r=66.90.98.166:41637
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:21] "GET /_dash-layout HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:22+0000 lvl=info msg="join connections" obj=join id=ec851e9bf0bd l=127.0.0.1:8073 r=66.90.98.166:41637
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:22] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:22] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:22+0000 lvl=info msg="join connections" obj=join id=cd1ef1cc1eec l=127.0.0.1:8073 r=66.90.98.166:41637
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:22+0000 lvl=info msg="join connections" obj=join id=c24e664edd22 l=127.0.0.1:8073 r=66.90.98.166:41637
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:22] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:23+0000 lvl=info msg="join connections" obj=join id=ecf853e3fa85 l=127.0.0.1:8073 r=66.90.98.166:41637
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:23] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:30+0000 lvl=info msg="join connections" obj=join id=2fb057adf6dc l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:30] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:31+0000 lvl=info msg="join connections" obj=join id=2045675bb788 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:31+0000 lvl=info msg="join connections" obj=join id=7cb4b91a2516 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:31] "GET /_dash-component-suites/dash/dash_table/async-table.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:31] "GET /_dash-component-suites/dash/dash_table/async-highlight.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:41+0000 lvl=info msg="join connections" obj=join id=2a35ad0157a0 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:41] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:41+0000 lvl=info msg="join connections" obj=join id=ed99748eeaba l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:41] "GET /_dash-component-suites/dash/dcc/async-dropdown.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:42+0000 lvl=info msg="join connections" obj=join id=cb8addb72644 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:42+0000 lvl=info msg="join connections" obj=join id=032e41a7fdc7 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:42+0000 lvl=info msg="join connections" obj=join id=a678766f9d42 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:42+0000 lvl=info msg="join connections" obj=join id=4bc9a29d6eeb l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:42+0000 lvl=info msg="join connections" obj=join id=f6d0cf4112df l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:42] "GET /_dash-component-suites/dash/dcc/async-graph.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:42] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:42] "GET /_dash-component-suites/plotly/package_data/plotly.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:42+0000 lvl=info msg="join connections" obj=join id=99175da54020 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:42] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:42] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:42] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:44+0000 lvl=info msg="join connections" obj=join id=9ea2caf77fae l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:44] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:37:59+0000 lvl=info msg="join connections" obj=join id=5a0bc80a5bad l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:37:59] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:38:20+0000 lvl=info msg="join connections" obj=join id=95d7cc6112f0 l=127.0.0.1:8073 r=66.90.98.166:44533
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:38:20] "GET / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:38:21+0000 lvl=info msg="join connections" obj=join id=b87968de54d9 l=127.0.0.1:8073 r=66.90.98.166:44533
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:38:21] "GET /assets/styles.css?m=1698037976.7453413 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:38:21] "GET /_dash-component-suites/dash/deps/polyfill@7.v2_13_0m1698038291.12.1.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:38:21+0000 lvl=info msg="join connections" obj=join id=e1db8ff198f2 l=127.0.0.1:8073 r=66.90.98.166:44533
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:38:22+0000 lvl=info msg="join connections" obj=join id=ad0743c26222 l=127.0.0.1:8073 r=66.90.98.166:44533
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:38:22+0000 lvl=info msg="join connections" obj=join id=c861e3306f44 l=127.0.0.1:8073 r=66.90.98.166:44533
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:38:22+0000 lvl=info msg="join connections" obj=join id=3e00071985f1 l=127.0.0.1:8073 r=66.90.98.166:44533
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:38:22+0000 lvl=info msg="join connections" obj=join id=a83c3495cea2 l=127.0.0.1:8073 r=66.90.98.166:44533
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:38:22+0000 lvl=info msg="join connections" obj=join id=296d6e77e596 l=127.0.0.1:8073 r=66.90.98.166:44533
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:38:22+0000 lvl=info msg="join connections" obj=join id=60f7bf082056 l=127.0.0.1:8073 r=66.90.98.166:44533
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:38:22] "GET /_dash-component-suites/dash/dcc/dash_core_components.v2_12_0m1698038290.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:38:22+0000 lvl=info msg="join connections" obj=join id=4a15a98f7844 l=127.0.0.1:8073 r=66.90.98.166:44533
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:38:22] "GET /_dash-component-suites/dash/dash_table/bundle.v5_2_7m1698038290.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:38:22+0000 lvl=info msg="join connections" obj=join id=ccbf008ce31a l=127.0.0.1:8073 r=66.90.98.166:44533
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:38:22] "GET /_dash-component-suites/dash_dangerously_set_inner_html/bundle.v0_0_2m1698038295.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:38:22] "GET /_dash-component-suites/dash_bootstrap_components/_components/dash_bootstrap_components.v1_5_0m1698038292.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:38:22+0000 lvl=info msg="join connections" obj=join id=845788f74417 l=127.0.0.1:8073 r=66.90.98.166:44533
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:38:22] "GET /_dash-component-suites/dash/dash-renderer/build/dash_renderer.v2_13_0m1698038290.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:38:22] "GET /_dash-component-suites/dash/deps/prop-types@15.v2_13_0m1698038291.8.1.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:38:22+0000 lvl=info msg="join connections" obj=join id=2bafe221b11a l=127.0.0.1:8073 r=66.90.98.166:44533
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:38:22] "GET /_dash-component-suites/dash/deps/react@16.v2_13_0m1698038291.14.0.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:38:22] "GET /_dash-component-suites/dash/deps/react-dom@16.v2_13_0m1698038291.14.0.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:38:22] "GET /_dash-component-suites/dash/html/dash_html_components.v2_0_14m1698038291.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:38:22] "GET /_dash-component-suites/dash/dcc/dash_core_components-shared.v2_12_0m1698038290.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:38:24+0000 lvl=info msg="join connections" obj=join id=fa9a5e3684b3 l=127.0.0.1:8073 r=66.90.98.166:44533
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:38:24] "GET /_dash-layout HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:38:24] "GET /_dash-dependencies HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:38:24+0000 lvl=info msg="join connections" obj=join id=b3405027b0ec l=127.0.0.1:8073 r=66.90.98.166:44533
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:38:24+0000 lvl=info msg="join connections" obj=join id=05d07e412c12 l=127.0.0.1:8073 r=66.90.98.166:44533
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:38:24] "GET /_favicon.ico?v=2.13.0 HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:38:25+0000 lvl=info msg="join connections" obj=join id=a55bc64dcab7 l=127.0.0.1:8073 r=66.90.98.166:44533
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:38:25+0000 lvl=info msg="join connections" obj=join id=f20ad1541ddd l=127.0.0.1:8073 r=66.90.98.166:44533
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:38:25] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:38:25] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:38:25] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:38:25+0000 lvl=info msg="join connections" obj=join id=e817e3ce28ac l=127.0.0.1:8073 r=66.90.98.166:44533
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:38:26] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:38:26+0000 lvl=info msg="join connections" obj=join id=38f56f37cbe0 l=127.0.0.1:8073 r=66.90.98.166:44533
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:39:40+0000 lvl=info msg="join connections" obj=join id=8483de43843f l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:39:40] "GET / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:39:41+0000 lvl=info msg="join connections" obj=join id=b4e962ed2bb2 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:39:41] "[36mGET /assets/styles.css?m=1698037976.7453413 HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:39:42+0000 lvl=info msg="join connections" obj=join id=6244d2998514 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:39:42+0000 lvl=info msg="join connections" obj=join id=d0929692eef9 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:39:42] "GET /_dash-layout HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:39:42+0000 lvl=info msg="join connections" obj=join id=2a6f0689f302 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:39:42] "GET /_dash-dependencies HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:39:42] "GET /_favicon.ico?v=2.13.0 HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:39:43+0000 lvl=info msg="join connections" obj=join id=a45c596d0cb1 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:39:43+0000 lvl=info msg="join connections" obj=join id=68c641dd2c35 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:39:43+0000 lvl=info msg="join connections" obj=join id=74042d8dfe64 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:39:43] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:39:43] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:39:43] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:39:44+0000 lvl=info msg="join connections" obj=join id=85b9ba7f35e1 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:39:44] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:40:08+0000 lvl=info msg="join connections" obj=join id=3a0e8f693f73 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:40:08] "GET / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:40:08+0000 lvl=info msg="join connections" obj=join id=30aec2d897cb l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:40:08] "[36mGET /assets/styles.css?m=1698037976.7453413 HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:40:09+0000 lvl=info msg="join connections" obj=join id=1e2ab8f9a27c l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:40:09+0000 lvl=info msg="join connections" obj=join id=f4765c72ac3d l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:40:09] "GET /_favicon.ico?v=2.13.0 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:40:09] "GET /_dash-layout HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:40:09+0000 lvl=info msg="join connections" obj=join id=dd97fe27f460 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:40:09] "GET /_dash-dependencies HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:40:10] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:40:10+0000 lvl=info msg="join connections" obj=join id=7ecebee9735c l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:40:10+0000 lvl=info msg="join connections" obj=join id=91b712de84df l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:40:10] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:40:10+0000 lvl=info msg="join connections" obj=join id=e9feabb18fe7 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:40:10] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:40:11+0000 lvl=info msg="join connections" obj=join id=b55b13d2ddb3 l=127.0.0.1:8073 r=103.20.198.154:30199
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:40:11] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:40:14+0000 lvl=info msg="join connections" obj=join id=1a3f9b082c75 l=127.0.0.1:8073 r=61.16.102.75:33430
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:40:14] "GET / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:40:15+0000 lvl=info msg="join connections" obj=join id=573be12bd455 l=127.0.0.1:8073 r=61.16.102.75:33430
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:40:15+0000 lvl=info msg="join connections" obj=join id=0fd3a2dd5f67 l=127.0.0.1:8073 r=61.16.102.75:33430
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:40:15] "GET /_dash-component-suites/dash/dash_table/bundle.v5_2_7m1698038290.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:40:15] "GET /_dash-component-suites/dash/deps/prop-types@15.v2_13_0m1698038291.8.1.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:40:16+0000 lvl=info msg="join connections" obj=join id=5ac529b84ac2 l=127.0.0.1:8073 r=61.16.102.75:33430
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:40:16+0000 lvl=info msg="join connections" obj=join id=e9f0e0af053f l=127.0.0.1:8073 r=61.16.102.75:33430
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:40:16+0000 lvl=info msg="join connections" obj=join id=a8444cdc4786 l=127.0.0.1:8073 r=61.16.102.75:33430
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:40:16+0000 lvl=info msg="join connections" obj=join id=bfeefde97c5a l=127.0.0.1:8073 r=61.16.102.75:33430
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:40:16+0000 lvl=info msg="join connections" obj=join id=b98359919eec l=127.0.0.1:8073 r=61.16.102.75:33430
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:40:16] "GET /_dash-component-suites/dash/dcc/dash_core_components.v2_12_0m1698038290.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:40:16+0000 lvl=info msg="join connections" obj=join id=6a4901129b30 l=127.0.0.1:8073 r=61.16.102.75:33430
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:40:16] "GET /_dash-component-suites/dash/deps/polyfill@7.v2_13_0m1698038291.12.1.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:40:16] "GET /_dash-component-suites/dash/deps/react-dom@16.v2_13_0m1698038291.14.0.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:40:16+0000 lvl=info msg="join connections" obj=join id=139ee915f927 l=127.0.0.1:8073 r=61.16.102.75:33430
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:40:16] "GET /_dash-component-suites/dash/deps/react@16.v2_13_0m1698038291.14.0.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:40:16] "GET /assets/styles.css?m=1698037976.7453413 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:40:16] "GET /_dash-component-suites/dash_dangerously_set_inner_html/bundle.v0_0_2m1698038295.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:40:16+0000 lvl=info msg="join connections" obj=join id=920d435243e3 l=127.0.0.1:8073 r=61.16.102.75:33430
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:40:16] "GET /_dash-component-suites/dash/dcc/dash_core_components-shared.v2_12_0m1698038290.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:40:16+0000 lvl=info msg="join connections" obj=join id=bee70a7f0322 l=127.0.0.1:8073 r=61.16.102.75:33430
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:40:16] "GET /_dash-component-suites/dash/html/dash_html_components.v2_0_14m1698038291.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:40:16+0000 lvl=info msg="join connections" obj=join id=7260d0daa3b8 l=127.0.0.1:8073 r=61.16.102.75:33430
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:40:16] "GET /_dash-component-suites/dash/dash-renderer/build/dash_renderer.v2_13_0m1698038290.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:40:16] "GET /_dash-component-suites/dash_bootstrap_components/_components/dash_bootstrap_components.v1_5_0m1698038292.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:40:20+0000 lvl=info msg="join connections" obj=join id=59b91c8f867b l=127.0.0.1:8073 r=61.16.102.75:33430
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:40:20] "GET /_dash-layout HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:40:20+0000 lvl=info msg="join connections" obj=join id=626d7964cff8 l=127.0.0.1:8073 r=61.16.102.75:33430
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:40:20] "GET /_dash-dependencies HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:40:21+0000 lvl=info msg="join connections" obj=join id=7c919869305c l=127.0.0.1:8073 r=61.16.102.75:33430
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:40:21] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:40:21+0000 lvl=info msg="join connections" obj=join id=f3ba894356d6 l=127.0.0.1:8073 r=61.16.102.75:33430
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:40:21] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:40:21+0000 lvl=info msg="join connections" obj=join id=5ac2705a64bf l=127.0.0.1:8073 r=61.16.102.75:33430
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:40:21] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:40:21+0000 lvl=info msg="join connections" obj=join id=8ba543fccf48 l=127.0.0.1:8073 r=61.16.102.75:33430
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:40:21] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:41:04+0000 lvl=info msg="join connections" obj=join id=7e1b540c8e4f l=127.0.0.1:8073 r=154.9.249.50:46003
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:41:04] "GET / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:41:05+0000 lvl=info msg="join connections" obj=join id=e9b7df56165d l=127.0.0.1:8073 r=154.9.249.50:46003
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:41:05] "GET /assets/styles.css?m=1698037976.7453413 HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:41:05+0000 lvl=info msg="join connections" obj=join id=5d9d9ad6b0b4 l=127.0.0.1:8073 r=154.9.249.50:46003
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:41:05+0000 lvl=info msg="join connections" obj=join id=edf1f65a3d43 l=127.0.0.1:8073 r=154.9.249.50:46003
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:41:05+0000 lvl=info msg="join connections" obj=join id=6becb4d4e654 l=127.0.0.1:8073 r=154.9.249.50:46003
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:41:05] "GET /_dash-component-suites/dash/deps/react-dom@16.v2_13_0m1698038291.14.0.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:41:06+0000 lvl=info msg="join connections" obj=join id=7a4d1eff734b l=127.0.0.1:8073 r=154.9.249.50:46003
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:41:06+0000 lvl=info msg="join connections" obj=join id=0dd3fc099200 l=127.0.0.1:8073 r=154.9.249.50:46003
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:41:06] "GET /_dash-component-suites/dash_dangerously_set_inner_html/bundle.v0_0_2m1698038295.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:41:06] "GET /_dash-component-suites/dash/deps/prop-types@15.v2_13_0m1698038291.8.1.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:41:06+0000 lvl=info msg="join connections" obj=join id=e90f27d8e23d l=127.0.0.1:8073 r=154.9.249.50:46003
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:41:06] "GET /_dash-component-suites/dash/dash-renderer/build/dash_renderer.v2_13_0m1698038290.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:41:06+0000 lvl=info msg="join connections" obj=join id=fcc67ce4f915 l=127.0.0.1:8073 r=154.9.249.50:46003
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:41:06] "GET /_dash-component-suites/dash/deps/react@16.v2_13_0m1698038291.14.0.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:41:06+0000 lvl=info msg="join connections" obj=join id=c304ef08a0cf l=127.0.0.1:8073 r=154.9.249.50:46003
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:41:06] "GET /_dash-component-suites/dash/dash_table/bundle.v5_2_7m1698038290.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:41:06] "GET /_dash-component-suites/dash/deps/polyfill@7.v2_13_0m1698038291.12.1.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:41:06] "GET /_dash-component-suites/dash/dcc/dash_core_components-shared.v2_12_0m1698038290.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:41:06+0000 lvl=info msg="join connections" obj=join id=0fa619b56a44 l=127.0.0.1:8073 r=154.9.249.50:46003
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:41:06] "GET /_dash-component-suites/dash/dcc/dash_core_components.v2_12_0m1698038290.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:41:06] "GET /_dash-component-suites/dash/html/dash_html_components.v2_0_14m1698038291.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:41:06+0000 lvl=info msg="join connections" obj=join id=2ec55cc8f9ce l=127.0.0.1:8073 r=154.9.249.50:46003
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:41:06] "GET /_dash-component-suites/dash_bootstrap_components/_components/dash_bootstrap_components.v1_5_0m1698038292.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:41:06+0000 lvl=info msg="join connections" obj=join id=77220b38cbf8 l=127.0.0.1:8073 r=154.9.249.50:46003
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:41:08] "GET /_dash-layout HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:41:08+0000 lvl=info msg="join connections" obj=join id=80a41921518d l=127.0.0.1:8073 r=154.9.249.50:46003
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:41:09] "GET /_dash-dependencies HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:41:09+0000 lvl=info msg="join connections" obj=join id=e533ecc0ab2c l=127.0.0.1:8073 r=154.9.249.50:46003
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:41:09+0000 lvl=info msg="join connections" obj=join id=f97843528da3 l=127.0.0.1:8073 r=154.9.249.50:46003
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:41:09] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:41:09+0000 lvl=info msg="join connections" obj=join id=cd9aa2a06d30 l=127.0.0.1:8073 r=154.9.249.50:46003
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:41:09+0000 lvl=info msg="join connections" obj=join id=ff965e6a4017 l=127.0.0.1:8073 r=154.9.249.50:46003
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:41:09+0000 lvl=info msg="join connections" obj=join id=ce6ab47f68a4 l=127.0.0.1:8073 r=154.9.249.50:46003
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:41:09] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:41:09] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:41:09] "GET /_favicon.ico?v=2.13.0 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:41:10] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:41:10+0000 lvl=info msg="join connections" obj=join id=84fe9ff91aaa l=127.0.0.1:8073 r=154.9.249.50:46003
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:41:41+0000 lvl=info msg="join connections" obj=join id=6a892415bfaf l=127.0.0.1:8073 r=154.9.249.50:46003
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:41:41] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:41:42+0000 lvl=info msg="join connections" obj=join id=59f920d952aa l=127.0.0.1:8073 r=154.9.249.50:46003
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:41:42+0000 lvl=info msg="join connections" obj=join id=6c2d79aec3bc l=127.0.0.1:8073 r=154.9.249.50:46003
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:41:42] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:41:42] "GET /_dash-component-suites/dash/dcc/async-dropdown.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:42:59+0000 lvl=info msg="join connections" obj=join id=b72d8a743a57 l=127.0.0.1:8073 r=142.4.117.2:50183
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:42:59] "GET / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:42:59+0000 lvl=info msg="join connections" obj=join id=698326262ec0 l=127.0.0.1:8073 r=142.4.117.2:50183
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:42:59+0000 lvl=info msg="join connections" obj=join id=1cd51193d8c1 l=127.0.0.1:8073 r=142.4.117.2:50183
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:42:59] "GET /assets/styles.css?m=1698037976.7453413 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:42:59] "GET /_dash-component-suites/dash/deps/polyfill@7.v2_13_0m1698038291.12.1.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:43:00+0000 lvl=info msg="join connections" obj=join id=d573eaa8d757 l=127.0.0.1:8073 r=142.4.117.2:50183
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:43:00+0000 lvl=info msg="join connections" obj=join id=e1763f8c68a3 l=127.0.0.1:8073 r=142.4.117.2:50183
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:43:00+0000 lvl=info msg="join connections" obj=join id=c61cde05446f l=127.0.0.1:8073 r=142.4.117.2:50183
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:43:00+0000 lvl=info msg="join connections" obj=join id=b84cca14835e l=127.0.0.1:8073 r=142.4.117.2:50183
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:43:00+0000 lvl=info msg="join connections" obj=join id=1aca58d73ab8 l=127.0.0.1:8073 r=142.4.117.2:50183
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:43:00] "GET /_dash-component-suites/dash_bootstrap_components/_components/dash_bootstrap_components.v1_5_0m1698038292.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:43:00+0000 lvl=info msg="join connections" obj=join id=6f4b850ba740 l=127.0.0.1:8073 r=142.4.117.2:50183
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:43:00] "GET /_dash-component-suites/dash/dcc/dash_core_components.v2_12_0m1698038290.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:43:00+0000 lvl=info msg="join connections" obj=join id=8be1c7ad4854 l=127.0.0.1:8073 r=142.4.117.2:50183
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:43:00] "GET /_dash-component-suites/dash/deps/react@16.v2_13_0m1698038291.14.0.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:43:00+0000 lvl=info msg="join connections" obj=join id=27292f16707d l=127.0.0.1:8073 r=142.4.117.2:50183
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:43:00] "GET /_dash-component-suites/dash/dash-renderer/build/dash_renderer.v2_13_0m1698038290.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:43:00] "GET /_dash-component-suites/dash/deps/react-dom@16.v2_13_0m1698038291.14.0.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:43:00+0000 lvl=info msg="join connections" obj=join id=832c712aa70a l=127.0.0.1:8073 r=142.4.117.2:50183
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:43:00] "GET /_dash-component-suites/dash/deps/prop-types@15.v2_13_0m1698038291.8.1.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:43:00] "GET /_dash-component-suites/dash/dcc/dash_core_components-shared.v2_12_0m1698038290.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:43:00+0000 lvl=info msg="join connections" obj=join id=f6cbaca5d736 l=127.0.0.1:8073 r=142.4.117.2:50183
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:43:00] "GET /_dash-component-suites/dash_dangerously_set_inner_html/bundle.v0_0_2m1698038295.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:43:00] "GET /_dash-component-suites/dash/dash_table/bundle.v5_2_7m1698038290.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:43:00] "GET /_dash-component-suites/dash/html/dash_html_components.v2_0_14m1698038291.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:43:02+0000 lvl=info msg="join connections" obj=join id=e533958ed2d7 l=127.0.0.1:8073 r=142.4.117.2:50183
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:43:02] "GET /_dash-dependencies HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:43:02+0000 lvl=info msg="join connections" obj=join id=924a220010b5 l=127.0.0.1:8073 r=142.4.117.2:50183
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:43:02] "GET /_dash-layout HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:43:02] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:43:02+0000 lvl=info msg="join connections" obj=join id=ac20e671892e l=127.0.0.1:8073 r=142.4.117.2:50183
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:43:02+0000 lvl=info msg="join connections" obj=join id=90c8c67871a6 l=127.0.0.1:8073 r=142.4.117.2:50183
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:43:02] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:43:02+0000 lvl=info msg="join connections" obj=join id=8a0f7acd1887 l=127.0.0.1:8073 r=142.4.117.2:50183
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:43:02] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:43:03] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:43:03+0000 lvl=info msg="join connections" obj=join id=5c965914cca1 l=127.0.0.1:8073 r=142.4.117.2:50183
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:43:03+0000 lvl=info msg="join connections" obj=join id=5df370fb49a2 l=127.0.0.1:8073 r=142.4.117.2:50183
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:43:03] "GET /_favicon.ico?v=2.13.0 HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:43:09+0000 lvl=info msg="join connections" obj=join id=3c625b628673 l=127.0.0.1:8073 r=142.4.117.2:50183
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:43:09] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:43:10+0000 lvl=info msg="join connections" obj=join id=114a9c187aa5 l=127.0.0.1:8073 r=142.4.117.2:50183
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:43:10+0000 lvl=info msg="join connections" obj=join id=89b8fdb12bcb l=127.0.0.1:8073 r=142.4.117.2:50183
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:43:10] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:43:10] "GET /_dash-component-suites/dash/dcc/async-dropdown.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:43:18+0000 lvl=info msg="join connections" obj=join id=68a9a91388a6 l=127.0.0.1:8073 r=142.4.117.2:50183
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:43:26+0000 lvl=info msg="join connections" obj=join id=d71269422c60 l=127.0.0.1:8073 r=142.4.117.2:50183
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:43:26] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:43:26+0000 lvl=info msg="join connections" obj=join id=dbca0a05382c l=127.0.0.1:8073 r=142.4.117.2:50183
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:43:26] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:45:12+0000 lvl=info msg="join connections" obj=join id=933bb22d6051 l=127.0.0.1:8073 r=142.4.117.2:50183
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:45:12] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:45:15+0000 lvl=info msg="join connections" obj=join id=f3bc535b58cb l=127.0.0.1:8073 r=142.4.117.2:50183
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:45:15] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:45:54] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:47:10+0000 lvl=info msg="join connections" obj=join id=1583bb803a5f l=127.0.0.1:8073 r=103.20.198.154:29251
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:47:10] "GET / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:47:10+0000 lvl=info msg="join connections" obj=join id=3578c0a92d20 l=127.0.0.1:8073 r=103.20.198.154:29251
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:47:10] "[36mGET /assets/styles.css?m=1698037976.7453413 HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:47:11+0000 lvl=info msg="join connections" obj=join id=d5537846e081 l=127.0.0.1:8073 r=103.20.198.154:29251
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:47:11] "GET /_dash-layout HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:47:11+0000 lvl=info msg="join connections" obj=join id=6bb3778f3e6a l=127.0.0.1:8073 r=103.20.198.154:29251
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:47:11+0000 lvl=info msg="join connections" obj=join id=4e47dc62980a l=127.0.0.1:8073 r=103.20.198.154:29251
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:47:11] "GET /_dash-dependencies HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:47:11] "GET /_favicon.ico?v=2.13.0 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:47:12] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:47:12+0000 lvl=info msg="join connections" obj=join id=d883b107bd76 l=127.0.0.1:8073 r=103.20.198.154:29251
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:47:12] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:47:12+0000 lvl=info msg="join connections" obj=join id=f693628d4ae1 l=127.0.0.1:8073 r=103.20.198.154:29251
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:47:12+0000 lvl=info msg="join connections" obj=join id=da12392a0c18 l=127.0.0.1:8073 r=103.20.198.154:29251
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:47:12] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:47:13+0000 lvl=info msg="join connections" obj=join id=3aa8dfe12ca8 l=127.0.0.1:8073 r=103.20.198.154:29251
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:47:13] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:47:14+0000 lvl=info msg="join connections" obj=join id=5b4e9997d07c l=127.0.0.1:8073 r=103.20.198.154:29251
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:47:14] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:47:15+0000 lvl=info msg="join connections" obj=join id=e832752d15fd l=127.0.0.1:8073 r=103.20.198.154:29251
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:47:15+0000 lvl=info msg="join connections" obj=join id=49c1d8c025a7 l=127.0.0.1:8073 r=103.20.198.154:29251
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:47:15] "[36mGET /_dash-component-suites/dash/dash_table/async-table.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:47:15] "[36mGET /_dash-component-suites/dash/dash_table/async-highlight.js HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:47:17+0000 lvl=info msg="join connections" obj=join id=5d66e314d00d l=127.0.0.1:8073 r=103.20.198.154:29251
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:47:17] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:47:18+0000 lvl=info msg="join connections" obj=join id=c6538e37aa95 l=127.0.0.1:8073 r=103.20.198.154:29251
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:47:19] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:47:21+0000 lvl=info msg="join connections" obj=join id=ad7f2bc3cff1 l=127.0.0.1:8073 r=103.20.198.154:29251
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:47:21] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:47:33+0000 lvl=info msg="join connections" obj=join id=3f4a2c7246f8 l=127.0.0.1:8073 r=103.20.198.154:29251
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:47:33] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:47:34+0000 lvl=info msg="join connections" obj=join id=4a1809d2202f l=127.0.0.1:8073 r=103.20.198.154:29251
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:47:34] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:48:36+0000 lvl=info msg="join connections" obj=join id=feae42150f11 l=127.0.0.1:8073 r=142.4.117.2:5443
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:48:36] "GET / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:48:36+0000 lvl=info msg="join connections" obj=join id=ab2c772bd155 l=127.0.0.1:8073 r=142.4.117.2:5443
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:48:36] "[36mGET /assets/styles.css?m=1698037976.7453413 HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:48:37+0000 lvl=info msg="join connections" obj=join id=3fae66e9a448 l=127.0.0.1:8073 r=142.4.117.2:5443
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:48:37] "GET /_dash-layout HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:48:37+0000 lvl=info msg="join connections" obj=join id=a2d0a96cfff9 l=127.0.0.1:8073 r=142.4.117.2:5443
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:48:37] "GET /_dash-dependencies HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:48:38+0000 lvl=info msg="join connections" obj=join id=54a6b9429e1a l=127.0.0.1:8073 r=142.4.117.2:5443
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:48:38] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:48:38+0000 lvl=info msg="join connections" obj=join id=ee6d9ec53434 l=127.0.0.1:8073 r=142.4.117.2:5443
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:48:38] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:48:38+0000 lvl=info msg="join connections" obj=join id=c526315e039d l=127.0.0.1:8073 r=142.4.117.2:5443
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:48:38] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:48:38+0000 lvl=info msg="join connections" obj=join id=5076ebd6caf9 l=127.0.0.1:8073 r=142.4.117.2:5443
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:48:38] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:48:57+0000 lvl=info msg="join connections" obj=join id=5901a72284f3 l=127.0.0.1:8073 r=[2001:250:206:4f89:50c7:824e:fbfc:1029]:50166
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:48:57] "GET / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:48:58+0000 lvl=info msg="join connections" obj=join id=2277fc23b542 l=127.0.0.1:8073 r=[2001:250:206:4f89:50c7:824e:fbfc:1029]:50166
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:48:58] "GET /_dash-component-suites/dash/deps/polyfill@7.v2_13_0m1698038291.12.1.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:48:58+0000 lvl=info msg="join connections" obj=join id=69b7f3175ba9 l=127.0.0.1:8073 r=[2001:250:206:4f89:50c7:824e:fbfc:1029]:50166
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:48:58+0000 lvl=info msg="join connections" obj=join id=0072fdbd844b l=127.0.0.1:8073 r=[2001:250:206:4f89:50c7:824e:fbfc:1029]:50166
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:48:58+0000 lvl=info msg="join connections" obj=join id=64002d1d7fc0 l=127.0.0.1:8073 r=[2001:250:206:4f89:50c7:824e:fbfc:1029]:50166
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:48:58+0000 lvl=info msg="join connections" obj=join id=8f91d401f01c l=127.0.0.1:8073 r=[2001:250:206:4f89:50c7:824e:fbfc:1029]:50166
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:48:58+0000 lvl=info msg="join connections" obj=join id=eae762a2922f l=127.0.0.1:8073 r=[2001:250:206:4f89:50c7:824e:fbfc:1029]:50166
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:48:58] "GET /_dash-component-suites/dash_dangerously_set_inner_html/bundle.v0_0_2m1698038295.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:48:58] "GET /_dash-component-suites/dash_bootstrap_components/_components/dash_bootstrap_components.v1_5_0m1698038292.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:48:58+0000 lvl=info msg="join connections" obj=join id=5d2c780cd5c9 l=127.0.0.1:8073 r=[2001:250:206:4f89:50c7:824e:fbfc:1029]:50166
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:48:58] "GET /_dash-component-suites/dash/deps/prop-types@15.v2_13_0m1698038291.8.1.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:48:58] "GET /_dash-component-suites/dash/dcc/dash_core_components-shared.v2_12_0m1698038290.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:48:58+0000 lvl=info msg="join connections" obj=join id=e1bfc84ad904 l=127.0.0.1:8073 r=[2001:250:206:4f89:50c7:824e:fbfc:1029]:50166
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:48:58] "GET /_dash-component-suites/dash/deps/react@16.v2_13_0m1698038291.14.0.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:48:58+0000 lvl=info msg="join connections" obj=join id=4e7e7122ea7f l=127.0.0.1:8073 r=[2001:250:206:4f89:50c7:824e:fbfc:1029]:50166
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:48:58] "GET /_dash-component-suites/dash/deps/react-dom@16.v2_13_0m1698038291.14.0.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:48:58] "GET /_dash-component-suites/dash/dcc/dash_core_components.v2_12_0m1698038290.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:48:58+0000 lvl=info msg="join connections" obj=join id=5056193e6ada l=127.0.0.1:8073 r=[2001:250:206:4f89:50c7:824e:fbfc:1029]:50166
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:48:58] "GET /_dash-component-suites/dash/html/dash_html_components.v2_0_14m1698038291.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:48:58] "GET /_dash-component-suites/dash/dash_table/bundle.v5_2_7m1698038290.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:48:58] "GET /assets/styles.css?m=1698037976.7453413 HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:48:58+0000 lvl=info msg="join connections" obj=join id=5e226dfed11a l=127.0.0.1:8073 r=[2001:250:206:4f89:50c7:824e:fbfc:1029]:50166
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:48:58] "GET /_dash-component-suites/dash/dash-renderer/build/dash_renderer.v2_13_0m1698038290.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:48:58+0000 lvl=info msg="join connections" obj=join id=d99730e76b2e l=127.0.0.1:8073 r=[2001:250:206:4f89:50c7:824e:fbfc:1029]:50166
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:49:01+0000 lvl=info msg="join connections" obj=join id=8007fda0240f l=127.0.0.1:8073 r=[2001:250:206:4f89:50c7:824e:fbfc:1029]:50166
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:49:01] "GET /_dash-layout HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:49:01+0000 lvl=info msg="join connections" obj=join id=2d27c70ec816 l=127.0.0.1:8073 r=[2001:250:206:4f89:50c7:824e:fbfc:1029]:50166
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:49:01] "GET /_dash-dependencies HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:49:02] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:49:02+0000 lvl=info msg="join connections" obj=join id=f7376d12cdfc l=127.0.0.1:8073 r=[2001:250:206:4f89:50c7:824e:fbfc:1029]:50166
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:49:02] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:49:02+0000 lvl=info msg="join connections" obj=join id=43e95577a449 l=127.0.0.1:8073 r=[2001:250:206:4f89:50c7:824e:fbfc:1029]:50166
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:49:02+0000 lvl=info msg="join connections" obj=join id=70d250865c57 l=127.0.0.1:8073 r=[2001:250:206:4f89:50c7:824e:fbfc:1029]:50166
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:49:02] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:49:03] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:49:03+0000 lvl=info msg="join connections" obj=join id=9c5ae8135201 l=127.0.0.1:8073 r=[2001:250:206:4f89:50c7:824e:fbfc:1029]:50166
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:49:05] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:49:05+0000 lvl=info msg="join connections" obj=join id=b567943267d4 l=127.0.0.1:8073 r=[2001:250:206:4f89:50c7:824e:fbfc:1029]:50166
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:49:08+0000 lvl=info msg="join connections" obj=join id=616c9c148e4d l=127.0.0.1:8073 r=[2001:250:206:4f89:50c7:824e:fbfc:1029]:50166
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:49:08] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:49:09+0000 lvl=info msg="join connections" obj=join id=3d5f67e2fd22 l=127.0.0.1:8073 r=[2001:250:206:4f89:50c7:824e:fbfc:1029]:50166
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:49:09] "GET /_dash-component-suites/dash/dcc/async-dropdown.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:49:09+0000 lvl=info msg="join connections" obj=join id=241a1a9cec18 l=127.0.0.1:8073 r=[2001:250:206:4f89:50c7:824e:fbfc:1029]:50166
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:49:09] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:49:36+0000 lvl=info msg="join connections" obj=join id=93930676cc86 l=127.0.0.1:8073 r=[2001:250:206:4f89:50c7:824e:fbfc:1029]:50166
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:49:36] "GET /_favicon.ico?v=2.13.0 HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:49:44+0000 lvl=info msg="join connections" obj=join id=0b27b534a9cd l=127.0.0.1:8073 r=[2001:250:206:4f89:50c7:824e:fbfc:1029]:50166
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:50:12] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:50:13] "GET /assets/styles.css?m=1698037976.7453413 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:50:13] "GET /_dash-component-suites/dash/deps/polyfill@7.v2_13_0m1698038291.12.1.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:50:13] "GET /_dash-component-suites/dash_bootstrap_components/_components/dash_bootstrap_components.v1_5_0m1698038292.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:50:13] "GET /_dash-component-suites/dash/deps/react@16.v2_13_0m1698038291.14.0.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:50:13] "GET /_dash-component-suites/dash/html/dash_html_components.v2_0_14m1698038291.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:50:13] "GET /_dash-component-suites/dash/dash-renderer/build/dash_renderer.v2_13_0m1698038290.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:50:13] "GET /_dash-component-suites/dash_dangerously_set_inner_html/bundle.v0_0_2m1698038295.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:50:13] "GET /_dash-component-suites/dash/dcc/dash_core_components.v2_12_0m1698038290.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:50:13] "GET /_dash-component-suites/dash/dash_table/bundle.v5_2_7m1698038290.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:50:13] "GET /_dash-component-suites/dash/deps/prop-types@15.v2_13_0m1698038291.8.1.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:50:13] "GET /_dash-component-suites/dash/dcc/dash_core_components-shared.v2_12_0m1698038290.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:50:13] "GET /_dash-component-suites/dash/deps/react-dom@16.v2_13_0m1698038291.14.0.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:50:24] "GET /_favicon.ico?v=2.13.0 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:50:25] "GET /_dash-dependencies HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:50:25] "GET /_dash-layout HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:50:25] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:50:26] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:50:26] "GET /_favicon.ico?v=2.13.0 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:50:26] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:50:26] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:50:28] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:50:45] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:50:45+0000 lvl=info msg="join connections" obj=join id=320d1032b2dc l=127.0.0.1:8073 r=66.90.98.166:44633
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:52:34] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:55:36+0000 lvl=info msg="join connections" obj=join id=9513a134d1b3 l=127.0.0.1:8073 r=103.20.198.154:10571
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:55:36] "GET / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:55:36+0000 lvl=info msg="join connections" obj=join id=2fb7bc26b1ed l=127.0.0.1:8073 r=103.20.198.154:10571
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:55:36] "[36mGET /assets/styles.css?m=1698037976.7453413 HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:55:37+0000 lvl=info msg="join connections" obj=join id=7755bf087429 l=127.0.0.1:8073 r=103.20.198.154:10571
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:55:37+0000 lvl=info msg="join connections" obj=join id=0c064860921f l=127.0.0.1:8073 r=103.20.198.154:10571
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:55:37] "GET /_dash-dependencies HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:55:37] "GET /_favicon.ico?v=2.13.0 HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:55:37+0000 lvl=info msg="join connections" obj=join id=fc1f9ce31968 l=127.0.0.1:8073 r=103.20.198.154:10571
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:55:37] "GET /_dash-layout HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:55:38] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:55:38+0000 lvl=info msg="join connections" obj=join id=6623dcb8db01 l=127.0.0.1:8073 r=103.20.198.154:10571
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:55:38] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:55:38+0000 lvl=info msg="join connections" obj=join id=cacb59838b43 l=127.0.0.1:8073 r=103.20.198.154:10571
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:55:39+0000 lvl=info msg="join connections" obj=join id=eb99ad5c08c3 l=127.0.0.1:8073 r=103.20.198.154:10571
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:55:39] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:55:39+0000 lvl=info msg="join connections" obj=join id=97cfe170e4e2 l=127.0.0.1:8073 r=103.20.198.154:10571
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:55:39] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:55:41+0000 lvl=info msg="join connections" obj=join id=67af992cd3ac l=127.0.0.1:8073 r=103.20.198.154:10571
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:55:41] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:55:42+0000 lvl=info msg="join connections" obj=join id=c94d67682740 l=127.0.0.1:8073 r=103.20.198.154:10571
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:55:42] "[36mGET /_dash-component-suites/dash/dash_table/async-table.js HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T08:55:43+0000 lvl=info msg="join connections" obj=join id=be34c5951685 l=127.0.0.1:8073 r=103.20.198.154:10571
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 08:55:43] "[36mGET /_dash-component-suites/dash/dash_table/async-highlight.js HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T09:03:15+0000 lvl=info msg="join connections" obj=join id=7fbe843b377c l=127.0.0.1:8073 r=103.20.198.154:8985
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 09:03:15] "GET / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T09:03:16+0000 lvl=info msg="join connections" obj=join id=26c533157ffb l=127.0.0.1:8073 r=103.20.198.154:8985
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 09:03:16] "[36mGET /assets/styles.css?m=1698037976.7453413 HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T09:03:17+0000 lvl=info msg="join connections" obj=join id=b2468f6ecd1f l=127.0.0.1:8073 r=103.20.198.154:8985
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 09:03:17] "GET /_dash-layout HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T09:03:17+0000 lvl=info msg="join connections" obj=join id=7d509f8cc58e l=127.0.0.1:8073 r=103.20.198.154:8985
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 09:03:17] "GET /_dash-dependencies HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T09:03:17+0000 lvl=info msg="join connections" obj=join id=dcd1132783d5 l=127.0.0.1:8073 r=103.20.198.154:8985
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 09:03:17] "GET /_favicon.ico?v=2.13.0 HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T09:03:17+0000 lvl=info msg="join connections" obj=join id=85c22d56278c l=127.0.0.1:8073 r=103.20.198.154:8985
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 09:03:17] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T09:03:17+0000 lvl=info msg="join connections" obj=join id=a4109e2f411e l=127.0.0.1:8073 r=103.20.198.154:8985
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 09:03:17] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T09:03:17+0000 lvl=info msg="join connections" obj=join id=a7bacfffaec4 l=127.0.0.1:8073 r=103.20.198.154:8985
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 09:03:17] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T09:03:18+0000 lvl=info msg="join connections" obj=join id=5ac1a5de8a69 l=127.0.0.1:8073 r=103.20.198.154:8985
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 09:03:18] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T09:03:21+0000 lvl=info msg="join connections" obj=join id=9d505c469081 l=127.0.0.1:8073 r=103.20.198.154:8985
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 09:03:21] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T09:03:22+0000 lvl=info msg="join connections" obj=join id=512bec0a70b9 l=127.0.0.1:8073 r=103.20.198.154:8985
+INFO:pyngrok.process.ngrok:t=2023-10-23T09:03:22+0000 lvl=info msg="join connections" obj=join id=b2f37f168c90 l=127.0.0.1:8073 r=103.20.198.154:8985
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 09:03:22] "[36mGET /_dash-component-suites/dash/dash_table/async-highlight.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 09:03:22] "[36mGET /_dash-component-suites/dash/dash_table/async-table.js HTTP/1.1[0m" 304 -
+ERROR:pyngrok.process.ngrok:t=2023-10-23T11:32:50+0000 lvl=eror msg="session closed, starting reconnect loop" obj=tunnels.session obj=csess id=3793b5235703 err="read EOF from remote peer"
+ERROR:pyngrok.process.ngrok:t=2023-10-23T11:33:00+0000 lvl=eror msg="heartbeat timeout, terminating session" obj=tunnels.session obj=csess id=98464908f871 clientid=c1f7b0c93b6e254f2e396bcd1f2afe1e
+ERROR:pyngrok.process.ngrok:t=2023-10-23T11:33:00+0000 lvl=eror msg="failed to reconnect session" obj=tunnels.session obj=csess id=3793b5235703 err="failed to dial ngrok server with address \"connect.us.ngrok-agent.com:443\": dial tcp: lookup connect.us.ngrok-agent.com: i/o timeout"
+INFO:pyngrok.process.ngrok:t=2023-10-23T11:33:02+0000 lvl=info msg="client session established" obj=tunnels.session obj=csess id=3793b5235703
+INFO:pyngrok.process.ngrok:t=2023-10-23T11:33:02+0000 lvl=info msg="tunnel session started" obj=tunnels.session
+INFO:pyngrok.process.ngrok:t=2023-10-23T11:47:41+0000 lvl=info msg="join connections" obj=join id=8c40af00cfc0 l=127.0.0.1:8073 r=103.20.198.154:4943
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 11:47:41] "GET / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T11:47:42+0000 lvl=info msg="join connections" obj=join id=9c576f40ef47 l=127.0.0.1:8073 r=103.20.198.154:4943
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 11:47:42] "[36mGET /assets/styles.css?m=1698037976.7453413 HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T11:47:42+0000 lvl=info msg="join connections" obj=join id=f292fbafc8a2 l=127.0.0.1:8073 r=103.20.198.154:4943
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 11:47:42] "GET /_dash-layout HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T11:47:42+0000 lvl=info msg="join connections" obj=join id=be5b3fc456fe l=127.0.0.1:8073 r=103.20.198.154:4943
+INFO:pyngrok.process.ngrok:t=2023-10-23T11:47:42+0000 lvl=info msg="join connections" obj=join id=f961e8067cbf l=127.0.0.1:8073 r=103.20.198.154:4943
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 11:47:42] "GET /_dash-dependencies HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 11:47:42] "GET /_favicon.ico?v=2.13.0 HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T11:47:44+0000 lvl=info msg="join connections" obj=join id=b2dabbbf61c8 l=127.0.0.1:8073 r=103.20.198.154:4943
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 11:47:44] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T11:47:44+0000 lvl=info msg="join connections" obj=join id=b766318fe6ef l=127.0.0.1:8073 r=103.20.198.154:4943
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 11:47:44] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T11:47:44+0000 lvl=info msg="join connections" obj=join id=d4546985d151 l=127.0.0.1:8073 r=103.20.198.154:4943
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 11:47:44] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 11:47:44] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T11:47:44+0000 lvl=info msg="join connections" obj=join id=362a703e45ce l=127.0.0.1:8073 r=103.20.198.154:4943
+INFO:pyngrok.process.ngrok:t=2023-10-23T11:49:41+0000 lvl=info msg="join connections" obj=join id=ee582b503e87 l=127.0.0.1:8073 r=103.20.198.154:4943
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 11:49:41] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T11:52:25+0000 lvl=info msg="join connections" obj=join id=ec9ca24e260b l=127.0.0.1:8073 r=103.20.198.154:4943
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 11:52:25] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T11:55:22+0000 lvl=info msg="join connections" obj=join id=f695fe7f239a l=127.0.0.1:8073 r=103.20.198.154:4943
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 11:55:22] "POST /_dash-update-component HTTP/1.1" 200 -
+ERROR:pyngrok.process.ngrok:t=2023-10-23T12:25:07+0000 lvl=eror msg="session closed, starting reconnect loop" obj=tunnels.session obj=csess id=3793b5235703 err="read EOF from remote peer"
+INFO:pyngrok.process.ngrok:t=2023-10-23T12:25:08+0000 lvl=info msg="client session established" obj=tunnels.session obj=csess id=3793b5235703
+INFO:pyngrok.process.ngrok:t=2023-10-23T12:25:08+0000 lvl=info msg="tunnel session started" obj=tunnels.session
+ERROR:pyngrok.process.ngrok:t=2023-10-23T12:25:16+0000 lvl=eror msg="heartbeat timeout, terminating session" obj=tunnels.session obj=csess id=6490367048f6 clientid=c1f7b0c93b6e254f2e396bcd1f2afe1e
+INFO:pyngrok.process.ngrok:t=2023-10-23T13:08:35+0000 lvl=info msg="join connections" obj=join id=93be2d486182 l=127.0.0.1:8073 r=103.20.198.154:9605
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 13:08:35] "GET / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T13:08:36+0000 lvl=info msg="join connections" obj=join id=264e625d5d29 l=127.0.0.1:8073 r=103.20.198.154:9605
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 13:08:36] "[36mGET /assets/styles.css?m=1698037976.7453413 HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T13:08:36+0000 lvl=info msg="join connections" obj=join id=2ddd04a8c0c4 l=127.0.0.1:8073 r=103.20.198.154:9605
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 13:08:36] "GET /_dash-layout HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T13:08:36+0000 lvl=info msg="join connections" obj=join id=77c735926acc l=127.0.0.1:8073 r=103.20.198.154:9605
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 13:08:36] "GET /_dash-dependencies HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T13:08:36+0000 lvl=info msg="join connections" obj=join id=2c236fc9c972 l=127.0.0.1:8073 r=103.20.198.154:9605
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 13:08:36] "GET /_favicon.ico?v=2.13.0 HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T13:08:37+0000 lvl=info msg="join connections" obj=join id=145e8e402ec9 l=127.0.0.1:8073 r=103.20.198.154:9605
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 13:08:37] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T13:08:37+0000 lvl=info msg="join connections" obj=join id=aa0b0f9f7a9d l=127.0.0.1:8073 r=103.20.198.154:9605
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 13:08:37] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 13:08:37] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T13:08:37+0000 lvl=info msg="join connections" obj=join id=ca6168929e9f l=127.0.0.1:8073 r=103.20.198.154:9605
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 13:08:38] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T13:08:38+0000 lvl=info msg="join connections" obj=join id=cf38bddc9e90 l=127.0.0.1:8073 r=103.20.198.154:9605
+INFO:pyngrok.process.ngrok:t=2023-10-23T13:08:40+0000 lvl=info msg="join connections" obj=join id=75f8f01c21ba l=127.0.0.1:8073 r=103.20.198.154:9605
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 13:08:40] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T13:08:41+0000 lvl=info msg="join connections" obj=join id=d7c1688ccb6e l=127.0.0.1:8073 r=103.20.198.154:9605
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 13:08:41] "[36mGET /_dash-component-suites/dash/dash_table/async-highlight.js HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T13:08:41+0000 lvl=info msg="join connections" obj=join id=95b78c1a8db1 l=127.0.0.1:8073 r=103.20.198.154:9605
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 13:08:41] "[36mGET /_dash-component-suites/dash/dash_table/async-table.js HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T13:08:48+0000 lvl=info msg="join connections" obj=join id=a97a12b2ae02 l=127.0.0.1:8073 r=103.20.198.154:9605
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 13:08:48] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T13:08:49+0000 lvl=info msg="join connections" obj=join id=d0e7cf6318fb l=127.0.0.1:8073 r=103.20.198.154:9605
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 13:08:49] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T13:14:05+0000 lvl=info msg="join connections" obj=join id=0c55824f6387 l=127.0.0.1:8073 r=103.20.198.154:23413
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 13:14:05] "GET / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T13:14:05+0000 lvl=info msg="join connections" obj=join id=2027b7ee3bb7 l=127.0.0.1:8073 r=103.20.198.154:23413
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 13:14:05] "[36mGET /assets/styles.css?m=1698037976.7453413 HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T13:14:06+0000 lvl=info msg="join connections" obj=join id=391f54040f0b l=127.0.0.1:8073 r=103.20.198.154:23413
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 13:14:06] "GET /_dash-dependencies HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T13:14:06+0000 lvl=info msg="join connections" obj=join id=92c54b074901 l=127.0.0.1:8073 r=103.20.198.154:23413
+INFO:pyngrok.process.ngrok:t=2023-10-23T13:14:06+0000 lvl=info msg="join connections" obj=join id=0f6f5029ca04 l=127.0.0.1:8073 r=103.20.198.154:23413
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 13:14:06] "GET /_dash-layout HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 13:14:06] "GET /_favicon.ico?v=2.13.0 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 13:14:07] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T13:14:07+0000 lvl=info msg="join connections" obj=join id=5d9a9b56e81b l=127.0.0.1:8073 r=103.20.198.154:23413
+INFO:pyngrok.process.ngrok:t=2023-10-23T13:14:07+0000 lvl=info msg="join connections" obj=join id=6475286bc990 l=127.0.0.1:8073 r=103.20.198.154:23413
+INFO:pyngrok.process.ngrok:t=2023-10-23T13:14:07+0000 lvl=info msg="join connections" obj=join id=c7b6137b753a l=127.0.0.1:8073 r=103.20.198.154:23413
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 13:14:07] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 13:14:07] "POST /_dash-update-component HTTP/1.1" 200 -
+ERROR:pyngrok.process.ngrok:t=2023-10-23T14:51:03+0000 lvl=eror msg="session closed, starting reconnect loop" obj=tunnels.session obj=csess id=3793b5235703 err="read EOF from remote peer"
+INFO:pyngrok.process.ngrok:t=2023-10-23T14:51:09+0000 lvl=info msg="client session established" obj=tunnels.session obj=csess id=3793b5235703
+INFO:pyngrok.process.ngrok:t=2023-10-23T14:51:09+0000 lvl=info msg="tunnel session started" obj=tunnels.session
+ERROR:pyngrok.process.ngrok:t=2023-10-23T14:51:12+0000 lvl=eror msg="heartbeat timeout, terminating session" obj=tunnels.session obj=csess id=5c92e7d7633a clientid=c1f7b0c93b6e254f2e396bcd1f2afe1e
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:10:07+0000 lvl=info msg="join connections" obj=join id=f6921b965884 l=127.0.0.1:8073 r=103.20.198.154:19893
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:10:07] "GET / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:10:08+0000 lvl=info msg="join connections" obj=join id=54a33099a3a5 l=127.0.0.1:8073 r=103.20.198.154:19893
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:10:08] "[36mGET /assets/styles.css?m=1698037976.7453413 HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:10:09+0000 lvl=info msg="join connections" obj=join id=ead000431fe6 l=127.0.0.1:8073 r=103.20.198.154:19893
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:10:09] "GET /_favicon.ico?v=2.13.0 HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:10:09+0000 lvl=info msg="join connections" obj=join id=30590bf789d7 l=127.0.0.1:8073 r=103.20.198.154:19893
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:10:09] "GET /_dash-layout HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:10:09+0000 lvl=info msg="join connections" obj=join id=d2e66ff04f7b l=127.0.0.1:8073 r=103.20.198.154:19893
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:10:09] "GET /_dash-dependencies HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:10:10+0000 lvl=info msg="join connections" obj=join id=84f95ffb5c79 l=127.0.0.1:8073 r=103.20.198.154:19893
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:10:10] "GET /_favicon.ico?v=2.13.0 HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:10:10+0000 lvl=info msg="join connections" obj=join id=286f74985c76 l=127.0.0.1:8073 r=103.20.198.154:19893
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:10:10] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:10:10+0000 lvl=info msg="join connections" obj=join id=85e56bf16827 l=127.0.0.1:8073 r=103.20.198.154:19893
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:10:10] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:10:10+0000 lvl=info msg="join connections" obj=join id=6a291b774188 l=127.0.0.1:8073 r=103.20.198.154:19893
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:10:10] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:10:11+0000 lvl=info msg="join connections" obj=join id=0c41d448e2d3 l=127.0.0.1:8073 r=103.20.198.154:19893
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:10:11] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:10:12+0000 lvl=info msg="join connections" obj=join id=3a1b3fb37984 l=127.0.0.1:8073 r=103.20.198.154:19893
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:10:12] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:10:13+0000 lvl=info msg="join connections" obj=join id=fe189498113e l=127.0.0.1:8073 r=103.20.198.154:19893
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:10:13+0000 lvl=info msg="join connections" obj=join id=7f18882e9154 l=127.0.0.1:8073 r=103.20.198.154:19893
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:10:13] "[36mGET /_dash-component-suites/dash/dash_table/async-highlight.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:10:13] "[36mGET /_dash-component-suites/dash/dash_table/async-table.js HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:36:47+0000 lvl=info msg="join connections" obj=join id=4d10bb06d3b6 l=127.0.0.1:8073 r=103.20.198.154:26039
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:36:47] "GET / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:36:48+0000 lvl=info msg="join connections" obj=join id=97d0f44aef79 l=127.0.0.1:8073 r=103.20.198.154:26039
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:36:48] "[36mGET /assets/styles.css?m=1698037976.7453413 HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:36:49+0000 lvl=info msg="join connections" obj=join id=20345bc905d6 l=127.0.0.1:8073 r=103.20.198.154:26039
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:36:49+0000 lvl=info msg="join connections" obj=join id=5482455eddf3 l=127.0.0.1:8073 r=103.20.198.154:26039
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:36:49] "GET /_dash-dependencies HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:36:49] "GET /_favicon.ico?v=2.13.0 HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:36:49+0000 lvl=info msg="join connections" obj=join id=e2581865ae87 l=127.0.0.1:8073 r=103.20.198.154:26039
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:36:49] "GET /_dash-layout HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:36:50] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:36:50+0000 lvl=info msg="join connections" obj=join id=7875b4661b49 l=127.0.0.1:8073 r=103.20.198.154:26039
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:36:50+0000 lvl=info msg="join connections" obj=join id=12997c39d8ab l=127.0.0.1:8073 r=103.20.198.154:26039
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:36:50] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:36:50+0000 lvl=info msg="join connections" obj=join id=8a4448af23a6 l=127.0.0.1:8073 r=103.20.198.154:26039
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:36:50] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:36:50+0000 lvl=info msg="join connections" obj=join id=42ed81bb412e l=127.0.0.1:8073 r=103.20.198.154:26039
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:36:50] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:37:11+0000 lvl=info msg="join connections" obj=join id=279df24e850b l=127.0.0.1:8073 r=103.20.198.154:26039
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:37:11] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:37:12+0000 lvl=info msg="join connections" obj=join id=d7d6dc20ab51 l=127.0.0.1:8073 r=103.20.198.154:26039
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:37:12] "[36mGET /_dash-component-suites/dash/dash_table/async-table.js HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:37:12+0000 lvl=info msg="join connections" obj=join id=9822740d28c1 l=127.0.0.1:8073 r=103.20.198.154:26039
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:37:12] "[36mGET /_dash-component-suites/dash/dash_table/async-highlight.js HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:38:30+0000 lvl=info msg="join connections" obj=join id=0d866077d2da l=127.0.0.1:8073 r=103.20.198.154:26039
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:38:30] "GET / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:38:31+0000 lvl=info msg="join connections" obj=join id=a81248c48c5b l=127.0.0.1:8073 r=103.20.198.154:26039
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:38:31] "[36mGET /assets/styles.css?m=1698037976.7453413 HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:38:32+0000 lvl=info msg="join connections" obj=join id=d22ef4762b2b l=127.0.0.1:8073 r=103.20.198.154:26039
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:38:32] "GET /_dash-layout HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:38:32+0000 lvl=info msg="join connections" obj=join id=b7468714b090 l=127.0.0.1:8073 r=103.20.198.154:26039
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:38:32] "GET /_dash-dependencies HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:38:32+0000 lvl=info msg="join connections" obj=join id=43438a66cf42 l=127.0.0.1:8073 r=103.20.198.154:26039
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:38:32] "GET /_favicon.ico?v=2.13.0 HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:38:33+0000 lvl=info msg="join connections" obj=join id=c19ce2fb31b0 l=127.0.0.1:8073 r=103.20.198.154:26039
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:38:33] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:38:33+0000 lvl=info msg="join connections" obj=join id=dbe24d0584d0 l=127.0.0.1:8073 r=103.20.198.154:26039
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:38:33] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:38:33+0000 lvl=info msg="join connections" obj=join id=ef17dbecf371 l=127.0.0.1:8073 r=103.20.198.154:26039
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:38:33] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:38:33+0000 lvl=info msg="join connections" obj=join id=be1537cd989a l=127.0.0.1:8073 r=103.20.198.154:26039
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:38:33] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:38:36+0000 lvl=info msg="join connections" obj=join id=09e1a52e7c55 l=127.0.0.1:8073 r=103.20.198.154:26039
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:38:36] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:38:37+0000 lvl=info msg="join connections" obj=join id=3f737cfef8b3 l=127.0.0.1:8073 r=103.20.198.154:26039
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:38:37] "[36mGET /_dash-component-suites/dash/dash_table/async-highlight.js HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:38:37+0000 lvl=info msg="join connections" obj=join id=133d950d918b l=127.0.0.1:8073 r=103.20.198.154:26039
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:38:37] "[36mGET /_dash-component-suites/dash/dash_table/async-table.js HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:06+0000 lvl=info msg="join connections" obj=join id=6e8661c68b1a l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:06] "GET / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:07+0000 lvl=info msg="join connections" obj=join id=f28abb017037 l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:07+0000 lvl=info msg="join connections" obj=join id=20138854652b l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:07] "GET /_dash-component-suites/dash/deps/prop-types@15.v2_13_0m1698038291.8.1.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:07] "GET /_dash-component-suites/dash/dash-renderer/build/dash_renderer.v2_13_0m1698038290.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:07+0000 lvl=info msg="join connections" obj=join id=bcdfa0b55973 l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:07+0000 lvl=info msg="join connections" obj=join id=d9adb9f7a28d l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:07] "GET /_dash-component-suites/dash/deps/react-dom@16.v2_13_0m1698038291.14.0.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:07+0000 lvl=info msg="join connections" obj=join id=a535e2bbbeb4 l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:07+0000 lvl=info msg="join connections" obj=join id=f865f23e94d2 l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:07] "GET /_dash-component-suites/dash/dcc/dash_core_components.v2_12_0m1698038290.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:07] "GET /_dash-component-suites/dash_dangerously_set_inner_html/bundle.v0_0_2m1698038295.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:07] "GET /_dash-component-suites/dash/deps/react@16.v2_13_0m1698038291.14.0.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:07+0000 lvl=info msg="join connections" obj=join id=7239e713e514 l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:07] "GET /_dash-component-suites/dash/dcc/dash_core_components-shared.v2_12_0m1698038290.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:07+0000 lvl=info msg="join connections" obj=join id=2f6d0c6ad39d l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:07] "GET /assets/styles.css?m=1698037976.7453413 HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:07+0000 lvl=info msg="join connections" obj=join id=0e7b0913e8c7 l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:07] "GET /_dash-component-suites/dash/deps/polyfill@7.v2_13_0m1698038291.12.1.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:07] "GET /_dash-component-suites/dash/html/dash_html_components.v2_0_14m1698038291.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:07] "GET /_dash-component-suites/dash/dash_table/bundle.v5_2_7m1698038290.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:07+0000 lvl=info msg="join connections" obj=join id=d09b5480a7cc l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:07] "GET /_dash-component-suites/dash_bootstrap_components/_components/dash_bootstrap_components.v1_5_0m1698038292.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:07+0000 lvl=info msg="join connections" obj=join id=5d69302041f9 l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:07+0000 lvl=info msg="join connections" obj=join id=a2627a4332de l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:09+0000 lvl=info msg="join connections" obj=join id=b103e52f0c3a l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:09+0000 lvl=info msg="join connections" obj=join id=02a383b36665 l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:09] "GET /_dash-layout HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:09] "GET /_dash-dependencies HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:10] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:10+0000 lvl=info msg="join connections" obj=join id=4c9da96c6995 l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:10+0000 lvl=info msg="join connections" obj=join id=e98cca1dab39 l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:10] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:10+0000 lvl=info msg="join connections" obj=join id=8eac95204506 l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:10] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:10+0000 lvl=info msg="join connections" obj=join id=0ee104630db6 l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:10] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:12+0000 lvl=info msg="join connections" obj=join id=b91a4bbc52bd l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:12] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:12+0000 lvl=info msg="join connections" obj=join id=443a710a67f4 l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:12+0000 lvl=info msg="join connections" obj=join id=50472778a371 l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:12] "GET /_dash-component-suites/dash/dash_table/async-highlight.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:12] "GET /_dash-component-suites/dash/dash_table/async-table.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:16+0000 lvl=info msg="join connections" obj=join id=38b447111222 l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:16] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:17+0000 lvl=info msg="join connections" obj=join id=860920a9bff3 l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:17] "GET /_dash-component-suites/dash/dcc/async-dropdown.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:17+0000 lvl=info msg="join connections" obj=join id=50fb7e6b3f60 l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:17+0000 lvl=info msg="join connections" obj=join id=03134bdf5e7c l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:17] "GET /_dash-component-suites/dash/dcc/async-graph.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:17] "GET /_dash-component-suites/plotly/package_data/plotly.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:17+0000 lvl=info msg="join connections" obj=join id=0e43e34a42fe l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:17+0000 lvl=info msg="join connections" obj=join id=3a5b15dc0355 l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:17+0000 lvl=info msg="join connections" obj=join id=0966ab24d246 l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:17] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:17] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:17] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:19+0000 lvl=info msg="join connections" obj=join id=58d6032e8731 l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:19] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:45+0000 lvl=info msg="join connections" obj=join id=b59cfdf68be4 l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:45] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:46+0000 lvl=info msg="join connections" obj=join id=b76aadc9cfef l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:46] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:47+0000 lvl=info msg="join connections" obj=join id=087163cc5871 l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:47] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:50+0000 lvl=info msg="join connections" obj=join id=2cc6eb971aa5 l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:50] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T15:39:51+0000 lvl=info msg="join connections" obj=join id=5fd0892a08e8 l=127.0.0.1:8073 r=[2601:640:8001:5a00:d91f:725e:60f6:592a]:63308
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 15:39:51] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+ERROR:pyngrok.process.ngrok:t=2023-10-23T16:22:24+0000 lvl=eror msg="heartbeat timeout, terminating session" obj=tunnels.session obj=csess id=bbc812263a38 clientid=c1f7b0c93b6e254f2e396bcd1f2afe1e
+ERROR:pyngrok.process.ngrok:t=2023-10-23T16:22:24+0000 lvl=eror msg="session closed, starting reconnect loop" obj=tunnels.session obj=csess id=3793b5235703 err="session closed"
+INFO:pyngrok.process.ngrok:t=2023-10-23T16:22:28+0000 lvl=info msg="client session established" obj=tunnels.session obj=csess id=3793b5235703
+INFO:pyngrok.process.ngrok:t=2023-10-23T16:22:28+0000 lvl=info msg="tunnel session started" obj=tunnels.session
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:17:28+0000 lvl=info msg="join connections" obj=join id=1d85114c2fe0 l=127.0.0.1:8073 r=18.211.26.100:33146
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:17:28] "HEAD / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:05+0000 lvl=info msg="join connections" obj=join id=3813affaedfe l=127.0.0.1:8073 r=98.42.255.230:60761
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:05] "GET / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:05+0000 lvl=info msg="join connections" obj=join id=18cc47024d7c l=127.0.0.1:8073 r=98.42.255.230:60761
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:05] "GET / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:05+0000 lvl=info msg="join connections" obj=join id=73940ed77110 l=127.0.0.1:8073 r=98.42.255.230:60760
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:05] "GET /assets/styles.css?m=1698037976.7453413 HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:06+0000 lvl=info msg="join connections" obj=join id=d4e35ffb076d l=127.0.0.1:8073 r=98.42.255.230:60760
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:06+0000 lvl=info msg="join connections" obj=join id=52033ecf7d61 l=127.0.0.1:8073 r=98.42.255.230:60760
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:06+0000 lvl=info msg="join connections" obj=join id=0555380ea38a l=127.0.0.1:8073 r=98.42.255.230:60760
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:06+0000 lvl=info msg="join connections" obj=join id=ff0882e40cc7 l=127.0.0.1:8073 r=98.42.255.230:60760
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:06+0000 lvl=info msg="join connections" obj=join id=0386f56f1df8 l=127.0.0.1:8073 r=98.42.255.230:60760
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:06] "GET /_dash-component-suites/dash/deps/polyfill@7.v2_13_0m1698038291.12.1.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:06] "GET /_dash-component-suites/dash/deps/prop-types@15.v2_13_0m1698038291.8.1.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:06+0000 lvl=info msg="join connections" obj=join id=41eaf4a93e71 l=127.0.0.1:8073 r=98.42.255.230:60760
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:06+0000 lvl=info msg="join connections" obj=join id=39c85fcfc087 l=127.0.0.1:8073 r=98.42.255.230:60760
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:06] "GET /_dash-component-suites/dash/dcc/dash_core_components-shared.v2_12_0m1698038290.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:06] "GET /_dash-component-suites/dash/html/dash_html_components.v2_0_14m1698038291.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:06] "GET /_dash-component-suites/dash/deps/react@16.v2_13_0m1698038291.14.0.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:06] "GET /_dash-component-suites/dash/dcc/dash_core_components.v2_12_0m1698038290.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:06+0000 lvl=info msg="join connections" obj=join id=87d012ba6d1f l=127.0.0.1:8073 r=98.42.255.230:60760
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:06+0000 lvl=info msg="join connections" obj=join id=f79f1f2d0522 l=127.0.0.1:8073 r=98.42.255.230:60760
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:06] "GET /_dash-component-suites/dash_dangerously_set_inner_html/bundle.v0_0_2m1698038295.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:06] "GET /_dash-component-suites/dash/dash_table/bundle.v5_2_7m1698038290.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:06] "GET /_dash-component-suites/dash_bootstrap_components/_components/dash_bootstrap_components.v1_5_0m1698038292.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:06+0000 lvl=info msg="join connections" obj=join id=965d0220a00b l=127.0.0.1:8073 r=98.42.255.230:60760
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:06+0000 lvl=info msg="join connections" obj=join id=99e9860847b8 l=127.0.0.1:8073 r=98.42.255.230:60760
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:06] "GET /_dash-component-suites/dash/dash-renderer/build/dash_renderer.v2_13_0m1698038290.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:06] "GET /_dash-component-suites/dash/deps/react-dom@16.v2_13_0m1698038291.14.0.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:08+0000 lvl=info msg="join connections" obj=join id=1b0b3ad7e0cb l=127.0.0.1:8073 r=98.42.255.230:60760
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:08] "GET /_dash-layout HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:08+0000 lvl=info msg="join connections" obj=join id=567797c88a36 l=127.0.0.1:8073 r=98.42.255.230:60760
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:08] "GET /_dash-dependencies HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:08+0000 lvl=info msg="join connections" obj=join id=588e490c8d66 l=127.0.0.1:8073 r=98.42.255.230:60760
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:08] "GET /_favicon.ico?v=2.13.0 HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:08+0000 lvl=info msg="join connections" obj=join id=bd77dad38b7c l=127.0.0.1:8073 r=98.42.255.230:60760
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:08] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:08+0000 lvl=info msg="join connections" obj=join id=b91693277b16 l=127.0.0.1:8073 r=98.42.255.230:60760
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:08] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:08+0000 lvl=info msg="join connections" obj=join id=9a5f5c4cbb30 l=127.0.0.1:8073 r=98.42.255.230:60760
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:08] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:09+0000 lvl=info msg="join connections" obj=join id=03b52c18f428 l=127.0.0.1:8073 r=98.42.255.230:60760
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:09] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:12+0000 lvl=info msg="join connections" obj=join id=797b7fe7e5a3 l=127.0.0.1:8073 r=98.42.255.230:60777
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:12] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:13+0000 lvl=info msg="join connections" obj=join id=6206d407cc94 l=127.0.0.1:8073 r=98.42.255.230:60777
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:13] "GET /_dash-component-suites/dash/dcc/async-graph.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:13] "GET /_dash-component-suites/plotly/package_data/plotly.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:13+0000 lvl=info msg="join connections" obj=join id=9bc8e1f67104 l=127.0.0.1:8073 r=98.42.255.230:60777
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:13+0000 lvl=info msg="join connections" obj=join id=0e5d2a856dd4 l=127.0.0.1:8073 r=98.42.255.230:60777
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:13+0000 lvl=info msg="join connections" obj=join id=f0930773f3f6 l=127.0.0.1:8073 r=98.42.255.230:60777
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:13+0000 lvl=info msg="join connections" obj=join id=961200ec6b69 l=127.0.0.1:8073 r=98.42.255.230:60777
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:13+0000 lvl=info msg="join connections" obj=join id=6da39ed93f42 l=127.0.0.1:8073 r=98.42.255.230:60777
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:13] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:13] "GET /_dash-component-suites/dash/dcc/async-dropdown.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:13] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:13] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:13] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:13+0000 lvl=info msg="join connections" obj=join id=25fbdcc4d36a l=127.0.0.1:8073 r=98.42.255.230:60777
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:15+0000 lvl=info msg="join connections" obj=join id=5ed07cf12cfb l=127.0.0.1:8073 r=98.42.255.230:60777
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:15] "GET /_dash-component-suites/dash/dash_table/async-table.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:15+0000 lvl=info msg="join connections" obj=join id=f2b1941bb5a9 l=127.0.0.1:8073 r=98.42.255.230:60777
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:15] "GET /_dash-component-suites/dash/dash_table/async-highlight.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:15+0000 lvl=info msg="join connections" obj=join id=f67ef6bd0a2d l=127.0.0.1:8073 r=98.42.255.230:60777
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:15] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:21+0000 lvl=info msg="join connections" obj=join id=de09a9aa012a l=127.0.0.1:8073 r=98.42.255.230:60790
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:21] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:26+0000 lvl=info msg="join connections" obj=join id=fb5128d6c9cb l=127.0.0.1:8073 r=98.42.255.230:60790
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:26] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:26+0000 lvl=info msg="join connections" obj=join id=e0ccd5de4e56 l=127.0.0.1:8073 r=98.42.255.230:60790
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:26] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:31+0000 lvl=info msg="join connections" obj=join id=cc8b7052d50c l=127.0.0.1:8073 r=98.42.255.230:60796
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:31] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:32+0000 lvl=info msg="join connections" obj=join id=1f1374207f50 l=127.0.0.1:8073 r=98.42.255.230:60796
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:32] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:33+0000 lvl=info msg="join connections" obj=join id=d3a49e513a4a l=127.0.0.1:8073 r=98.42.255.230:60796
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:33] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:33+0000 lvl=info msg="join connections" obj=join id=3a5182b15e32 l=127.0.0.1:8073 r=98.42.255.230:60796
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:33+0000 lvl=info msg="join connections" obj=join id=3e21fd708947 l=127.0.0.1:8073 r=98.42.255.230:60796
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:33] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:33+0000 lvl=info msg="join connections" obj=join id=351fa8600a11 l=127.0.0.1:8073 r=98.42.255.230:60796
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:33] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:33] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:35+0000 lvl=info msg="join connections" obj=join id=a0ceb3f5b92d l=127.0.0.1:8073 r=98.42.255.230:60796
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:35] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:40+0000 lvl=info msg="join connections" obj=join id=ebd211137ff5 l=127.0.0.1:8073 r=98.42.255.230:60801
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:40] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:40+0000 lvl=info msg="join connections" obj=join id=31804a93120d l=127.0.0.1:8073 r=98.42.255.230:60801
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:40] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:40+0000 lvl=info msg="join connections" obj=join id=13e1a04c44b0 l=127.0.0.1:8073 r=98.42.255.230:60801
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:40+0000 lvl=info msg="join connections" obj=join id=c6928439d04d l=127.0.0.1:8073 r=98.42.255.230:60801
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:40] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:40] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:41+0000 lvl=info msg="join connections" obj=join id=e3cbabaa439c l=127.0.0.1:8073 r=98.42.255.230:60801
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:41] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:42+0000 lvl=info msg="join connections" obj=join id=2fe95658fd86 l=127.0.0.1:8073 r=98.42.255.230:60801
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:42] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:43+0000 lvl=info msg="join connections" obj=join id=68762a65079c l=127.0.0.1:8073 r=98.42.255.230:60801
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:43] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:44+0000 lvl=info msg="join connections" obj=join id=59a7c362c9b0 l=127.0.0.1:8073 r=98.42.255.230:60801
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:44] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:44+0000 lvl=info msg="join connections" obj=join id=fdb5bce58956 l=127.0.0.1:8073 r=98.42.255.230:60801
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:44] "GET /_dash-component-suites/dash/dcc/async-slider.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:44+0000 lvl=info msg="join connections" obj=join id=b655ef5cc630 l=127.0.0.1:8073 r=98.42.255.230:60801
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:44] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:45+0000 lvl=info msg="join connections" obj=join id=bccc97dbb86e l=127.0.0.1:8073 r=98.42.255.230:60801
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:45] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:18:46+0000 lvl=info msg="join connections" obj=join id=943e9cb5d0d4 l=127.0.0.1:8073 r=98.42.255.230:60801
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:18:46] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:26:46+0000 lvl=info msg="join connections" obj=join id=2e3492851c53 l=127.0.0.1:8073 r=52.4.12.49:57472
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:26:46] "HEAD / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-23T17:30:37+0000 lvl=info msg="join connections" obj=join id=055ca1a1569d l=127.0.0.1:8073 r=18.211.51.248:36030
+INFO:werkzeug:127.0.0.1 - - [23/Oct/2023 17:30:37] "HEAD / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T00:32:18+0000 lvl=info msg="join connections" obj=join id=1c42a375ecd0 l=127.0.0.1:8073 r=34.197.56.57:58844
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 00:32:18] "HEAD / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:52+0000 lvl=info msg="join connections" obj=join id=3a7624e34ee4 l=127.0.0.1:8073 r=152.32.251.105:36744
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:52] "GET / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:52+0000 lvl=info msg="join connections" obj=join id=3e41087ccb6a l=127.0.0.1:8073 r=152.32.251.105:37912
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:52] "GET /api HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:53+0000 lvl=info msg="join connections" obj=join id=4a94d72a41dd l=127.0.0.1:8073 r=152.32.251.105:36744
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:53] "GET /api/im/v2/app/config HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:53+0000 lvl=info msg="join connections" obj=join id=8e2b4363e20e l=127.0.0.1:8073 r=152.32.251.105:37926
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:53] "GET /api/linkPF HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:53+0000 lvl=info msg="join connections" obj=join id=871924cea26a l=127.0.0.1:8073 r=152.32.251.105:37926
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:53] "[31m[1mPOST /api/notice HTTP/1.1[0m" 405 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:53+0000 lvl=info msg="join connections" obj=join id=48ac8ccacfd5 l=127.0.0.1:8073 r=152.32.251.105:59966
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:53] "[31m[1mPOST /wap/forward HTTP/1.1[0m" 405 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:54+0000 lvl=info msg="join connections" obj=join id=a188fde809a8 l=127.0.0.1:8073 r=152.32.251.105:36746
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:54] "[31m[1mPOST /kkrp/site/info HTTP/1.1[0m" 405 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:54+0000 lvl=info msg="join connections" obj=join id=cc211560777f l=127.0.0.1:8073 r=152.32.251.105:36744
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:54] "[31m[1mPOST /biz/server/config HTTP/1.1[0m" 405 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:54] "[31m[1mPOST /api/link/platform HTTP/1.1[0m" 405 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:54+0000 lvl=info msg="join connections" obj=join id=8fc1d9b8f071 l=127.0.0.1:8073 r=152.32.251.105:59966
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:55+0000 lvl=info msg="join connections" obj=join id=30b919c7834a l=127.0.0.1:8073 r=152.32.251.105:36746
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:55] "[31m[1mPOST /km.asmx/getPlatParam HTTP/1.1[0m" 405 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:55+0000 lvl=info msg="join connections" obj=join id=d1f055810a95 l=127.0.0.1:8073 r=152.32.251.105:59966
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:55] "GET /api/user/ismustmobile HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:55+0000 lvl=info msg="join connections" obj=join id=91718f17d48d l=127.0.0.1:8073 r=152.32.251.105:37912
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:55] "[31m[1mPOST /api/user/ismustmobile HTTP/1.1[0m" 405 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:55] "[31m[1mPOST /api/user/ismustmobile HTTP/1.1[0m" 405 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:55+0000 lvl=info msg="join connections" obj=join id=e623ead6150c l=127.0.0.1:8073 r=152.32.251.105:37926
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:56+0000 lvl=info msg="join connections" obj=join id=ebc797595a65 l=127.0.0.1:8073 r=152.32.251.105:36744
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:56] "[31m[1mPOST /api/config/getwebsitename HTTP/1.1[0m" 405 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:56+0000 lvl=info msg="join connections" obj=join id=35546af15f06 l=127.0.0.1:8073 r=152.32.251.105:37926
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:56] "[31m[1mPOST /melody/api/v1/pageconfig/list HTTP/1.1[0m" 405 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:56] "[31m[1mPOST /api/GetConfigByKeys?keys=of_we HTTP/1.1[0m" 405 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:56+0000 lvl=info msg="join connections" obj=join id=b9b54d8c6e03 l=127.0.0.1:8073 r=152.32.251.105:37912
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:56+0000 lvl=info msg="join connections" obj=join id=46a38494b4eb l=127.0.0.1:8073 r=152.32.251.105:36760
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:56] "GET /api/exclude/siteConfig/webSiteConfig HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:57+0000 lvl=info msg="join connections" obj=join id=e7b6099c6c4e l=127.0.0.1:8073 r=152.32.251.105:59966
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:57] "[31m[1mPOST /api/system/systemConfigs/getCustomerServiceLink HTTP/1.1[0m" 405 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:57+0000 lvl=info msg="join connections" obj=join id=2de5c714a56a l=127.0.0.1:8073 r=152.32.251.105:37926
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:57] "[31m[1mPOST /site/api/v1/site/vipExclusiveDomain/getGuestDomain HTTP/1.1[0m" 405 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:58+0000 lvl=info msg="join connections" obj=join id=2c0a241ede73 l=127.0.0.1:8073 r=152.32.251.105:59966
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:58] "GET / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:58+0000 lvl=info msg="join connections" obj=join id=704b76376b09 l=127.0.0.1:8073 r=152.32.251.105:37912
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:58] "GET /api HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:58+0000 lvl=info msg="join connections" obj=join id=903eb86b3968 l=127.0.0.1:8073 r=152.32.251.105:36760
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:58] "GET /api/linkPF HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:58+0000 lvl=info msg="join connections" obj=join id=59fba4684bde l=127.0.0.1:8073 r=152.32.251.105:36746
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:58] "[31m[1mPOST /api/notice HTTP/1.1[0m" 405 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:58+0000 lvl=info msg="join connections" obj=join id=37c1f2c9f2ce l=127.0.0.1:8073 r=152.32.251.105:36744
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:58] "[31m[1mPOST /wap/forward HTTP/1.1[0m" 405 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:58+0000 lvl=info msg="join connections" obj=join id=a5b407eb5cce l=127.0.0.1:8073 r=152.32.251.105:59966
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:58] "GET /api/im/v2/app/config HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:59+0000 lvl=info msg="join connections" obj=join id=8641ca1a3c5a l=127.0.0.1:8073 r=152.32.251.105:37926
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:59] "[31m[1mPOST /kkrp/site/info HTTP/1.1[0m" 405 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:59] "[31m[1mPOST /api/link/platform HTTP/1.1[0m" 405 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:59+0000 lvl=info msg="join connections" obj=join id=580117d9b35f l=127.0.0.1:8073 r=152.32.251.105:36760
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:59] "[31m[1mPOST /biz/server/config HTTP/1.1[0m" 405 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:59+0000 lvl=info msg="join connections" obj=join id=c1a32c8cfdbe l=127.0.0.1:8073 r=152.32.251.105:37926
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:59] "[31m[1mPOST /km.asmx/getPlatParam HTTP/1.1[0m" 405 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:59+0000 lvl=info msg="join connections" obj=join id=69156be7176a l=127.0.0.1:8073 r=152.32.251.105:37912
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:59+0000 lvl=info msg="join connections" obj=join id=3293f6aa3c67 l=127.0.0.1:8073 r=152.32.251.105:37898
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:59] "[31m[1mPOST /api/user/ismustmobile HTTP/1.1[0m" 405 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:59+0000 lvl=info msg="join connections" obj=join id=066355809bc6 l=127.0.0.1:8073 r=152.32.251.105:36744
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:59] "GET /api/user/ismustmobile HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:19:59+0000 lvl=info msg="join connections" obj=join id=6c2684d14356 l=127.0.0.1:8073 r=152.32.251.105:36746
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:19:59] "[31m[1mPOST /api/user/ismustmobile HTTP/1.1[0m" 405 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:20:00] "[31m[1mPOST /api/config/getwebsitename HTTP/1.1[0m" 405 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:20:00+0000 lvl=info msg="join connections" obj=join id=7d5cd49fc0d0 l=127.0.0.1:8073 r=152.32.251.105:36760
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:20:00+0000 lvl=info msg="join connections" obj=join id=775893ccd230 l=127.0.0.1:8073 r=152.32.251.105:37926
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:20:00] "[31m[1mPOST /melody/api/v1/pageconfig/list HTTP/1.1[0m" 405 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:20:00+0000 lvl=info msg="join connections" obj=join id=42a050df67d9 l=127.0.0.1:8073 r=152.32.251.105:36746
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:20:00] "[31m[1mPOST /api/GetConfigByKeys?keys=of_we HTTP/1.1[0m" 405 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:20:00+0000 lvl=info msg="join connections" obj=join id=13c17b691d77 l=127.0.0.1:8073 r=152.32.251.105:37912
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:20:00] "GET /api/exclude/siteConfig/webSiteConfig HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:20:00+0000 lvl=info msg="join connections" obj=join id=a36e4a2a561b l=127.0.0.1:8073 r=152.32.251.105:37898
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:20:00] "[31m[1mPOST /api/system/systemConfigs/getCustomerServiceLink HTTP/1.1[0m" 405 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:20:01] "[31m[1mPOST /site/api/v1/site/vipExclusiveDomain/getGuestDomain HTTP/1.1[0m" 405 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:20:01+0000 lvl=info msg="join connections" obj=join id=4cc54abce839 l=127.0.0.1:8073 r=152.32.251.105:36744
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:20:54+0000 lvl=info msg="join connections" obj=join id=e4e1a44fe9e8 l=127.0.0.1:8073 r=3.232.118.158:51648
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:20:54] "HEAD / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:23:52+0000 lvl=info msg="join connections" obj=join id=55b7ff60dd1c l=127.0.0.1:8073 r=67.202.24.159:61144
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:23:52] "HEAD / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:23:53+0000 lvl=info msg="join connections" obj=join id=2a5656d93821 l=127.0.0.1:8073 r=104.182.239.40:49751
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:23:53] "GET / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:23:54+0000 lvl=info msg="join connections" obj=join id=64a8aa1c72b7 l=127.0.0.1:8073 r=104.182.239.40:49751
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:23:54+0000 lvl=info msg="join connections" obj=join id=08c265dd844d l=127.0.0.1:8073 r=104.182.239.40:49751
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:23:54] "GET /_dash-component-suites/dash/dash-renderer/build/dash_renderer.v2_13_0m1698038290.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:23:54+0000 lvl=info msg="join connections" obj=join id=d06213e8d422 l=127.0.0.1:8073 r=104.182.239.40:49751
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:23:54+0000 lvl=info msg="join connections" obj=join id=50f36c2e4457 l=127.0.0.1:8073 r=104.182.239.40:49751
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:23:54] "GET /_dash-component-suites/dash/dcc/dash_core_components.v2_12_0m1698038290.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:23:54+0000 lvl=info msg="join connections" obj=join id=2fb906e82b71 l=127.0.0.1:8073 r=104.182.239.40:49751
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:23:54+0000 lvl=info msg="join connections" obj=join id=ca97da494f96 l=127.0.0.1:8073 r=104.182.239.40:49751
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:23:54] "GET /_dash-component-suites/dash/deps/react-dom@16.v2_13_0m1698038291.14.0.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:23:54] "GET /_dash-component-suites/dash_bootstrap_components/_components/dash_bootstrap_components.v1_5_0m1698038292.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:23:54] "GET /_dash-component-suites/dash/dash_table/bundle.v5_2_7m1698038290.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:23:54] "[36mGET /assets/styles.css?m=1698037976.7453413 HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:23:54+0000 lvl=info msg="join connections" obj=join id=3bddac40a60b l=127.0.0.1:8073 r=104.182.239.40:49751
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:23:54+0000 lvl=info msg="join connections" obj=join id=ca5cbd8a9f19 l=127.0.0.1:8073 r=104.182.239.40:49751
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:23:54] "GET /_dash-component-suites/dash/html/dash_html_components.v2_0_14m1698038291.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:23:54] "GET /_dash-component-suites/dash/deps/polyfill@7.v2_13_0m1698038291.12.1.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:23:56+0000 lvl=info msg="join connections" obj=join id=8407da42deb7 l=127.0.0.1:8073 r=104.182.239.40:49751
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:23:56+0000 lvl=info msg="join connections" obj=join id=21fb5bbd6939 l=127.0.0.1:8073 r=104.182.239.40:49751
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:23:56] "GET /_dash-dependencies HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:23:56] "GET /_dash-layout HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:23:56+0000 lvl=info msg="join connections" obj=join id=35519d82c26e l=127.0.0.1:8073 r=104.182.239.40:49751
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:23:56+0000 lvl=info msg="join connections" obj=join id=d4e968df096f l=127.0.0.1:8073 r=104.182.239.40:49751
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:23:56] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:23:56] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:23:56] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:23:56+0000 lvl=info msg="join connections" obj=join id=0a0461463f4d l=127.0.0.1:8073 r=104.182.239.40:49751
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:23:57] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:23:57+0000 lvl=info msg="join connections" obj=join id=e633638de35d l=127.0.0.1:8073 r=104.182.239.40:49751
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:24:27+0000 lvl=info msg="join connections" obj=join id=0a284c89131a l=127.0.0.1:8073 r=104.182.239.40:49751
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:24:27] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:24:27+0000 lvl=info msg="join connections" obj=join id=12e994ed6354 l=127.0.0.1:8073 r=104.182.239.40:49751
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:24:27] "GET /_dash-component-suites/dash/dash_table/async-highlight.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:24:28+0000 lvl=info msg="join connections" obj=join id=b0f108fb4c2a l=127.0.0.1:8073 r=104.182.239.40:49751
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:24:28] "GET /_dash-component-suites/dash/dash_table/async-table.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:29:22+0000 lvl=info msg="join connections" obj=join id=47709e577dd6 l=127.0.0.1:8073 r=104.182.239.40:49751
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:29:22] "GET /experiment-results HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:29:22+0000 lvl=info msg="join connections" obj=join id=845f86635cde l=127.0.0.1:8073 r=104.182.239.40:49751
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:29:22] "[36mGET /assets/styles.css?m=1698037976.7453413 HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:29:23+0000 lvl=info msg="join connections" obj=join id=0593c30fda05 l=127.0.0.1:8073 r=104.182.239.40:49751
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:29:23] "GET /_dash-dependencies HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:29:23+0000 lvl=info msg="join connections" obj=join id=4b76020a89ba l=127.0.0.1:8073 r=104.182.239.40:49751
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:29:23] "GET /_dash-layout HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:29:23+0000 lvl=info msg="join connections" obj=join id=073c8ac163cf l=127.0.0.1:8073 r=104.182.239.40:49751
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:29:23] "GET /_favicon.ico?v=2.13.0 HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:29:24+0000 lvl=info msg="join connections" obj=join id=3fba9f250d82 l=127.0.0.1:8073 r=104.182.239.40:49751
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:29:24+0000 lvl=info msg="join connections" obj=join id=5fa4968fae12 l=127.0.0.1:8073 r=104.182.239.40:49751
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:29:24] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:29:24] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:29:24+0000 lvl=info msg="join connections" obj=join id=50c1ed5c7893 l=127.0.0.1:8073 r=104.182.239.40:49751
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:29:24] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:29:24+0000 lvl=info msg="join connections" obj=join id=b49fa6b1ccc1 l=127.0.0.1:8073 r=104.182.239.40:49751
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:29:24+0000 lvl=info msg="join connections" obj=join id=1815060c9efa l=127.0.0.1:8073 r=104.182.239.40:49751
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:29:24] "[36mGET /_dash-component-suites/dash/dash_table/async-highlight.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:29:24] "[36mGET /_dash-component-suites/dash/dash_table/async-table.js HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:35:51+0000 lvl=info msg="join connections" obj=join id=406e1619b2eb l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:35:51] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:35:51+0000 lvl=info msg="join connections" obj=join id=7e2d69a5ac8b l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:35:51] "[36mGET /_dash-component-suites/dash/dcc/async-graph.js HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:35:51+0000 lvl=info msg="join connections" obj=join id=5344e38a7647 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:35:51+0000 lvl=info msg="join connections" obj=join id=9f5f733ba5c3 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:35:51] "GET /_dash-component-suites/dash/dcc/async-dropdown.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:35:51] "GET /_dash-component-suites/plotly/package_data/plotly.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:35:51+0000 lvl=info msg="join connections" obj=join id=790f2736e426 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:35:51] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:35:51+0000 lvl=info msg="join connections" obj=join id=55d42f406277 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:35:51+0000 lvl=info msg="join connections" obj=join id=ac71bfa9ca6c l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:35:51] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:35:51] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:36:09+0000 lvl=info msg="join connections" obj=join id=4d04f6cc02c2 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:36:09] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:36:10+0000 lvl=info msg="join connections" obj=join id=36abbda08749 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:36:10] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:36:13+0000 lvl=info msg="join connections" obj=join id=cce2fece491d l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:36:13] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:36:20+0000 lvl=info msg="join connections" obj=join id=4545ba3ffdd1 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:36:20] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:36:25+0000 lvl=info msg="join connections" obj=join id=56377fd6d33c l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:36:25] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:36:26+0000 lvl=info msg="join connections" obj=join id=cedbf6923096 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:36:26] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:36:28+0000 lvl=info msg="join connections" obj=join id=6f4e2e5b1a95 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:36:28] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:36:51+0000 lvl=info msg="join connections" obj=join id=2c91df62e3bb l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:36:51] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:36:56+0000 lvl=info msg="join connections" obj=join id=7ee49a6fe1c2 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:36:56] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:36:56+0000 lvl=info msg="join connections" obj=join id=45ec94a32351 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:36:56] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:37:01+0000 lvl=info msg="join connections" obj=join id=862ade007772 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:37:01] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:37:15+0000 lvl=info msg="join connections" obj=join id=cd03b16cdfb3 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:37:15] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:37:15+0000 lvl=info msg="join connections" obj=join id=81f45e3f1718 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:37:15] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:37:27+0000 lvl=info msg="join connections" obj=join id=a74a14254969 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:37:27] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:38:20+0000 lvl=info msg="join connections" obj=join id=cf60ee7aa389 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:38:20] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:38:20+0000 lvl=info msg="join connections" obj=join id=ece662f0e3e6 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:38:20] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:38:23+0000 lvl=info msg="join connections" obj=join id=886056bdeaa5 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:38:23] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:38:54+0000 lvl=info msg="join connections" obj=join id=e2c6f494dc3a l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:38:54] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:39:01+0000 lvl=info msg="join connections" obj=join id=7073b0bd8829 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:39:01] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:39:02+0000 lvl=info msg="join connections" obj=join id=2a05ce8d02ed l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:39:02] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:39:23+0000 lvl=info msg="join connections" obj=join id=23470c39e7de l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:39:23] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:41:55+0000 lvl=info msg="join connections" obj=join id=bf56f9fcb322 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:41:55] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:41:56+0000 lvl=info msg="join connections" obj=join id=7d9605d662dc l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:41:56] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:42:24+0000 lvl=info msg="join connections" obj=join id=ee0b295a40ef l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:42:24] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:43:12+0000 lvl=info msg="join connections" obj=join id=554149c0e974 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:43:12] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:44:03+0000 lvl=info msg="join connections" obj=join id=4a862b7fd89c l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:44:03] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:44:04+0000 lvl=info msg="join connections" obj=join id=db2823e5281e l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:44:04] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:44:09+0000 lvl=info msg="join connections" obj=join id=5c41712a4f2f l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:44:09] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:44:10+0000 lvl=info msg="join connections" obj=join id=0a5a25d2144b l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:44:10] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:44:10+0000 lvl=info msg="join connections" obj=join id=4dab97e3fbab l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:44:10] "GET /_dash-component-suites/dash/dcc/async-slider.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:44:10+0000 lvl=info msg="join connections" obj=join id=b2aeee609d2d l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:44:10] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:44:11+0000 lvl=info msg="join connections" obj=join id=917521a11160 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:44:11] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:44:12+0000 lvl=info msg="join connections" obj=join id=7983a8c3d673 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:44:12] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:44:27+0000 lvl=info msg="join connections" obj=join id=2348f82fd288 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:44:28] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:44:28+0000 lvl=info msg="join connections" obj=join id=53254e1cd66e l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:44:28] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:44:28+0000 lvl=info msg="join connections" obj=join id=1b2a32085ad2 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:44:28] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:44:34+0000 lvl=info msg="join connections" obj=join id=90d6ae1ed310 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:44:34] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:44:34+0000 lvl=info msg="join connections" obj=join id=b810e1fb1e1f l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:44:34] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:44:58+0000 lvl=info msg="join connections" obj=join id=630749678030 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:44:58] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:45:10+0000 lvl=info msg="join connections" obj=join id=9fbb21100726 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:45:10] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:45:11+0000 lvl=info msg="join connections" obj=join id=c35ba8032022 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:45:11] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:45:19+0000 lvl=info msg="join connections" obj=join id=479044c0d378 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:45:19] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:45:22+0000 lvl=info msg="join connections" obj=join id=90698ea2cefe l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:45:22] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:45:22+0000 lvl=info msg="join connections" obj=join id=04fededa9aa9 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:45:22] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:45:26+0000 lvl=info msg="join connections" obj=join id=6ac114c67e7e l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:45:26] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:45:29+0000 lvl=info msg="join connections" obj=join id=fe6a89845e0c l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:45:29] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:45:30+0000 lvl=info msg="join connections" obj=join id=4342088e7c7f l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:45:30] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:46:54+0000 lvl=info msg="join connections" obj=join id=26c99880e837 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:46:54] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:46:54+0000 lvl=info msg="join connections" obj=join id=7456a8340a3e l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:46:54] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:46:55+0000 lvl=info msg="join connections" obj=join id=f0c6c8dda001 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:46:55] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:47:08+0000 lvl=info msg="join connections" obj=join id=c616eba853d6 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:47:08] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:47:10+0000 lvl=info msg="join connections" obj=join id=2069e27d1888 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:47:10] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:47:16+0000 lvl=info msg="join connections" obj=join id=3a2237db7f5a l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:47:16] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:47:17+0000 lvl=info msg="join connections" obj=join id=bd873cadf8da l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:47:17] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:47:19+0000 lvl=info msg="join connections" obj=join id=8311fff28493 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:47:19] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:47:20+0000 lvl=info msg="join connections" obj=join id=c855a3613ef2 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:47:20] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:47:24+0000 lvl=info msg="join connections" obj=join id=469d15d0bb61 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:47:24] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:47:25+0000 lvl=info msg="join connections" obj=join id=180396af33ee l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:47:25] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:47:26+0000 lvl=info msg="join connections" obj=join id=964aeffbc114 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:47:26] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:47:45+0000 lvl=info msg="join connections" obj=join id=d7f8c0a93ae0 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:47:45] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:48:39+0000 lvl=info msg="join connections" obj=join id=749225145af1 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:48:39] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:48:39+0000 lvl=info msg="join connections" obj=join id=8ba44c01b81d l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:48:39] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:48:39+0000 lvl=info msg="join connections" obj=join id=e93c222c99d8 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:48:39+0000 lvl=info msg="join connections" obj=join id=b56accf8680f l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:48:39] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:48:39] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:48:41+0000 lvl=info msg="join connections" obj=join id=9459a6348f30 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:48:41] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:48:48+0000 lvl=info msg="join connections" obj=join id=72eda792d8f9 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:48:48] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:49:17+0000 lvl=info msg="join connections" obj=join id=1dacee14e470 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:49:17] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:49:27+0000 lvl=info msg="join connections" obj=join id=9ff252f47f4c l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:49:27] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:50:49+0000 lvl=info msg="join connections" obj=join id=2db21a5587bf l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:50:49] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:50:50+0000 lvl=info msg="join connections" obj=join id=abce46354adc l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:50:50] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:55:26+0000 lvl=info msg="join connections" obj=join id=aadd9f1f820c l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:55:26] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:55:26+0000 lvl=info msg="join connections" obj=join id=5571a2ae771c l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:55:26] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:55:27] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:55:27+0000 lvl=info msg="join connections" obj=join id=a7f916800735 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:56:33+0000 lvl=info msg="join connections" obj=join id=3711988cdd4f l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:56:33] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:56:34+0000 lvl=info msg="join connections" obj=join id=059a03729cd9 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:56:34] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:56:36+0000 lvl=info msg="join connections" obj=join id=2d5a54a563e7 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:56:36] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:56:40+0000 lvl=info msg="join connections" obj=join id=2402fcb36aae l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:56:40] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:56:41+0000 lvl=info msg="join connections" obj=join id=09195afff984 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:56:41] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:56:44+0000 lvl=info msg="join connections" obj=join id=aec6d3331708 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:56:44] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:56:45+0000 lvl=info msg="join connections" obj=join id=16e6a8da4136 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:56:45] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:56:49+0000 lvl=info msg="join connections" obj=join id=c876fbfb9310 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:56:49] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:56:50+0000 lvl=info msg="join connections" obj=join id=3ddb6bb23209 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:56:50] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:58:40+0000 lvl=info msg="join connections" obj=join id=aab3cf1fe575 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:58:40] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:58:43+0000 lvl=info msg="join connections" obj=join id=961068693041 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:58:43] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:58:45+0000 lvl=info msg="join connections" obj=join id=cb4bc0a61acc l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:58:45] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:58:46+0000 lvl=info msg="join connections" obj=join id=0dc9fd39fbdd l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:58:46] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:58:49+0000 lvl=info msg="join connections" obj=join id=a22ebfdfe5cb l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:58:49] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:58:55+0000 lvl=info msg="join connections" obj=join id=8d1faebadddb l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:58:55] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:58:56+0000 lvl=info msg="join connections" obj=join id=49ac36f4a8e8 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:58:56] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:59:26+0000 lvl=info msg="join connections" obj=join id=29d68b1d5c57 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:59:26] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:59:27+0000 lvl=info msg="join connections" obj=join id=9d0b06c451e5 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:59:27] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:59:30+0000 lvl=info msg="join connections" obj=join id=6752fa39b575 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:59:30] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:59:31+0000 lvl=info msg="join connections" obj=join id=d20e0d842f19 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:59:31] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:59:55+0000 lvl=info msg="join connections" obj=join id=218a40b725f6 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:59:55] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:59:56+0000 lvl=info msg="join connections" obj=join id=ca1a894409dc l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:59:56] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:59:57+0000 lvl=info msg="join connections" obj=join id=784c4dc29cf6 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:59:57] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:59:57+0000 lvl=info msg="join connections" obj=join id=02f94a5e72b9 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:59:57+0000 lvl=info msg="join connections" obj=join id=4cfbd3a74577 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:59:57] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T02:59:57+0000 lvl=info msg="join connections" obj=join id=74ecf2db6812 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:59:57] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 02:59:57] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T03:00:36+0000 lvl=info msg="join connections" obj=join id=ccc8e624467e l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 03:00:36] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T03:00:36+0000 lvl=info msg="join connections" obj=join id=d68a8a68d3c5 l=127.0.0.1:8073 r=104.182.239.40:49861
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 03:00:36] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T03:09:03+0000 lvl=info msg="join connections" obj=join id=414c83316881 l=127.0.0.1:8073 r=104.182.239.40:50141
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 03:09:03] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T03:09:03+0000 lvl=info msg="join connections" obj=join id=31afb3f24652 l=127.0.0.1:8073 r=104.182.239.40:50141
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 03:09:03] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T03:09:05+0000 lvl=info msg="join connections" obj=join id=79dea53aaedf l=127.0.0.1:8073 r=104.182.239.40:50141
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 03:09:05] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T03:11:10+0000 lvl=info msg="join connections" obj=join id=2866350ff3b9 l=127.0.0.1:8073 r=104.182.239.40:50141
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 03:11:10] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T03:11:11+0000 lvl=info msg="join connections" obj=join id=9643431afa36 l=127.0.0.1:8073 r=104.182.239.40:50141
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 03:11:11] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T03:11:12+0000 lvl=info msg="join connections" obj=join id=c3bbe9d971d2 l=127.0.0.1:8073 r=104.182.239.40:50141
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 03:11:12] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T03:11:15+0000 lvl=info msg="join connections" obj=join id=9378cab1a0c2 l=127.0.0.1:8073 r=104.182.239.40:50141
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 03:11:15] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:14+0000 lvl=info msg="join connections" obj=join id=0c98e9eac6be l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56801
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:14] "GET / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:14+0000 lvl=info msg="join connections" obj=join id=c6ba64da90d0 l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56801
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:14+0000 lvl=info msg="join connections" obj=join id=d39b7c46fcc9 l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56801
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:14] "GET /_dash-component-suites/dash/dcc/dash_core_components-shared.v2_12_0m1698038290.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:14+0000 lvl=info msg="join connections" obj=join id=76ce0848361e l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56801
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:14+0000 lvl=info msg="join connections" obj=join id=931b4fe46fd7 l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56801
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:14] "GET /assets/styles.css?m=1698037976.7453413 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:14] "GET /_dash-component-suites/dash_dangerously_set_inner_html/bundle.v0_0_2m1698038295.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:14+0000 lvl=info msg="join connections" obj=join id=8ea394d4fb68 l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56801
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:14] "GET /_dash-component-suites/dash/deps/prop-types@15.v2_13_0m1698038291.8.1.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:14+0000 lvl=info msg="join connections" obj=join id=7278ceab5c05 l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56801
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:14] "GET /_dash-component-suites/dash/dash_table/bundle.v5_2_7m1698038290.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:14] "GET /_dash-component-suites/dash/deps/react@16.v2_13_0m1698038291.14.0.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:14+0000 lvl=info msg="join connections" obj=join id=a36b5e2a33a6 l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56801
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:14+0000 lvl=info msg="join connections" obj=join id=5c5058a78244 l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56801
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:14+0000 lvl=info msg="join connections" obj=join id=e202cad9d9a2 l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56801
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:14] "GET /_dash-component-suites/dash/deps/polyfill@7.v2_13_0m1698038291.12.1.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:14] "GET /_dash-component-suites/dash/html/dash_html_components.v2_0_14m1698038291.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:15+0000 lvl=info msg="join connections" obj=join id=64c0af56c704 l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56801
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:15+0000 lvl=info msg="join connections" obj=join id=f720bf7cc2b6 l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56801
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:15+0000 lvl=info msg="join connections" obj=join id=451a2e7a9722 l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56801
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:15] "GET /_dash-component-suites/dash/deps/react-dom@16.v2_13_0m1698038291.14.0.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:15] "GET /_dash-component-suites/dash/dcc/dash_core_components.v2_12_0m1698038290.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:15] "GET /_dash-component-suites/dash/dash-renderer/build/dash_renderer.v2_13_0m1698038290.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:15] "GET /_dash-component-suites/dash_bootstrap_components/_components/dash_bootstrap_components.v1_5_0m1698038292.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:16+0000 lvl=info msg="join connections" obj=join id=74cf103b886f l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56801
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:16] "GET /_dash-dependencies HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:16+0000 lvl=info msg="join connections" obj=join id=ca86ba8404eb l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56801
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:16] "GET /_dash-layout HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:16+0000 lvl=info msg="join connections" obj=join id=95b94e88e713 l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56801
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:16] "GET /_favicon.ico?v=2.13.0 HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:17+0000 lvl=info msg="join connections" obj=join id=6fc0653f97c9 l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56801
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:17] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:17] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:17+0000 lvl=info msg="join connections" obj=join id=00719916b2ca l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56801
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:17] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:17+0000 lvl=info msg="join connections" obj=join id=d7d54fe89f9b l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56801
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:17] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:17+0000 lvl=info msg="join connections" obj=join id=e543bfeced7f l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56801
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:25+0000 lvl=info msg="join connections" obj=join id=e0160b3cecb8 l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56811
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:25] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:25+0000 lvl=info msg="join connections" obj=join id=753da2a38dac l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56811
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:25] "GET /_dash-component-suites/dash/dash_table/async-table.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:25+0000 lvl=info msg="join connections" obj=join id=844a00c0f7cc l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56811
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:25] "GET /_dash-component-suites/dash/dash_table/async-highlight.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:26+0000 lvl=info msg="join connections" obj=join id=e785e4705607 l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56811
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:26] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:27+0000 lvl=info msg="join connections" obj=join id=55da8da2be13 l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56811
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:27+0000 lvl=info msg="join connections" obj=join id=98f4f4c5315c l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56811
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:27+0000 lvl=info msg="join connections" obj=join id=683b6a916222 l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56811
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:27] "GET /_dash-component-suites/dash/dcc/async-graph.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:27] "GET /_dash-component-suites/dash/dcc/async-dropdown.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:27+0000 lvl=info msg="join connections" obj=join id=eb08089913ba l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56811
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:27] "GET /_dash-component-suites/plotly/package_data/plotly.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:27+0000 lvl=info msg="join connections" obj=join id=1d2609e17fed l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56811
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:27+0000 lvl=info msg="join connections" obj=join id=4685112b02c8 l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56811
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:27] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:27] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:27] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:29] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:29+0000 lvl=info msg="join connections" obj=join id=dce886486c80 l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56811
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:30+0000 lvl=info msg="join connections" obj=join id=98c6cbc2f66b l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56811
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:30] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:31+0000 lvl=info msg="join connections" obj=join id=e149111c310c l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56811
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:31] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:32+0000 lvl=info msg="join connections" obj=join id=4d0fc3edc259 l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56811
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:32] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:33+0000 lvl=info msg="join connections" obj=join id=5a4275cdd984 l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56811
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:33] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T04:12:36+0000 lvl=info msg="join connections" obj=join id=9ce63023326c l=127.0.0.1:8073 r=[2600:1700:3ec7:1410:8d3e:2aa2:e619:93ee]:56825
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 04:12:36] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:07+0000 lvl=info msg="join connections" obj=join id=d8f74d5e9e9b l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:07] "GET / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:08+0000 lvl=info msg="join connections" obj=join id=205e32a2a81e l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:08+0000 lvl=info msg="join connections" obj=join id=617210499aeb l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:08] "GET /_dash-component-suites/dash/html/dash_html_components.v2_0_14m1698038291.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:08] "GET /_dash-component-suites/dash/deps/react@16.v2_13_0m1698038291.14.0.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:08+0000 lvl=info msg="join connections" obj=join id=9a8f72817670 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:08+0000 lvl=info msg="join connections" obj=join id=49b97bec3085 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:08+0000 lvl=info msg="join connections" obj=join id=b5ff443a883b l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:08+0000 lvl=info msg="join connections" obj=join id=a9987b141481 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:08+0000 lvl=info msg="join connections" obj=join id=8babef3024a1 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:08] "GET /_dash-component-suites/dash/deps/prop-types@15.v2_13_0m1698038291.8.1.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:08] "GET /_dash-component-suites/dash_dangerously_set_inner_html/bundle.v0_0_2m1698038295.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:08] "GET /_dash-component-suites/dash/deps/polyfill@7.v2_13_0m1698038291.12.1.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:08] "GET /_dash-component-suites/dash/dash-renderer/build/dash_renderer.v2_13_0m1698038290.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:08] "GET /_dash-component-suites/dash/dcc/dash_core_components-shared.v2_12_0m1698038290.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:08+0000 lvl=info msg="join connections" obj=join id=477a27f1858f l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:08+0000 lvl=info msg="join connections" obj=join id=f3676a140df0 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:08+0000 lvl=info msg="join connections" obj=join id=55db181afd47 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:08+0000 lvl=info msg="join connections" obj=join id=8c09b661345b l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:08+0000 lvl=info msg="join connections" obj=join id=7f40aae343b1 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:08] "GET /assets/styles.css?m=1698037976.7453413 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:08] "GET /_dash-component-suites/dash/deps/react-dom@16.v2_13_0m1698038291.14.0.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:08] "GET /_dash-component-suites/dash_bootstrap_components/_components/dash_bootstrap_components.v1_5_0m1698038292.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:08] "GET /_dash-component-suites/dash/dash_table/bundle.v5_2_7m1698038290.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:08] "GET /_dash-component-suites/dash/dcc/dash_core_components.v2_12_0m1698038290.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:10+0000 lvl=info msg="join connections" obj=join id=a0d260ffe494 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:10+0000 lvl=info msg="join connections" obj=join id=8ee20759582d l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:10] "GET /_dash-dependencies HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:10] "GET /_dash-layout HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:10+0000 lvl=info msg="join connections" obj=join id=12003266d2aa l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:10] "GET /_favicon.ico?v=2.13.0 HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:11+0000 lvl=info msg="join connections" obj=join id=fcf667a491f4 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:11] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:11+0000 lvl=info msg="join connections" obj=join id=5810d1be067c l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:11] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:11+0000 lvl=info msg="join connections" obj=join id=01b0791a9a42 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:11] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:11+0000 lvl=info msg="join connections" obj=join id=526f84ae68ae l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:11] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:18+0000 lvl=info msg="join connections" obj=join id=b10ab143b961 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:18] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:19+0000 lvl=info msg="join connections" obj=join id=ec7130f2cdb9 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:19] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:22+0000 lvl=info msg="join connections" obj=join id=a630f5b785fd l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:22] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:25+0000 lvl=info msg="join connections" obj=join id=ac09663f1afa l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:25] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:34+0000 lvl=info msg="join connections" obj=join id=607524336a85 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:34] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:35+0000 lvl=info msg="join connections" obj=join id=ee92524762f9 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:35] "GET /_dash-component-suites/dash/dash_table/async-table.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:35+0000 lvl=info msg="join connections" obj=join id=1e567b56e4bf l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:35] "GET /_dash-component-suites/dash/dash_table/async-highlight.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:38+0000 lvl=info msg="join connections" obj=join id=b7c337b16260 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:38] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:39] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:39+0000 lvl=info msg="join connections" obj=join id=6cb6c6c42175 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:44+0000 lvl=info msg="join connections" obj=join id=89f1f2bb7be2 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:44] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:44+0000 lvl=info msg="join connections" obj=join id=46c72dcc022a l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:44] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:50+0000 lvl=info msg="join connections" obj=join id=f19f80cf1024 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:50] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:51+0000 lvl=info msg="join connections" obj=join id=0133134acf7d l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:51+0000 lvl=info msg="join connections" obj=join id=feb5693d2683 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:51] "GET /_dash-component-suites/dash/dcc/async-dropdown.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:51+0000 lvl=info msg="join connections" obj=join id=ca256f15751c l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:51] "GET /_dash-component-suites/dash/dcc/async-graph.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:51] "GET /_dash-component-suites/plotly/package_data/plotly.min.js HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:51+0000 lvl=info msg="join connections" obj=join id=65e95532a71a l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:51+0000 lvl=info msg="join connections" obj=join id=e5607abbaf0d l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:51+0000 lvl=info msg="join connections" obj=join id=896a87a071ec l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:51] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:51] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:51] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:13:55+0000 lvl=info msg="join connections" obj=join id=a66fd1d23403 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64216
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:13:55] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:14:32+0000 lvl=info msg="join connections" obj=join id=8ea1960caa9b l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64256
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:14:32] "GET / HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:14:32+0000 lvl=info msg="join connections" obj=join id=b72df05aab53 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64256
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:14:32] "[36mGET /assets/styles.css?m=1698037976.7453413 HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:14:33+0000 lvl=info msg="join connections" obj=join id=c05522dbf6a5 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64256
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:14:33] "GET /_dash-layout HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:14:33+0000 lvl=info msg="join connections" obj=join id=e57a58d3c5e2 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64256
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:14:33] "GET /_dash-dependencies HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:14:34+0000 lvl=info msg="join connections" obj=join id=825e0e9f737d l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64256
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:14:34] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:14:34+0000 lvl=info msg="join connections" obj=join id=b1a8f4fc8936 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64256
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:14:34] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:14:34+0000 lvl=info msg="join connections" obj=join id=c3cecdce15b4 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64256
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:14:34] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:14:34+0000 lvl=info msg="join connections" obj=join id=9060b7f56847 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64256
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:14:34] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:14:36+0000 lvl=info msg="join connections" obj=join id=e636e578d155 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64256
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:14:36] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:14:37+0000 lvl=info msg="join connections" obj=join id=686e1b04c53f l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64256
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:14:37] "[36mGET /_dash-component-suites/dash/dash_table/async-highlight.js HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:14:37+0000 lvl=info msg="join connections" obj=join id=414954046f50 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64256
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:14:37] "[36mGET /_dash-component-suites/dash/dash_table/async-table.js HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:14:42+0000 lvl=info msg="join connections" obj=join id=cb2f0b93bbb5 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64256
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:14:42] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:14:42+0000 lvl=info msg="join connections" obj=join id=089374e83131 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64256
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:14:42+0000 lvl=info msg="join connections" obj=join id=ae7b1d073176 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64256
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:14:42+0000 lvl=info msg="join connections" obj=join id=7f45a04177b6 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64256
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:14:42] "[36mGET /_dash-component-suites/dash/dcc/async-dropdown.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:14:42] "[36mGET /_dash-component-suites/dash/dcc/async-graph.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:14:42] "[36mGET /_dash-component-suites/plotly/package_data/plotly.min.js HTTP/1.1[0m" 304 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:14:42+0000 lvl=info msg="join connections" obj=join id=2898a848cebd l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64256
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:14:42] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:14:42+0000 lvl=info msg="join connections" obj=join id=9450096aef38 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64256
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:14:42+0000 lvl=info msg="join connections" obj=join id=db55f66b15f1 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64256
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:14:42] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:14:42] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:17:45+0000 lvl=info msg="join connections" obj=join id=d31e3d0e3d04 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64325
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:17:45] "POST /_dash-update-component HTTP/1.1" 200 -
+INFO:pyngrok.process.ngrok:t=2023-10-24T06:17:46+0000 lvl=info msg="join connections" obj=join id=0b9f0e766183 l=127.0.0.1:8073 r=[2601:647:5a00:1320:b48e:9c19:6855:23e8]:64325
+INFO:werkzeug:127.0.0.1 - - [24/Oct/2023 06:17:46] "[35m[1mPOST /_dash-update-component HTTP/1.1[0m" 204 -
