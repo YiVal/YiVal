@@ -2053,7 +2053,7 @@ def create_dash_app(
             **input_data.content,
             state=state
         ) if "custom_function" in experiment_config else None  #type: ignore
-        
+
         current_result = [
             html.Div([
                 html.Ul([
