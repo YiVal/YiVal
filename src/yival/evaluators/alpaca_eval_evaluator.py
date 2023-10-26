@@ -1,13 +1,3 @@
-"""
-Elo Evaluators Module.
-
-This module contains the OpenAIEloEvaluator class, which implements an
-ELO-based evaluation system. The ELO system is used to rank different model
-outputs based on human evaluations, and this specific 
-implementation interfaces with the OpenAI API for those evaluations.
-
-"""
-
 from typing import List
 
 from alpaca_eval.annotators import PairwiseAnnotator

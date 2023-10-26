@@ -17,8 +17,8 @@ def interactive_bot(
     interactive=True,
 ):
     print("Running interactive bot mode...")
-    if experiment_data.improver_output:
-        for group_result in experiment_data.improver_output.group_experiment_results:
+    if experiment_data.enhancer_output:
+        for group_result in experiment_data.enhancer_output.group_experiment_results:
             experiment_results = []
             seen = set()
             for r in group_result.experiment_results:

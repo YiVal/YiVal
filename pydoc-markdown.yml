@@ -33,8 +33,8 @@ renderer:
         source: docs/custom_classes/variation_generators.md
       - title: Custom Reader
         source: docs/custom_classes/readers.md
-      - title: Custom Combination Improver
-        source: docs/custom_classes/improvers.md
+      - title: Custom Combination Enhancer
+        source: docs/custom_classes/enhancers.md
       - title: Custom Selection Strategy
         source: docs/custom_classes/selection_strategy.md
   - title: Contributing Guide

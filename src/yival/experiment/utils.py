@@ -11,11 +11,11 @@ from typing import Any, Dict, List
 
 from yival.variation_generators.chain_of_density_prompt import ChainOfDensityPromptGenerator
 
-from ..combination_improvers.base_combination_improver import BaseCombinationImprover
 from ..data.base_reader import BaseReader
 from ..data.csv_reader import CSVReader
 from ..data.huggingface_dataset_reader import HuggingFaceDatasetReader
 from ..data_generators.base_data_generator import BaseDataGenerator
+from ..enhancers.base_combination_enhancer import BaseCombinationEnhancer
 from ..evaluators.alpaca_eval_evaluator import AlpacaEvalEvaluator
 from ..evaluators.base_evaluator import BaseEvaluator
 from ..evaluators.bertscore_evaluator import BertScoreEvaluator
@@ -28,7 +28,7 @@ from ..finetune.base_trainer import BaseTrainer
 from ..logger.token_logger import TokenLogger
 from ..result_selectors.ahp_selection import AHPSelection
 from ..result_selectors.selection_strategy import SelectionStrategy
-from ..schemas.combination_improver_configs import BaseCombinationImproverConfig
+from ..schemas.combination_enhancer_configs import BaseCombinationEnhancerConfig
 from ..schemas.evaluator_config import MethodCalculationMethod
 from ..schemas.experiment_config import (
     CombinationAggregatedMetrics,
@@ -126,21 +126,21 @@ def register_custom_readers(custom_readers: Dict[str, Dict[str, Any]]):
     _ = HuggingFaceDatasetReader
 
 
-def register_custom_improver(custom_improver: Dict[str, Dict[str, Any]]):
-    for name, details in custom_improver.items():
-        improver_cls = _get_class_from_path(details["class"])
+def register_custom_enhancer(custom_enhancer: Dict[str, Dict[str, Any]]):
+    for name, details in custom_enhancer.items():
+        enhancer_cls = _get_class_from_path(details["class"])
 
         config_cls = None
         if "config_cls" in details:
             config_cls = _get_class_from_path(details["config_cls"])
 
-        BaseCombinationImprover.register_combination_improver(
-            name, improver_cls, config_cls
+        BaseCombinationEnhancer.register_enhancer(
+            name, enhancer_cls, config_cls
         )
-    from ..combination_improvers.openai_prompt_based_combination_improver import (
-        OpenAIPromptBasedCombinationImprover,
+    from ..enhancers.openai_prompt_based_combination_enhancer import (
+        OpenAIPromptBasedCombinationEnhancer,
     )
-    _ = OpenAIPromptBasedCombinationImprover
+    _ = OpenAIPromptBasedCombinationEnhancer
 
 
 def register_custom_selection_strategy(
@@ -291,7 +291,8 @@ def run_single_input(
             config["custom_function"],  # type: ignore
             **d.content,
             state=tmp_state
-        )
+        ) if "custom_function" in config else None  #type: ignore
+
         end_time = time.time()
         latency = end_time - start_time  # Time in seconds
 
@@ -375,31 +376,31 @@ def get_selection_strategy(
     return None
 
 
-def get_improver(config: ExperimentConfig) -> BaseCombinationImprover | None:
-    if "improver" not in config:  # type: ignore
+def get_enhancer(config: ExperimentConfig) -> BaseCombinationEnhancer | None:
+    if "enhancer" not in config:  # type: ignore
         return None
-    if config["improver"]:  # type: ignore
-        improver_config = config["improver"]  # type: ignore
-        improver_cls = BaseCombinationImprover.get_combination_improver(
-            improver_config["name"]
+    if config["enhancer"]:  # type: ignore
+        enhancer_config = config["enhancer"]  # type: ignore
+        enhancer_cls = BaseCombinationEnhancer.get_enhancer(
+            enhancer_config["name"]
         )
-        if improver_cls:
-            config_cls = BaseCombinationImprover.get_config_class(
-                improver_config["name"]
+        if enhancer_cls:
+            config_cls = BaseCombinationEnhancer.get_config_class(
+                enhancer_config["name"]
             )
             if config_cls:
-                if isinstance(improver_config, dict):
-                    config_data = improver_config
+                if isinstance(enhancer_config, dict):
+                    config_data = enhancer_config
                 else:
-                    config_data = improver_config.asdict()
+                    config_data = enhancer_config.asdict()
                 config_instance = config_cls(**config_data)
-                improver_instance = improver_cls(config_instance)
-                return improver_instance
+                enhancer_instance = enhancer_cls(config_instance)
+                return enhancer_instance
             else:
-                improver_instance = improver_cls(
-                    BaseCombinationImproverConfig(name="")
+                enhancer_instance = enhancer_cls(
+                    BaseCombinationEnhancerConfig(name="")
                 )
-                return improver_instance
+                return enhancer_instance
     return None
 
 
@@ -466,6 +467,10 @@ def generate_experiment(
                 grouped_experiment_result.experiment_results
             )
 
+    enable_custom_func = False
+    if results[0].raw_output:
+        enable_custom_func = True
+
     combo_metrics = defaultdict(list)
     for item in results:
         combo_str = json.dumps(item.combination)
@@ -489,9 +494,11 @@ def generate_experiment(
         )
 
     experiment = Experiment(
+        enable_custom_func=enable_custom_func,
         group_experiment_results=grouped_experiment_results,
         combination_aggregated_metrics=cobo_aggregated_metrics
     )
+
     if evaluate_all:
         er = [experiment]
         evaluator.evaluate_based_on_all_results(er)

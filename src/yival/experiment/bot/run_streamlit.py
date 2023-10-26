@@ -5,7 +5,7 @@ import re
 
 import streamlit as st
 
-from yival.combination_improvers.lite_experiment import LiteExperimentRunner
+from yival.experiment.lite_experiment import LiteExperimentRunner
 from yival.experiment.rate_limiter import RateLimiter
 from yival.schemas.common_structures import InputData
 from yival.schemas.experiment_config import Experiment, ExperimentResult

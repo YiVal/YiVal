@@ -27,6 +27,9 @@ jobs:
             echo "Running core tests, installing dependencies with poetry..."
             poetry install
 
+      - name: Build
+        run: poetry run pydoc-markdown
+        shell: bash
       - name: Deploy
         run: poetry run mkdocs gh-deploy -f docs/mkdocs.yml --force 
         shell: bash

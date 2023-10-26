@@ -65,7 +65,7 @@ of it!
 sequenceDiagram
     participant Y as YivalFrameworks Variation Generation
     participant C as Custom Function
-    participant E as Yival's Evaluator/Improver
+    participant E as Yival's Evaluator/Enhancer
 
     Note over Y: Start with predefined prompts from Awesome GPT prompt Git library
 
@@ -80,7 +80,7 @@ sequenceDiagram
     end
 
     Y->>C: Feed generated variation
-    C-->>E: Return output to Yival's Evaluator/Improver
+    C-->>E: Return output to Yival's Evaluator/Enhancer
 
 ```
 

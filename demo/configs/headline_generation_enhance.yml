@@ -32,6 +32,24 @@ variations:
         value: Generate landing page headline for {tech_startup_business}, company business is {business}, target_people is {target_people}
         value_type: str
         variation_id: null
+    generator_name: openai_prompt_based_variation_generator
+    generator_config:
+     #model_name specify the llm model , e.g. a16z-infra/llama-2-13b-chat:9dff94b1bed5af738655d4a7cbcdcde2bd503aa85c94334fe1f42af7f3dd5ee3
+      model_name: gpt-4
+      number_of_variations: 2
+      diversify: false
+      variables: null
+      prompt: 
+        - content: |-
+            Your objective is to construct a concise instruction prompt for GPT-4.
+            Points to emphasize in your instruction:
+            - Given an tech startup business,company business and target people, generate one corresponding landing page headline which is really attracting.
+            - {tech_startup_business} represent tech startup business the nature of its business 
+            - {business} represent the nature of company's business
+            - {target_people} represent company's target audience
+            - keep your output crisp: only the prompt, devoid of any extraneous content.
+
+          role: system
 
 evaluators:
   - evaluator_type: individual
@@ -49,10 +67,10 @@ evaluators:
       [Result]: {raw_output}
       Answer the question by selecting one of the following options:
       A It fails to meet the criterion at all.
-      B It somewhat meets the criterion, but there is significant room for improvement.
+      B It somewhat meets the criterion, but there is significant room for enhancement.
       C It meets the criterion to a satisfactory degree.
       D It meets the criterion very well.
-      E It meets the criterion exceptionally well, with little to no room for improvement.
+      E It meets the criterion exceptionally well, with little to no room for enhancement.
     choices: ["A", "B", "C", "D", "E"]
     # model_name specify the llm model , e.g. a16z-infra/llama-2-13b-chat:9dff94b1bed5af738655d4a7cbcdcde2bd503aa85c94334fe1f42af7f3dd5ee3
     model_name: gpt-4
@@ -80,10 +98,10 @@ evaluators:
       [Result]: {raw_output}
       Answer the question by selecting one of the following options:
       A It fails to meet the criterion at all.
-      B It somewhat meets the criterion, but there is significant room for improvement.
+      B It somewhat meets the criterion, but there is significant room for enhancement.
       C It meets the criterion to a satisfactory degree.
       D It meets the criterion very well.
-      E It meets the criterion exceptionally well, with little to no room for improvement.
+      E It meets the criterion exceptionally well, with little to no room for enhancement.
     display_name: relevance
     description: Is the headline relevant to the target audience?
     scale_description: "0-4"
@@ -109,10 +127,10 @@ evaluators:
       [Result]: {raw_output}
       Answer the question by selecting one of the following options:
       A It fails to meet the criterion at all.
-      B It somewhat meets the criterion, but there is significant room for improvement.
+      B It somewhat meets the criterion, but there is significant room for enhancement.
       C It meets the criterion to a satisfactory degree.
       D It meets the criterion very well.
-      E It meets the criterion exceptionally well, with little to no room for improvement.
+      E It meets the criterion exceptionally well, with little to no room for enhancement.
     display_name: catchiness
     description: Is the headline catchy or memorable?
     scale_description: "0-4"
@@ -147,11 +165,16 @@ selection_strategy:
       average_token_usage: 0.0
     # normalize_func: "z-score"
 
-improver:
-  name: "optimize_by_prompt_improver"
+human_rating_configs:
+  - name: comprehensibility
+    instructions: Rate the degree to which the headline is easy to understand.
+    scale: [1, 5]
+
+enhancer:
+  name: "optimize_by_prompt_enhancer"
   model_name: "gpt-4"
   max_iterations: 2
-  improve_var: ["task"]
+  enhance_var: ["task"]
   head_meta_instruction: |
     Now you will help me generate a prompt which is used to generate a corresponding
     landing page headline according for a startup business named [tech_startup_business],

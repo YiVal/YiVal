@@ -3,13 +3,19 @@ This module provides an implementation of Supervised Fine-tuning trainer.
 
 """
 import os
+from pprint import pprint
 
 from transformers import AutoModelForCausalLM, BitsAndBytesConfig, TrainingArguments
 
 from ..schemas.experiment_config import Experiment, ExperimentConfig, TrainerOutput
 from ..schemas.trainer_configs import DatasetConfig, SFTTrainerConfig, TrainArguments
 from .base_trainer import BaseTrainer
-from .utils import extract_from_input_data, get_hg_tokenizer, print_trainable_parameters
+from .utils import (
+    display_dataset,
+    extract_from_input_data,
+    get_hg_tokenizer,
+    print_trainable_parameters,
+)
 
 DEFAULT_PROMPT_FORMAT = """
 You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe. Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.
@@ -67,16 +73,17 @@ class SFTTrainer(BaseTrainer):
         from peft import LoraConfig, get_peft_model  # type: ignore
         from trl import SFTTrainer as TRL_SFTTrainer  # type: ignore
 
-        print("[INFO][sft_trainer] train config: ", self.config)
+        pprint(f"[INFO][sft_trainer] train config:")
+        pprint(self.config.asdict())
 
+        #Extract data from experiment according to condition
         assert (isinstance(self.config.dataset_config, dict))
-        assert (isinstance(self.config.bnb_config, dict))
-        assert (isinstance(self.config.train_arguments, dict))
-
         dataset = extract_from_input_data(
             experiment, self.config.dataset_config.get("prompt_key", None),
-            self.config.dataset_config.get("completion_key", None)
+            self.config.dataset_config.get("completion_key", None),
+            self.config.dataset_config.get("condition", None)
         )
+        display_dataset(dataset, 5)
 
         #Prepare base model and tokenizer
         model_name = self.config.model_name
@@ -85,17 +92,21 @@ class SFTTrainer(BaseTrainer):
         #Assemble bitsandbytes quant config
         bnb_config = None
         if self.config.enable_bits_and_bytes:
+            assert (isinstance(self.config.bnb_config, dict))
             bnb_config = BitsAndBytesConfig(
                 load_in_4bit=self.config.bnb_config.load_in_4_bit,
                 load_in_8bit=self.config.bnb_config.load_in_8_bit
             )
 
+        #Load base model from hg
         base_model = AutoModelForCausalLM.from_pretrained(
             model_name, torch_dtype=torch.half, quantization_config=bnb_config
         )
 
+        #prepare peft, lora e.g.
         peft_config = None
         if self.config.enable_lora:
+            assert (isinstance(self.config.lora_config, dict))
             peft_config = LoraConfig(
                 r=self.config.lora_config["r"],
                 lora_alpha=self.config.lora_config["lora_alpha"],
@@ -108,28 +119,42 @@ class SFTTrainer(BaseTrainer):
 
         print_trainable_parameters(base_model)
 
+        assert (isinstance(self.config.train_arguments, dict))
         # Parameters for training arguments details => https://github.com/huggingface/transformers/blob/main/src/transformers/training_args.py#L158
+        output_dir = self.config.output_path
         training_args = TrainingArguments(
-            per_device_train_batch_size=self.config.get(
+            per_device_train_batch_size=self.config.train_arguments.get(
                 "per_device_train_batch_size", 4
             ),
-            gradient_accumulation_steps=self.config.get(
+            gradient_accumulation_steps=self.config.train_arguments.get(
                 "gradient_accumulation_steps", 4
             ),
-            gradient_checkpointing=self.config.get(
+            gradient_checkpointing=self.config.train_arguments.get(
                 "gradient_checkpointing", True
             ),
-            max_grad_norm=self.config.get("max_grad_norm", 0.3),
-            num_train_epochs=self.config.get("num_train_epochs", 15),
-            learning_rate=self.config.get("learning_rate", 2e-4),
-            bf16=self.config.get("bf16", False),
-            save_total_limit=self.config.get("save_total_limit", 3),
-            logging_steps=self.config.get("logging_steps", 1),
-            output_dir=self.config.get("output_dir", self.config.output_path),
-            optim=self.config.get("optim", "paged_adamw_32bit"),
-            lr_scheduler_type=self.config.get("lr_scheduler_type", "cosine"),
-            warmup_ratio=self.config.get("warmup_ratio", 0.05),
-            log_level=self.config.get('log_level', 'debug')
+            max_grad_norm=self.config.train_arguments.get(
+                "max_grad_norm", 0.3
+            ),
+            num_train_epochs=self.config.train_arguments.get(
+                "num_train_epochs", 15
+            ),
+            learning_rate=self.config.train_arguments.get(
+                "learning_rate", 2e-4
+            ),
+            bf16=self.config.train_arguments.get("bf16", False),
+            save_total_limit=self.config.train_arguments.get(
+                "save_total_limit", 3
+            ),
+            logging_steps=self.config.train_arguments.get("logging_steps", 1),
+            output_dir=output_dir,
+            optim=self.config.train_arguments.get(
+                "optim", "paged_adamw_32bit"
+            ),
+            lr_scheduler_type=self.config.train_arguments.get(
+                "lr_scheduler_type", "cosine"
+            ),
+            warmup_ratio=self.config.train_arguments.get("warmup_ratio", 0.05),
+            log_level=self.config.train_arguments.get('log_level', 'debug')
         )
 
         output_dir = self.config.output_path

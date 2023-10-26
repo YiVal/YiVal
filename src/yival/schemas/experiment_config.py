@@ -1,15 +1,15 @@
 """
 Module for experiment configuration structures.
 
-This module provides data structures to capture configurations required to run an
-experiment.
+This module provides data structures to capture configurations required to run
+an experiment.
 """
 from dataclasses import asdict, dataclass, field
 from typing import Any, Callable, Dict, List, Optional, Tuple, Type, Union
 
 from PIL import Image
 
-from .combination_improver_configs import BaseCombinationImproverConfig
+from .combination_enhancer_configs import BaseCombinationEnhancerConfig
 from .common_structures import InputData
 from .dataset_config import DatasetConfig
 from .evaluator_config import (
@@ -125,7 +125,8 @@ class HumanRating:
     Attributes:
     - aspect (str): Aspect being rated.
     - rating (float): Rating value.
-    - scale (Tuple[float, float]): Minimum and maximum value of the rating scale.
+    - scale (Tuple[float, float]): Minimum and maximum value of the rating
+            scale.
     """
 
     aspect: str
@@ -160,7 +161,7 @@ class ExperimentConfig:
     combinations_to_run: Optional[List[Tuple[str, Any]]] = None
     evaluators: Optional[List[Union[EvaluatorConfig, ComparisonEvaluatorConfig,
                                     GlobalEvaluatorConfig]]] = None
-    improver: Optional[BaseCombinationImproverConfig] = None
+    enhancer: Optional[BaseCombinationEnhancerConfig] = None
     trainer: Optional[BaseTrainerConfig] = None
     output: Optional[OutputConfig] = None
     human_rating_configs: Optional[List[HumanRatingConfig]] = None
@@ -169,13 +170,13 @@ class ExperimentConfig:
     output_parser: Optional[str] = None
     metadata: Optional[Dict[str, Any]] = None
     custom_reader: Optional[Dict[str, Dict[str, Any]]] = None
-    custom_combination_improver: Optional[Dict[str, Dict[str, Any]]] = None
+    custom_combination_enhancer: Optional[Dict[str, Dict[str, Any]]] = None
     custom_data_generators: Optional[Dict[str, Dict[str, Any]]] = None
     custom_wrappers: Optional[Dict[str, Dict[str, Any]]] = None
     custom_evaluators: Optional[Dict[str, Dict[str, Any]]] = None
     custom_variation_generators: Optional[Dict[str, Dict[str, Any]]] = None
     custom_selection_strategies: Optional[Dict[str, Dict[str, Any]]] = None
-    custom_improvers: Optional[Dict[str, Dict[str, Any]]] = None
+    custom_enhancers: Optional[Dict[str, Dict[str, Any]]] = None
 
     def asdict(self) -> Dict[str, Any]:
         # Convert the dataclass instance to a dictionary
@@ -206,9 +207,9 @@ class ExperimentConfig:
                 if hasattr(h, 'asdict')
             ]
 
-        # Note: For the custom_reader, custom_wrappers, custom_evaluators attributes,
-        # you'd need additional logic if their nested dictionaries also contain objects
-        # that need to be converted using asdict.
+        # Note: For the custom_reader, custom_wrappers, custom_evaluators
+        # attributes, you'd need additional logic if their nested dictionaries
+        # also contain objects that need to be converted using asdict.
 
         return result
 
@@ -242,7 +243,8 @@ class ExperimentSummary:
 
     Attributes:
     - aggregated_metrics (Dict[str, Dict[str, Metric]]): 
-      A dictionary where keys are evaluator names and values are dictionaries mapping metric names to their values.
+      A dictionary where keys are evaluator names and values are dictionaries
+      mapping metric names to their values.
     - ... (other summary attributes)
     """
     aggregated_metrics: Dict[str, Dict[str, Metric]]
@@ -260,6 +262,14 @@ class ExperimentSummary:
 
 
 @dataclass
+class Context:
+    """
+    Custom function context that will be used for evlaution
+    """
+    text_context: Dict[str, str] = field(default_factory=dict)
+
+
+@dataclass
 class MultimodalOutput:
     """
     Multimodal output that can include a string, a PIL Image, or both.
@@ -270,29 +280,33 @@ class MultimodalOutput:
     """
     text_output: Optional[str] = None
     image_output: Optional[List[Image.Image]] = None
+    video_output: Optional[List[str]] = None
+    context: Optional[Context] = None
 
     def asdict(self) -> Dict[str, Any]:
         return {
             "text_output": self.text_output,
             "image_output": "PIL Image List" if self.image_output else
-            None  # You might want to serialize the image differently
+            None,  # You might want to serialize the image differently
+            "video_output": "video URL List" if self.video_output else None
         }
 
 
 @dataclass
 class ExperimentResult:
     """
-    Result for a single example based on a specific combination of active variations
-    across wrappers.
+    Result for a single example based on a specific combination of active
+    variations across wrappers.
 
     Attributes:
-    - combination (Dict[str, str]): The combination of wrapper names and their active
-      variation_ids for this example.
+    - combination (Dict[str, str]): The combination of wrapper names and their
+      active variation_ids for this example.
     - raw_output (Any): Raw output for this example. Support str and PILimage
     - latency (float): Latency for producing the output for this example
       (in milliseconds or appropriate unit).
     - token_usage (int): Number of tokens used for this example.
-    - evaluator_outputs (List[EvaluatorOutput]): Evaluator outputs for this example.
+    - evaluator_outputs (List[EvaluatorOutput]): Evaluator outputs for this
+      example.
     - human_rating (Optional[HumanRating]): Human rating for this example.
     - intermediate_logs (List[str]): Logs captured during the experiment.
     """
@@ -380,10 +394,30 @@ class FunctionMetadata:
 
 
 @dataclass
-class ImproverOutput:
+class EnhancerOutput:
+    """
+    Represents the outputs related to the "enhancer" component of the
+    experiment.
+    
+    The enhancer's role is to enhance or optimize certain aspects of the
+    experiment. 
+    This dataclass captures the results, metrics, and decisions made by the
+    enhancer.
+
+    Attributes:
+        group_experiment_results (List[GroupedExperimentResult]): List of
+        grouped results after enhancement.
+        combination_aggregated_metrics (List[CombinationAggregatedMetrics]):
+        Aggregated metrics post-enhancement.
+        original_best_combo_key (str): The best combination key before the
+        enhancer made optimizations.
+        selection_output (Optional[SelectionOutput]): Output from the selection
+
+    """
     group_experiment_results: List[GroupedExperimentResult]
     combination_aggregated_metrics: List[CombinationAggregatedMetrics]
     original_best_combo_key: str
+    selection_output: Optional[SelectionOutput] = None
 
 
 @dataclass
@@ -394,13 +428,28 @@ class TrainerOutput:
 @dataclass
 class Experiment:
     """
-    Represents an entire experiment.
+    Represents the entirety of an experiment run.
+
+    This dataclass encapsulates the results, metrics, and configurations used
+    and generated during the experiment. 
+    It is a comprehensive view of everything related to a specific experiment
+    run.
+
+    Attributes:
+        group_experiment_results (List[GroupedExperimentResult]): List of
+        results grouped by test cases.
+        combination_aggregated_metrics (List[CombinationAggregatedMetrics]):
+        Metrics aggregated for specific combinations.
+        selection_output (Optional[SelectionOutput]): Output from the
+        selection strategy. enhancer_output (Optional[enhancerOutput]):
+        Output from the enhancer component, if used.
 
     """
     group_experiment_results: List[GroupedExperimentResult]
     combination_aggregated_metrics: List[CombinationAggregatedMetrics]
+    enable_custom_func: bool = False
     selection_output: Optional[SelectionOutput] = None
-    improver_output: Optional[ImproverOutput] = None
+    enhancer_output: Optional[EnhancerOutput] = None
 
     def asdict(self) -> Dict[str, Any]:
         return {

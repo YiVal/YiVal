@@ -24,7 +24,12 @@ from PIL import Image
 from pyngrok import ngrok
 
 from yival.experiment.rate_limiter import RateLimiter
-from yival.experiment.utils import generate_experiment, get_function_args, run_single_input
+from yival.experiment.utils import (
+    call_function_from_string,
+    generate_experiment,
+    get_function_args,
+    run_single_input,
+)
 from yival.schemas.experiment_config import (
     CombinationAggregatedMetrics,
     EvaluatorOutput,
@@ -36,11 +41,12 @@ from yival.schemas.experiment_config import (
 )
 
 from ...schemas.common_structures import InputData
+from ...states.experiment_state import ExperimentState
 from .hexagram import HEXAGRAMS, generate_hexagram_figure
 from .utils import (
     generate_group_key_combination_data,
     generate_heatmap_style,
-    highlight_best_values,
+    generate_legend,
     sanitize_column_name,
     sanitize_group_key,
 )
@@ -49,6 +55,17 @@ from .utils import (
 def include_image_base64(data_dict):
     """Check if a string includes a base64 encoded image."""
     pattern = r'iVBORw.+'
+    for item in data_dict:
+        for record in item:
+            for value in record.values():
+                if re.search(pattern, value):
+                    return True
+    return False
+
+
+def include_video(data_dict):
+    """Check if a string includes a video."""
+    pattern = r'<yival_video_output>'
     for item in data_dict:
         for record in item:
             for value in record.values():
@@ -96,6 +113,33 @@ def extract_and_decode_image_from_string(data_string):
         return None
 
 
+def extract_and_decode_video_from_string(data_string):
+    """Extract and decode the first video from a string include video urls and return a dictionary."""
+    # Extract text_output, video_output and evaluate part
+    video_output_string_match = re.search(
+        r"<yival_video_output>(.*?)</yival_video_output>", data_string,
+        re.DOTALL
+    )
+    if video_output_string_match:
+        text_output_match = re.search(
+            r'<yival_raw_output>\n(.*?)\n</yival_raw_output>', data_string,
+            re.DOTALL
+        )
+        text_output = text_output_match.group(1)
+        video_output = video_output_string_match.group(1)
+        evaluate_match = re.search(
+            r"</yival_video_output>(.*)", data_string, re.DOTALL
+        )
+        evaluate = evaluate_match.group(1).strip()
+        return {
+            "text_output": text_output,
+            "video_output": video_output,
+            "evaluate": evaluate
+        }
+    else:
+        return None
+
+
 def extract_and_decode_image(data_dict):
     """Extract and decode image from a dictionary include base64 encoded."""
     new_data_dict = []
@@ -107,6 +151,25 @@ def extract_and_decode_image(data_dict):
                     image = extract_and_decode_image_from_string(value)
                     if image is not None:
                         new_record[key] = image
+                    else:
+                        new_record[key] = value
+                else:
+                    new_record[key] = value
+            new_data_dict.append(new_record)
+    return new_data_dict
+
+
+def extract_and_decode_video(data_dict):
+    """Extract and decode video from a dictionary include video url."""
+    new_data_dict = []
+    for item in data_dict:
+        for record in item:
+            new_record = {}
+            for key, value in record.items():
+                if isinstance(value, str):
+                    video = extract_and_decode_video_from_string(value)
+                    if video is not None:
+                        new_record[key] = video
                     else:
                         new_record[key] = value
                 else:
@@ -145,6 +208,50 @@ def create_table(data):
                 text = html.P(value["text_output"])
                 cell = html.Td([
                     text, html.Br(), img,
+                    html.Br(), value["evaluate"]
+                ])
+            else:
+                cell = html.Td(value)
+            row.append(cell)
+        table_rows.append(html.Tr(row))
+    return table_rows
+
+
+def create_video_table(data):
+    """Create an HTML table from a list of dictionaries, where the values can be strings or video."""
+    # Create the header row
+    header_row = [
+        html.Th(key if key != "Hashed Group Key" else "Human Rating")
+        for key in data[0].keys()
+    ]
+    table_rows = [html.Tr(header_row)]
+
+    # Create the data rows
+    for record in data:
+        row = []
+        for key, value in record.items():
+            if key == "Hashed Group Key":
+                # Convert the hashed group key to a hyperlink
+                href = f"/rating-result/{value}"
+                cell = html.Td(
+                    dcc.Link("Link", href=href)
+                )  # Replace "Link text" with the text you want to display on UI
+            elif isinstance(value, dict):
+                text = html.P(value["text_output"])
+                video = html.Div(
+                    children=html.Video(
+                        controls=True,
+                        id='movie_player',
+                        src=value["video_output"],
+                        autoPlay=False
+                    ),
+                    style={
+                        'height': '200px',
+                        'width': '200px',
+                    }
+                )
+                cell = html.Td([
+                    text, html.Br(), video,
                     html.Br(), value["evaluate"]
                 ])
             else:
@@ -204,7 +311,7 @@ def create_dash_app(
             if hashlib.sha256(group_key.encode()
                               ).hexdigest() == hashed_group_key:
                 return group_result
-        for group_result in experiment_data.improver_output.group_experiment_results:
+        for group_result in experiment_data.enhancer_output.group_experiment_results:
             group_key = sanitize_group_key(group_result.group_key)
             if hashlib.sha256(group_key.encode()
                               ).hexdigest() == hashed_group_key:
@@ -221,23 +328,20 @@ def create_dash_app(
                     )
                 ),
                 dbc.NavItem(
-                    dbc.NavLink("Data Analysis", href="/data-analysis")
-                ),
-                dbc.NavItem(
                     dbc.NavLink(
-                        "Detailed Test Results", href="/group-key-combo"
+                        "Detailed Experiment Results", href="/group-key-combo"
                     )
                 ),
                 dbc.NavItem(
                     dbc.NavLink(
-                        "Improver Experiment Results Analysis",
-                        href="/improver-experiment-results"
+                        "Enhancer Experiment Results Analysis",
+                        href="/enhancer-experiment-results"
                     )
                 ),
                 dbc.NavItem(
                     dbc.NavLink(
-                        "Improver Detailed Test Results",
-                        href="/improver-group-key-combo"
+                        "Enhancer Detailed Experiment Results",
+                        href="/enhancer-group-key-combo"
                     )
                 ),
                 dbc.NavItem(
@@ -248,10 +352,17 @@ def create_dash_app(
                         className="ml-2"
                     )
                 ),
+                dbc.NavItem(dbc.NavLink(
+                    "Playground",
+                    href="/interactive",
+                )),
+                dbc.NavItem(
+                    dbc.NavLink("Data Analysis", href="/data-analysis")
+                ),
                 dbc.NavItem(
                     dbc.NavLink(
-                        "Interactive Mode",
-                        href="/interactive",
+                        "Use Best Combinations",
+                        href="/use-best-result",
                     )
                 ),
             ],
@@ -275,7 +386,7 @@ def create_dash_app(
         data = []
         for metric in combo_metrics:
             row = {
-                "Combo Key":
+                "Hyperparameters":
                 "\n".join(
                     textwrap.wrap(
                         str(metric.combo_key).replace('"',
@@ -339,7 +450,12 @@ def create_dash_app(
                     sample_count += 1
 
             data.append(row)
+        for index, row in enumerate(data):
+            row["Iteration"] = index
         df = pd.DataFrame(data)
+        column_order = ["Iteration"
+                        ] + [col for col in df if col != "Iteration"]
+        df = df[column_order]
         if 'Average Token Usage' in df:
             df['Average Token Usage'] = pd.to_numeric(
                 df['Average Token Usage'], errors='coerce'
@@ -367,20 +483,34 @@ def create_dash_app(
                 not None
             ).any() for col in sample_columns
         )
+        contains_videos = any(
+            df[col].apply(
+                lambda x: isinstance(x, MultimodalOutput) and x.video_output is
+                not None
+            ).any() for col in sample_columns
+        )
+
+        multi_div = None
+
+        if contains_images:
+            multi_div = image_combo_aggregated_metrics_layout(df)
+        elif contains_videos:
+            multi_div = video_combo_aggregated_metrics_layout(df)
+        else:
+            multi_div = combo_aggregated_metrics_layout(df)
+
         return html.Div([
             html.H3(
                 "Experiment Results Analysis", style={'textAlign': 'center'}
             ),
             html.Hr(),
-            html.Div([
-                image_combo_aggregated_metrics_layout(df)
-                if contains_images else combo_aggregated_metrics_layout(df)
-            ],
+            html.Div([multi_div],
                      style={
                          'overflowY': 'auto',
                          'overflowX': 'auto'
                      }),
             html.Hr(),
+            generate_legend(),
             html.A(
                 'Export to CSV',
                 id='export-link-experiment-results',
@@ -391,16 +521,18 @@ def create_dash_app(
             html.Br(),
             dcc.Link('Go to Data Analysis', href='/data-analysis'),
             html.Br(),
-            dcc.Link('Go to Detailed Test Results', href='/group-key-combo'),
-            html.Br(),
             dcc.Link(
-                'Go to Improver Experiment Results Analysis',
-                href='/improver-experiment-results'
+                'Go to Detailed Experiment Results', href='/group-key-combo'
             ),
             html.Br(),
             dcc.Link(
-                'Go to Improver Detailed Test Results',
-                href='/improver-group-key-combo'
+                'Go to Enhancer Experiment Results Analysis',
+                href='/enhancer-experiment-results'
+            ),
+            html.Br(),
+            dcc.Link(
+                'Go to Enhancer Detailed Experiment Results',
+                href='/enhancer-group-key-combo'
             ),
             html.Br()
         ])
@@ -415,35 +547,39 @@ def create_dash_app(
                 href='/experiment-results'
             ),
             html.Br(),
-            dcc.Link('Go to Detailed Test Results', href='/group-key-combo'),
-            html.Br(),
             dcc.Link(
-                'Go to Improver Experiment Results Analysis',
-                href='/improver-experiment-results'
+                'Go to Detailed Experiment Results', href='/group-key-combo'
             ),
             html.Br(),
             dcc.Link(
-                'Go to Improver Detailed Test Results',
-                href='/improver-group-key-combo'
+                'Go to Enhancer Experiment Results Analysis',
+                href='/enhancer-experiment-results'
+            ),
+            html.Br(),
+            dcc.Link(
+                'Go to Enhancer Detailed Experiment Results',
+                href='/enhancer-group-key-combo'
             ),
             html.Br()
         ])
 
     def combo_page_layout():
         return html.Div([
-            html.H3("Detailed Test Results", style={'textAlign': 'center'}),
+            html.H3(
+                "Detailed Experiment Results", style={'textAlign': 'center'}
+            ),
             html.Hr(),
             group_key_combination_layout(
                 experiment_data.group_experiment_results
             ),
             dcc.Link(
-                'Go to Improver Experiment Results Analysis',
-                href='/improver-experiment-results'
+                'Go to Enhancer Experiment Results Analysis',
+                href='/enhancer-experiment-results'
             ),
             html.Br(),
             dcc.Link(
-                'Go to Improver Detailed Test Results',
-                href='/improver-group-key-combo'
+                'Go to Enhancer Detailed Experiment Results',
+                href='/enhancer-group-key-combo'
             ),
             html.Br(),
             html.Hr(),
@@ -454,42 +590,45 @@ def create_dash_app(
             )
         ])
 
-    def improver_experiment_results_layout():
-        if not experiment_data.improver_output:
-            return html.Div([html.H3("No Improver Output data available.")])
+    def enhancer_experiment_results_layout():
+        if not experiment_data.enhancer_output:
+            return html.Div([html.H3("No Enhancer Output data available.")])
 
-        df_improver = generate_combo_metrics_data(
-            experiment_data.improver_output.combination_aggregated_metrics,
-            experiment_data.improver_output.group_experiment_results
+        df_enhancer = generate_combo_metrics_data(
+            experiment_data.enhancer_output.combination_aggregated_metrics,
+            experiment_data.enhancer_output.group_experiment_results
         )
 
-        csv_string = df_improver.to_csv(index=False, encoding='utf-8')
+        csv_string = df_enhancer.to_csv(index=False, encoding='utf-8')
         csv_data_url = 'data:text/csv;charset=utf-8,' + urllib.parse.quote(
             csv_string
         )
 
         return html.Div([
             html.H3(
-                "Improver Experiment Results Analysis",
+                "Enhancer Experiment Results Analysis",
                 style={'textAlign': 'center'}
             ),
-            combo_aggregated_metrics_layout(df_improver),
+            combo_aggregated_metrics_layout(df_enhancer),
             html.Hr(),
+            generate_legend(),
             html.A(
                 'Export to CSV',
-                id='export-link-improver-experiment-results',
-                download="improver_experiment_results.csv",
+                id='export-link-enhancer-experiment-results',
+                download="enhancer_experiment_results.csv",
                 href=csv_data_url,
                 target="_blank"
             ),
             html.Br(),
             dcc.Link('Go to Data Analysis', href='/data-analysis'),
             html.Br(),
-            dcc.Link('Go to Detailed Test Results', href='/group-key-combo'),
+            dcc.Link(
+                'Go to Detailed Experiment Results', href='/group-key-combo'
+            ),
             html.Br(),
             dcc.Link(
-                'Go to Improver Detailed Test Results',
-                href='/improver-group-key-combo'
+                'Go to Enhancer Detailed Experiment Results',
+                href='/enhancer-group-key-combo'
             ),
             html.Br()
         ])
@@ -497,7 +636,7 @@ def create_dash_app(
     def analysis_layout(df):
         evaluator_outputs = [
             col for col in df.columns
-            if (col != 'Combo Key' and 'Sample' not in col)
+            if (col != 'Hyperparameters' and 'Sample' not in col)
         ]
         return html.Div([
             html.Div([
@@ -531,28 +670,28 @@ def create_dash_app(
         ],
                         className="row")
 
-    def improver_combo_page_layout():
-        if not experiment_data.improver_output:
-            return html.Div([html.H3("No Improver Output data available.")])
+    def enhancer_combo_page_layout():
+        if not experiment_data.enhancer_output:
+            return html.Div([html.H3("No Enhancer Output data available.")])
         return html.Div([
             html.H3(
-                "Improver Detailed Test Results",
+                "Enhancer Detailed Experiment Results",
                 style={'textAlign': 'center'}
             ),
             group_key_combination_layout(
-                experiment_data.improver_output.group_experiment_results,
-                highlight_key=experiment_data.improver_output.
+                experiment_data.enhancer_output.group_experiment_results,
+                highlight_key=experiment_data.enhancer_output.
                 original_best_combo_key
             ),
             dcc.Link(
-                'Go to Improver Experiment Results Analysis',
-                href='/improver-experiment-results'
+                'Go to Enhancer Experiment Results Analysis',
+                href='/enhancer-experiment-results'
             ),
             html.Hr(),
             html.Div(
                 id='current-page-context',
                 style={'display': 'none'},
-                children='improver'
+                children='enhancer'
             )
         ])
 
@@ -572,8 +711,8 @@ def create_dash_app(
             'width': '15%'
         } for col in sample_columns]
 
-        styles = highlight_best_values(df, *df.columns)
-        styles += generate_heatmap_style(df, *df.columns)
+        # styles = highlight_best_values(df, *df.columns)
+        styles = generate_heatmap_style(df, *df.columns)
         styles += sample_style
 
         # Highlight the best_combination row
@@ -587,9 +726,10 @@ def create_dash_app(
             )
             styles.append({
                 'if': {
-                    'column_id': 'Combo Key',
+                    'column_id':
+                    'Hyperparameters',
                     'filter_query':
-                    f'{{Combo Key}} eq "{best_combination_str}"',
+                    f'{{Hyperparameters}} eq "{best_combination_str}"',
                 },
                 'backgroundColor': '#DFF0D8',  # Light green color
                 'border': '2px solid #28A745',  # Darker green border
@@ -603,11 +743,11 @@ def create_dash_app(
                     experiment_data.selection_output.selection_reason.items()
                 ])
                 tooltip_data = [{
-                    'Combo Key': {
+                    'Hyperparameters': {
                         'value': reason_str,
                         'type': 'markdown'
                     }
-                } if row["Combo Key"] == best_combination_str else {}
+                } if row["Hyperparameters"] == best_combination_str else {}
                                 for row in df.to_dict('records')]
 
         evaluator_names = [
@@ -642,7 +782,7 @@ def create_dash_app(
             },
             style_cell_conditional=[{
                 'if': {
-                    'column_id': 'Combo Key'
+                    'column_id': 'Hyperparameters'
                 },
                 'width': '40%'
             }, {
@@ -721,6 +861,54 @@ def create_dash_app(
 
         return table
 
+    def video_combo_aggregated_metrics_layout(df):
+        sample_columns = [col for col in df.columns if "Sample" in col]
+
+        # Process each column with MultimodalOutput
+        for col in sample_columns:
+            df[col] = df[col].apply(
+                lambda x: html.Div([
+                    html.P(f'<text_output> {x.text_output} </text_output>'),
+                    html.Div(
+                        children=[
+                            html.Video(
+                                controls=True,
+                                id='movie_player',
+                                src=x.video_output[0],
+                                autoPlay=False
+                            )
+                        ],
+                        style={
+                            'height': '200px',
+                            'width': '200px',
+                            'display': 'flex',
+                            # 'justifyContent': 'center',
+                            # 'alignItems': 'center',
+                            # 'overflow': 'hidden'
+                        }
+                    )
+                ]) if isinstance(x, MultimodalOutput) and x.video_output is
+                not None else x
+            )
+
+        # Create html.Table
+        table = html.Table(
+            # Header
+            [html.Tr([html.Th(col) for col in df.columns])] +
+
+            # Body
+            [
+                html.Tr([
+                    DangerouslySetInnerHTML(
+                        f'<details><summary>{row[col][:250]}...</summary>{row[col]}</details>'
+                    ) if col_index == 0 else html.Td(row[col])
+                    for col_index, col in enumerate(df.columns)
+                ]) for index, row in df.iterrows()
+            ]
+        )
+
+        return table
+
     def format_with_tags(cell):
         # Split the cell content using the yival_raw_output tags
         raw_output_start = "<yival_raw_output>"
@@ -757,6 +945,17 @@ def create_dash_app(
                 for line in cell.split("\n")
             ])
 
+    test_data_hint = html.Div([
+        html.Small(
+            "Click on each test data below to perform human labeling.",
+            style={
+                "color": "#888888",
+                "display": "block",
+                "marginBottom": "10px"
+            }
+        )
+    ])
+
     def group_key_combination_layout(
         group_experiment_results: List[GroupedExperimentResult],
         highlight_key: Optional[str] = None
@@ -791,8 +990,8 @@ def create_dash_app(
         if highlight_key:
             styles_data_conditional.append({
                 'if': {
-                    'column_id': 'Combo Key',
-                    'filter_query': f'{{Combo Key}} eq "{highlight_key}"'
+                    'column_id': 'Hyperparameters',
+                    'filter_query': f'{{Hyperparameters}} eq "{highlight_key}"'
                 },
                 'backgroundColor': '#FFCCCC'  # Highlighting with gold color
             })
@@ -820,9 +1019,33 @@ def create_dash_app(
                     href=csv_data_url,
                     target="_blank"
                 ),
-                html.Br(),
+                html.Br(), test_data_hint,
                 html.Table(
                     create_table(new_data_dict), id='group-key-combo-table'
+                ),
+                html.Hr(),
+                dcc.Link(
+                    'Go back to Experiment Results Analysis',
+                    href='/experiment-results'
+                ),
+                html.Br(),
+                dcc.Link('Go to Data Analysis', href='/data-analysis'),
+                html.Br()
+            ])
+        elif include_video(data_dict):
+            new_data_dict = extract_and_decode_video(data_dict)
+            return html.Div([
+                html.A(
+                    'Export to CSV',
+                    id='export-link-group-key-combo',
+                    download="group_key_combo.csv",
+                    href=csv_data_url,
+                    target="_blank"
+                ),
+                html.Br(), test_data_hint,
+                html.Table(
+                    create_video_table(new_data_dict),
+                    id='group-key-combo-table'
                 ),
                 html.Hr(),
                 dcc.Link(
@@ -843,6 +1066,7 @@ def create_dash_app(
                     target="_blank"
                 ),
                 html.Br(),
+                test_data_hint,
                 dash_table.DataTable(
                     id='group-key-combo-table',
                     columns=columns,
@@ -941,8 +1165,7 @@ def create_dash_app(
                         dbc.Card(
                             [
                                 dbc.CardHeader(
-                                    html.
-                                    H4("Parameters", className="text-center"),
+                                    html.H4("Input", className="text-center"),
                                     className="bg-light"
                                 ),
                                 dbc.CardBody([
@@ -1006,14 +1229,14 @@ def create_dash_app(
                                     )
                                 ],
                                          style={"padding": "10px"}),
-                                # Toggle for improver combinations
+                                # Toggle for enhancer combinations
                                 dbc.Checklist(
                                     options=[{
-                                        "label": "Use Improver Combinations",
-                                        "value": "improver"
+                                        "label": "Use Enhancer Combinations",
+                                        "value": "enhancer"
                                     }],
                                     value=[],
-                                    id="improver-toggle",
+                                    id="enhancer-toggle",
                                     switch=True,
                                     inline=True,
                                     style={"padding": "10px"}
@@ -1044,8 +1267,106 @@ def create_dash_app(
             dbc.Container(fluid=True, className="p-3")
         ])
 
+    def use_best_result_layout():
+        if experiment_data.enhancer_output:
+            best_combination = experiment_data.enhancer_output.selection_output.best_combination
+        elif experiment_data.selection_output:
+            best_combination = experiment_data.selection_output.best_combination
+        else:
+            best_combination = experiment_data.group_experiment_results[
+                0].experiment_results[0].combination
+        best_combination = str(best_combination)
+
+        return html.Div([
+            dbc.Row([
+                dbc.Col(
+                    [
+                        dbc.Card(
+                            [
+                                dbc.CardHeader(
+                                    html.
+                                    H4("Parameters", className="text-center"),
+                                    className="bg-light"
+                                ),
+                                dbc.CardBody([
+                                    html.Div([
+                                        dbc.Label(
+                                            key,
+                                            className="mr-2 font-weight-bold",
+                                            width=4
+                                        ),
+                                        dbc.Col(
+                                            dbc.Input(
+                                                id=f"input-{key}",
+                                                type=value,
+                                                placeholder=key
+                                            ),
+                                            width=8
+                                        )
+                                    ],
+                                             className=
+                                             "d-flex align-items-center mb-4")
+                                    for key, value in
+                                    list(function_args.items())[:-1]
+                                ],
+                                             className="p-4"),
+                                dbc.Button(
+                                    "Run",
+                                    id="best-result-btn",
+                                    color="primary",
+                                    className="mt-2 mb-4 w-100"
+                                ),
+                                # Enhanced Section for Combinations Selection
+                                html.Hr(),
+                                html.Div([
+                                    html.H5(
+                                        "Best Combination",
+                                        className="text-center mt-2"
+                                    ),
+                                    html.P(
+                                        "This is the best combination from the available combinations.",
+                                        className="text-muted small text-center"
+                                    ),
+                                    html.P(
+                                        best_combination,
+                                        id="best-combination",
+                                        style={
+                                            "border": "1px solid #ced4da",
+                                            "border-radius": "4px",
+                                            "padding": "5px",
+                                            "margin-bottom": "20px"
+                                        }
+                                    )
+                                ],
+                                         style={"padding": "10px"}),
+                            ],
+                            className="m-4 shadow-sm rounded"
+                        ),
+                    ],
+                    width=3
+                ),
+                dbc.Col([
+                    dbc.Card([
+                        dbc.CardHeader(
+                            html.H4("Results", className="text-center"),
+                            className="bg-light"
+                        ),
+                        dcc.Loading(
+                            id="loading-results",
+                            type="default",
+                            children=html.
+                            Div(id="best-results-section", className="p-4")
+                        )
+                    ],
+                             className="m-4 shadow-sm rounded")
+                ],
+                        width=9)
+            ]),
+            dbc.Container(fluid=True, className="p-3")
+        ])
+
     def display_group_experiment_result_layout(
-        hashed_group_key, experiment_config, is_from_improver=False
+        hashed_group_key, experiment_config, is_from_enhancer=False
     ):
         group_result = get_group_experiment_result_from_hash(hashed_group_key)
         if not group_result:
@@ -1087,7 +1408,7 @@ def create_dash_app(
             )
         ]
         children.append(
-            dcc.Store(id='is-from-improver', data=is_from_improver)
+            dcc.Store(id='is-from-enhancer', data=is_from_enhancer)
         )
 
         for index, exp_result in enumerate(group_result.experiment_results):
@@ -1122,6 +1443,34 @@ def create_dash_app(
                            }  # Make the text span 4 columns
                 ) if exp_result.raw_output.text_output else None
                 content = html.Div([text] + images,
+                                   style={
+                                       'display': 'grid',
+                                       'grid-template-columns':
+                                       'repeat(4, 1fr)',
+                                       'justify-content': 'center',
+                                       'align-items': 'center'
+                                   })
+            elif exp_result.raw_output.video_output:
+                videos = []
+                for video in exp_result.raw_output.video_output:
+                    vid = html.Video(
+                        controls=True,
+                        id='movie_player',
+                        src=video,
+                        autoPlay=False,
+                        style={
+                            'width': '200px',
+                            'height': '200px',
+                            'margin': 'auto'
+                        }
+                    )
+                    videos.append(vid)
+                text = html.P(
+                    exp_result.raw_output.text_output,
+                    style={'grid-column': 'span 4'
+                           }  # Make the text span 4 columns
+                ) if exp_result.raw_output.text_output else None
+                content = html.Div([text] + videos,
                                    style={
                                        'display': 'grid',
                                        'grid-template-columns':
@@ -1277,23 +1626,25 @@ def create_dash_app(
     def display_page(pathname):
         if pathname.startswith('/rating-result/'):
             hashed_group_key = pathname.split('/')[-1]
-            is_from_improver = "?source=improver" in hashed_group_key
-            hashed_group_key = hashed_group_key.replace('?source=improver', '')
+            is_from_enhancer = "?source=enhancer" in hashed_group_key
+            hashed_group_key = hashed_group_key.replace('?source=enhancer', '')
             return display_group_experiment_result_layout(
-                hashed_group_key, experiment_config, is_from_improver
+                hashed_group_key, experiment_config, is_from_enhancer
             )
-        elif pathname == '/data-analysis':
-            return data_analysis_layout()
         elif pathname == '/experiment-results':
             return experiment_results_layout()
         elif pathname == '/group-key-combo':
             return combo_page_layout()
-        elif pathname == '/improver-experiment-results':
-            return improver_experiment_results_layout()
-        elif pathname == '/improver-group-key-combo':
-            return improver_combo_page_layout()
+        elif pathname == '/enhancer-experiment-results':
+            return enhancer_experiment_results_layout()
+        elif pathname == '/enhancer-group-key-combo':
+            return enhancer_combo_page_layout()
         elif pathname == '/interactive':
             return input_page_layout()
+        elif pathname == '/use-best-result':
+            return use_best_result_layout()
+        elif pathname == '/data-analysis':
+            return data_analysis_layout()
         else:
             return index_page()
 
@@ -1419,11 +1770,11 @@ def create_dash_app(
             Input('save-button', 'n_clicks'),
             State('current-group-key', 'value'),
             State('slider-values-store', 'data'),
-            State('is-from-improver', 'data')
+            State('is-from-enhancer', 'data')
         ]
     )  # We'll handle the dynamic State components inside the function itself
     def update_output(
-        n_clicks, hashed_group_key, slider_values_store, is_from_improver
+        n_clicks, hashed_group_key, slider_values_store, is_from_enhancer
     ):
         if not n_clicks:
             return dash.no_update
@@ -1456,9 +1807,9 @@ def create_dash_app(
                         )
                         exp_result.evaluator_outputs.append(new_output)
 
-        if is_from_improver:
+        if is_from_enhancer:
             results = []
-            for e in experiment_data.improver_output.group_experiment_results:
+            for e in experiment_data.enhancer_output.group_experiment_results:
                 for r in e.experiment_results:
                     results.append(r)
             r = generate_experiment(
@@ -1467,7 +1818,7 @@ def create_dash_app(
                 evaluate_all=False,
                 evaluate_group=False
             )
-            experiment_data.improver_output.combination_aggregated_metrics = r.combination_aggregated_metrics
+            experiment_data.enhancer_output.combination_aggregated_metrics = r.combination_aggregated_metrics
         else:
             results = []
             for e in experiment_data.group_experiment_results:
@@ -1497,8 +1848,8 @@ def create_dash_app(
             col_id = active_cell["column_id"]
             if col_id == "Test Data":
                 hashed_group_key = table_data[row]["Hashed Group Key"]
-                if page_context == 'improver':
-                    return f'/rating-result/{hashed_group_key}?source=improver'
+                if page_context == 'enhancer':
+                    return f'/rating-result/{hashed_group_key}?source=enhancer'
                 return f'/rating-result/{hashed_group_key}'
         return dash.no_update
 
@@ -1535,15 +1886,15 @@ def create_dash_app(
         Input("interactive-btn", "n_clicks"),
         [State(f"input-{key}", "value") for key in function_args.keys()] + [
             State("combinations-select", "value"),
-            State("improver-toggle", "value")
+            State("enhancer-toggle", "value")
         ],
         prevent_initial_call=True
     )
     def update_results(n_clicks, *input_values_and_combinations_and_toggle):
         if not n_clicks:
             return []
-        *input_values, selected_combinations_str, use_improver = input_values_and_combinations_and_toggle
-        use_improver = "improver" in use_improver if use_improver else False
+        *input_values, selected_combinations_str, use_enhancer = input_values_and_combinations_and_toggle
+        use_enhancer = "enhancer" in use_enhancer if use_enhancer else False
         if selected_combinations_str is None:
             return html.Div(
                 "Please select at least one combination.",
@@ -1689,20 +2040,102 @@ def create_dash_app(
 
         return all_results
 
+    @app.callback(
+        Output("best-results-section", "children"),
+        Input("best-result-btn", "n_clicks"),
+        [
+            State(f"input-{key}", "value")
+            for key in list(function_args.keys())[:-1]
+        ] + [State("best-combination", "children")],
+        prevent_initial_call=True
+    )
+    def update_best_results(n_clicks, *input_values_and_combinations):
+        if not n_clicks:
+            return []
+        *input_values, best_combination = input_values_and_combinations
+        # Create a new InputData instance
+        input_data = InputData(
+            dict(zip(list(function_args.keys())[:-1], input_values))
+        )
+        missing_fields = [
+            key for i, key in enumerate(list(function_args.keys())[:-1])
+            if input_values[i] is None
+            and key != "yival_expected_result (Optional)"
+        ]
+        if missing_fields:
+            return html.Div(
+                f"Please fill out the following required fields: {', '.join(missing_fields)}",
+                style={"color": "red"}
+            )
+
+        state.active = True
+        best_varation = json.loads(best_combination)
+        for key in best_varation:
+            best_varation[key] = [best_varation[key]]
+        state.current_variations = best_varation
+        res = call_function_from_string(
+            experiment_config["custom_function"],  # type: ignore
+            **input_data.content,
+            state=state
+        ) if "custom_function" in experiment_config else None  #type: ignore
+
+        current_result = [
+            html.Div([
+                html.Ul([
+                    html.Li("Text Raw Output:"),
+                    html.Div(
+                        handle_output(res.text_output), className="raw-output"
+                    ),
+                ] + ([
+                    html.Li("Image Raw Output:"),
+                    html.Div(
+                        handle_output(res.image_output),
+                        className="raw-output"
+                    )
+                ] if res.image_output is not None else []))
+            ])
+        ]
+
+        input_summary = ", ".join([
+            f"{key}: {value}" for key, value in
+            zip(list(function_args.keys())[:-1], input_values)
+        ])
+        toggle_id = {"type": "toggle", "index": n_clicks}
+        collapse_id = {"type": "collapse", "index": n_clicks}
+        current_result_card = html.Div([
+            dbc.Button(
+                input_summary,
+                id=toggle_id,
+                className="mb-2 w-100",
+                color="info"
+            ),
+            dbc.Collapse([
+                item for sublist in [[res, html.Hr()]
+                                     for res in current_result]
+                for item in sublist
+            ],
+                         id=collapse_id,
+                         is_open=True)
+        ],
+                                       className="mb-3")
+
+        all_results.insert(0, current_result_card)
+        return all_results
+
     def truncate_text(text, max_length=60):  # Adjust max_length as needed
         """Truncate text to a specified length and append ellipses."""
         return text if len(text) <= max_length else text[:max_length] + "..."
 
     @app.callback(
         Output("combinations-select", "options"),
-        [Input("improver-toggle", "value")]
+        [Input("enhancer-toggle", "value")]
     )
-    def update_combinations_options(use_improver):
+    def update_combinations_options(use_enhancer):
         unique_combination = {}
 
-        if "improver" in use_improver:
-            # Use improver combinations
-            for group in experiment_data.improver_output.group_experiment_results:
+        if "enhancer" in use_enhancer:
+            # Use enhancer combinations
+            for group in experiment_data.enhancer_output.group_experiment_results:
                 for result in group.experiment_results:
                     if str(result.combination) not in unique_combination:
                         unique_combination[str(result.combination)
@@ -1807,8 +2240,8 @@ def display_results_dash(
     interactive=False,
     port=8073
 ):
-    if experiment_data.improver_output:
-        for group_result in experiment_data.improver_output.group_experiment_results:
+    if experiment_data.enhancer_output:
+        for group_result in experiment_data.enhancer_output.group_experiment_results:
             experiment_results = []
             seen = set()
             for r in group_result.experiment_results:

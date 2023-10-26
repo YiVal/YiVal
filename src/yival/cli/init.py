@@ -2,12 +2,12 @@ from argparse import Namespace
 
 from yival.wrappers.string_wrapper import StringWrapper
 
-from ..combination_improvers.openai_prompt_based_combination_improver import (
-    OpenAIPromptBasedCombinationImprover,
-)
-from ..combination_improvers.optimize_by_prompt_improver import OptimizeByPromptImprover
 from ..data.csv_reader import CSVReader
 from ..data_generators.openai_prompt_data_generator import OpenAIPromptBasedGeneratorConfig
+from ..enhancers.openai_prompt_based_combination_enhancer import (
+    OpenAIPromptBasedCombinationEnhancer,
+)
+from ..enhancers.optimize_by_prompt_enhancer import OptimizeByPromptEnhancer
 from ..evaluators.bertscore_evaluator import BertScoreEvaluator
 from ..evaluators.openai_elo_evaluator import OpenAIEloEvaluator
 from ..evaluators.openai_prompt_based_evaluator import OpenAIPromptBasedEvaluator
@@ -50,9 +50,9 @@ def _prevent_unused_imports():
     _ = OpenAIPromptBasedEvaluator
     _ = RAGSEvaluator
 
-    #Improver
-    _ = OpenAIPromptBasedCombinationImprover
-    _ = OptimizeByPromptImprover
+    #Enhancer
+    _ = OpenAIPromptBasedCombinationEnhancer
+    _ = OptimizeByPromptEnhancer
 
     #Strategy
     _ = AHPSelection
@@ -133,9 +133,9 @@ def add_arguments_to(subparser):
         help="Name of the data reader for the config."
     )
     parser.add_argument(
-        "--improver_name",
+        "--enhancer_name",
         type=str,
-        help="Name of the improver for the config."
+        help="Name of the enhancer for the config."
     )
     parser.add_argument(
         "--function",
@@ -173,10 +173,10 @@ def add_arguments_to(subparser):
         )
     )
     parser.add_argument(
-        "--custom_improver",
+        "--custom_enhancer",
         type=str,
         help=
-        "Specify custom improver in 'name:class_path:config_cls_path' format."
+        "Specify custom enhancer in 'name:class_path:config_cls_path' format."
     )
     parser.add_argument(
         "--selection_strategy",
@@ -251,14 +251,14 @@ def init(args: Namespace):
             "class_path": reader_class_path,
             "config_path": reader_config_cls_path
         }
-    custom_improver = {}
-    if args.custom_improver:
-        improver_name, improver_class_path, improver_config_cls_path = (
-            args.custom_improver.split(":")
+    custom_enhancer = {}
+    if args.custom_enhancer:
+        enhancer_name, enhancer_class_path, enhancer_config_cls_path = (
+            args.custom_enhancer.split(":")
         )
-        custom_improver[improver_name] = {
-            "class_path": improver_class_path,
-            "config_path": improver_config_cls_path
+        custom_enhancer[enhancer_name] = {
+            "class_path": enhancer_class_path,
+            "config_path": enhancer_config_cls_path
         }
     custom_wrappers = {}
     if args.custom_wrappers:
@@ -317,7 +317,7 @@ def init(args: Namespace):
         source_type=args.source_type,
         evaluator_names=args.evaluator_names,
         reader_name=args.reader_name,
-        improver_name=args.improver_name,
+        enhancer_name=args.enhancer_name,
         wrapper_names=args.wrapper_names,
         data_generator_names=args.data_genertaor_names,
         selection_strategy_name=args.selection_strategy,
@@ -328,7 +328,7 @@ def init(args: Namespace):
         custom_data_generators=custom_data_generators,
         custom_variation_generators=custom_variation_generators,
         custom_selection_strategy=custom_selection_strategy,
-        custom_improver=custom_improver
+        custom_enhancer=custom_enhancer
     )
 
     # Save the generated template to the specified config path

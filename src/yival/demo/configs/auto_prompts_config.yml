@@ -32,7 +32,7 @@ variations:
     generator_name: openai_prompt_based_variation_generator
     generator_config:
       diversify: false
-      max_tokens: 7000
+      max_tokens: 100
       number_of_variations: 2
       model_name: gpt-4
       output_path: demo_generated_prompt.pkl
@@ -198,7 +198,7 @@ selection_strategy:
       "openai_prompt_based_evaluator: catchiness": 0.1
 
 
-improver:
-  name: "optimize_by_prompt_improver"
+enhancer:
+  name: "optimize_by_prompt_enhancer"
   model_name: "gpt-4"
   max_iterations: 2

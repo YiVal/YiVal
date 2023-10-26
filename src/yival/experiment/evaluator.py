@@ -73,7 +73,7 @@ class Evaluator:
                         evaluator.evaluate_comparison(results)
 
     def evaluate_based_on_all_results(
-        self, experimnet: List[Experiment]
+        self, experiment: List[Experiment]
     ) -> None:
 
         for config in self.configs:
@@ -98,4 +98,4 @@ class Evaluator:
                         config_instance = config_cls(**config_data)
                         evaluator = evaluator_cls(config_instance)
 
-                        evaluator.evaluate_based_on_all_results(experimnet)
+                        evaluator.evaluate_based_on_all_results(experiment)

@@ -38,7 +38,7 @@ nav:
     - Custom Data Generator: eng-spec/custom_parent/custom-data-generator.md
     - Custom Variation Generator: eng-spec/custom_parent/custom-variation-generator.md
     - Custom Reader: eng-spec/custom_parent/custom-reader.md
-    - Custom Combination Improver: eng-spec/custom_parent/custom-combination-improver.md
+    - Custom Combination Enhancer: eng-spec/custom_parent/custom-combination-improver.md
     - Custom Selection Strategy: eng-spec/custom_parent/custom-selection-strategy.md
 - Contributing Guide: contributing-guide.md
 - Code Reference:
@@ -53,7 +53,7 @@ nav:
   - Configs: code_reference/configs.md
 repo_name: YiVal/YiVal
 repo_url: https://github.com/YiVal/YiVal
-site_name: My Project
+site_name: YiVal
 theme:
   favicon: fontawesome/brands/github
   features:

@@ -4,6 +4,7 @@ import json
 from typing import List
 
 import pandas as pd  # type: ignore
+from dash import html  # type: ignore
 from PIL import Image
 
 from yival.schemas.experiment_config import GroupedExperimentResult
@@ -114,13 +115,23 @@ def generate_group_key_combination_data(
                 process_raw_output(
                     getattr(exp_result.raw_output, 'image_output', None)
                 ),
+                "video_output":
+                process_raw_output(
+                    getattr(exp_result.raw_output, 'video_output', None)
+                ),
                 "evaluator_outputs":
                 "\n".join([
                     f"{e.name} : {e.display_name} = {e.result}"
                     for e in exp_result.evaluator_outputs
                 ]) if exp_result.evaluator_outputs else None
             }
-            formatted_output = f"<yival_raw_output>{nested_output['text_output']}</yival_raw_output>{nested_output['image_output']}\n{nested_output['evaluator_outputs']}"
+            video_text = ''
+            video_output = nested_output['video_output']
+            if video_output is not None:
+                for video_url in nested_output['video_output']:
+                    video_text += f"<yival_video_output>{video_url}</yival_video_output>"
+
+            formatted_output = f"<yival_raw_output>{nested_output['text_output']}</yival_raw_output>{nested_output['image_output']}{video_text}\n{nested_output['evaluator_outputs']}"
             row_dict[combo_str] = formatted_output
             all_combos.add(combo_str)
         data_list.append(row_dict)
@@ -144,6 +155,8 @@ def generate_heatmap_style(df, *cols):
     dark_negative = (255, 150, 140)
 
     for col in df.columns:
+        if col == "Iteration":
+            continue
         if pd.api.types.is_numeric_dtype(df[col]):
             min_val = df[col].min()
             max_val = df[col].max()
@@ -199,3 +212,37 @@ def generate_heatmap_style(df, *cols):
                         'backgroundColor': bg_color_str
                     })
     return styles
+
+
+def generate_legend():
+    """
+    Generates the legend for the heatmap.
+    """
+    # Define the colors for the legend
+    colors = [("Low Value (Positive)", "rgb(173, 216, 230)"),
+              ("High Value (Positive)", "rgb(70, 130, 180)"),
+              ("Low Value (Negative)", "rgb(255, 245, 235)"),
+              ("High Value (Negative)", "rgb(255, 150, 140)")]
+
+    # Create the legend elements
+    legend_elements = [
+        html.Div([
+            html.Div(
+                style={
+                    "backgroundColor": color,
+                    "width": "20px",
+                    "height": "20px",
+                    "display": "inline-block"
+                }
+            ),
+            html.Span(f" {label}", style={"marginLeft": "10px"})
+        ]) for label, color in colors
+    ]
+
+    # Return the legend wrapped in a container
+    return html.Div(
+        legend_elements, style={
+            "marginTop": "20px",
+            "marginBottom": "20px"
+        }
+    )
