@@ -40,7 +40,7 @@ from .hexagram import HEXAGRAMS, generate_hexagram_figure
 from .utils import (
     generate_group_key_combination_data,
     generate_heatmap_style,
-    highlight_best_values,
+    generate_legend,
     sanitize_column_name,
     sanitize_group_key,
 )
@@ -322,23 +322,20 @@ def create_dash_app(
                     )
                 ),
                 dbc.NavItem(
-                    dbc.NavLink("Data Analysis", href="/data-analysis")
-                ),
-                dbc.NavItem(
                     dbc.NavLink(
-                        "Detailed Test Results", href="/group-key-combo"
+                        "Detailed Experiment Results", href="/group-key-combo"
                     )
                 ),
                 dbc.NavItem(
                     dbc.NavLink(
-                        "Improver Experiment Results Analysis",
-                        href="/improver-experiment-results"
+                        "Enhancer Experiment Results Analysis",
+                        href="/enhancer-experiment-results"
                     )
                 ),
                 dbc.NavItem(
                     dbc.NavLink(
-                        "Improver Detailed Test Results",
-                        href="/improver-group-key-combo"
+                        "Enhancer Detailed Experiment Results",
+                        href="/enhancer-group-key-combo"
                     )
                 ),
                 dbc.NavItem(
@@ -349,11 +346,12 @@ def create_dash_app(
                         className="ml-2"
                     )
                 ),
+                dbc.NavItem(dbc.NavLink(
+                    "Playground",
+                    href="/interactive",
+                )),
                 dbc.NavItem(
-                    dbc.NavLink(
-                        "Interactive Mode",
-                        href="/interactive",
-                    )
+                    dbc.NavLink("Data Analysis", href="/data-analysis")
                 ),
             ],
             brand="YiVal",
@@ -376,7 +374,7 @@ def create_dash_app(
         data = []
         for metric in combo_metrics:
             row = {
-                "Combo Key":
+                "Hyperparameters":
                 "\n".join(
                     textwrap.wrap(
                         str(metric.combo_key).replace('"',
@@ -440,7 +438,12 @@ def create_dash_app(
                     sample_count += 1
 
             data.append(row)
+        for index, row in enumerate(data):
+            row["Iteration"] = index
         df = pd.DataFrame(data)
+        column_order = ["Iteration"
+                        ] + [col for col in df if col != "Iteration"]
+        df = df[column_order]
         if 'Average Token Usage' in df:
             df['Average Token Usage'] = pd.to_numeric(
                 df['Average Token Usage'], errors='coerce'
@@ -495,6 +498,7 @@ def create_dash_app(
                          'overflowX': 'auto'
                      }),
             html.Hr(),
+            generate_legend(),
             html.A(
                 'Export to CSV',
                 id='export-link-experiment-results',
@@ -505,16 +509,18 @@ def create_dash_app(
             html.Br(),
             dcc.Link('Go to Data Analysis', href='/data-analysis'),
             html.Br(),
-            dcc.Link('Go to Detailed Test Results', href='/group-key-combo'),
-            html.Br(),
             dcc.Link(
-                'Go to Improver Experiment Results Analysis',
-                href='/improver-experiment-results'
+                'Go to Detailed Experiment Results', href='/group-key-combo'
             ),
             html.Br(),
             dcc.Link(
-                'Go to Improver Detailed Test Results',
-                href='/improver-group-key-combo'
+                'Go to Enhancer Experiment Results Analysis',
+                href='/enhancer-experiment-results'
+            ),
+            html.Br(),
+            dcc.Link(
+                'Go to Enhancer Detailed Experiment Results',
+                href='/enhancer-group-key-combo'
             ),
             html.Br()
         ])
@@ -529,35 +535,39 @@ def create_dash_app(
                 href='/experiment-results'
             ),
             html.Br(),
-            dcc.Link('Go to Detailed Test Results', href='/group-key-combo'),
-            html.Br(),
             dcc.Link(
-                'Go to Improver Experiment Results Analysis',
-                href='/improver-experiment-results'
+                'Go to Detailed Experiment Results', href='/group-key-combo'
             ),
             html.Br(),
             dcc.Link(
-                'Go to Improver Detailed Test Results',
-                href='/improver-group-key-combo'
+                'Go to Enhancer Experiment Results Analysis',
+                href='/enhancer-experiment-results'
+            ),
+            html.Br(),
+            dcc.Link(
+                'Go to Enhancer Detailed Experiment Results',
+                href='/enhancer-group-key-combo'
             ),
             html.Br()
         ])
 
     def combo_page_layout():
         return html.Div([
-            html.H3("Detailed Test Results", style={'textAlign': 'center'}),
+            html.H3(
+                "Detailed Experiment Results", style={'textAlign': 'center'}
+            ),
             html.Hr(),
             group_key_combination_layout(
                 experiment_data.group_experiment_results
             ),
             dcc.Link(
-                'Go to Improver Experiment Results Analysis',
-                href='/improver-experiment-results'
+                'Go to Enhancer Experiment Results Analysis',
+                href='/enhancer-experiment-results'
             ),
             html.Br(),
             dcc.Link(
-                'Go to Improver Detailed Test Results',
-                href='/improver-group-key-combo'
+                'Go to Enhancer Detailed Experiment Results',
+                href='/enhancer-group-key-combo'
             ),
             html.Br(),
             html.Hr(),
@@ -568,42 +578,45 @@ def create_dash_app(
             )
         ])
 
-    def improver_experiment_results_layout():
+    def enhancer_experiment_results_layout():
         if not experiment_data.enhancer_output:
-            return html.Div([html.H3("No Improver Output data available.")])
+            return html.Div([html.H3("No Enhancer Output data available.")])
 
-        df_improver = generate_combo_metrics_data(
+        df_enhancer = generate_combo_metrics_data(
             experiment_data.enhancer_output.combination_aggregated_metrics,
             experiment_data.enhancer_output.group_experiment_results
         )
 
-        csv_string = df_improver.to_csv(index=False, encoding='utf-8')
+        csv_string = df_enhancer.to_csv(index=False, encoding='utf-8')
         csv_data_url = 'data:text/csv;charset=utf-8,' + urllib.parse.quote(
             csv_string
         )
 
         return html.Div([
             html.H3(
-                "Improver Experiment Results Analysis",
+                "Enhancer Experiment Results Analysis",
                 style={'textAlign': 'center'}
             ),
-            combo_aggregated_metrics_layout(df_improver),
+            combo_aggregated_metrics_layout(df_enhancer),
             html.Hr(),
+            generate_legend(),
             html.A(
                 'Export to CSV',
-                id='export-link-improver-experiment-results',
-                download="improver_experiment_results.csv",
+                id='export-link-enhancer-experiment-results',
+                download="enhancer_experiment_results.csv",
                 href=csv_data_url,
                 target="_blank"
             ),
             html.Br(),
             dcc.Link('Go to Data Analysis', href='/data-analysis'),
             html.Br(),
-            dcc.Link('Go to Detailed Test Results', href='/group-key-combo'),
+            dcc.Link(
+                'Go to Detailed Experiment Results', href='/group-key-combo'
+            ),
             html.Br(),
             dcc.Link(
-                'Go to Improver Detailed Test Results',
-                href='/improver-group-key-combo'
+                'Go to Enhancer Detailed Experiment Results',
+                href='/enhancer-group-key-combo'
             ),
             html.Br()
         ])
@@ -611,7 +624,7 @@ def create_dash_app(
     def analysis_layout(df):
         evaluator_outputs = [
             col for col in df.columns
-            if (col != 'Combo Key' and 'Sample' not in col)
+            if (col != 'Hyperparameters' and 'Sample' not in col)
         ]
         return html.Div([
             html.Div([
@@ -645,12 +658,12 @@ def create_dash_app(
         ],
                         className="row")
 
-    def improver_combo_page_layout():
+    def enhancer_combo_page_layout():
         if not experiment_data.enhancer_output:
-            return html.Div([html.H3("No Improver Output data available.")])
+            return html.Div([html.H3("No Enhancer Output data available.")])
         return html.Div([
             html.H3(
-                "Improver Detailed Test Results",
+                "Enhancer Detailed Experiment Results",
                 style={'textAlign': 'center'}
             ),
             group_key_combination_layout(
@@ -659,14 +672,14 @@ def create_dash_app(
                 original_best_combo_key
             ),
             dcc.Link(
-                'Go to Improver Experiment Results Analysis',
-                href='/improver-experiment-results'
+                'Go to Enhancer Experiment Results Analysis',
+                href='/enhancer-experiment-results'
             ),
             html.Hr(),
             html.Div(
                 id='current-page-context',
                 style={'display': 'none'},
-                children='improver'
+                children='enhancer'
             )
         ])
 
@@ -686,8 +699,8 @@ def create_dash_app(
             'width': '15%'
         } for col in sample_columns]
 
-        styles = highlight_best_values(df, *df.columns)
-        styles += generate_heatmap_style(df, *df.columns)
+        # styles = highlight_best_values(df, *df.columns)
+        styles = generate_heatmap_style(df, *df.columns)
         styles += sample_style
 
         # Highlight the best_combination row
@@ -701,9 +714,10 @@ def create_dash_app(
             )
             styles.append({
                 'if': {
-                    'column_id': 'Combo Key',
+                    'column_id':
+                    'Hyperparameters',
                     'filter_query':
-                    f'{{Combo Key}} eq "{best_combination_str}"',
+                    f'{{Hyperparameters}} eq "{best_combination_str}"',
                 },
                 'backgroundColor': '#DFF0D8',  # Light green color
                 'border': '2px solid #28A745',  # Darker green border
@@ -717,11 +731,11 @@ def create_dash_app(
                     experiment_data.selection_output.selection_reason.items()
                 ])
                 tooltip_data = [{
-                    'Combo Key': {
+                    'Hyperparameters': {
                         'value': reason_str,
                         'type': 'markdown'
                     }
-                } if row["Combo Key"] == best_combination_str else {}
+                } if row["Hyperparameters"] == best_combination_str else {}
                                 for row in df.to_dict('records')]
 
         evaluator_names = [
@@ -756,7 +770,7 @@ def create_dash_app(
             },
             style_cell_conditional=[{
                 'if': {
-                    'column_id': 'Combo Key'
+                    'column_id': 'Hyperparameters'
                 },
                 'width': '40%'
             }, {
@@ -919,6 +933,17 @@ def create_dash_app(
                 for line in cell.split("\n")
             ])
 
+    test_data_hint = html.Div([
+        html.Small(
+            "Click on each test data below to perform human labeling.",
+            style={
+                "color": "#888888",
+                "display": "block",
+                "marginBottom": "10px"
+            }
+        )
+    ])
+
     def group_key_combination_layout(
         group_experiment_results: List[GroupedExperimentResult],
         highlight_key: Optional[str] = None
@@ -953,8 +978,8 @@ def create_dash_app(
         if highlight_key:
             styles_data_conditional.append({
                 'if': {
-                    'column_id': 'Combo Key',
-                    'filter_query': f'{{Combo Key}} eq "{highlight_key}"'
+                    'column_id': 'Hyperparameters',
+                    'filter_query': f'{{Hyperparameters}} eq "{highlight_key}"'
                 },
                 'backgroundColor': '#FFCCCC'  # Highlighting with gold color
             })
@@ -982,7 +1007,7 @@ def create_dash_app(
                     href=csv_data_url,
                     target="_blank"
                 ),
-                html.Br(),
+                html.Br(), test_data_hint,
                 html.Table(
                     create_table(new_data_dict), id='group-key-combo-table'
                 ),
@@ -1005,7 +1030,7 @@ def create_dash_app(
                     href=csv_data_url,
                     target="_blank"
                 ),
-                html.Br(),
+                html.Br(), test_data_hint,
                 html.Table(
                     create_video_table(new_data_dict),
                     id='group-key-combo-table'
@@ -1029,6 +1054,7 @@ def create_dash_app(
                     target="_blank"
                 ),
                 html.Br(),
+                test_data_hint,
                 dash_table.DataTable(
                     id='group-key-combo-table',
                     columns=columns,
@@ -1127,8 +1153,7 @@ def create_dash_app(
                         dbc.Card(
                             [
                                 dbc.CardHeader(
-                                    html.
-                                    H4("Parameters", className="text-center"),
+                                    html.H4("Input", className="text-center"),
                                     className="bg-light"
                                 ),
                                 dbc.CardBody([
@@ -1192,14 +1217,14 @@ def create_dash_app(
                                     )
                                 ],
                                          style={"padding": "10px"}),
-                                # Toggle for improver combinations
+                                # Toggle for enhancer combinations
                                 dbc.Checklist(
                                     options=[{
-                                        "label": "Use Improver Combinations",
-                                        "value": "improver"
+                                        "label": "Use Enhancer Combinations",
+                                        "value": "enhancer"
                                     }],
                                     value=[],
-                                    id="improver-toggle",
+                                    id="enhancer-toggle",
                                     switch=True,
                                     inline=True,
                                     style={"padding": "10px"}
@@ -1231,7 +1256,7 @@ def create_dash_app(
         ])
 
     def display_group_experiment_result_layout(
-        hashed_group_key, experiment_config, is_from_improver=False
+        hashed_group_key, experiment_config, is_from_enhancer=False
     ):
         group_result = get_group_experiment_result_from_hash(hashed_group_key)
         if not group_result:
@@ -1273,7 +1298,7 @@ def create_dash_app(
             )
         ]
         children.append(
-            dcc.Store(id='is-from-improver', data=is_from_improver)
+            dcc.Store(id='is-from-enhancer', data=is_from_enhancer)
         )
 
         for index, exp_result in enumerate(group_result.experiment_results):
@@ -1491,23 +1516,23 @@ def create_dash_app(
     def display_page(pathname):
         if pathname.startswith('/rating-result/'):
             hashed_group_key = pathname.split('/')[-1]
-            is_from_improver = "?source=improver" in hashed_group_key
-            hashed_group_key = hashed_group_key.replace('?source=improver', '')
+            is_from_enhancer = "?source=enhancer" in hashed_group_key
+            hashed_group_key = hashed_group_key.replace('?source=enhancer', '')
             return display_group_experiment_result_layout(
-                hashed_group_key, experiment_config, is_from_improver
+                hashed_group_key, experiment_config, is_from_enhancer
             )
-        elif pathname == '/data-analysis':
-            return data_analysis_layout()
         elif pathname == '/experiment-results':
             return experiment_results_layout()
         elif pathname == '/group-key-combo':
             return combo_page_layout()
-        elif pathname == '/improver-experiment-results':
-            return improver_experiment_results_layout()
-        elif pathname == '/improver-group-key-combo':
-            return improver_combo_page_layout()
+        elif pathname == '/enhancer-experiment-results':
+            return enhancer_experiment_results_layout()
+        elif pathname == '/enhancer-group-key-combo':
+            return enhancer_combo_page_layout()
         elif pathname == '/interactive':
             return input_page_layout()
+        elif pathname == '/data-analysis':
+            return data_analysis_layout()
         else:
             return index_page()
 
@@ -1633,11 +1658,11 @@ def create_dash_app(
             Input('save-button', 'n_clicks'),
             State('current-group-key', 'value'),
             State('slider-values-store', 'data'),
-            State('is-from-improver', 'data')
+            State('is-from-enhancer', 'data')
         ]
     )  # We'll handle the dynamic State components inside the function itself
     def update_output(
-        n_clicks, hashed_group_key, slider_values_store, is_from_improver
+        n_clicks, hashed_group_key, slider_values_store, is_from_enhancer
     ):
         if not n_clicks:
             return dash.no_update
@@ -1670,7 +1695,7 @@ def create_dash_app(
                         )
                         exp_result.evaluator_outputs.append(new_output)
 
-        if is_from_improver:
+        if is_from_enhancer:
             results = []
             for e in experiment_data.enhancer_output.group_experiment_results:
                 for r in e.experiment_results:
@@ -1711,8 +1736,8 @@ def create_dash_app(
             col_id = active_cell["column_id"]
             if col_id == "Test Data":
                 hashed_group_key = table_data[row]["Hashed Group Key"]
-                if page_context == 'improver':
-                    return f'/rating-result/{hashed_group_key}?source=improver'
+                if page_context == 'enhancer':
+                    return f'/rating-result/{hashed_group_key}?source=enhancer'
                 return f'/rating-result/{hashed_group_key}'
         return dash.no_update
 
@@ -1749,15 +1774,15 @@ def create_dash_app(
         Input("interactive-btn", "n_clicks"),
         [State(f"input-{key}", "value") for key in function_args.keys()] + [
             State("combinations-select", "value"),
-            State("improver-toggle", "value")
+            State("enhancer-toggle", "value")
         ],
         prevent_initial_call=True
     )
     def update_results(n_clicks, *input_values_and_combinations_and_toggle):
         if not n_clicks:
             return []
-        *input_values, selected_combinations_str, use_improver = input_values_and_combinations_and_toggle
-        use_improver = "improver" in use_improver if use_improver else False
+        *input_values, selected_combinations_str, use_enhancer = input_values_and_combinations_and_toggle
+        use_enhancer = "enhancer" in use_enhancer if use_enhancer else False
         if selected_combinations_str is None:
             return html.Div(
                 "Please select at least one combination.",
@@ -1909,13 +1934,13 @@ def create_dash_app(
 
     @app.callback(
         Output("combinations-select", "options"),
-        [Input("improver-toggle", "value")]
+        [Input("enhancer-toggle", "value")]
     )
-    def update_combinations_options(use_improver):
+    def update_combinations_options(use_enhancer):
         unique_combination = {}
 
-        if "improver" in use_improver:
-            # Use improver combinations
+        if "enhancer" in use_enhancer:
+            # Use enhancer combinations
             for group in experiment_data.enhancer_output.group_experiment_results:
                 for result in group.experiment_results:
                     if str(result.combination) not in unique_combination:
