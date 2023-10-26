@@ -30,8 +30,9 @@ from ..common.model_utils import llm_completion
 from ..experiment.evaluator import Evaluator
 from ..experiment.lite_experiment import LiteExperimentRunner
 from ..experiment.rate_limiter import RateLimiter
-from ..experiment.utils import generate_experiment
+from ..experiment.utils import generate_experiment, get_selection_strategy
 from ..logger.token_logger import TokenLogger
+from ..result_selectors.selection_context import SelectionContext
 from ..schemas.combination_enhancer_configs import OptimizeByPromptEnhancerConfig
 from ..schemas.common_structures import InputData
 from ..schemas.experiment_config import (
@@ -266,12 +267,20 @@ class OptimizeByPromptEnhancer(BaseCombinationEnhancer):
         experiment = generate_experiment(
             results, evaluator, evaluate_group=False, evaluate_all=False
         )
+        enable_custom_func = "custom_function" in self.updated_config  #type: ignore
+        strategy = get_selection_strategy(self.updated_config)
+        if strategy and enable_custom_func:
+            context_trade_off = SelectionContext(strategy=strategy)
+            experiment.selection_output = context_trade_off.execute_selection( # type: ignore
+                experiment=experiment
+            )
 
         enhancer_output = EnhancerOutput(
             group_experiment_results=experiment.group_experiment_results,
             combination_aggregated_metrics=experiment.
             combination_aggregated_metrics,
-            original_best_combo_key=original_combo_key
+            original_best_combo_key=original_combo_key,
+            selection_output=experiment.selection_output
         )
 
         return enhancer_output
