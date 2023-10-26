@@ -27,23 +27,35 @@ def scratch_variations_from_str(
     e.g.
     target_str:
         This is the generated new output
-        var1: hello world
-        var2: bye
+        var1=hello world
+        hello world
+        var2=bye
     
     variations: ["var1", "var2"]
 
     function result:
     {
-        "var1": "hello world"
+        "var1": "hello world\nhello world"
         "var2": "bye"
     }
     """
-    result = {}
+    result = {var: "" for var in variations}
     lines = target_str.split('\n')
+    var_detect = False
+    current_var = ""
     for line in lines:
+        var_line = False
         for var in variations:
-            if line.startswith(var + '='):
-                result[var] = line[len(var) + 1:].strip().strip("'").strip('"')
+            if line.strip().startswith(f"{var}="):
+                var_detect = True
+                result[var] = line.strip().split('=',
+                                                 1)[1].strip().strip("'\"")
+                var_line = True
+                current_var = var
+        if var_line:
+            continue
+        if var_detect:
+            result[current_var] += ('\n' + line.strip())
     return result
 
 
@@ -51,17 +63,29 @@ def construct_output_format(variations: List[str]) -> str:
     """
     Instruct llm to output variations in fixed format
 
-    e.g. variations: ["task"]
+    e.g. variations: ["prompt"]
 
     expected llm output:
-        task: "123"
+        prompt: "123"
     
     function_output:
         Do not write code . Please response with given format:
-        task: 
+        prompt={ your generated prompt } 
     """
 
     prompt = "Do not write code. Please response with given format:\n"
     for var in variations:
-        prompt += f"{var}= \n"
+        prompt += (var + '=' + '{' + "your generated " + f"{var}" + '}')
     return prompt
+
+
+if __name__ == "__main__":
+    input = """
+    This is the generated new output
+            var1= hello world
+            hello world
+            var2= bye
+    """
+    print(input)
+    result = scratch_variations_from_str(input, ["var1", "var2"])
+    print(result)
