@@ -237,7 +237,6 @@ class OptimizeByPromptEnhancer(BaseCombinationEnhancer):
                 enable_selector=True
             )
             experiments.append(experiment)
-            # print(f"experiments: {experiments}")
 
             #fetch next prompt
             best_combo, score = find_combo_with_score(experiment)
