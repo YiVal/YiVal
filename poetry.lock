@@ -5270,4 +5270,4 @@ trainers = ["bitsandbytes", "peft", "scipy", "trl"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.13"
-content-hash = "a1967c4383fc161768b95fb9da2b3ba30c004d716cc093ab9990b677d5e1236b"
+content-hash = "6677d09e641094978aff3213c6a15ef9d66201fac194d2563d9e25aef441e178"
