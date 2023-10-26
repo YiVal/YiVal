@@ -33,7 +33,7 @@ dash-bootstrap-components = "^1.4.2"
 aiohttp-socks = "^0.8.0"
 pyngrok = "^6.0.0"
 faiss-cpu = "^1.7.4"
-langchain = "^0.0.275"
+langchain = "0.0.288"
 tiktoken = "^0.4.0"
 pillow = "9.4.0"
 types-requests = "^2.31.0.2"
@@ -54,6 +54,7 @@ scipy = { version = "^1.11.3", optional = true}
 streamlit = "^1.27.2"
 pydoc-markdown = "^4.8.2"
 pandas-stubs = "^2.1.1.230928"
+ragas = "^0.0.18"
 
 [tool.poetry.extras]
 trainers = ["peft","trl","bitsandbytes","scipy"]
