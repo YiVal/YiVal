@@ -41,7 +41,7 @@ types-pillow = "^10.0.0.2"
 dash-dangerously-set-inner-html = "^0.0.2"
 litellm = "0.1.607"
 torch = ">=2.0.0, !=2.0.1, !=2.1.0"
-transformers = "4.33.0"
+transformers = "^4.33.0"
 psutil = "^5.9.5"
 replicate = "^0.12.0"
 bert-score = "^0.3.13"
@@ -52,7 +52,6 @@ trl = { version = "^0.7.1", optional = true }
 bitsandbytes = { version = "^0.41.1", optional = true }
 scipy = { version = "^1.11.3", optional = true}
 streamlit = "^1.27.2"
-greenlet = "3.0.0"
 
 [tool.poetry.extras]
 trainers = ["peft","trl","bitsandbytes","scipy"]
