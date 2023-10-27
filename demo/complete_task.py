@@ -44,7 +44,7 @@ def complete_task(
         StringWrapper("gpt-3.5-turbo", name="model_name", state=state)
     )
     response = llm_completion(
-        Request(model_name=model_name, prompt=prompt)
+        Request(model_name=model_name, prompt=prompt, params={"temperature": 0.5})
     ).output
     res = MultimodalOutput(
         text_output=response['choices'][0]['message']['content'],
