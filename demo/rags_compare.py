@@ -56,14 +56,16 @@ class retriever_model_prompt:
     timer :dict
     data :dict
     cnt :dict
+    inited :dict
     def __init__(self,pdf_path=None):
         self.retrievers=dict()
         self.model_prompt=dict()
         self.pdf_path=None
         self.pdf_path_2=None
-        self.cnt=dict()
+        self.cnt=dict() 
         self.timer=dict()
         self.data=dict()
+        self.inited=dict()
         if not pdf_path == None:
             self.data = PyPDFLoader(pdf_path).load()
             print(self.data)
@@ -222,33 +224,39 @@ class retriever_model_prompt:
 
     def init_retriever(self,retriever:str,context:dict=None):
         
-        if retriever == 'MultiQueryRetriever' and 'MultiQueryRetriever' not in self.retrievers:
-            self.retrievers[retriever]=False
+        if retriever == 'MultiQueryRetriever' and retriever not in self.inited:
+            #self.retrievers[retriever]=False
+            self.inited[retriever]=False
             self.cnt[retriever]=10
             self.add_retriever(retriever,self.init_MultiQueryRetriever(context=context))
+            self.inited[retriever]=True
             pass
-        elif retriever == 'Contextual_compression' and 'Contextual_compression' not in self.retrievers:
-            self.retrievers[retriever]=False
+        elif retriever == 'Contextual_compression' and retriever not in self.retrievers:
+            self.inited[retriever]=False
             self.cnt[retriever]=10
             self.add_retriever(retriever,self.init_Contextual_comporession(context=context))
+            self.inited[retriever]=True
             pass
-        elif retriever == 'Ensemble_Retriever' and 'Ensemble_Retriever' not in self.retrievers:
-            self.retrievers[retriever]=False
+        elif retriever == 'Ensemble_Retriever' and retriever not in self.retrievers:
+            self.inited[retriever]=False
             self.cnt[retriever]=10
             self.add_retriever(retriever,self.init_Ensemble_Retriever(context=context))
+            self.inited[retriever]=True
             pass
-        elif retriever == 'MultiVector_Retriever' and 'MultiVector_Retriever' not in self.retrievers:
-            self.retrievers[retriever]=False
+        elif retriever == 'MultiVector_Retriever' and retriever not in self.retrievers:
+            self.inited[retriever]=False
             self.cnt[retriever]=10
             self.add_retriever(retriever,self.init_MultiVector_Retriever(context=context))
+            self.inited[retriever]=True
             pass
-        elif retriever == 'Parent_Document_Retriever' and 'Parent_Document_Retriever' not in self.retrievers:
-            self.retrievers[retriever]=False
+        elif retriever == 'Parent_Document_Retriever' and retriever not in self.retrievers:
+            self.inited[retriever]=False
             self.cnt[retriever]=10
             self.add_retriever(retriever,self.init_Parent_Document_Retriever(context=context))
+            self.inited[retriever]=True
             pass
-        elif retriever == 'llamaindex' and 'llamaindex' not in self.retrievers:
-            self.retrievers[retriever]=False
+        elif retriever == 'llamaindex' and retriever not in self.retrievers:
+            self.inited[retriever]=False
             self.cnt[retriever]=10
             documents=[]
             if not self.pdf_path==None:
@@ -265,6 +273,7 @@ class retriever_model_prompt:
             index = VectorStoreIndex.from_documents(documents)
             llamaindex = index.as_retriever()
             self.add_retriever(retriever,llamaindex)
+            self.inited[retriever]=True
             pass
 def langchain_docs_to_string(docs:List)-> str:
     return f"---".join([f"Document {i+1}:\n\n" + d.page_content for i, d in enumerate(docs)])
@@ -287,11 +296,9 @@ def retriever_method(input: str, retriever: str,context:dict=None)-> str:
 
     if retriever == 'MultiQueryRetriever':
         flag=1
-        while not isinstance(r_m_ps.retrievers[retriever],MultiQueryRetriever):
-            print('line:260')
+        while r_m_ps.inited[retriever]==False:
             if flag==1 and retriever in r_m_ps.data:
                 r_m_ps.timer[retriever]=time.time()
-                
                 r_m_ps.data[retriever]+=context
                 flag=0
             time.sleep(1)
@@ -300,7 +307,7 @@ def retriever_method(input: str, retriever: str,context:dict=None)-> str:
         pass
     elif retriever == 'Contextual_compression':
         flag=1
-        while not isinstance(r_m_ps.retrievers[retriever],ContextualCompressionRetriever):
+        while r_m_ps.inited[retriever]==False:
             if flag==1 and retriever in r_m_ps.data:
                 r_m_ps.timer[retriever]=time.time()
                 r_m_ps.data[retriever].append(context)
@@ -311,7 +318,7 @@ def retriever_method(input: str, retriever: str,context:dict=None)-> str:
         pass
     elif retriever == 'Ensemble_Retriever':
         flag=1
-        while not isinstance(r_m_ps.retrievers[retriever],EnsembleRetriever):
+        while r_m_ps.inited[retriever]==False:
             if flag==1 and retriever in r_m_ps.data:
                 r_m_ps.timer[retriever]=time.time()
                 r_m_ps.data[retriever].append(context)
@@ -322,7 +329,7 @@ def retriever_method(input: str, retriever: str,context:dict=None)-> str:
         pass
     elif retriever == 'MultiVector_Retriever':
         flag=0
-        while not isinstance(r_m_ps.retrievers[retriever],MultiVectorRetriever):
+        while r_m_ps.inited[retriever]==False:
             if flag==1 and retriever in r_m_ps.data:
                 r_m_ps.timer[retriever]=time.time()
                 r_m_ps.data[retriever].append(context)
@@ -333,7 +340,7 @@ def retriever_method(input: str, retriever: str,context:dict=None)-> str:
         pass
     elif retriever == 'Parent_Document_Retriever':
         flag=0
-        while not isinstance(r_m_ps.retrievers[retriever],ParentDocumentRetriever):
+        while r_m_ps.inited[retriever]==False:
             if flag==1 and retriever in r_m_ps.data:
                 r_m_ps.timer[retriever]=time.time()
                 r_m_ps.data[retriever].append(context)
@@ -344,7 +351,7 @@ def retriever_method(input: str, retriever: str,context:dict=None)-> str:
         pass
     elif retriever == 'llamaindex':
         flag=0
-        while not isinstance(r_m_ps.retrievers[retriever],VectorIndexRetriever):
+        while r_m_ps.inited[retriever]==False:
             if flag==1 and retriever in r_m_ps.data:
                 r_m_ps.timer[retriever]=time.time()
                 r_m_ps.data[retriever].append(context)
