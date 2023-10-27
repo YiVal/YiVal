@@ -17,10 +17,12 @@ from langchain.embeddings import OpenAIEmbeddings
 from langchain.document_loaders import TextLoader
 from langchain.vectorstores import FAISS
 from langchain.llms import OpenAI
+from langchain.llms import BaseLLM
 from langchain.retrievers import ContextualCompressionRetriever
 from langchain.retrievers.document_compressors import LLMChainExtractor
 from langchain.document_loaders import PyPDFLoader
 from langchain.retrievers import BM25Retriever, EnsembleRetriever
+
 import time
 from langchain.retrievers.multi_vector import MultiVectorRetriever
 from langchain.storage import InMemoryStore
@@ -123,7 +125,7 @@ class retriever_model_prompt:
         compression_retriever = ContextualCompressionRetriever(base_compressor=compressor, base_retriever=retriever)
         return compression_retriever
     def init_Ensemble_Retriever(self,context=None)->EnsembleRetriever:
-        splits=None
+        splits=[]
         if not self.pdf_path==None:
             text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=0)
             splits = text_splitter.split_documents(self.data)
@@ -282,7 +284,7 @@ def llamaindex_docs_to_string(docs:List)-> str:
 
 r_m_ps=retriever_model_prompt()
 
-def retriever_method(input: str, retriever: str,context:dict=None)-> str:
+def retriever_method(input: str, retriever: str,context:Optional[Dict]=None)-> str:
     res=""
     global r_m_ps
 
@@ -365,7 +367,7 @@ def retriever_method(input: str, retriever: str,context:dict=None)-> str:
         res='No result!'
     return res
 
-def rags_compare(question: str,context:Dict=None, state: ExperimentState=None) -> MultimodalOutput:
+def rags_compare(question: str,context:Optional[Dict]=None, state: Optional[ExperimentState]=None) -> MultimodalOutput:
      
 
     res=""
