@@ -224,7 +224,7 @@ class retriever_model_prompt:
         PDR_retriever=copy.copy(retriever)
         return PDR_retriever
 
-    def init_retriever(self,retriever:str,context:dict=None):
+    def init_retriever(self,retriever:str,context:Optional[Dict]=None):
         
         if retriever == 'MultiQueryRetriever' and retriever not in self.inited:
             #self.retrievers[retriever]=False
@@ -381,17 +381,19 @@ def rags_compare(question: str,context:Optional[Dict]=None, state: Optional[Expe
         'model_name': ['gpt-3.5-turbo']
     }
     '''
-    if state.current_variations['retriever_name']:
-        retriever_name=state.current_variations['retriever_name'][0]
-        if retriever_name in r_m_ps.cnt:
-            r_m_ps.cnt[retriever_name] -= 1
-            if r_m_ps.cnt[retriever_name] <= 0:
-                return MultimodalOutput(
-                        text_output="No result\rNo context"
-                    )
-        res=retriever_method(question,retriever_name,context=context)
-    prompts=state.current_variations['prompts'][0]
-
+    if not state == None:
+        if state.current_variations['retriever_name']:
+            retriever_name=state.current_variations['retriever_name'][0]
+            if retriever_name in r_m_ps.cnt:
+                r_m_ps.cnt[retriever_name] -= 1
+                if r_m_ps.cnt[retriever_name] <= 0:
+                    return MultimodalOutput(
+                            text_output="No result\rNo context"
+                        )
+            res=retriever_method(question,retriever_name,context=context)
+        prompts=state.current_variations['prompts'][0]
+    else:
+        res='Error'
     # print(res)
 
     response = llm_completion(
