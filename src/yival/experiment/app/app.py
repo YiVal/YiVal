@@ -2293,3 +2293,9 @@ def display_results_dash(
         app.run(debug=False, port=port)
     else:
         app.run(debug=False, port=port)
+
+if __name__ == "__main__":
+    import pickle
+    with open("deploy/email_case/auto_generated_email_0.pkl",'rb') as file:
+        experiment = pickle.load(file)
+    print(f"experiment: {experiment}")
