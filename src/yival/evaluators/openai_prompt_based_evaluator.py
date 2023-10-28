@@ -10,7 +10,9 @@ import copy
 import string
 from typing import Any, Dict, Iterable, List, Optional, Union
 
+# for exponential backoff
 import openai
+from tenacity import retry, stop_after_attempt, wait_random_exponential
 
 from ..schemas.evaluator_config import (
     EvaluatorOutput,
@@ -93,6 +95,12 @@ def format_template(
     return res
 
 
+@retry(wait=wait_random_exponential(min=1, max=20), stop=stop_after_attempt(6))
+def completion_with_backpff(**kwargs):
+    response = openai.ChatCompletion.create(**kwargs)
+    return response
+
+
 def choices_to_string(choice_strings: Iterable[str]) -> str:
     """Converts a list of choices into a formatted string."""
     return " or ".join(f'"{choice}"' for choice in choice_strings)
@@ -115,7 +123,6 @@ class OpenAIPromptBasedEvaluator(BaseEvaluator):
         format_dict = copy.deepcopy(experiment_result.input_data.content)
         format_dict["raw_output"] = experiment_result.raw_output.text_output
 
-
         prompt = format_template(self.config.prompt, format_dict)
         if isinstance(prompt, str):
             prompt = [{"role": "user", "content": prompt}]
@@ -123,8 +130,8 @@ class OpenAIPromptBasedEvaluator(BaseEvaluator):
         prompt[-1]["content"] += "\n\n" + CLASSIFY_STR.format(
             choices=choices_to_string(self.config.choices)
         )
-        
 
+        # print("----before prompt -----")
         # response = llm_completion(
         #     Request(
         #         model_name=self.config.model_name,
@@ -132,7 +139,12 @@ class OpenAIPromptBasedEvaluator(BaseEvaluator):
         #         params={"temperature": 0.5}
         #     )
         # ).output
-        response = openai.ChatCompletion.create(model="gpt-4", messages=prompt, temperature=0.5)
+        # print("----after prompt -----")
+        # print(prompt)
+        response = completion_with_backpff(
+            model="gpt-4", messages=prompt, temperature=0.5
+        )
+        #response = openai.ChatCompletion.create(model="gpt-4", messages=prompt, temperature=0.5)
         response_content = response['choices'][0]['message']['content']
 
         choice = extract_choice_from_response(

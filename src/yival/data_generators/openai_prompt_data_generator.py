@@ -17,14 +17,14 @@ import pickle
 import re
 from typing import Any, Dict, Iterator, List
 
+import openai
+from tenacity import retry, stop_after_attempt, wait_random_exponential
 from tqdm import tqdm
 
 from yival.common import utils
-from yival.common.model_utils import llm_completion
 from yival.data_generators.base_data_generator import BaseDataGenerator
 from yival.schemas.common_structures import InputData
 from yival.schemas.data_generator_configs import OpenAIPromptBasedGeneratorConfig
-from yival.schemas.model_configs import Request
 
 
 def dict_to_description(data, indent=0):
@@ -72,6 +72,12 @@ DEFAULT_PROMPT = """
     excluding description and name. Ensure it's succinct and well-structured.
     **Only provide the dictionary.**
     """
+
+
+@retry(wait=wait_random_exponential(min=1, max=20), stop=stop_after_attempt(6))
+def completion_with_backpff(**kwargs):
+    response = openai.ChatCompletion.create(**kwargs)
+    return response
 
 
 class OpenAIPromptDataGenerator(BaseDataGenerator):
@@ -132,8 +138,11 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
         return messages
 
     def process_output(
-        self, output_content: str, all_data: List[InputData],
-        chunk: List[InputData], fixed_input: Dict[str, Any] = None
+        self,
+        output_content: str,
+        all_data: List[InputData],
+        chunk: List[InputData],
+        fixed_input: Dict[str, Any] | None = {}
     ):
         """Process the output from GPT API and update data lists."""
         generated_example = extract_dict_from_gpt_output(output_content)
@@ -202,7 +211,10 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                     )
                 for r in responses:
                     self.process_output(
-                        r["choices"][0]["message"]["content"], all_data, chunk, self.config.fixed_input
+                        r["choices"][0]["message"]["content"],
+                        all_data,  # pyright: ignore
+                        chunk,
+                        self.config.fixed_input  # pyright: ignore
                     )
         else:
             with tqdm(
@@ -214,15 +226,16 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                 # call_option = self.config.call_option if self.config.call_option else {}
                 while len(all_data) < self.config.number_of_examples:
                     messages = self.prepare_messages(all_data_content)
-                    output = llm_completion(
-                        Request(
-                            model_name=self.config.model_name,
-                            prompt=messages,
-                            params=self.config.call_option  #type:ignore
-                        )
-                    ).output
-                    self.process_output(
-                        output.choices[0].message.content, all_data, chunk, self.config.fixed_input
+                    output = completion_with_backpff(
+                        model=self.config.model_name,
+                        messages=messages,
+                        temperature=0.5
+                    )
+                    self.process_output(  # pyright: ignore
+                        output.choices[0].message.content,
+                        all_data,
+                        chunk,
+                        self.config.fixed_input  # pyright: ignore
                     )
                     if len(all_data) > last_len:
                         last_len = len(all_data)

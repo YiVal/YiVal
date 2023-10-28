@@ -41,7 +41,6 @@ from yival.schemas.experiment_config import (
 )
 
 from ...schemas.common_structures import InputData
-from ...states.experiment_state import ExperimentState
 from .hexagram import HEXAGRAMS, generate_hexagram_figure
 from .utils import (
     generate_group_key_combination_data,
@@ -2257,7 +2256,7 @@ def display_results_dash(
         experiment_data, experiment_config, function_args, all_combinations,
         state, logger, evaluator, interactive
     )
-    if os.environ.get("ngrok", False):
+    if os.environ.get("ngrok", True):
         public_url = ngrok.connect(port)
         print(f"Access Yival from this public URL :{public_url}")
         app.run(debug=False, port=port)

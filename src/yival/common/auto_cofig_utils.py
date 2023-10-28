@@ -218,8 +218,8 @@ def generate_evaluator_config(
             "E": 4
         }
     }
-    config = OpenAIPromptBasedEvaluatorConfig(**config)
-    return config
+    config = OpenAIPromptBasedEvaluatorConfig(**config)  # type: ignore
+    return config  # type: ignore
 
 
 def output_aspects_for_eval(response: str) -> str:
@@ -277,7 +277,9 @@ def generate_manual_aspect(task: str, aspect: str) -> str:
     response = llm_completion(
         Request(
             model_name="gpt-4",
-            prompt=EVALUATION_ASPECT_GENERATION_PROMPT_TEMPLATE.format(task=task, aspect=aspect),
+            prompt=EVALUATION_ASPECT_GENERATION_PROMPT_TEMPLATE.format(
+                task=task, aspect=aspect
+            ),
             params={"temperature": 0}
         )
     ).output
@@ -323,9 +325,12 @@ def write_to_yaml(config: ExperimentConfig, filepath: str) -> None:
     data = remove_none_values(config.asdict())
     with open(filepath, 'w') as file:
         yaml.dump(data, file)
+    return
 
 
-def auto_generate_config(task: str, parameters: list[str], additional_aspect:list[str]) -> ExperimentConfig:
+def auto_generate_config(
+    task: str, parameters: list[str], additional_aspect: list[str]
+) -> None:
     description = auto_data_generation_prompt(task, parameters)
     function_name = auto_data_generation_function_name_prompt(description)
     parameters_dict = {}
@@ -344,7 +349,7 @@ def auto_generate_config(task: str, parameters: list[str], additional_aspect:lis
         fixed_input={"task": task}
     )
     dataset_config = DatasetConfig(
-        source_type="machine_generated",
+        source_type="machine_generated",  # type: ignore
         data_generators={"openai_prompt_data_generator": generator_config}
     )
     print(colored("\nGenerate evaluation aspects", "green"))
@@ -357,7 +362,9 @@ def auto_generate_config(task: str, parameters: list[str], additional_aspect:lis
     print(evaulation_prospect_dict)
     evaulator_configs: list[OpenAIPromptBasedEvaluatorConfig] = []
     human_rating_configs: list[HumanRatingConfig] = []
-    prompt_lines = ["Complete the following task:", task+" based on the following info"]
+    prompt_lines = [
+        "Complete the following task:", task + " based on the following info"
+    ]
     for key in parameters:
         prompt_lines.append(f"{key}: {{{key}}}")
 
@@ -366,18 +373,22 @@ def auto_generate_config(task: str, parameters: list[str], additional_aspect:lis
         name="task",
         variations=[WrapperVariation(value_type="str", value=prompt_str)]
     )
-    for eval in evaulation_prospect_dict["description_display_name_map"]:
+    for eval in evaulation_prospect_dict[
+        "description_display_name_map"  # type: ignore
+    ]:  # type: ignore
         evaulator_configs.append(
             generate_evaluator_config(
-                description, eval["description"], eval["display_name"],
+                description,
+                eval["description"],  # type: ignore
+                eval["display_name"],  # type: ignore
                 parameters
             )
         )
         human_rating_configs.append(
-            HumanRatingConfig(
-                name=eval["display_name"],
-                instructions=eval["description"],
-                scale=[0,4]
+            HumanRatingConfig( # type: ignore
+                name=eval["display_name"],  # type: ignore
+                instructions=eval["description"],  # type: ignore
+                scale=[0, 4]  # type: ignore
             )
         )
 
@@ -392,16 +403,22 @@ def auto_generate_config(task: str, parameters: list[str], additional_aspect:lis
     )
     criteria = []
     criteria_weights = {}
-    criteria_maximization = {"average_token_usage": False, "average_latency": False}
-    for _, eval in enumerate(evaulator_configs):
-        criteria.append(eval.name + ": " + eval.display_name)
-        criteria_maximization[eval.name + ": " + eval.display_name] = True
-        criteria_weights[eval.name + ": " + eval.display_name] = 1.0/len(evaulator_configs)
+    criteria_maximization = {
+        "average_token_usage": False,
+        "average_latency": False
+    }
+    for _, eval in enumerate(evaulator_configs):  # type: ignore
+        criteria.append(eval.name + ": " + eval.display_name)  # type: ignore
+        criteria_maximization[eval.name + ": " +  # type: ignore
+                              eval.display_name] = True  # type: ignore
+        criteria_weights[
+            eval.name + ": " +  # type: ignore
+            eval.display_name] = 1.0 / len(evaulator_configs)  # type: ignore
     criteria.append("average_token_usage")
     criteria.append("average_latency")
     criteria_weights["average_latency"] = 0
     criteria_weights["average_token_usage"] = 0
-    
+
     ahp_selection = AHPConfig(
         criteria=criteria,
         criteria_weights=criteria_weights,
@@ -411,7 +428,7 @@ def auto_generate_config(task: str, parameters: list[str], additional_aspect:lis
         description="Auto generated config for " + task,
         human_rating_configs=human_rating_configs,
         dataset=dataset_config,
-        evaluators=evaulator_configs,
+        evaluators=evaulator_configs,  # type: ignore
         custom_function="demo.complete_task.complete_task",
         variations=[variation_config],
         enhancer=enhancer_config,
@@ -425,7 +442,11 @@ def main():
     #     "generate first paragraph of an email",
     #     ["title"]
     # )
-    print(generate_manual_aspect("generate first paragraph of an email", "humble tone"))
+    print(
+        generate_manual_aspect(
+            "generate first paragraph of an email", "humble tone"
+        )
+    )
     # #print(res)
     # # res = auto_evaluation_prospect(
     # #     "The function is designed to create a script for TikTok videos. It takes into consideration the specific topic of the content as well as the target audience for whom the TikTok video is created. It uses this information to draft a suitable, engaging and relevant script for the making TikTok video based on the provided content topic and audience preferences. The function is useful for those looking to create tailored content suitable for their audience on the TikTok platform."

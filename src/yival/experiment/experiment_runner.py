@@ -140,7 +140,7 @@ class ExperimentRunner:
 
     def parallel_task(self, data_point, all_combinations, logger, evaluator):
         """Task to be run in parallel for processing data points."""
-        # RateLimiter(1000 / 60)()  # Ensure rate limit
+        RateLimiter(1000 / 60)()  # Ensure rate limit
         return run_single_input(
             data_point,
             self.config,

@@ -3,6 +3,7 @@ import random
 import time
 
 import openai
+
 from yival.common.model_utils import llm_completion
 from yival.logger.token_logger import TokenLogger
 from yival.schemas.experiment_config import MultimodalOutput
@@ -23,10 +24,7 @@ def complete_task(
     # Ensure you have your OpenAI API key set up
     openai.api_key = os.getenv("OPENAI_API_KEY")
 
-    prompt_lines = [
-        "Complete the following task:",
-        task
-    ]
+    prompt_lines = ["Complete the following task:", task]
     for key in kwargs.keys():
         prompt_lines.append(f"{key}: {{{key}}}")
 
@@ -44,7 +42,9 @@ def complete_task(
         StringWrapper("gpt-3.5-turbo", name="model_name", state=state)
     )
     response = llm_completion(
-        Request(model_name=model_name, prompt=prompt, params={"temperature": 0.5})
+        Request(
+            model_name=model_name, prompt=prompt, params={"temperature": 0.5}
+        )
     ).output
     res = MultimodalOutput(
         text_output=response['choices'][0]['message']['content'],
@@ -55,8 +55,14 @@ def complete_task(
 
 
 def main():
-    res = complete_task(task = "tiktok script writer", ticktok_audience="teens", tiktok_cotnent_topic="environment conservation", state=ExperimentState())
+    res = complete_task(
+        task="tiktok script writer",
+        ticktok_audience="teens",
+        tiktok_cotnent_topic="environment conservation",
+        state=ExperimentState()
+    )
     print(res)
+
 
 #"tiktok script writer", ["tiktok_cotnent_topic", "ticktok_audience"]
 if __name__ == "__main__":

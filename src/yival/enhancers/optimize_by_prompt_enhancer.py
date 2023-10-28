@@ -125,7 +125,7 @@ def construct_opro_full_prompt(
         full_prompt += (optimation_task_format + '\n')
     full_prompt += (end_meta_instruction + '\n')
     full_prompt += construct_output_format(enhance_var)
-    print(full_prompt)
+
     return full_prompt
 
 
@@ -191,7 +191,6 @@ class OptimizeByPromptEnhancer(BaseCombinationEnhancer):
         llm_output_str = response["choices"][0]["message"]["content"].strip(
             "'"
         ).strip('"')  #type: ignore
-        print(llm_output_str)
 
         variations = scratch_variations_from_str(
             llm_output_str, self.config.enhance_var
