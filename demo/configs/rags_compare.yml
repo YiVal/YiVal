@@ -9,7 +9,7 @@ dataset:
   reader: huggingface_dataset_reader
   source_type: dataset
   reader_config:
-    example_limit: 2
+    example_limit: 10
     output_mapping:
       question: question
       context: context

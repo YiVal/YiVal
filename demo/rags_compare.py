@@ -73,7 +73,7 @@ class retriever_model_prompt:
             print(self.data)
             self.pdf_path=pdf_path
             self.pdf_path_2="../abstract.pdf"
-        self.WaitTime=2
+        self.WaitTime=5
 
     def add_retriever(self,name:str,retriever:Any):
         self.retrievers[name]=retriever
@@ -110,14 +110,17 @@ class retriever_model_prompt:
             text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=0)
             splits = text_splitter.split_documents(self.data)
         elif not context==None:
-            name='ContextualCompressionRetrieve'
+            name='Contextual_compression'
             self.data[name]=context
             self.timer[name]=time.time()
             cur_time=self.timer[name]
+            # print('line:here')
             while(cur_time-self.timer[name]<self.WaitTime):
                 time.sleep(1)
                 cur_time=time.time()
+                # print('cur:',str(cur_time),',timer:',str(self.timer[name]))
             splits=self.data[name]
+        # print('!'*100+splits)
 
         retriever = FAISS.from_documents(splits, OpenAIEmbeddings()).as_retriever()
         llm = OpenAI(temperature=0)
@@ -130,7 +133,7 @@ class retriever_model_prompt:
             text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=0)
             splits = text_splitter.split_documents(self.data)
         elif not context==None:
-            name='ContextualCompressionRetrieve'
+            name='Ensemble_Retriever'
             self.data[name]=context
             self.timer[name]=time.time()
             cur_time=self.timer[name]
@@ -138,7 +141,6 @@ class retriever_model_prompt:
                 time.sleep(1)
                 cur_time=time.time()
             splits=self.data[name]
-        
         doc_list = [i.page_content for i in splits]
         bm25_retriever = BM25Retriever.from_texts(doc_list)
         bm25_retriever.k = 2
@@ -157,7 +159,7 @@ class retriever_model_prompt:
             for l in loaders:
                 docs.extend(l.load())
         elif not context == None:
-            name='ContextualCompressionRetrieve'
+            name='MultiVector_Retriever'
             self.data[name]=context
             self.timer[name]=time.time()
             cur_time=self.timer[name]
@@ -167,7 +169,7 @@ class retriever_model_prompt:
             docs=self.data[name]
 
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000)
-        splits = text_splitter.split_documents(docs)
+        docs = text_splitter.split_documents(docs)
         vectorstore = Chroma(
             collection_name="full_documents",
             embedding_function=OpenAIEmbeddings()
@@ -200,14 +202,16 @@ class retriever_model_prompt:
             for l in loaders:
                 docs.extend(l.load())
         elif not context == None:
-            name='ContextualCompressionRetrieve'
+            name='Parent_Document_Retriever'
             self.data[name]=context
+            # print('!!!'*100+str(len(self.data[name])))
             self.timer[name]=time.time()
             cur_time=self.timer[name]
             while(cur_time-self.timer[name]<self.WaitTime):
                 time.sleep(1)
                 cur_time=time.time()
             docs=self.data[name]
+            # print('???'*100+str(len(self.data[name])))
         
         child_splitter = RecursiveCharacterTextSplitter(chunk_size=400)
         vectorstore = Chroma(
@@ -233,31 +237,31 @@ class retriever_model_prompt:
             self.add_retriever(retriever,self.init_MultiQueryRetriever(context=context))
             self.inited[retriever]=True
             pass
-        elif retriever == 'Contextual_compression' and retriever not in self.retrievers:
+        elif retriever == 'Contextual_compression' and retriever not in self.inited:
             self.inited[retriever]=False
             self.cnt[retriever]=10
             self.add_retriever(retriever,self.init_Contextual_comporession(context=context))
             self.inited[retriever]=True
             pass
-        elif retriever == 'Ensemble_Retriever' and retriever not in self.retrievers:
+        elif retriever == 'Ensemble_Retriever' and retriever not in self.inited:
             self.inited[retriever]=False
             self.cnt[retriever]=10
             self.add_retriever(retriever,self.init_Ensemble_Retriever(context=context))
             self.inited[retriever]=True
             pass
-        elif retriever == 'MultiVector_Retriever' and retriever not in self.retrievers:
+        elif retriever == 'MultiVector_Retriever' and retriever not in self.inited:
             self.inited[retriever]=False
             self.cnt[retriever]=10
             self.add_retriever(retriever,self.init_MultiVector_Retriever(context=context))
             self.inited[retriever]=True
             pass
-        elif retriever == 'Parent_Document_Retriever' and retriever not in self.retrievers:
+        elif retriever == 'Parent_Document_Retriever' and retriever not in self.inited:
             self.inited[retriever]=False
             self.cnt[retriever]=10
             self.add_retriever(retriever,self.init_Parent_Document_Retriever(context=context))
             self.inited[retriever]=True
             pass
-        elif retriever == 'llamaindex' and retriever not in self.retrievers:
+        elif retriever == 'llamaindex' and retriever not in self.inited:
             self.inited[retriever]=False
             self.cnt[retriever]=10
             documents=[]
@@ -299,6 +303,7 @@ def retriever_method(input: str, retriever: str,context:Optional[Dict]=None)-> s
     if retriever == 'MultiQueryRetriever':
         flag=1
         while r_m_ps.inited[retriever]==False:
+            print('line:302')
             if flag==1 and retriever in r_m_ps.data:
                 r_m_ps.timer[retriever]=time.time()
                 r_m_ps.data[retriever]+=context
@@ -310,53 +315,62 @@ def retriever_method(input: str, retriever: str,context:Optional[Dict]=None)-> s
     elif retriever == 'Contextual_compression':
         flag=1
         while r_m_ps.inited[retriever]==False:
+            print('line:314')
             if flag==1 and retriever in r_m_ps.data:
                 r_m_ps.timer[retriever]=time.time()
-                r_m_ps.data[retriever].append(context)
+                r_m_ps.data[retriever]+=context
                 flag=0
             time.sleep(1)
-        docs = r_m_ps.retrievers[retriever].get_relevant_documents(input)
+        docs = r_m_ps.retrievers[retriever].get_relevant_documents(query=input)
+        print(docs)
         res=langchain_docs_to_string(docs=docs)
         pass
     elif retriever == 'Ensemble_Retriever':
         flag=1
         while r_m_ps.inited[retriever]==False:
+            print('line:326')
             if flag==1 and retriever in r_m_ps.data:
                 r_m_ps.timer[retriever]=time.time()
-                r_m_ps.data[retriever].append(context)
+                r_m_ps.data[retriever]+=context
                 flag=0
             time.sleep(1)
-        docs = r_m_ps.retrievers[retriever].get_relevant_documents(input)
+        docs = r_m_ps.retrievers[retriever].get_relevant_documents(query=input)
         res=langchain_docs_to_string(docs=docs)
         pass
     elif retriever == 'MultiVector_Retriever':
-        flag=0
+        flag=1
         while r_m_ps.inited[retriever]==False:
+            print('line:338')
             if flag==1 and retriever in r_m_ps.data:
                 r_m_ps.timer[retriever]=time.time()
-                r_m_ps.data[retriever].append(context)
+                r_m_ps.data[retriever]+=context
                 flag=0
             time.sleep(1)
-        docs=r_m_ps.retrievers[retriever].vectorstore.similarity_search(input)
+        docs=r_m_ps.retrievers[retriever].vectorstore.similarity_search(query=input)
+        # docs=r_m_ps.retrievers[retriever].get_relevant_documents(query=input)
         res=langchain_docs_to_string(docs=docs)
         pass
     elif retriever == 'Parent_Document_Retriever':
-        flag=0
+        flag=1
         while r_m_ps.inited[retriever]==False:
+            print('line:350')
             if flag==1 and retriever in r_m_ps.data:
                 r_m_ps.timer[retriever]=time.time()
-                r_m_ps.data[retriever].append(context)
+                r_m_ps.data[retriever]+=context
                 flag=0
             time.sleep(1)
-        docs=r_m_ps.retrievers[retriever].vectorstore.similarity_search(input)
+        # docs=r_m_ps.retrievers[retriever].vectorstore.similarity_search(input)
+        docs=r_m_ps.retrievers[retriever].get_relevant_documents(query=input)
+
         res=langchain_docs_to_string(docs=docs)
         pass
     elif retriever == 'llamaindex':
-        flag=0
+        flag=1
         while r_m_ps.inited[retriever]==False:
+            print('line:362')
             if flag==1 and retriever in r_m_ps.data:
                 r_m_ps.timer[retriever]=time.time()
-                r_m_ps.data[retriever].append(context)
+                r_m_ps.data[retriever]+=context
                 flag=0
             time.sleep(1)
         docs=r_m_ps.retrievers[retriever].retrieve(input)
@@ -381,21 +395,18 @@ def rags_compare(question: str,context:Optional[Dict]=None, state: Optional[Expe
         'model_name': ['gpt-3.5-turbo']
     }
     '''
-    if not state == None:
-        if state.current_variations['retriever_name']:
-            retriever_name=state.current_variations['retriever_name'][0]
-            if retriever_name in r_m_ps.cnt:
-                r_m_ps.cnt[retriever_name] -= 1
-                if r_m_ps.cnt[retriever_name] <= 0:
-                    return MultimodalOutput(
-                            text_output="No result\rNo context"
-                        )
-            res=retriever_method(question,retriever_name,context=context)
-        prompts=state.current_variations['prompts'][0]
-    else:
-        res='Error'
+    if not state == None and state.current_variations['retriever_name']:
+        retriever_name=state.current_variations['retriever_name'][0]
+        if retriever_name in r_m_ps.cnt:
+            r_m_ps.cnt[retriever_name] -= 1
+            if r_m_ps.cnt[retriever_name] <= 0:
+                return MultimodalOutput(
+                        text_output="No result\rNo context"
+                    )
+        res=retriever_method(question,retriever_name,context=context)
+    prompts=state.current_variations['prompts'][0]
     # print(res)
-
+    print('!!!!!!the input len=',str(len(res)))
     response = llm_completion(
         Request(
             model_name=str(
@@ -405,7 +416,7 @@ def rags_compare(question: str,context:Optional[Dict]=None, state: Optional[Expe
         )
     ).output
 
-    output=response['choices'][0]['message']['content']+'\r'+res
+    output='answer: '+response['choices'][0]['message']['content']+'\n\rdocs: '+res
     # print(output)
     result=MultimodalOutput(
         text_output=output
