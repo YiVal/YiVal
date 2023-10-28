@@ -373,7 +373,7 @@ def auto_generate_config(
     )
     end_meta_message = "Give me a new prompt that is different from all pairs above, and has evaluation values on "
 
-    # and has evaluation values on accuracy, relevance, intrigue, emoji, cute, that are higher than any of above.
+
     for eval in evaulation_prospect_dict[
         "description_display_name_map"  # type: ignore
     ]:  # type: ignore

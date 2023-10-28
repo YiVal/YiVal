@@ -2287,7 +2287,7 @@ def display_results_dash(
         experiment_data, experiment_config, function_args, all_combinations,
         state, logger, evaluator, interactive
     )
-    if os.environ.get("ngrok", False):
+    if os.environ.get("ngrok", True):
         public_url = ngrok.connect(port)
         print(f"Access Yival from this public URL :{public_url}")
         app.run(debug=False, port=port)

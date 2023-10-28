@@ -4,7 +4,6 @@ import time
 
 import openai
 from tenacity import retry, stop_after_attempt, wait_random
-
 from yival.logger.token_logger import TokenLogger
 from yival.schemas.experiment_config import MultimodalOutput
 from yival.states.experiment_state import ExperimentState

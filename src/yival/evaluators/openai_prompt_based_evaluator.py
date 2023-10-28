@@ -18,6 +18,7 @@ from tenacity import before_sleep_log, retry, stop_after_attempt, wait_random
 logging.basicConfig(level=logging.ERROR)
 logger = logging.getLogger(__name__)
 
+
 from ..schemas.evaluator_config import (
     EvaluatorOutput,
     EvaluatorType,
