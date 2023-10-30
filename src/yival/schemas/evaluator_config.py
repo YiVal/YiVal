@@ -171,6 +171,7 @@ class OpenAIPromptBasedEvaluatorConfig(EvaluatorConfig):
     def asdict(self) -> Dict[str, Any]:
         return asdict(self)
 
+
 @dataclass
 class RougeEvaluatorConfig(EvaluatorConfig):
     evaluator_type: EvaluatorType = EvaluatorType.INDIVIDUAL

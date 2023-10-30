@@ -43,11 +43,7 @@ from ..schemas.experiment_config import (
 )
 from ..schemas.model_configs import Request
 from .base_combination_enhancer import BaseCombinationEnhancer
-from .utils import (
-    construct_output_format,
-    format_input_from_dict,
-    scratch_variations_from_str,
-)
+from .utils import construct_output_format, format_input_from_dict, scratch_variations_from_str
 
 rate_limiter = RateLimiter(60 / 60)
 

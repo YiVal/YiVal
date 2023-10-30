@@ -42,7 +42,7 @@ class OpenAIPromptBasedGeneratorConfig(BaseDataGeneratorConfig):
     call_option: Optional[CallOption] = None
 
     output_csv_path: Optional[str] = None
-    
+
     fixed_input: Optional[Dict[str, Any]] = None
 
     def asdict(self):
