@@ -41,7 +41,6 @@ from yival.schemas.experiment_config import (
 )
 
 from ...schemas.common_structures import InputData
-from ...states.experiment_state import ExperimentState
 from .hexagram import HEXAGRAMS, generate_hexagram_figure
 from .utils import (
     generate_group_key_combination_data,
@@ -2263,3 +2262,32 @@ def display_results_dash(
         app.run(debug=False, port=port)
     else:
         app.run(debug=False, port=port)
+
+if __name__ == "__main__":
+    import argparse,pickle
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--experiment", type=str, required=True, help="Path to the experiment pickle file")
+    parser.add_argument("--self_config", type=str, required=True, help="Path to the self_config pickle file")
+    parser.add_argument("--all_combinations", type=str, required=True, help="Path to the all_combinations pickle file")
+    parser.add_argument("--instance", type=str, required=True, help="Path to the instance pickle file")
+    parser.add_argument("--logger", type=str, required=True, help="Path to the logger pickle file")
+    parser.add_argument("--evaluator", type=str, required=True, help="Path to the evaluator pickle file")
+    parser.add_argument("--port", type=int, default=8977, help="Port number to display results")
+    
+    args = parser.parse_args()
+    
+    print("start!")
+    with open(args.experiment, 'rb') as file:
+        experiment = pickle.load(file)
+    with open(args.self_config,'rb') as file:
+        self_config = pickle.load(file)
+    with open(args.all_combinations, 'rb') as file:
+        all_combinations = pickle.load(file)
+    with open(args.instance,'rb') as file:
+        instance = pickle.load(file)
+    with open(args.logger,'rb') as file:
+        logger = pickle.load(file)
+    with open(args.evaluator,'rb') as file:
+        evaluator = pickle.load(file)
+    
+    display_results_dash(experiment, self_config, all_combinations, instance, logger, evaluator, port=args.port)
