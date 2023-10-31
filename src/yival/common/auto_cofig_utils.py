@@ -363,7 +363,7 @@ def auto_generate_config(
     evaulator_configs: list[OpenAIPromptBasedEvaluatorConfig] = []
     human_rating_configs: list[HumanRatingConfig] = []
     prompt_lines = [
-        "Complete the following task:", task + " based on the following info"
+        task + " based on the following info"
     ]
     for key in parameters:
         prompt_lines.append(f"{key}: {{{key}}}")
