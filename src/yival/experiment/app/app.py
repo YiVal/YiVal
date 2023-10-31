@@ -41,7 +41,6 @@ from yival.schemas.experiment_config import (
 )
 
 from ...schemas.common_structures import InputData
-from ...states.experiment_state import ExperimentState
 from .hexagram import HEXAGRAMS, generate_hexagram_figure
 from .utils import (
     generate_group_key_combination_data,
@@ -2238,7 +2237,7 @@ def display_results_dash(
     logger,
     evaluator,
     interactive=False,
-    port=8073
+    port=8074
 ):
     if experiment_data.enhancer_output:
         for group_result in experiment_data.enhancer_output.group_experiment_results:

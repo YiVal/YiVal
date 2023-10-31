@@ -10,7 +10,10 @@ import copy
 import string
 from typing import Any, Dict, Iterable, List, Optional, Union
 
-from ..common.model_utils import llm_completion
+# for exponential backoff
+import openai
+from tenacity import retry, stop_after_attempt, wait_random_exponential
+
 from ..schemas.evaluator_config import (
     EvaluatorOutput,
     EvaluatorType,
@@ -19,7 +22,6 @@ from ..schemas.evaluator_config import (
     OpenAIPromptBasedEvaluatorConfig,
 )
 from ..schemas.experiment_config import ExperimentResult, InputData, MultimodalOutput
-from ..schemas.model_configs import Request
 from .base_evaluator import BaseEvaluator
 
 CLASSIFY_STR = """
@@ -93,6 +95,14 @@ def format_template(
     return res
 
 
+@retry(
+    wait=wait_random_exponential(min=1, max=60), stop=stop_after_attempt(10)
+)
+def completion_with_backpff(**kwargs):
+    response = openai.ChatCompletion.create(**kwargs)
+    return response
+
+
 def choices_to_string(choice_strings: Iterable[str]) -> str:
     """Converts a list of choices into a formatted string."""
     return " or ".join(f'"{choice}"' for choice in choice_strings)
@@ -123,15 +133,16 @@ class OpenAIPromptBasedEvaluator(BaseEvaluator):
             choices=choices_to_string(self.config.choices)
         )
 
-        response = llm_completion(
-            Request(
-                model_name=self.config.model_name,
-                prompt=prompt,
-                params={"temperature": 0.0}
-            )
-        ).output
+        response = completion_with_backpff(
+            model="gpt-4",
+            messages=prompt,
+            temperature=0.5,
+            n=1,
+            max_tokens=1000,
+            request_timeout=60
+        )
+        #response = openai.ChatCompletion.create(model="gpt-4", messages=prompt, temperature=0.5)
         response_content = response['choices'][0]['message']['content']
-
         choice = extract_choice_from_response(
             response_content, self.config.choices
         )
