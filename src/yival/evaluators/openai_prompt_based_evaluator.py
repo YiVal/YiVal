@@ -136,7 +136,6 @@ class OpenAIPromptBasedEvaluator(BaseEvaluator):
         )
         #response = openai.ChatCompletion.create(model="gpt-4", messages=prompt, temperature=0.5)
         response_content = response['choices'][0]['message']['content']
-
         choice = extract_choice_from_response(
             response_content, self.config.choices
         )

@@ -338,7 +338,7 @@ def auto_generate_config(
         parameters_dict[p] = "str"
     generator_config = OpenAIPromptBasedGeneratorConfig(
         chunk_size=10000,
-        number_of_examples=8,
+    number_of_examples=8,
         output_path=function_name + "_generated_data.pkl",
         output_csv_path=function_name + "_generated_data.csv",
         input_function={
