@@ -3,6 +3,7 @@ import random
 import time
 
 import openai
+
 from yival.logger.token_logger import TokenLogger
 from yival.schemas.experiment_config import MultimodalOutput
 from yival.states.experiment_state import ExperimentState
@@ -12,7 +13,6 @@ from yival.wrappers.string_wrapper import StringWrapper
 def completion_with_backpff(**kwargs):
     response = openai.ChatCompletion.create(**kwargs)
     return response
-
 
 
 def complete_task(
@@ -46,7 +46,12 @@ def complete_task(
     )
     prompt_a = [{"content": prompt, "role": "user"}]
     response = completion_with_backpff(
-        model="gpt-3.5-turbo", messages=prompt_a, temperature=0.5, n=1, max_tokens=1000, request_timeout=10
+        model="gpt-3.5-turbo",
+        messages=prompt_a,
+        temperature=0.5,
+        n=1,
+        max_tokens=1000,
+        request_timeout=10
     )
     res = MultimodalOutput(
         text_output=response['choices'][0]['message']['content'],

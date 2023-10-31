@@ -338,7 +338,7 @@ def auto_generate_config(
         parameters_dict[p] = "str"
     generator_config = OpenAIPromptBasedGeneratorConfig(
         chunk_size=10000,
-    number_of_examples=8,
+        number_of_examples=8,
         output_path=function_name + "_generated_data.pkl",
         output_csv_path=function_name + "_generated_data.csv",
         input_function={
@@ -362,9 +362,7 @@ def auto_generate_config(
     print(evaulation_prospect_dict)
     evaulator_configs: list[OpenAIPromptBasedEvaluatorConfig] = []
     human_rating_configs: list[HumanRatingConfig] = []
-    prompt_lines = [
-        task + " based on the following info"
-    ]
+    prompt_lines = [task + " based on the following info"]
     for key in parameters:
         prompt_lines.append(f"{key}: {{{key}}}")
 
