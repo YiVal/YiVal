@@ -11,9 +11,9 @@ from ..enhancers.optimize_by_prompt_enhancer import OptimizeByPromptEnhancer
 from ..evaluators.bertscore_evaluator import BertScoreEvaluator
 from ..evaluators.openai_elo_evaluator import OpenAIEloEvaluator
 from ..evaluators.openai_prompt_based_evaluator import OpenAIPromptBasedEvaluator
+from ..evaluators.rags_evaluator import RAGSEvaluator
 from ..evaluators.rouge_evaluator import RougeEvaluator
 from ..evaluators.string_expected_result_evaluator import StringExpectedResultEvaluator
-from ..evaluators.rags_evaluator import RAGSEvaluator
 from ..result_selectors.ahp_selection import AHPSelection
 from ..schemas.experiment_config import WrapperConfig, WrapperVariation
 from ..variation_generators.openai_prompt_based_variation_generator import (
