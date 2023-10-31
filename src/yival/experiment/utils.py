@@ -9,7 +9,9 @@ from collections import defaultdict
 from importlib import import_module
 from typing import Any, Dict, List
 
-from yival.variation_generators.chain_of_density_prompt import ChainOfDensityPromptGenerator
+from yival.variation_generators.chain_of_density_prompt import (
+    ChainOfDensityPromptGenerator,
+)
 
 from ..data.base_reader import BaseReader
 from ..data.csv_reader import CSVReader

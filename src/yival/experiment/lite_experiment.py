@@ -75,7 +75,6 @@ class LiteExperimentRunner:
         """
         Execute a single input run in parallel
         """
-        self.limiter()
         return run_single_input(
             data, self.config, all_combinations, logger, evaluator
         )

@@ -10,7 +10,8 @@ import copy
 import string
 from typing import Any, Dict, Iterable, List, Optional, Union
 
-from ..common.model_utils import llm_completion
+import openai
+
 from ..schemas.evaluator_config import (
     EvaluatorOutput,
     EvaluatorType,
@@ -19,7 +20,6 @@ from ..schemas.evaluator_config import (
     OpenAIPromptBasedEvaluatorConfig,
 )
 from ..schemas.experiment_config import ExperimentResult, InputData, MultimodalOutput
-from ..schemas.model_configs import Request
 from .base_evaluator import BaseEvaluator
 
 CLASSIFY_STR = """
@@ -123,14 +123,16 @@ class OpenAIPromptBasedEvaluator(BaseEvaluator):
         prompt[-1]["content"] += "\n\n" + CLASSIFY_STR.format(
             choices=choices_to_string(self.config.choices)
         )
+        
 
-        response = llm_completion(
-            Request(
-                model_name=self.config.model_name,
-                prompt=prompt,
-                params={"temperature": 0.5}
-            )
-        ).output
+        # response = llm_completion(
+        #     Request(
+        #         model_name=self.config.model_name,
+        #         prompt=prompt,
+        #         params={"temperature": 0.5}
+        #     )
+        # ).output
+        response = openai.ChatCompletion.create(model="gpt-4", messages=prompt, temperature=0.5)
         response_content = response['choices'][0]['message']['content']
 
         choice = extract_choice_from_response(
