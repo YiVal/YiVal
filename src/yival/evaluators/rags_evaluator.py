@@ -23,6 +23,7 @@ class RAGSEvaluator(BaseEvaluator):
         self.config=config
 
     def evaluate(self,experiment_result: ExperimentResult)-> EvaluatorOutput:
+        assert isinstance(self.config, Rags_EvaluatorConfig)
         format_dict = copy.deepcopy(experiment_result.input_data.content)
         format_dict['raw_output']=experiment_result.raw_output.text_output
         output,context=format_dict['raw_output'].split('\r')
