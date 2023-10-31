@@ -100,7 +100,7 @@ class retriever_model_prompt:
         vectordb = Chroma.from_documents(documents=splits, embedding=embedding).as_retriever()
         llm = ChatOpenAI(temperature=0)
         retriever_from_llm = MultiQueryRetriever.from_llm(
-            retriever=vectordb, llm=llm
+            retriever=vectordb, llm=llm # type: ignore
         )
         return retriever_from_llm
     
@@ -395,7 +395,7 @@ def rags_compare(question: str,context:Optional[Dict]=None, state: Optional[Expe
         'model_name': ['gpt-3.5-turbo']
     }
     '''
-    if not state == None and state.current_variations['retriever_name']:
+    if (not state == None) and state.current_variations['retriever_name']:
         retriever_name=state.current_variations['retriever_name'][0]
         if retriever_name in r_m_ps.cnt:
             r_m_ps.cnt[retriever_name] -= 1
