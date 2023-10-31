@@ -252,7 +252,7 @@ class OptimizeByPromptEnhancer(BaseCombinationEnhancer):
 
             if not gen_variations:
                 logging.info(
-                    f"[INFO][optimize_by_prompt_enhancer] fetch next variations error"
+                    "[INFO][optimize_by_prompt_enhancer] fetch next variations error"
                 )
             else:
                 logging.info(

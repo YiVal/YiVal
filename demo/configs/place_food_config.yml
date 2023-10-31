@@ -1,6 +1,6 @@
 description: generate video for stable-diffusion-video with place and season
 
-custom_function: yival.demo.place_food_generation.video_generation
+custom_function: demo.place_food_generation.video_generation
 dataset:
   data_generators:
     openai_prompt_data_generator:
