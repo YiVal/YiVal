@@ -395,7 +395,7 @@ def rags_compare(question: str,context:Optional[Dict]=None, state: Optional[Expe
         'model_name': ['gpt-3.5-turbo']
     }
     '''
-    cur_variation=str(StringWrapper(None,name='retriever_name',state=state))
+    cur_variation=str(StringWrapper('void',name='retriever_name',state=state))
     if not cur_variation == None:
         retriever_name=cur_variation
         if retriever_name in r_m_ps.cnt:
@@ -405,7 +405,7 @@ def rags_compare(question: str,context:Optional[Dict]=None, state: Optional[Expe
                         text_output="No result\rNo context"
                     )
         res=retriever_method(question,retriever_name,context=context)
-    prompts=str(StringWrapper(None,name='prompts',state=state))
+    prompts=str(StringWrapper("Answer question '{question}' based on the content of '{context}'",name='prompts',state=state))
     # print(res)
     # print('!!!!!!the input len=',str(len(res)))
     response = llm_completion(
