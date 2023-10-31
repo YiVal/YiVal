@@ -426,7 +426,6 @@ files = [
 ]
 
 [package.dependencies]
-jinxed = {version = ">=1.1.0", markers = "platform_system == \"Windows\""}
 six = ">=1.9.0"
 wcwidth = ">=0.1.4"
 
