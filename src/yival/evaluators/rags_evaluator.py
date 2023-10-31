@@ -5,11 +5,12 @@ from typing import Any, Dict, Iterable, List, Optional, Union
 from ..schemas.evaluator_config import EvaluatorOutput, Rags_EvaluatorConfig
 from ..schemas.experiment_config import ExperimentResult
 
-from ragas import evaluate
-from ragas.metrics import answer_relevancy,faithfulness,context_precision
-from datasets import Dataset
+from ragas import evaluate # type: ignore
+from ragas.metrics import answer_relevancy,faithfulness,context_precision # type: ignore
+from datasets import Dataset # type: ignore
 from .base_evaluator import BaseEvaluator
 import numpy as np
+from yival.wrappers.string_wrapper import StringWrapper
 
 class RAGSEvaluator(BaseEvaluator):
     

@@ -395,8 +395,9 @@ def rags_compare(question: str,context:Optional[Dict]=None, state: Optional[Expe
         'model_name': ['gpt-3.5-turbo']
     }
     '''
-    if (not state == None) and state.current_variations['retriever_name']:
-        retriever_name=state.current_variations['retriever_name'][0]
+    cur_variation=str(StringWrapper(None,name='retriever_name',state=state))
+    if not cur_variation == None:
+        retriever_name=cur_variation
         if retriever_name in r_m_ps.cnt:
             r_m_ps.cnt[retriever_name] -= 1
             if r_m_ps.cnt[retriever_name] <= 0:
@@ -404,9 +405,9 @@ def rags_compare(question: str,context:Optional[Dict]=None, state: Optional[Expe
                         text_output="No result\rNo context"
                     )
         res=retriever_method(question,retriever_name,context=context)
-    prompts=state.current_variations['prompts'][0]
+    prompts=str(StringWrapper(None,name='prompts',state=state))
     # print(res)
-    print('!!!!!!the input len=',str(len(res)))
+    # print('!!!!!!the input len=',str(len(res)))
     response = llm_completion(
         Request(
             model_name=str(

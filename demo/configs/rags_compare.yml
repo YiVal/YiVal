@@ -9,7 +9,7 @@ dataset:
   reader: huggingface_dataset_reader
   source_type: dataset
   reader_config:
-    example_limit: 10
+    example_limit: 1
     output_mapping:
       question: question
       context: context
@@ -29,26 +29,26 @@ variations:
         value: "MultiQueryRetriever"
         value_type: str
         variation_id: null
-      - instantiated_value: "Contextual_compression"
-        value: "Contextual_compression"
-        value_type: str
-        variation_id: null
-      - instantiated_value: "Ensemble_Retriever"
-        value: "Ensemble_Retriever"
-        value_type: str
-        variation_id: null
-      - instantiated_value: "MultiVector_Retriever"
-        value: "MultiVector_Retriever"
-        value_type: str
-        variation_id: null
-      - instantiated_value: "Parent_Document_Retriever"
-        value: "Parent_Document_Retriever"
-        value_type: str
-        variation_id: null
-      - instantiated_value: "llamaindex"
-        value: "llamaindex"
-        value_type: str
-        variation_id: null
+      # - instantiated_value: "Contextual_compression"
+      #   value: "Contextual_compression"
+      #   value_type: str
+      #   variation_id: null
+      # - instantiated_value: "Ensemble_Retriever"
+      #   value: "Ensemble_Retriever"
+      #   value_type: str
+      #   variation_id: null
+      # - instantiated_value: "MultiVector_Retriever"
+      #   value: "MultiVector_Retriever"
+      #   value_type: str
+      #   variation_id: null
+      # - instantiated_value: "Parent_Document_Retriever"
+      #   value: "Parent_Document_Retriever"
+      #   value_type: str
+      #   variation_id: null
+      # - instantiated_value: "llamaindex"
+      #   value: "llamaindex"
+      #   value_type: str
+      #   variation_id: null
   - name: prompts
     variations:
       - instantiated_value: "Answer question '{question}' based on the content of '{context}'"
