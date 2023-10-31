@@ -2237,7 +2237,7 @@ def display_results_dash(
     logger,
     evaluator,
     interactive=False,
-    port=8073
+    port=8074
 ):
     if experiment_data.enhancer_output:
         for group_result in experiment_data.enhancer_output.group_experiment_results:
@@ -2256,7 +2256,7 @@ def display_results_dash(
         experiment_data, experiment_config, function_args, all_combinations,
         state, logger, evaluator, interactive
     )
-    if os.environ.get("ngrok", True):
+    if os.environ.get("ngrok", False):
         public_url = ngrok.connect(port)
         print(f"Access Yival from this public URL :{public_url}")
         app.run(debug=False, port=port)

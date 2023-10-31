@@ -95,7 +95,7 @@ def format_template(
     return res
 
 
-@retry(wait=wait_random_exponential(min=1, max=20), stop=stop_after_attempt(6))
+@retry(wait=wait_random_exponential(min=1, max=60), stop=stop_after_attempt(10))
 def completion_with_backpff(**kwargs):
     response = openai.ChatCompletion.create(**kwargs)
     return response
@@ -131,18 +131,8 @@ class OpenAIPromptBasedEvaluator(BaseEvaluator):
             choices=choices_to_string(self.config.choices)
         )
 
-        # print("----before prompt -----")
-        # response = llm_completion(
-        #     Request(
-        #         model_name=self.config.model_name,
-        #         prompt=prompt,
-        #         params={"temperature": 0.5}
-        #     )
-        # ).output
-        # print("----after prompt -----")
-        # print(prompt)
         response = completion_with_backpff(
-            model="gpt-4", messages=prompt, temperature=0.5
+            model="gpt-4", messages=prompt, temperature=0.5, n=1, max_tokens=1000, request_timeout=60
         )
         #response = openai.ChatCompletion.create(model="gpt-4", messages=prompt, temperature=0.5)
         response_content = response['choices'][0]['message']['content']

@@ -229,7 +229,10 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                     output = completion_with_backpff(
                         model=self.config.model_name,
                         messages=messages,
-                        temperature=0.5
+                        n=1,
+                        max_tokens=4000,
+                        temperature=0.5,
+                        request_timeout=20,
                     )
                     self.process_output(  # pyright: ignore
                         output.choices[0].message.content,
