@@ -56,7 +56,7 @@ returns the returned result:
 
 """
 
-EVALUATION_GENERATION_PROMPT_TEMPLATE: str = """Generate at most 2 important evaluation aspects  that complete the following task :
+EVALUATION_GENERATION_PROMPT_TEMPLATE: str = """Generate at most 3 important evaluation aspects  that complete the following task :
     ####
     {task}
     ####
@@ -338,7 +338,7 @@ def auto_generate_config(
         parameters_dict[p] = "str"
     generator_config = OpenAIPromptBasedGeneratorConfig(
         chunk_size=10000,
-        number_of_examples=5,
+        number_of_examples=8,
         output_path=function_name + "_generated_data.pkl",
         output_csv_path=function_name + "_generated_data.csv",
         input_function={
