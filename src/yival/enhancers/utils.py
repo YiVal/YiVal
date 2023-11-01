@@ -1,3 +1,4 @@
+import re
 from typing import Dict, List
 
 
@@ -77,6 +78,35 @@ def construct_output_format(variations: List[str]) -> str:
     for var in variations:
         prompt += (var + '=' + '{' + "your generated " + f"{var}" + '}')
     return prompt
+
+
+def construct_template_restrict(template_vars: List[str]) -> str:
+    """
+    Restrict llm to output variations in format template
+
+    e.g. template_vars: ['user_info']
+
+    retrict_prompt: 
+        Please follow python's template formatting for replies and make sure your output conforms to the format of python string.
+        * Use {user_info} instead of user_info
+    """
+
+    prompt = "Please follow python's template formatting for replies and make sure your output conforms to the format of python string.\n"
+    for var in template_vars:
+        prompt += f"* Use {{{var}}} instead of {var}\n"
+    return prompt + '\n'
+
+
+def scratch_template_vars(prompt: str) -> List[str]:
+    """
+    scratch template vars from given prompt.
+
+    e.g. prompt: write a short discord welcome message based on the following info\n user_info: {user_info}\n channel_type: {channel_type}
+
+    response: ['user_info', 'channel_type']
+
+    """
+    return re.findall(r"\{(\w+)\}", prompt)
 
 
 if __name__ == "__main__":
