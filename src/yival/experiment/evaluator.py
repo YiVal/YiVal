@@ -47,7 +47,7 @@ class Evaluator:
     def evaluate_individual_result(
         self, result: ExperimentResult
     ) -> List[EvaluatorOutput]:
-        with ThreadPoolExecutor() as executor:
+        with ThreadPoolExecutor(max_workers=4) as executor:
             futures = [
                 executor.submit(evaluate_config, config, result)
                 for config in self.configs

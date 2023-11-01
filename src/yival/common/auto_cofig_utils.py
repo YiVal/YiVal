@@ -338,7 +338,7 @@ def auto_generate_config(
         parameters_dict[p] = "str"
     generator_config = OpenAIPromptBasedGeneratorConfig(
         chunk_size=10000,
-        number_of_examples=8,
+        number_of_examples=5,
         output_path=function_name + "_generated_data.pkl",
         output_csv_path=function_name + "_generated_data.csv",
         input_function={
@@ -389,13 +389,15 @@ def auto_generate_config(
                 scale=[0, 4]  # type: ignore
             )
         )
-
+    # additional_message = "And make sure it has the list of parameters "
+    # for p in parameters:
+    #     additional_message = additional_message + '{' + p + '}  '
     enhancer_config = OptimizeByPromptEnhancerConfig(
         name="optimize_by_prompt_enhancer",
         enhance_var=["task"],
         head_meta_instruction=auto_head_meta_prompt(task, parameters),
         end_meta_instruction=
-        "Give me a new prompt that is different from all pairs above, and has a evaluation value higher than any of above.",
+        "Give me a new prompt that is different from all pairs above, and has evaluation values higher than any of above.",
         model_name="gpt-4",
         max_iterations=3
     )

@@ -7,12 +7,16 @@ the model's responses to determine the quality or correctness of a given
 experiment result.
 """
 import copy
+import logging
 import string
 from typing import Any, Dict, Iterable, List, Optional, Union
 
 # for exponential backoff
 import openai
-from tenacity import retry, stop_after_attempt, wait_random_exponential
+from tenacity import before_sleep_log, retry, stop_after_attempt, wait_random
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 from ..schemas.evaluator_config import (
     EvaluatorOutput,
@@ -96,7 +100,9 @@ def format_template(
 
 
 @retry(
-    wait=wait_random_exponential(min=1, max=60), stop=stop_after_attempt(10)
+    wait=wait_random(min=1, max=20),
+    stop=stop_after_attempt(100),
+    before_sleep=before_sleep_log(logger, logging.DEBUG)
 )
 def completion_with_backpff(**kwargs):
     response = openai.ChatCompletion.create(**kwargs)
@@ -132,14 +138,13 @@ class OpenAIPromptBasedEvaluator(BaseEvaluator):
         prompt[-1]["content"] += "\n\n" + CLASSIFY_STR.format(
             choices=choices_to_string(self.config.choices)
         )
-
         response = completion_with_backpff(
             model="gpt-4",
             messages=prompt,
             temperature=0.5,
             n=1,
             max_tokens=1000,
-            request_timeout=60
+            request_timeout=60,
         )
         #response = openai.ChatCompletion.create(model="gpt-4", messages=prompt, temperature=0.5)
         response_content = response['choices'][0]['message']['content']
@@ -147,7 +152,6 @@ class OpenAIPromptBasedEvaluator(BaseEvaluator):
             response_content, self.config.choices
         )
         score = calculate_choice_score(choice, self.config.choice_scores)
-
         return EvaluatorOutput(
             name=self.config.name,
             result=score if score is not None else choice,
