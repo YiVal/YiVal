@@ -371,6 +371,9 @@ def auto_generate_config(
         name="task",
         variations=[WrapperVariation(value_type="str", value=prompt_str)]
     )
+    end_meta_message = "Give me a new prompt that is different from all pairs above, and has evaluation values on "
+
+    # and has evaluation values on accuracy, relevance, intrigue, emoji, cute, that are higher than any of above.
     for eval in evaulation_prospect_dict[
         "description_display_name_map"  # type: ignore
     ]:  # type: ignore
@@ -382,6 +385,7 @@ def auto_generate_config(
                 parameters
             )
         )
+        end_meta_message += eval["display_name"] + ", "  # type: ignore
         human_rating_configs.append(
             HumanRatingConfig( # type: ignore
                 name=eval["display_name"],  # type: ignore
@@ -389,6 +393,7 @@ def auto_generate_config(
                 scale=[0, 4]  # type: ignore
             )
         )
+    end_meta_message += "that are higher than any of above."
     # additional_message = "And make sure it has the list of parameters "
     # for p in parameters:
     #     additional_message = additional_message + '{' + p + '}  '
@@ -396,8 +401,7 @@ def auto_generate_config(
         name="optimize_by_prompt_enhancer",
         enhance_var=["task"],
         head_meta_instruction=auto_head_meta_prompt(task, parameters),
-        end_meta_instruction=
-        "Give me a new prompt that is different from all pairs above, and has evaluation values higher than any of above.",
+        end_meta_instruction=end_meta_message,
         model_name="gpt-4",
         max_iterations=3
     )
