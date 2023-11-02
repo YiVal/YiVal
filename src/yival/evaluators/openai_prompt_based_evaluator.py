@@ -15,7 +15,7 @@ from typing import Any, Dict, Iterable, List, Optional, Union
 import openai
 from tenacity import before_sleep_log, retry, stop_after_attempt, wait_random
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.ERROR)
 logger = logging.getLogger(__name__)
 
 from ..schemas.evaluator_config import (
@@ -109,6 +109,14 @@ def completion_with_backpff(**kwargs):
     return response
 
 
+@retry(
+    wait=wait_random(min=1, max=20),
+    stop=stop_after_attempt(100),
+)
+async def acompletion_with_backpff(**kwargs):
+    return await openai.ChatCompletion.acreate(**kwargs)
+
+
 def choices_to_string(choice_strings: Iterable[str]) -> str:
     """Converts a list of choices into a formatted string."""
     return " or ".join(f'"{choice}"' for choice in choice_strings)
@@ -139,6 +147,39 @@ class OpenAIPromptBasedEvaluator(BaseEvaluator):
             choices=choices_to_string(self.config.choices)
         )
         response = completion_with_backpff(
+            model="gpt-4",
+            messages=prompt,
+            temperature=0.5,
+            n=1,
+            max_tokens=1000,
+            request_timeout=60,
+        )
+        #response = openai.ChatCompletion.create(model="gpt-4", messages=prompt, temperature=0.5)
+        response_content = response['choices'][0]['message']['content']
+        choice = extract_choice_from_response(
+            response_content, self.config.choices
+        )
+        score = calculate_choice_score(choice, self.config.choice_scores)
+        return EvaluatorOutput(
+            name=self.config.name,
+            result=score if score is not None else choice,
+            display_name=self.config.display_name,
+            metric_calculators=self.config.metric_calculators
+        )
+
+    async def aevaluate(self, experiment_result: ExperimentResult) -> Any:
+        assert isinstance(self.config, OpenAIPromptBasedEvaluatorConfig)
+        format_dict = copy.deepcopy(experiment_result.input_data.content)
+        format_dict["raw_output"] = experiment_result.raw_output.text_output
+
+        prompt = format_template(self.config.prompt, format_dict)
+        if isinstance(prompt, str):
+            prompt = [{"role": "user", "content": prompt}]
+
+        prompt[-1]["content"] += "\n\n" + CLASSIFY_STR.format(
+            choices=choices_to_string(self.config.choices)
+        )
+        response = await acompletion_with_backpff(
             model="gpt-4",
             messages=prompt,
             temperature=0.5,

@@ -232,7 +232,7 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                         n=1,
                         max_tokens=4000,
                         temperature=0.5,
-                        request_timeout=20,
+                        request_timeout=200,
                     )
                     self.process_output(  # pyright: ignore
                         output.choices[0].message.content,
