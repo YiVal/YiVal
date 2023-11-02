@@ -1,0 +1,385 @@
+custom_function: demo.complete_task.complete_task
+dataset:
+  data_generators:
+    openai_prompt_data_generator:
+      chunk_size: 10000
+      diversify: true
+      expected_param_name: ''
+      fixed_input:
+        task: generate a short tiktok video title
+      input_function:
+        description: This function generates a short TikTok video title based on the
+          supplied content summary and target audience. It utilizes the information
+          about the video content and who it's intended for to create an engaging
+          and appropriate title that will attract viewers. The title is designed to
+          accurately represent the content while also sparking the interest of the
+          target demographic.
+        name: generate_tiktok_video_title_based_on_content_and_audience
+        parameters:
+          content_summary: str
+          target_audience: str
+      model_name: gpt-4
+      number_of_examples: 5
+      output_csv_path: generate_tiktok_video_title_based_on_content_and_audience_generated_data.csv
+      output_path: generate_tiktok_video_title_based_on_content_and_audience_generated_data.pkl
+      prompt: "\n        \"Please provide a concrete and realistic test case as a\
+        \ dictionary for function invocation using the ** operator.\n        Only\
+        \ include parameters, excluding description and name.\n        Ensure it's\
+        \ succinct and well-structured.\n        **Only provide the dictionary.**\"\
+        \    \n    "
+  source_type: machine_generated
+description: Auto generated config for generate a short tiktok video title
+enhancer:
+  end_meta_instruction: Give me a new prompt that is different from all pairs above,
+    and has evaluation values on accuracy, target audience appeal, catchiness, emoji,
+    oneline, that are higher than any of above.
+  enhance_var:
+  - task
+  head_meta_instruction: "Now you will help me generate a prompt which is used to\
+    \ generate a corresponding \nshort TikTok video title based on the content summary\
+    \ [content_summary] and its target audience [target_audience]. \nI already have\
+    \ some prompt and its evaluation results :"
+  max_iterations: 2
+  model_name: gpt-4
+  name: optimize_by_prompt_enhancer
+evaluators:
+- choice_scores:
+    A: 0
+    B: 1
+    C: 2
+    D: 3
+    E: 4
+  choices:
+  - A
+  - B
+  - C
+  - D
+  - E
+  description: Does the title accurately represent the content of the TikTok video?
+    The title should give a clear idea of what the video is about, without misleading
+    or confusing potential viewers.
+  display_name: accuracy
+  evaluator_type: individual
+  metric_calculators:
+  - method: AVERAGE
+  model_name: gpt-4
+  name: openai_prompt_based_evaluator
+  prompt: 'You are assessing a submitted answer on a given task based on a criterion.
+    Here is the data:
+
+    This function generates a short TikTok video title based on the supplied content
+    summary and target audience. It utilizes the information about the video content
+    and who it''s intended for to create an engaging and appropriate title that will
+    attract viewers. The title is designed to accurately represent the content while
+    also sparking the interest of the target demographic.
+
+    Does the title accurately represent the content of the TikTok video? The title
+    should give a clear idea of what the video is about, without misleading or confusing
+    potential viewers.
+
+    [Input]: content_summary: {{content_summary}}
+
+    target_audience: {{target_audience}}
+
+    [Result]: {raw_output}
+
+    Answer the question by selecting one of the following options:
+
+    A It fails to meet the criterion at all.
+
+    B It somewhat meets the criterion, but there is significant room for improvement.
+
+    C It meets the criterion to a satisfactory degree.
+
+    D It meets the criterion very well.
+
+    E It meets the criterion exceptionally well, with little to no room for improvement.'
+  scale_description: 0-4
+- choice_scores:
+    A: 0
+    B: 1
+    C: 2
+    D: 3
+    E: 4
+  choices:
+  - A
+  - B
+  - C
+  - D
+  - E
+  description: Does the title appeal to the target audience? The title should be crafted
+    in a way that it resonates with the intended demographic, using language, phrases
+    or references that they would find engaging or relatable.
+  display_name: target audience appeal
+  evaluator_type: individual
+  metric_calculators:
+  - method: AVERAGE
+  model_name: gpt-4
+  name: openai_prompt_based_evaluator
+  prompt: 'You are assessing a submitted answer on a given task based on a criterion.
+    Here is the data:
+
+    This function generates a short TikTok video title based on the supplied content
+    summary and target audience. It utilizes the information about the video content
+    and who it''s intended for to create an engaging and appropriate title that will
+    attract viewers. The title is designed to accurately represent the content while
+    also sparking the interest of the target demographic.
+
+    Does the title appeal to the target audience? The title should be crafted in a
+    way that it resonates with the intended demographic, using language, phrases or
+    references that they would find engaging or relatable.
+
+    [Input]: content_summary: {{content_summary}}
+
+    target_audience: {{target_audience}}
+
+    [Result]: {raw_output}
+
+    Answer the question by selecting one of the following options:
+
+    A It fails to meet the criterion at all.
+
+    B It somewhat meets the criterion, but there is significant room for improvement.
+
+    C It meets the criterion to a satisfactory degree.
+
+    D It meets the criterion very well.
+
+    E It meets the criterion exceptionally well, with little to no room for improvement.'
+  scale_description: 0-4
+- choice_scores:
+    A: 0
+    B: 1
+    C: 2
+    D: 3
+    E: 4
+  choices:
+  - A
+  - B
+  - C
+  - D
+  - E
+  description: Is the title catchy and attention-grabbing? Given the short nature
+    of TikTok videos and the platform's fast-paced scrolling, the title needs to be
+    able to quickly capture a viewer's attention and make them want to watch the video.
+  display_name: catchiness
+  evaluator_type: individual
+  metric_calculators:
+  - method: AVERAGE
+  model_name: gpt-4
+  name: openai_prompt_based_evaluator
+  prompt: 'You are assessing a submitted answer on a given task based on a criterion.
+    Here is the data:
+
+    This function generates a short TikTok video title based on the supplied content
+    summary and target audience. It utilizes the information about the video content
+    and who it''s intended for to create an engaging and appropriate title that will
+    attract viewers. The title is designed to accurately represent the content while
+    also sparking the interest of the target demographic.
+
+    Is the title catchy and attention-grabbing? Given the short nature of TikTok videos
+    and the platform''s fast-paced scrolling, the title needs to be able to quickly
+    capture a viewer''s attention and make them want to watch the video.
+
+    [Input]: content_summary: {{content_summary}}
+
+    target_audience: {{target_audience}}
+
+    [Result]: {raw_output}
+
+    Answer the question by selecting one of the following options:
+
+    A It fails to meet the criterion at all.
+
+    B It somewhat meets the criterion, but there is significant room for improvement.
+
+    C It meets the criterion to a satisfactory degree.
+
+    D It meets the criterion very well.
+
+    E It meets the criterion exceptionally well, with little to no room for improvement.'
+  scale_description: 0-4
+- choice_scores:
+    A: 0
+    B: 1
+    C: 2
+    D: 3
+    E: 4
+  choices:
+  - A
+  - B
+  - C
+  - D
+  - E
+  description: Does the emoji used in the TikTok video title clearly represent the
+    content or theme of the video? It should be immediately clear to anyone who sees
+    the emoji what the video's topic or mood is.
+  display_name: emoji
+  evaluator_type: individual
+  metric_calculators:
+  - method: AVERAGE
+  model_name: gpt-4
+  name: openai_prompt_based_evaluator
+  prompt: 'You are assessing a submitted answer on a given task based on a criterion.
+    Here is the data:
+
+    This function generates a short TikTok video title based on the supplied content
+    summary and target audience. It utilizes the information about the video content
+    and who it''s intended for to create an engaging and appropriate title that will
+    attract viewers. The title is designed to accurately represent the content while
+    also sparking the interest of the target demographic.
+
+    Does the emoji used in the TikTok video title clearly represent the content or
+    theme of the video? It should be immediately clear to anyone who sees the emoji
+    what the video''s topic or mood is.
+
+    [Input]: content_summary: {{content_summary}}
+
+    target_audience: {{target_audience}}
+
+    [Result]: {raw_output}
+
+    Answer the question by selecting one of the following options:
+
+    A It fails to meet the criterion at all.
+
+    B It somewhat meets the criterion, but there is significant room for improvement.
+
+    C It meets the criterion to a satisfactory degree.
+
+    D It meets the criterion very well.
+
+    E It meets the criterion exceptionally well, with little to no room for improvement.'
+  scale_description: 0-4
+- choice_scores:
+    A: 0
+    B: 1
+    C: 2
+    D: 3
+    E: 4
+  choices:
+  - A
+  - B
+  - C
+  - D
+  - E
+  description: Does the generated TikTok video title effectively convey the content
+    or theme of the video in a single line? The title should be concise, catchy, and
+    give viewers a clear idea of what to expect from the video.
+  display_name: oneline
+  evaluator_type: individual
+  metric_calculators:
+  - method: AVERAGE
+  model_name: gpt-4
+  name: openai_prompt_based_evaluator
+  prompt: 'You are assessing a submitted answer on a given task based on a criterion.
+    Here is the data:
+
+    This function generates a short TikTok video title based on the supplied content
+    summary and target audience. It utilizes the information about the video content
+    and who it''s intended for to create an engaging and appropriate title that will
+    attract viewers. The title is designed to accurately represent the content while
+    also sparking the interest of the target demographic.
+
+    Does the generated TikTok video title effectively convey the content or theme
+    of the video in a single line? The title should be concise, catchy, and give viewers
+    a clear idea of what to expect from the video.
+
+    [Input]: content_summary: {{content_summary}}
+
+    target_audience: {{target_audience}}
+
+    [Result]: {raw_output}
+
+    Answer the question by selecting one of the following options:
+
+    A It fails to meet the criterion at all.
+
+    B It somewhat meets the criterion, but there is significant room for improvement.
+
+    C It meets the criterion to a satisfactory degree.
+
+    D It meets the criterion very well.
+
+    E It meets the criterion exceptionally well, with little to no room for improvement.'
+  scale_description: 0-4
+human_rating_configs:
+- instructions: Does the title accurately represent the content of the TikTok video?
+    The title should give a clear idea of what the video is about, without misleading
+    or confusing potential viewers.
+  name: accuracy
+  scale:
+  - 0
+  - 4
+- instructions: Does the title appeal to the target audience? The title should be
+    crafted in a way that it resonates with the intended demographic, using language,
+    phrases or references that they would find engaging or relatable.
+  name: target audience appeal
+  scale:
+  - 0
+  - 4
+- instructions: Is the title catchy and attention-grabbing? Given the short nature
+    of TikTok videos and the platform's fast-paced scrolling, the title needs to be
+    able to quickly capture a viewer's attention and make them want to watch the video.
+  name: catchiness
+  scale:
+  - 0
+  - 4
+- instructions: Does the emoji used in the TikTok video title clearly represent the
+    content or theme of the video? It should be immediately clear to anyone who sees
+    the emoji what the video's topic or mood is.
+  name: emoji
+  scale:
+  - 0
+  - 4
+- instructions: Does the generated TikTok video title effectively convey the content
+    or theme of the video in a single line? The title should be concise, catchy, and
+    give viewers a clear idea of what to expect from the video.
+  name: oneline
+  scale:
+  - 0
+  - 4
+selection_strategy:
+  ahp_selection:
+    criteria:
+    - 'openai_prompt_based_evaluator: accuracy'
+    - 'openai_prompt_based_evaluator: target audience appeal'
+    - 'openai_prompt_based_evaluator: catchiness'
+    - 'openai_prompt_based_evaluator: emoji'
+    - 'openai_prompt_based_evaluator: oneline'
+    - average_token_usage
+    - average_latency
+    criteria_maximization:
+      average_latency: false
+      average_token_usage: false
+      'openai_prompt_based_evaluator: accuracy': true
+      'openai_prompt_based_evaluator: catchiness': true
+      'openai_prompt_based_evaluator: emoji': true
+      'openai_prompt_based_evaluator: oneline': true
+      'openai_prompt_based_evaluator: target audience appeal': true
+    criteria_weights:
+      average_latency: 0
+      average_token_usage: 0
+      'openai_prompt_based_evaluator: accuracy': 0.2
+      'openai_prompt_based_evaluator: catchiness': 0.2
+      'openai_prompt_based_evaluator: emoji': 0.2
+      'openai_prompt_based_evaluator: oneline': 0.2
+      'openai_prompt_based_evaluator: target audience appeal': 0.2
+variations:
+- generator_config: null
+  generator_name: null
+  name: task
+  variations:
+  - instantiated_value: 'generate a short tiktok video title based on the following
+      info
+
+      content_summary: {content_summary}
+
+      target_audience: {target_audience}'
+    value: 'generate a short tiktok video title based on the following info
+
+      content_summary: {content_summary}
+
+      target_audience: {target_audience}'
+    value_type: str
+    variation_id: null

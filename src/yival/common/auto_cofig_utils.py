@@ -403,7 +403,7 @@ def auto_generate_config(
         head_meta_instruction=auto_head_meta_prompt(task, parameters),
         end_meta_instruction=end_meta_message,
         model_name="gpt-4",
-        max_iterations=3
+        max_iterations=2
     )
     criteria = []
     criteria_weights = {}
