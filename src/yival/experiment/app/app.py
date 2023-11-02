@@ -385,7 +385,7 @@ def create_dash_app(
         data = []
         for metric in combo_metrics:
             row = {
-                "Hyperparameters":
+                "Prompt Variations":
                 "\n".join(
                     textwrap.wrap(
                         str(metric.combo_key).replace('"',
@@ -396,7 +396,9 @@ def create_dash_app(
 
             for k, v in metric.aggregated_metrics.items():
                 row[k] = ', '.join([f"{m.name}: {m.value}" for m in v])
-            row['Average Token Usage'] = str(metric.average_token_usage)
+            row['Average Token Usage(Cost Proportional)'] = str(
+                metric.average_token_usage
+            )
             row['Average Latency'] = str(metric.average_latency)
 
             if metric.combine_evaluator_outputs:
@@ -455,9 +457,9 @@ def create_dash_app(
         column_order = ["Iteration"
                         ] + [col for col in df if col != "Iteration"]
         df = df[column_order]
-        if 'Average Token Usage' in df:
-            df['Average Token Usage'] = pd.to_numeric(
-                df['Average Token Usage'], errors='coerce'
+        if 'Average Token Usage(Cost Proportional)' in df:
+            df['Average Token Usage(Cost Proportional)'] = pd.to_numeric(
+                df['Average Token Usage(Cost Proportional)'], errors='coerce'
             )
         if 'Average Latency' in df:
             df['Average Latency'] = pd.to_numeric(
@@ -608,6 +610,13 @@ def create_dash_app(
                 "Enhancer Experiment Results Analysis",
                 style={'textAlign': 'center'}
             ),
+            html.P(
+                "*Note: iteration 0 is the user task input, other iterations are YiVal autotune results.",
+                style={
+                    'textAlign': 'center',
+                    'color': 'grey'
+                }
+            ),
             combo_aggregated_metrics_layout(df_enhancer),
             html.Hr(),
             generate_legend(),
@@ -635,7 +644,7 @@ def create_dash_app(
     def analysis_layout(df):
         evaluator_outputs = [
             col for col in df.columns
-            if (col != 'Hyperparameters' and 'Sample' not in col)
+            if (col != 'Prompt Variations' and 'Sample' not in col)
         ]
         return html.Div([
             html.Div([
@@ -726,9 +735,9 @@ def create_dash_app(
             styles.append({
                 'if': {
                     'column_id':
-                    'Hyperparameters',
+                    'Prompt Variations',
                     'filter_query':
-                    f'{{Hyperparameters}} eq "{best_combination_str}"',
+                    f'{{Prompt Variations}} eq "{best_combination_str}"',
                 },
                 'backgroundColor': '#DFF0D8',  # Light green color
                 'border': '2px solid #28A745',  # Darker green border
@@ -742,11 +751,11 @@ def create_dash_app(
                     experiment_data.selection_output.selection_reason.items()
                 ])
                 tooltip_data = [{
-                    'Hyperparameters': {
+                    'Prompt Variations': {
                         'value': reason_str,
                         'type': 'markdown'
                     }
-                } if row["Hyperparameters"] == best_combination_str else {}
+                } if row["Prompt Variations"] == best_combination_str else {}
                                 for row in df.to_dict('records')]
 
         evaluator_names = [
@@ -781,12 +790,12 @@ def create_dash_app(
             },
             style_cell_conditional=[{
                 'if': {
-                    'column_id': 'Hyperparameters'
+                    'column_id': 'Prompt Variations'
                 },
                 'width': '40%'
             }, {
                 'if': {
-                    'column_id': 'Average Token Usage'
+                    'column_id': 'Average Token Usage(Cost Proportional)'
                 },
                 'width': '20%'
             }, {
@@ -989,8 +998,9 @@ def create_dash_app(
         if highlight_key:
             styles_data_conditional.append({
                 'if': {
-                    'column_id': 'Hyperparameters',
-                    'filter_query': f'{{Hyperparameters}} eq "{highlight_key}"'
+                    'column_id': 'Prompt Variations',
+                    'filter_query':
+                    f'{{Prompt Variations}} eq "{highlight_key}"'
                 },
                 'backgroundColor': '#FFCCCC'  # Highlighting with gold color
             })
@@ -1296,7 +1306,7 @@ def create_dash_app(
                                         ),
                                         dbc.Col(
                                             dbc.Input(
-                                                id=f"input-{key}",
+                                                id=f"best-input-{key}",
                                                 type=value,
                                                 placeholder=key
                                             ),
@@ -1657,10 +1667,10 @@ def create_dash_app(
             return fig
         return px.scatter(
             df,
-            x='Average Token Usage',
+            x='Average Token Usage(Cost Proportional)',
             y=selected_evaluator,
             title=
-            f'Comparative Scatter plot of Average Token Usage vs {selected_evaluator}',
+            f'Comparative Scatter plot of Average Token Usage(Cost Proportional) vs {selected_evaluator}',
             size_max=15
         )
 
@@ -1720,7 +1730,7 @@ def create_dash_app(
 
             # Ensure 'Average Token Usage' is also numerical
             temp_avg_token_usage = pd.to_numeric(
-                df['Average Token Usage'], errors='coerce'
+                df['Average Token Usage(Cost Proportional)'], errors='coerce'
             )
 
             # Check if the columns exist and are not null, and if their lengths match
@@ -1728,7 +1738,7 @@ def create_dash_app(
                 temp_avg_token_usage
             ) == len(temp_evaluator_data):
                 correlation = temp_avg_token_usage.corr(temp_evaluator_data)
-                return f"Correlation between Average Token Usage and {selected_evaluator}: {correlation:.2f}"
+                return f"Correlation between Average Token Usage(Cost Proportional) and {selected_evaluator}: {correlation:.2f}"
             else:
                 return "Data not available for correlation calculation."
 
@@ -1879,6 +1889,7 @@ def create_dash_app(
         return dash.no_update
 
     all_results: List[html.Div] = []
+    best_all_results: List[html.Div] = []
 
     @app.callback(
         Output("results-section", "children"),
@@ -2043,7 +2054,7 @@ def create_dash_app(
         Output("best-results-section", "children"),
         Input("best-result-btn", "n_clicks"),
         [
-            State(f"input-{key}", "value")
+            State(f"best-input-{key}", "value")
             for key in list(function_args.keys())[:-1]
         ] + [State("best-combination", "children")],
         prevent_initial_call=True
@@ -2078,7 +2089,7 @@ def create_dash_app(
             state=state
         ) if "custom_function" in experiment_config else None  #type: ignore
 
-        current_result = [
+        best_current_result = [
             html.Div([
                 html.Ul([
                     html.Li("Text Raw Output:"),
@@ -2101,7 +2112,7 @@ def create_dash_app(
         ])
         toggle_id = {"type": "toggle", "index": n_clicks}
         collapse_id = {"type": "collapse", "index": n_clicks}
-        current_result_card = html.Div([
+        best_current_result_card = html.Div([
             dbc.Button(
                 input_summary,
                 id=toggle_id,
@@ -2110,16 +2121,16 @@ def create_dash_app(
             ),
             dbc.Collapse([
                 item for sublist in [[res, html.Hr()]
-                                     for res in current_result]
+                                     for res in best_current_result]
                 for item in sublist
             ],
                          id=collapse_id,
                          is_open=True)
         ],
-                                       className="mb-3")
+                                            className="mb-3")
 
-        all_results.insert(0, current_result_card)
-        return all_results
+        best_all_results.insert(0, best_current_result_card)
+        return best_all_results
 
     def truncate_text(text, max_length=60):  # Adjust max_length as needed
         """Truncate text to a specified length and append ellipses."""
