@@ -28,7 +28,7 @@ def interactive_bot(
                     seen.add(str(r.combination))
                     experiment_results.append(r)
             group_result.experiment_results = experiment_results
-    function_args = get_function_args(experiment_config["custom_function"])
+    function_args = get_function_args(experiment_config["custom_function"],experiment_config["dataset"])
     function_args["yival_expected_result (Optional)"] = 'str'
 
     data = {
