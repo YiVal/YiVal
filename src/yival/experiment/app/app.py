@@ -1938,6 +1938,10 @@ def create_dash_app(
                 if input_values[i] is not None:
                     content[k] = input_values[i]
             i += 1
+
+        if experiment_config["custom_function"
+                             ] == "demo.complete_task.complete_task":
+            content["task"] = selected_combinations[0]['task']
         input_data = InputData(
             content=content, expected_result=expected_result
         )
@@ -2083,11 +2087,25 @@ def create_dash_app(
         for key in best_varation:
             best_varation[key] = [best_varation[key]]
         state.current_variations = best_varation
-        res = call_function_from_string(
-            experiment_config["custom_function"],  # type: ignore
-            **input_data.content,
-            state=state
-        ) if "custom_function" in experiment_config else None  #type: ignore
+
+        if "custom_function" in experiment_config:
+            if experiment_config["custom_function"
+                                 ] == "demo.complete_task.complete_task":
+                additional_data = {'task': best_combination}
+                content = {**input_data.content, **additional_data}
+                res = call_function_from_string(
+                    experiment_config["custom_function"],
+                    **content,
+                    state=state
+                )
+            else:
+                res = call_function_from_string(
+                    experiment_config["custom_function"],
+                    **input_data.content,
+                    state=state
+                )
+        else:
+            res = None
 
         best_current_result = [
             html.Div([
@@ -2261,7 +2279,9 @@ def display_results_dash(
                     seen.add(str(r.combination))
                     experiment_results.append(r)
             group_result.experiment_results = experiment_results
-    function_args = get_function_args(experiment_config["custom_function"])
+    function_args = get_function_args(
+        experiment_config["custom_function"], experiment_config["dataset"]
+    )
     function_args["yival_expected_result (Optional)"] = 'str'
     app = create_dash_app(
         experiment_data, experiment_config, function_args, all_combinations,
