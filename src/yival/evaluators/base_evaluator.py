@@ -102,6 +102,19 @@ class BaseEvaluator(ABC):
         """
         return EvaluatorOutput("evaluate", "evaluate")
 
+    async def aevaluate(self, experiment_result: ExperimentResult) -> Any:
+        """
+        Evaluate the experiment result and produce an evaluator output.
+
+        Args:
+            experiment_result (ExperimentResult): The result of an experiment
+            to be evaluated.
+
+        Returns:
+            EvaluatorOutput: The result of the evaluation.
+        """
+        return EvaluatorOutput("evaluate", "evaluate")
+
     def evaluate_comparison(self, group_data: List[ExperimentResult]) -> None:
         """
         Evaluate and compare a list of experiment results.

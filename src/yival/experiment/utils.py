@@ -318,7 +318,7 @@ def run_single_input(
         )
         if result.evaluator_outputs is not None:
             result.evaluator_outputs.extend(
-                evaluator.evaluate_individual_result(result)
+                asyncio.run(evaluator.evaluate_individual_result(result))
             )
         results.append(result)
     return results
@@ -355,7 +355,7 @@ async def arun_single_input(
         )
         if result.evaluator_outputs is not None:
             result.evaluator_outputs.extend(
-                evaluator.evaluate_individual_result(result)
+                asyncio.run(evaluator.evaluate_individual_result(result))
             )
         results.append(result)
     return results
