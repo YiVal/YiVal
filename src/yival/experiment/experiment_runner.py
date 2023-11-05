@@ -229,10 +229,6 @@ class ExperimentRunner:
                     with open(config_output_path, 'wb') as file:
                         pickle.dump(experiment, file)
                 if display and enable_custom_func:
-                    # display_results_dash(
-                    #     experiment, self.config, all_combinations,
-                    #     ExperimentState.get_instance(), logger, evaluator, port=base_port+idx
-                    # )
                     t = Thread(
                         target=display_results_dash,
                         args=(

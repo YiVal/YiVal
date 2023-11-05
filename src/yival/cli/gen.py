@@ -10,13 +10,13 @@ Example:
 """
 import traceback
 from argparse import ArgumentParser, Namespace
+
 from ..auto_prompt.main import run_auto_gen
+
 
 def add_arguments_to(subparser):
     """Add arguments to subcommand gen."""
-    parser: ArgumentParser = subparser.add_parser(
-        "gen", help=run_gen.__doc__
-    )
+    parser: ArgumentParser = subparser.add_parser("gen", help=run_gen.__doc__)
     parser.description = run_gen.__doc__
     parser.set_defaults(func=run_gen)
 

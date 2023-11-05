@@ -8,12 +8,11 @@ import json
 import os
 import re
 import subprocess
-import threading
 import textwrap
+import threading
 import urllib.parse
 from concurrent.futures import ThreadPoolExecutor
 from typing import Any, Dict, List, Optional
-from termcolor import colored
 
 import dash  # type: ignore
 import dash_bootstrap_components as dbc  # type: ignore
@@ -25,14 +24,10 @@ from dash.dependencies import ALL, MATCH, Input, Output, State
 from dash_dangerously_set_inner_html import DangerouslySetInnerHTML
 from PIL import Image
 from pyngrok import ngrok
+from termcolor import colored
 
-from ..rate_limiter import RateLimiter
-from ..utils import (
-    call_function_from_string,
-    generate_experiment,
-    get_function_args,
-    run_single_input,
-)
+from ...common.auto_cofig_utils import auto_generate_config
+from ...schemas.common_structures import InputData
 from ...schemas.experiment_config import (
     CombinationAggregatedMetrics,
     EvaluatorOutput,
@@ -42,10 +37,13 @@ from ...schemas.experiment_config import (
     GroupedExperimentResult,
     MultimodalOutput,
 )
-from ...common.auto_cofig_utils import auto_generate_config
-
-
-from ...schemas.common_structures import InputData
+from ..rate_limiter import RateLimiter
+from ..utils import (
+    call_function_from_string,
+    generate_experiment,
+    get_function_args,
+    run_single_input,
+)
 from .hexagram import HEXAGRAMS, generate_hexagram_figure
 from .utils import (
     generate_group_key_combination_data,
@@ -2263,60 +2261,25 @@ def create_dash_app(
     return app
 
 
-# def display_results_dash(
-#     experiment_data: Experiment,
-#     experiment_config,
-#     all_combinations,
-#     state,
-#     logger,
-#     evaluator,
-#     interactive=False,
-#     port=8074
-# ):
-#     if experiment_data.enhancer_output:
-#         for group_result in experiment_data.enhancer_output.group_experiment_results:
-#             experiment_results = []
-#             seen = set()
-#             for r in group_result.experiment_results:
-#                 if str(r.combination) in seen:
-#                     continue
-#                 else:
-#                     seen.add(str(r.combination))
-#                     experiment_results.append(r)
-#             group_result.experiment_results = experiment_results
-#     function_args = get_function_args(experiment_config["custom_function"])
-#     function_args["yival_expected_result (Optional)"] = 'str'
-#     app = create_dash_app(
-#         experiment_data, experiment_config, function_args, all_combinations,
-#         state, logger, evaluator, interactive
-#     )
-#     if os.environ.get("ngrok", False):
-#         public_url = ngrok.connect(port)
-#         print(f"Access Yival from this public URL :{public_url}")
-#         app.run(debug=False, port=port)
-#     else:
-#         app.run(debug=False, port=port)
-
 def create_input_app():
-    default_task="generate tiktok video title"
-    default_context_info="target_audience,content_summary"
-    default_evaluation_aspects=""
+    default_task = "generate tiktok video title"
+    default_context_info = "target_audience,content_summary"
+    default_evaluation_aspects = ""
 
     def generate_navigation():
         return dbc.NavbarSimple(
             children=[
-                dbc.NavItem(
-                    dbc.NavLink(
-                        "Create Task",
-                        href="/create_task",
-                    )
-                ),
+                dbc.NavItem(dbc.NavLink(
+                    "Create Task",
+                    href="/create_task",
+                )),
             ],
             brand="YiVal",
             brand_href="/",
             color="primary",
             dark=True,
         )
+
     def index_page():
         return html.Div([
             html.H1("Yijing (I Ching)"),
@@ -2324,32 +2287,85 @@ def create_input_app():
             html.Div(id='hexagram-container')
         ])
 
-
-
     def input_task_layout():
         return html.Div([
-            html.Label('[?] What task would you like to set up? For example:', style={'margin':'10px'}),
-            dcc.Input(id='task', type='text', placeholder='Task', value=default_task, style={'width': '100%', 'height': '50px', 'fontSize' : '18px', 'margin':'10px'}),
-            
-            html.Label('[?] Provide input for the task, separated by comma. For example:', style={'margin':'10px'}),
-            dcc.Input(id='context_info', type='text', placeholder='Context Info', value=default_context_info, style={'width': '100%', 'height': '50px', 'fontSize' : '18px', 'margin':'10px'}),
-            
-            html.Label('[?] Please provide evaluation aspects (optional):', style={'margin':'10px'}),
-            dcc.Input(id='evaluation_aspects', type='text', placeholder='Evaluation Aspects (optional)', value=default_evaluation_aspects, style={'width': '100%', 'height': '50px', 'fontSize' : '18px', 'margin':'10px'}),
-            
-            html.Button('Submit', id='submit-button', n_clicks=0, style={'fontSize' : '18px', 'margin':'10px'}),
+            html.Label(
+                '[?] What task would you like to set up? For example:',
+                style={'margin': '10px'}
+            ),
+            dcc.Input(
+                id='task',
+                type='text',
+                placeholder='Task',
+                value=default_task,
+                style={
+                    'width': '100%',
+                    'height': '50px',
+                    'fontSize': '18px',
+                    'margin': '10px'
+                }
+            ),
+            html.Label(
+                '[?] Provide input for the task, separated by comma. For example:',
+                style={'margin': '10px'}
+            ),
+            dcc.Input(
+                id='context_info',
+                type='text',
+                placeholder='Context Info',
+                value=default_context_info,
+                style={
+                    'width': '100%',
+                    'height': '50px',
+                    'fontSize': '18px',
+                    'margin': '10px'
+                }
+            ),
+            html.Label(
+                '[?] Please provide evaluation aspects (optional):',
+                style={'margin': '10px'}
+            ),
+            dcc.Input(
+                id='evaluation_aspects',
+                type='text',
+                placeholder='Evaluation Aspects (optional)',
+                value=default_evaluation_aspects,
+                style={
+                    'width': '100%',
+                    'height': '50px',
+                    'fontSize': '18px',
+                    'margin': '10px'
+                }
+            ),
+            html.Button(
+                'Submit',
+                id='submit-button',
+                n_clicks=0,
+                style={
+                    'fontSize': '18px',
+                    'margin': '10px'
+                }
+            ),
             html.Div(id='output-div')
-        ], style={'backgroundColor': '#f0f0f0', 'padding': '20px'})
+        ],
+                        style={
+                            'backgroundColor': '#f0f0f0',
+                            'padding': '20px'
+                        })
 
-
-    app = dash.Dash(__name__, suppress_callback_exceptions=True,external_stylesheets=[dbc.themes.FLATLY])
+    app = dash.Dash(
+        __name__,
+        suppress_callback_exceptions=True,
+        external_stylesheets=[dbc.themes.FLATLY]
+    )
 
     @app.callback(
-        Output('output-div', 'children'),
-        [Input('submit-button', 'n_clicks')],
-        [State('task', 'value'),
-         State('context_info', 'value'),
-         State('evaluation_aspects', 'value')]
+        Output('output-div', 'children'), [Input('submit-button', 'n_clicks')],
+        [
+            State('task', 'value'),
+            State('context_info', 'value'),
+            State('evaluation_aspects', 'value')
+        ]
     )
     def update_output(n_clicks, task, context_info, evaluation_aspects):
         if n_clicks > 0:
@@ -2357,16 +2373,26 @@ def create_input_app():
             aspect = []
             if evaluation_aspects:
                 aspect = evaluation_aspects.split(",")
-            
+
             if task != default_task and context_info != default_context_info and evaluation_aspects != default_evaluation_aspects:
                 auto_generate_config(task, parameters, aspect)
-                print(colored("\n[INFO][auto_gen] Generating configuration...", "yellow"))
+                print(
+                    colored(
+                        "\n[INFO][auto_gen] Generating configuration...",
+                        "yellow"
+                    )
+                )
                 subprocess.run([
                     "yival", "run", "auto_generated_config.yaml",
                     "--output_path=auto_generated.pkl"
                 ])
             else:
-                print(colored("\n[INFO][auto_gen] Using default configuration...", "yellow"))
+                print(
+                    colored(
+                        "\n[INFO][auto_gen] Using default configuration...",
+                        "yellow"
+                    )
+                )
                 subprocess.run([
                     "yival", "run", "default_auto_generated_config.yaml",
                     "--output_path=default_auto_generated.pkl"
@@ -2403,7 +2429,6 @@ def create_input_app():
                 }
             )
         ]
-    
 
     app.layout = html.Div(
         [
@@ -2432,18 +2457,11 @@ def create_input_app():
 
     return app
 
-# def display_input_dash(port=8073):
-#     app = create_input_app()
-#     if os.environ.get("ngrok", False):
-#         public_url = ngrok.connect(port)
-#         print(f"Access Yival from this public URL :{public_url}")
-#         app.run(debug=True, port=port)
-#     else:
-        # app.run(debug=True, port=port)
 
 def display_input_dash(port=8073):
     app = create_input_app()
     threading.Thread(target=run_app, args=(app, False, port)).start()
+
 
 def display_results_dash(
     experiment_data: Experiment,
@@ -2475,6 +2493,7 @@ def display_results_dash(
         state, logger, evaluator, interactive
     )
     threading.Thread(target=run_app, args=(app, False, port)).start()
+
 
 def run_app(app, debug, port):
     if os.environ.get("ngrok", False):
