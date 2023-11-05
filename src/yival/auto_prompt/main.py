@@ -1,5 +1,8 @@
 import argparse
+
 import subprocess
+
+from ..experiment.app.app import display_input_dash
 
 from termcolor import colored
 
@@ -19,6 +22,10 @@ except ImportError:
 
 def format_input(input_str):
     return input_str.replace(" ", "_")
+
+def run_auto_gen():
+    display_input_dash()
+    print(colored("\nProcess completed!", "green"))
 
 
 def main():

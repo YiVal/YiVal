@@ -19,9 +19,10 @@ dataset:
           TikTok video.
         name: generate_engaging_tiktok_headline
         parameters:
-          target_audioence: str
+          target_audience: str
+          content_summary: str
       model_name: gpt-4
-      number_of_examples: 1
+      number_of_examples: 5
       output_csv_path: generate_engaging_tiktok_headline_generated_data.csv
       output_path: generate_engaging_tiktok_headline_generated_data.pkl
       prompt: "\n        \"Please provide a concrete and realistic test case as a\
@@ -43,7 +44,7 @@ enhancer:
     \ which is used to generate a corresponding TikTok video headline according to\
     \ the tiktok_video_context [tiktok_video_context] and its target audience [target_audience].\
     \ I already have some prompt and its evaluation results :"
-  max_iterations: 1
+  max_iterations: 3
   model_name: gpt-4
   name: optimize_by_prompt_enhancer
 evaluators:
