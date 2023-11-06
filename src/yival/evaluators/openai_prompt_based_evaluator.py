@@ -132,8 +132,6 @@ async def acompletion_with_backpff(**kwargs):
 
     async with aiohttp.ClientSession(connector=connector) as session:
         async with session.post(url, headers=headers, json=kwargs) as response:
-            response_text = await response.text()
-            print(response_text)
 
             return await response.json()
 
