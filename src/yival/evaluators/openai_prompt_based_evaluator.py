@@ -8,8 +8,12 @@ experiment result.
 """
 import copy
 import logging
+import os
 import string
 from typing import Any, Dict, Iterable, List, Optional, Union
+import aiohttp
+
+from aiohttp_socks import ProxyConnector
 
 # for exponential backoff
 import openai
@@ -114,7 +118,29 @@ def completion_with_backpff(**kwargs):
     stop=stop_after_attempt(100),
 )
 async def acompletion_with_backpff(**kwargs):
-    return await openai.ChatCompletion.acreate(**kwargs)
+    url = "https://api.openai.com/v1/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {openai.api_key}",
+        "Content-Type": "application/json"
+    }
+
+    proxy = os.environ.get("all_proxy")
+    if proxy:
+        print(f"Using proxy: {proxy}")
+        connector = ProxyConnector.from_url(proxy)
+    else:
+        print("Not using proxy")
+        connector = None
+    kwargs.pop('request_timeout', None)
+
+    async with aiohttp.ClientSession(connector=connector) as session:
+        async with session.post(url, headers=headers, json=kwargs) as response:
+            response_text = await response.text()
+            print(response_text)
+
+            return await response.json() 
+
+
 
 
 def choices_to_string(choice_strings: Iterable[str]) -> str:
