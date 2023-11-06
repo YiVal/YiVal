@@ -4,8 +4,7 @@ import subprocess
 from termcolor import colored
 
 from yival.common.auto_cofig_utils import auto_generate_config
-
-from ..experiment.app.app import display_input_dash  # type: ignore
+from yival.experiment.app.app import display_input_dash  # type: ignore
 
 try:
     import inquirer
