@@ -269,8 +269,6 @@ class OptimizeByPromptEnhancer(BaseCombinationEnhancer):
                 template_vars  #type:ignore
             )
 
-            print(f"[INFO] opro_prompt: {opro_prompt}")
-
             gen_variations = self.fetch_next_variations(opro_prompt)
 
             if not gen_variations:
