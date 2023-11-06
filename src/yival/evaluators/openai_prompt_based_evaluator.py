@@ -11,12 +11,11 @@ import logging
 import os
 import string
 from typing import Any, Dict, Iterable, List, Optional, Union
+
 import aiohttp
-
-from aiohttp_socks import ProxyConnector
-
 # for exponential backoff
 import openai
+from aiohttp_socks import ProxyConnector  # type: ignore
 from tenacity import before_sleep_log, retry, stop_after_attempt, wait_random
 
 logging.basicConfig(level=logging.ERROR)
@@ -138,9 +137,7 @@ async def acompletion_with_backpff(**kwargs):
             response_text = await response.text()
             print(response_text)
 
-            return await response.json() 
-
-
+            return await response.json()
 
 
 def choices_to_string(choice_strings: Iterable[str]) -> str:
