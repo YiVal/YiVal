@@ -30,18 +30,32 @@ from yival.wrappers.string_wrapper import StringWrapper
 
 
 def deal_context(context):
-    data = context['sentences']
+    
     res = []
-    for part in data:
-        res.append(
-            Document(
-                page_content='.'.join(part),
-                metadata={
-                    'source': '../abstract.pdf',
-                    'page': 0
-                }
+    if isinstance(context,Dict):
+        data = context['sentences']
+        for part in data:
+            res.append(
+                Document(
+                    page_content='.'.join(part),
+                    metadata={
+                        'source': '../abstract.pdf',
+                        'page': 0
+                    }
+                )
             )
-        )
+    elif isinstance(context,List):
+        data = context
+        for part in data:
+            res.append(
+                Document(
+                    page_content=part,
+                    metadata={
+                        'source': '../abstract.pdf',
+                        'page': 0
+                    }
+                )
+            )
     return res
 
 
@@ -337,7 +351,6 @@ def retriever_method(
 ) -> str:
     res = ""
     global r_m_ps
-
     if not context == None:
         if retriever == 'llamaindex':
             context = deal_llamaindex(context=context)
@@ -423,7 +436,7 @@ def retriever_method(
 
 def rags_compare(
     question: str,
-    context: Optional[Dict] = None,
+    context: Optional[Any] = None,
     state: Optional[ExperimentState] = None
 ) -> MultimodalOutput:
 
