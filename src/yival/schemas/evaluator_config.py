@@ -192,4 +192,4 @@ class Rags_EvaluatorConfig(EvaluatorConfig):
     evaluator_type: EvaluatorType = EvaluatorType.INDIVIDUAL
     desciption: str = " This is the description of the evaluator"
 
-    metric_type: str = ''
+    metric_type: str = 'We can choose metric_type from "answer_relevacy, faithfulness, and context_precision". Any combination are avaliable.'
