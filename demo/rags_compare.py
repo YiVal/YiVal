@@ -47,25 +47,30 @@ def deal_context(context):
     elif isinstance(context,List):
         data = context
         for part in data:
-            res.append(
-                Document(
+            doc=Document(
                     page_content=part,
                     metadata={
                         'source': '../abstract.pdf',
                         'page': 0
                     }
                 )
-            )
+            res.append(doc)
     return res
 
 
 def deal_llamaindex(context):
     from llama_index import Document
-    data = context['sentences']
     res = []
-    for part in data:
-        s = ' '.join(part)
-        res.append(Document(text=s))
+    if isinstance(context,Dict):
+        data = context['sentences']
+        for part in data:
+            s = ' '.join(part)
+            res.append(Document(text=s))
+    elif isinstance(context,List):
+        data=context
+        for part in data:
+            s = part
+            res.append(Document(text=s))
     return res
 
 
