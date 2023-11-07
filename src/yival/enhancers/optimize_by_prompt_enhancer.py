@@ -22,6 +22,7 @@ and more examples in paper appendix
 """
 
 import copy
+import itertools
 import json
 import logging
 from typing import Dict, List, Tuple
@@ -43,7 +44,13 @@ from ..schemas.experiment_config import (
 )
 from ..schemas.model_configs import Request
 from .base_combination_enhancer import BaseCombinationEnhancer
-from .utils import construct_output_format, format_input_from_dict, scratch_variations_from_str
+from .utils import (
+    construct_output_format,
+    construct_template_restrict,
+    format_input_from_dict,
+    scratch_template_vars,
+    scratch_variations_from_str,
+)
 
 rate_limiter = RateLimiter(60 / 60)
 
@@ -105,7 +112,7 @@ def construct_solution_score_pairs(
 def construct_opro_full_prompt(
     cache: List[Tuple[Dict, Dict]], head_meta_instruction: str,
     optimation_task_format: str | None, end_meta_instruction: str,
-    enhance_var: List[str]
+    enhance_var: List[str], template_vars: List[str] | None
 ) -> str:
     """
     Construct full opro prompt , which has a format as follow
@@ -120,6 +127,8 @@ def construct_opro_full_prompt(
     if optimation_task_format:
         full_prompt += (optimation_task_format + '\n')
     full_prompt += (end_meta_instruction + '\n')
+    if template_vars:
+        full_prompt += construct_template_restrict(template_vars)
     full_prompt += construct_output_format(enhance_var)
 
     return full_prompt
@@ -211,6 +220,15 @@ class OptimizeByPromptEnhancer(BaseCombinationEnhancer):
         assert set(self.config.enhance_var).issubset(set(best_combo.keys()))
 
         variations_now = best_combo
+        template_vars = [
+            scratch_template_vars(str_value)
+            for str_value in best_combo.values()
+        ]
+        if template_vars:
+            template_vars = list(itertools.chain(*template_vars))  #type:ignore
+        else:
+            template_vars = None  #type:ignore
+
         logging.info(f"[INFO][opro] first variations is {variations_now}")
 
         lite_experiment_runner = LiteExperimentRunner(
@@ -243,9 +261,12 @@ class OptimizeByPromptEnhancer(BaseCombinationEnhancer):
             cache.append((best_combo, score))
 
             opro_prompt = construct_opro_full_prompt(
-                cache, self.config.head_meta_instruction,
+                cache,
+                self.config.head_meta_instruction,
                 self.config.optimation_task_format,
-                self.config.end_meta_instruction, self.config.enhance_var
+                self.config.end_meta_instruction,
+                self.config.enhance_var,
+                template_vars  #type:ignore
             )
 
             gen_variations = self.fetch_next_variations(opro_prompt)

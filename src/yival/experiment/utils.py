@@ -71,15 +71,26 @@ def import_function_from_string(func_string: str):
     return function
 
 
-def get_function_args(func_string: str):
+def get_yaml_args(dataset):
+    """Get argument from yaml."""
+    return dataset['data_generators']['openai_prompt_data_generator'][
+        'input_function']['parameters']
+
+
+def get_function_args(func_string: str, dataset: dict):
     """Get argument types of a function."""
-    function = import_function_from_string(func_string)
-    signature = inspect.signature(function)
-    return {
-        name: str(param.annotation)
-        for name, param in signature.parameters.items()
-        if name.lower() != "state"
-    }
+    if func_string == "demo.complete_task.complete_task":
+        args = get_yaml_args(dataset)
+        return {name: f"<class '{param}'>" for name, param in args.items()}
+    else:
+        function = import_function_from_string(func_string)
+        signature = inspect.signature(function)
+
+        return {
+            name: str(param.annotation)
+            for name, param in signature.parameters.items()
+            if name.lower() != "state"
+        }
 
 
 def call_function_from_string(func_string: str, **kwargs) -> Any:
@@ -307,7 +318,7 @@ def run_single_input(
         )
         if result.evaluator_outputs is not None:
             result.evaluator_outputs.extend(
-                evaluator.evaluate_individual_result(result)
+                asyncio.run(evaluator.evaluate_individual_result(result))
             )
         results.append(result)
     return results
@@ -344,7 +355,7 @@ async def arun_single_input(
         )
         if result.evaluator_outputs is not None:
             result.evaluator_outputs.extend(
-                evaluator.evaluate_individual_result(result)
+                asyncio.run(evaluator.evaluate_individual_result(result))
             )
         results.append(result)
     return results
