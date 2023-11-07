@@ -13,7 +13,7 @@ dataset:
     output_mapping:
       question: question
       context: context
-# output_path: demo_generated_examples.pkl
+
 
 description: Configuration fo question answering with expected results.
 

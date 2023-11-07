@@ -130,9 +130,7 @@ class retriever_model_prompt:
             while (cur_time - self.timer[name] < self.WaitTime):
                 time.sleep(1)
                 cur_time = time.time()
-                # print('cur:',str(cur_time),',timer:',str(self.timer[name]))
             splits = self.data[name]
-        # print('!'*100+splits)
 
         retriever = FAISS.from_documents(splits,
                                          OpenAIEmbeddings()).as_retriever()
@@ -233,14 +231,12 @@ class retriever_model_prompt:
         elif not context == None:
             name = 'Parent_Document_Retriever'
             self.data[name] = context
-            # print('!!!'*100+str(len(self.data[name])))
             self.timer[name] = time.time()
             cur_time = self.timer[name]
             while (cur_time - self.timer[name] < self.WaitTime):
                 time.sleep(1)
                 cur_time = time.time()
             docs = self.data[name]
-            # print('???'*100+str(len(self.data[name])))
 
         child_splitter = RecursiveCharacterTextSplitter(chunk_size=400)
         vectorstore = Chroma(
@@ -260,7 +256,6 @@ class retriever_model_prompt:
     def init_retriever(self, retriever: str, context: Optional[Dict] = None):
 
         if retriever == 'MultiQueryRetriever' and retriever not in self.inited:
-            #self.retrievers[retriever]=False
             self.inited[retriever] = False
             self.cnt[retriever] = 10
             self.add_retriever(
@@ -356,7 +351,6 @@ def retriever_method(
     if retriever == 'MultiQueryRetriever':
         flag = 1
         while r_m_ps.inited[retriever] == False:
-            print('line:302')
             if flag == 1 and retriever in r_m_ps.data:
                 r_m_ps.timer[retriever] = time.time()
                 r_m_ps.data[retriever] += context
@@ -368,7 +362,6 @@ def retriever_method(
     elif retriever == 'Contextual_compression':
         flag = 1
         while r_m_ps.inited[retriever] == False:
-            print('line:314')
             if flag == 1 and retriever in r_m_ps.data:
                 r_m_ps.timer[retriever] = time.time()
                 r_m_ps.data[retriever] += context
@@ -381,7 +374,6 @@ def retriever_method(
     elif retriever == 'Ensemble_Retriever':
         flag = 1
         while r_m_ps.inited[retriever] == False:
-            print('line:326')
             if flag == 1 and retriever in r_m_ps.data:
                 r_m_ps.timer[retriever] = time.time()
                 r_m_ps.data[retriever] += context
@@ -408,7 +400,6 @@ def retriever_method(
     elif retriever == 'Parent_Document_Retriever':
         flag = 1
         while r_m_ps.inited[retriever] == False:
-            print('line:350')
             if flag == 1 and retriever in r_m_ps.data:
                 r_m_ps.timer[retriever] = time.time()
                 r_m_ps.data[retriever] += context
@@ -422,14 +413,12 @@ def retriever_method(
     elif retriever == 'llamaindex':
         flag = 1
         while r_m_ps.inited[retriever] == False:
-            print('line:362')
             if flag == 1 and retriever in r_m_ps.data:
                 r_m_ps.timer[retriever] = time.time()
                 r_m_ps.data[retriever] += context
                 flag = 0
             time.sleep(1)
         docs = r_m_ps.retrievers[retriever].retrieve(input)
-        # print(docs)
         res = llamaindex_docs_to_string(docs=docs)
         pass
     if res == '':
@@ -446,7 +435,6 @@ def rags_compare(
     res = ""
     print(question)
     print('-' * 100)
-    # print(state.current_variations)
     '''
     {
         'retriever_name': ['Contextual_compression'], 
@@ -471,8 +459,6 @@ def rags_compare(
             state=state
         )
     )
-    # print(res)
-    # print('!!!!!!the input len=',str(len(res)))
     response = llm_completion(
         Request(
             model_name=str(
@@ -484,6 +470,5 @@ def rags_compare(
 
     output = 'answer: ' + response['choices'][0]['message'][
         'content'] + '\n\rdocs: ' + res
-    # print(output)
     result = MultimodalOutput(text_output=output)
     return result
