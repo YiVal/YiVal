@@ -30,9 +30,9 @@ from yival.wrappers.string_wrapper import StringWrapper
 
 
 def deal_context(context):
-    
+
     res = []
-    if isinstance(context,Dict):
+    if isinstance(context, Dict):
         data = context['sentences']
         for part in data:
             res.append(
@@ -44,16 +44,16 @@ def deal_context(context):
                     }
                 )
             )
-    elif isinstance(context,List):
+    elif isinstance(context, List):
         data = context
         for part in data:
-            doc=Document(
-                    page_content=part,
-                    metadata={
-                        'source': '../abstract.pdf',
-                        'page': 0
-                    }
-                )
+            doc = Document(
+                page_content=part,
+                metadata={
+                    'source': '../abstract.pdf',
+                    'page': 0
+                }
+            )
             res.append(doc)
     return res
 
@@ -61,13 +61,13 @@ def deal_context(context):
 def deal_llamaindex(context):
     from llama_index import Document
     res = []
-    if isinstance(context,Dict):
+    if isinstance(context, Dict):
         data = context['sentences']
         for part in data:
             s = ' '.join(part)
             res.append(Document(text=s))
-    elif isinstance(context,List):
-        data=context
+    elif isinstance(context, List):
+        data = context
         for part in data:
             s = part
             res.append(Document(text=s))
