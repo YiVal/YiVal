@@ -45,7 +45,8 @@ def deal_context(context):
                 )
             )
     elif isinstance(context, List):
-        data = context
+        print(context[0][-20:])
+        data = context[0].split('.')
         for part in data:
             doc = Document(
                 page_content=part,
