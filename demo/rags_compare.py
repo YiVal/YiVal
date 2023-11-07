@@ -73,7 +73,6 @@ class retriever_model_prompt:
         self.inited = dict()
         if not pdf_path == None:
             self.data = PyPDFLoader(pdf_path).load()
-            print(self.data)
             self.pdf_path = pdf_path
             self.pdf_path_2 = "../abstract.pdf"
         self.WaitTime = 5
@@ -126,7 +125,6 @@ class retriever_model_prompt:
             self.data[name] = context
             self.timer[name] = time.time()
             cur_time = self.timer[name]
-            # print('line:here')
             while (cur_time - self.timer[name] < self.WaitTime):
                 time.sleep(1)
                 cur_time = time.time()
@@ -340,7 +338,6 @@ def retriever_method(
     res = ""
     global r_m_ps
 
-    print(retriever, input)
     if not context == None:
         if retriever == 'llamaindex':
             context = deal_llamaindex(context=context)
@@ -368,7 +365,6 @@ def retriever_method(
                 flag = 0
             time.sleep(1)
         docs = r_m_ps.retrievers[retriever].get_relevant_documents(query=input)
-        print(docs)
         res = langchain_docs_to_string(docs=docs)
         pass
     elif retriever == 'Ensemble_Retriever':
@@ -385,7 +381,6 @@ def retriever_method(
     elif retriever == 'MultiVector_Retriever':
         flag = 1
         while r_m_ps.inited[retriever] == False:
-            print('line:338')
             if flag == 1 and retriever in r_m_ps.data:
                 r_m_ps.timer[retriever] = time.time()
                 r_m_ps.data[retriever] += context
@@ -433,8 +428,6 @@ def rags_compare(
 ) -> MultimodalOutput:
 
     res = ""
-    print(question)
-    print('-' * 100)
     '''
     {
         'retriever_name': ['Contextual_compression'], 
