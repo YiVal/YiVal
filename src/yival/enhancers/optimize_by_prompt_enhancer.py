@@ -24,7 +24,6 @@ and more examples in paper appendix
 import copy
 import itertools
 import json
-import logging
 from typing import Dict, List, Tuple
 
 from ..common.model_utils import llm_completion
@@ -215,6 +214,11 @@ class OptimizeByPromptEnhancer(BaseCombinationEnhancer):
 
         #init cache with the best combo
         best_combo, score = find_combo_with_score(experiment)
+        cache.append((best_combo,score))
+
+        for combo_me in experiment.combination_aggregated_metrics:
+            if combo_me.combo_key == json.dumps(best_combo):
+                results.extend(combo_me.experiment_results)
 
         #ensure that all variation in enhance_var appears best_combo
         assert set(self.config.enhance_var).issubset(set(best_combo.keys()))
@@ -229,7 +233,7 @@ class OptimizeByPromptEnhancer(BaseCombinationEnhancer):
         else:
             template_vars = None  #type:ignore
 
-        logging.info(f"[INFO][opro] first variations is {variations_now}")
+        print(f"[INFO][opro] first variations is {variations_now}")
 
         lite_experiment_runner = LiteExperimentRunner(
             config=self.updated_config,
@@ -240,46 +244,34 @@ class OptimizeByPromptEnhancer(BaseCombinationEnhancer):
         )
 
         #optimize by prompt for max_iterations times
-        for i in range(self.config.max_iterations + 1):
-            logging.info(
-                f"[INFO][optimize_by_prompt_enhancer] start iteration [{i}]"
-            )
-
-            #update variations and run experiment
-            lite_experiment_runner.set_variations([{
-                key: [value]
-                for key, value in variations_now.items()
-            }])
-
-            experiment = lite_experiment_runner.run_experiment(
-                enable_selector=True
-            )
-            experiments.append(experiment)
-
-            #fetch next prompt
-            best_combo, score = find_combo_with_score(experiment)
-            cache.append((best_combo, score))
-
+        for i in range(self.config.max_iterations):
+            print(f"[INFO][optimize_by_prompt_enhancer] start iteration[{i+1}]")
             opro_prompt = construct_opro_full_prompt(
                 cache,
                 self.config.head_meta_instruction,
                 self.config.optimation_task_format,
                 self.config.end_meta_instruction,
                 self.config.enhance_var,
-                template_vars  #type:ignore
+                template_vars   #type: ignore
             )
 
             gen_variations = self.fetch_next_variations(opro_prompt)
-
             if not gen_variations:
-                logging.info(
-                    "[INFO][optimize_by_prompt_enhancer] fetch next variations error"
-                )
+                print(f"[INFO][optimize_by_prompt_enhancer] fetch next variations error")
             else:
-                logging.info(
-                    f"[INFO][optimize_by_prompt_enhancer] generate new variations: {gen_variations}"
-                )
-                variations_now = gen_variations
+                print(f"[INFO][optimize_by_prompt_enhancer] generate new variations: {gen_variations}")
+            
+            lite_experiment_runner.set_variations([{
+                key:[value]
+                for key,value in gen_variations.items()
+            }])
+
+            experiment = lite_experiment_runner.run_experiment(
+                enable_selector=True
+            )
+            experiments.append(experiment)
+            best_combo, score = find_combo_with_score(experiment)
+            cache.append((best_combo, score))
 
         for exp in experiments:
             for res in exp.combination_aggregated_metrics:
