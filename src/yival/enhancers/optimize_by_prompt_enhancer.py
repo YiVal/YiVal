@@ -214,7 +214,7 @@ class OptimizeByPromptEnhancer(BaseCombinationEnhancer):
 
         #init cache with the best combo
         best_combo, score = find_combo_with_score(experiment)
-        cache.append((best_combo,score))
+        cache.append((best_combo, score))
 
         for combo_me in experiment.combination_aggregated_metrics:
             if combo_me.combo_key == json.dumps(best_combo):
@@ -245,25 +245,31 @@ class OptimizeByPromptEnhancer(BaseCombinationEnhancer):
 
         #optimize by prompt for max_iterations times
         for i in range(self.config.max_iterations):
-            print(f"[INFO][optimize_by_prompt_enhancer] start iteration[{i+1}]")
+            print(
+                f"[INFO][optimize_by_prompt_enhancer] start iteration[{i+1}]"
+            )
             opro_prompt = construct_opro_full_prompt(
                 cache,
                 self.config.head_meta_instruction,
                 self.config.optimation_task_format,
                 self.config.end_meta_instruction,
                 self.config.enhance_var,
-                template_vars   #type: ignore
+                template_vars  #type: ignore
             )
 
             gen_variations = self.fetch_next_variations(opro_prompt)
             if not gen_variations:
-                print(f"[INFO][optimize_by_prompt_enhancer] fetch next variations error")
+                print(
+                    f"[INFO][optimize_by_prompt_enhancer] fetch next variations error"
+                )
             else:
-                print(f"[INFO][optimize_by_prompt_enhancer] generate new variations: {gen_variations}")
-            
+                print(
+                    f"[INFO][optimize_by_prompt_enhancer] generate new variations: {gen_variations}"
+                )
+
             lite_experiment_runner.set_variations([{
-                key:[value]
-                for key,value in gen_variations.items()
+                key: [value]
+                for key, value in gen_variations.items()
             }])
 
             experiment = lite_experiment_runner.run_experiment(
