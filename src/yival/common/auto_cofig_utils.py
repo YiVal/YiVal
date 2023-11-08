@@ -338,7 +338,7 @@ def auto_generate_config(
         parameters_dict[p] = "str"
     generator_config = OpenAIPromptBasedGeneratorConfig(
         chunk_size=10000,
-        number_of_examples=5,
+        number_of_examples=1,
         output_path=function_name + "_generated_data.pkl",
         output_csv_path=function_name + "_generated_data.csv",
         input_function={
@@ -352,7 +352,7 @@ def auto_generate_config(
         source_type="machine_generated",  # type: ignore
         data_generators={"openai_prompt_data_generator": generator_config}
     )
-    print(colored("\nGenerate evaluation aspects", "green"))
+    print(colored("\n[INFO][auto_gen] Generate evaluation aspects", "green"))
     evaulation_prospect = auto_evaluation_prospect(description)
     if len(additional_aspect) > 0:
         for aspect in additional_aspect:
