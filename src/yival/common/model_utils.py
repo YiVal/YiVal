@@ -1,32 +1,31 @@
 from typing import Callable
 
-from litellm import completion
-
 from yival.common.huggingface.hf import HFInference
 from yival.schemas.model_configs import ModelProvider, Request, Response
 
+# from litellm import completion
 
-def _litellm_completion(
-    request: Request, provider: ModelProvider | None = None
-) -> Response:
-    if isinstance(request.prompt, str):
-        prompt = [{"content": request.prompt, "role": "user"}]
-    else:
-        prompt = request.prompt
-    if request.params is not None:
-        params = request.params
-    else:
-        params = {}
-    if provider and provider.provider_name:
-        response = completion(
-            request.model_name,
-            messages=prompt,
-            custom_llm_provider=provider.provider_name,
-            **params
-        )
-    else:
-        response = completion(request.model_name, messages=prompt, **params)
-    return Response(output=response)
+# def _litellm_completion(
+#     request: Request, provider: ModelProvider | None = None
+# ) -> Response:
+#     if isinstance(request.prompt, str):
+#         prompt = [{"content": request.prompt, "role": "user"}]
+#     else:
+#         prompt = request.prompt
+#     if request.params is not None:
+#         params = request.params
+#     else:
+#         params = {}
+#     if provider and provider.provider_name:
+#         response = completion(
+#             request.model_name,
+#             messages=prompt,
+#             custom_llm_provider=provider.provider_name,
+#             **params
+#         )
+#     else:
+#         response = completion(request.model_name, messages=prompt, **params)
+#     return Response(output=response)
 
 
 def huggerface_local_completion(request: Request) -> Response:
@@ -56,34 +55,33 @@ model_to_provider_maping: dict[str, str] = {
     "replicate"
 }
 
+# def llm_completion(
+#     request: Request, provider: ModelProvider | None = None
+# ) -> Response:
+#     """Perform model completion based on the provided request and optional
+#     model provider.
 
-def llm_completion(
-    request: Request, provider: ModelProvider | None = None
-) -> Response:
-    """Perform model completion based on the provided request and optional
-    model provider.
+#     Parameters:
+#         request (Request): The request object containing the model name and
+#         other details.
+#         provider (ModelProvider | None, optional): The model provider object.
+#         If None,  a provider will be determined based on the
+#         `model_to_provider_mapping`.
 
-    Parameters:
-        request (Request): The request object containing the model name and
-        other details.
-        provider (ModelProvider | None, optional): The model provider object.
-        If None,  a provider will be determined based on the
-        `model_to_provider_mapping`.
+#     Returns:
+#         Response: The model completion result as a Response object.
+#     """
 
-    Returns:
-        Response: The model completion result as a Response object.
-    """
-
-    completion_method = model_inference_mapping.get(
-        request.model_name, _litellm_completion
-    )
-    if provider is None and model_to_provider_maping.get(
-        request.model_name, ""
-    ) != "":
-        provider = ModelProvider(
-            provider_name=model_to_provider_maping.get(request.model_name, "")
-        )
-    return completion_method(request, provider)
+#     completion_method = model_inference_mapping.get(
+#         request.model_name, _litellm_completion
+#     )
+#     if provider is None and model_to_provider_maping.get(
+#         request.model_name, ""
+#     ) != "":
+#         provider = ModelProvider(
+#             provider_name=model_to_provider_maping.get(request.model_name, "")
+#         )
+#     return completion_method(request, provider)
 
 
 def main():

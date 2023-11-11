@@ -1,12 +1,13 @@
 import csv
+import os
 from typing import Iterator, List
 
 import faiss  # pylint: disable=import-error
-import openai
 from langchain.docstore import InMemoryDocstore
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.schema import Document
 from langchain.vectorstores import FAISS
+from openai import OpenAI
 
 from yival.evaluators.openai_prompt_based_evaluator import (
     CLASSIFY_STR,
@@ -107,25 +108,25 @@ class RetrivelVariationGenerator(BaseVariationGenerator):
         )
         options = [doc.page_content for doc in documents]
         choices, choices_strings = assign_labels_formatted(options)
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         prompt_generation_message = [{
             "role": "system",
             "content": PROMPT_GENERATION_PROMPT
         }]
-        prompt_generation_message.append({
-            "role":
-            "user",
-            "content":
-            f"use case: {self.config.use_case}"  # type: ignore
-        })
+
         if len(documents) == 0:
-            response = openai.ChatCompletion.create(
+            response = client.chat.completions.create(
                 model="gpt-4",
-                messages=prompt_generation_message,
+                messages=prompt_generation_message.append({
+                    "role":
+                    "user",
+                    "content":
+                    f"use case: {self.config.use_case}"  # type: ignore
+                }),
                 temperature=0.0
             )
             variation = WrapperVariation(
-                value_type="str",
-                value=response['choices'][0]['message']['content']
+                value_type="str", value=response.choices[0].message.content
             )
             yield [variation]
 
@@ -136,24 +137,35 @@ class RetrivelVariationGenerator(BaseVariationGenerator):
         prompt += "\n\n" + CLASSIFY_STR.format(
             choices=choices_to_string(choices_strings)
         )
-        messages = [{"role": "user", "content": prompt}]
-        response = openai.ChatCompletion.create(
-            model="gpt-4", messages=messages, temperature=0.0
+        response = client.chat.completions.create(
+            model="gpt-4",
+            messages=[{
+                "role": "user",
+                "content": prompt
+            }],
+            temperature=0.0
         )
-        response_content = response['choices'][0]['message']['content']
+        response_content = response.choices[0].message.content
         choice = extract_choice_from_response(
             response_content, choices_strings
         )
-
+        prompt_generation_choice_message = [{
+            "role": "system",
+            "content": PROMPT_GENERATION_PROMPT
+        }]
         if choice == choices_strings[-1]:
-            response = openai.ChatCompletion.create(
+            response = client.chat.completions.create(
                 model="gpt-4-32k",
-                messages=prompt_generation_message,
+                messages=prompt_generation_choice_message.append({
+                    "role":
+                    "user",
+                    "content":
+                    f"use case: {self.config.use_case}"  # type: ignore
+                }),
                 temperature=0.5
             )
             variation = WrapperVariation(
-                value_type="str",
-                value=response['choices'][0]['message']['content']
+                value_type="str", value=response.choices[0].message.content
             )
             yield [variation]
         else:

@@ -19,6 +19,7 @@ import re
 from typing import Any, Dict, Iterator, List
 
 import openai
+from openai import OpenAI
 from tenacity import retry, stop_after_attempt, wait_random_exponential
 from tqdm import tqdm
 
@@ -94,7 +95,10 @@ DEFAULT_PROMPT = """
 
 @retry(wait=wait_random_exponential(min=1, max=20), stop=stop_after_attempt(6))
 def completion_with_backpff(**kwargs):
-    response = openai.ChatCompletion.create(**kwargs)
+    request_timeout = kwargs.pop("request_timeout")
+    openai.timeout = request_timeout
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    response = client.chat.completions.create(**kwargs)
     return response
 
 

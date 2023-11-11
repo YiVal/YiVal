@@ -3,11 +3,11 @@ import openai
 
 
 def get_embedding(input_str: str) -> list[float]:
-    result = openai.Embedding.create(
+    result = openai.embeddings.create(
         model='text-embedding-ada-002',
         input=input_str,
     )
-    return result['data'][0]['embedding']
+    return result.data[0].embedding
 
 
 def cosine_similarity(a: list[float], b: list[float]) -> float:

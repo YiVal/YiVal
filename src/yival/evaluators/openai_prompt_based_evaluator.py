@@ -13,9 +13,10 @@ import string
 from typing import Any, Dict, Iterable, List, Optional, Union
 
 import aiohttp
-# for exponential backoff
 import openai
 from aiohttp_socks import ProxyConnector  # type: ignore
+# for exponential backoff
+from openai import OpenAI
 from tenacity import before_sleep_log, retry, stop_after_attempt, wait_random
 
 logging.basicConfig(level=logging.ERROR)
@@ -109,7 +110,11 @@ def format_template(
     before_sleep=before_sleep_log(logger, logging.DEBUG)
 )
 def completion_with_backpff(**kwargs):
-    response = openai.ChatCompletion.create(**kwargs)
+    request_timeout = kwargs.pop("request_timeout")
+    openai.timeout = request_timeout
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+    response = client.chat.completions.create(**kwargs)
     return response
 
 
@@ -118,9 +123,10 @@ def completion_with_backpff(**kwargs):
     stop=stop_after_attempt(100),
 )
 async def acompletion_with_backpff(**kwargs):
+    api_key = os.getenv("OPENAI_API_KEY")
     url = "https://api.openai.com/v1/chat/completions"
     headers = {
-        "Authorization": f"Bearer {openai.api_key}",
+        "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json"
     }
 
@@ -129,8 +135,7 @@ async def acompletion_with_backpff(**kwargs):
         connector = ProxyConnector.from_url(proxy)
     else:
         connector = None
-    kwargs.pop('request_timeout', None)
-
+    kwargs.pop('request_timeout')
     async with aiohttp.ClientSession(connector=connector) as session:
         async with session.post(url, headers=headers, json=kwargs) as response:
 
@@ -176,7 +181,8 @@ class OpenAIPromptBasedEvaluator(BaseEvaluator):
         response_content = create_assistant_and_get_response(
             prompt[-1]["content"], assistant_id=self.assistant_id
         )
-
+        # response = openai.ChatCompletion.create(model="gpt-4", messages=prompt, temperature=0.5)
+        # response_content = response.choices[0].message.content
         choice = extract_choice_from_response(
             response_content, self.config.choices
         )

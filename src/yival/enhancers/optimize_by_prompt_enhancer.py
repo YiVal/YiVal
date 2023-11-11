@@ -24,9 +24,11 @@ and more examples in paper appendix
 import copy
 import itertools
 import json
+import os
 from typing import Dict, List, Tuple
 
-from ..common.model_utils import llm_completion
+from openai import OpenAI
+
 from ..experiment.evaluator import Evaluator
 from ..experiment.lite_experiment import LiteExperimentRunner
 from ..experiment.rate_limiter import RateLimiter
@@ -138,16 +140,21 @@ def fetch_next_variations(prompt: str, model_name="gpt-4") -> str:
     enhance prompt according to opro enhancer
     fetch the next variations from llm output
     """
-    response = llm_completion(
-        Request(
-            model_name=model_name, prompt=prompt, params={"temperature": 1.0}
-        )
-    ).output
-
-    llm_output_str = response["choices"][0]["message"]["content"].strip(
-        "'"
-    ).strip('"')
-    return llm_output_str
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    response = client.chat.completions.create(
+        model=model_name,
+        messages=[{
+            "role": "user",
+            "content": prompt
+        }],
+        temperature=1.0,
+    )
+    llm_output_str = response.choices[0].message.content
+    if llm_output_str is not None:
+        llm_output_str = llm_output_str.strip("'").strip('"')
+        return llm_output_str
+    else:
+        return ""
 
 
 def collect_all_data(experiment: Experiment) -> List[InputData]:
@@ -184,20 +191,22 @@ class OptimizeByPromptEnhancer(BaseCombinationEnhancer):
         
         make sure llm response format is valid and return new varations
         """
-        response = llm_completion(
-            Request(
-                model_name=self.config.model_name,
-                prompt=prompt,
-                params={"temperature": 1.0}
-            )
-        ).output
-
-        llm_output_str = response["choices"][0]["message"]["content"].strip(
-            "'"
-        ).strip('"')  #type: ignore
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        response = client.chat.completions.create(
+            model=self.config.model_name,
+            messages=[{
+                "role": "user",
+                "content": prompt
+            }],
+            temperature=1.0,
+        )
+        llm_output_str = response.choices[0].message.content
+        if llm_output_str is not None:
+            llm_output_str = llm_output_str.strip("'").strip('"')
 
         variations = scratch_variations_from_str(
-            llm_output_str, self.config.enhance_var
+            llm_output_str if llm_output_str is not None else "",
+            self.config.enhance_var
         )
 
         return variations

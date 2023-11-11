@@ -10,11 +10,12 @@ implementation interfaces with the OpenAI API for those evaluations.
 import asyncio
 import itertools
 import json
+import os
 import re
 from math import comb
 from typing import Dict, List, Tuple
 
-import openai
+from openai import OpenAI
 from tqdm import tqdm
 
 from ..common.utils import parallel_completions
@@ -74,7 +75,8 @@ class OpenAIEloEvaluator(BaseEvaluator):
     def get_score(
         self, test_case, result1: ExperimentResult, result2: ExperimentResult
     ) -> float:
-        score = openai.ChatCompletion.create(
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        score = client.chat.completions.create(
             model=self.config.openai_model_name,
             messages=[{
                 "role": "system",
@@ -95,7 +97,7 @@ class OpenAIEloEvaluator(BaseEvaluator):
             max_tokens=1,
             temperature=0.5,
         ).choices[0].message.content
-        return score
+        return score  # type: ignore
 
     def evaluate_based_on_all_results(
         self, experiment: List[Experiment]

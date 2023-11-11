@@ -4,11 +4,11 @@ import os
 import uuid
 
 import faiss
-import openai
 from langchain.docstore import InMemoryDocstore
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.schema import Document
 from langchain.vectorstores import FAISS
+from openai import OpenAI
 
 from yival.logger.token_logger import TokenLogger
 from yival.schemas.experiment_config import MultimodalOutput
@@ -95,8 +95,7 @@ class Reply:
         logger = TokenLogger()
         logger.reset()
         # Ensure you have your OpenAI API key set up
-        openai.api_key = os.getenv("OPENAI_API_KEY")
-
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         documents = self.retriever.get_relevant_documents(user_input)
         query_context = ""
         if documents:
@@ -140,18 +139,16 @@ class Reply:
             )
         ) + suffix
 
-        # Create a chat message sequence
-        messages = [{"role": "user", "content": message}]
         # Use the chat-based completion
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo", messages=messages
+        response = client.completions.create(
+            model="gpt-3.5-turbo", prompt=prompt
         )
 
         # Extract the assistant's message (translated text) from the response
         answer = MultimodalOutput(
-            text_output=response['choices'][0]['message']['content'],
+            text_output=response.choices[0].message.content,
         )
-        token_usage = response['usage']['total_tokens']
+        token_usage = response.usage.total_tokens
         logger.log(token_usage)
 
         return answer
