@@ -13,14 +13,14 @@ const config = {
   favicon: "img/yival-logo.png",
 
   // Set the production url of your site here
-  url: "https://bang0518.github.io",
+  url: "https://yival.github.io",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: "/YiVal/",
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: "bang0518", // Usually your GitHub org/user name.
+  organizationName: "yival", // Usually your GitHub org/user name.
   projectName: "YiVal", // Usually your repo name.
   trailingSlash: false,
   onBrokenLinks: "throw",
