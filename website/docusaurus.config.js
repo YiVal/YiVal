@@ -16,12 +16,12 @@ const config = {
   url: "https://bang0518.github.io",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: "/YiVal-test/",
+  baseUrl: "/YiVal/",
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: "bang0518", // Usually your GitHub org/user name.
-  projectName: "YiVal-test", // Usually your repo name.
+  projectName: "YiVal", // Usually your repo name.
   trailingSlash: false,
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
