@@ -21,7 +21,7 @@ const config = {
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: "bang0518", // Usually your GitHub org/user name.
-  projectName: "YiVal", // Usually your repo name.
+  projectName: "YiVal-test", // Usually your repo name.
   trailingSlash: false,
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
