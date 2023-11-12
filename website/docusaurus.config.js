@@ -70,6 +70,7 @@ const config = {
         logo: {
           alt: "My Site Logo",
           src: "img/yival-logo.png",
+          href: "https://yival.io/",
         },
         items: [
           {
