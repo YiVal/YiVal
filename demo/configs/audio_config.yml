@@ -1,0 +1,125 @@
+custom_function: demo.audio_generate.audio_generation
+description: generate data with openai_prompt_data_generator
+dataset:
+  data_generators:
+    openai_prompt_data_generator:
+      chunk_size: 1000
+      diversify: true
+      prompt:
+          "Please provide a concrete and realistic test case as a dictionary for function invocation using the ** operator.
+          Only include parameters, excluding description and name.
+          Ensure it's succinct and well-structured.
+          **Only provide the dictionary.**"
+      input_function:
+        description:
+          Given the key, rhythm, melody, music_instrument generate a music arrangement specifications
+        name: music_specification_generation
+        parameters:
+          key: str
+          rhythm: str
+          melody: str
+          music_instrument: str
+          music_genre: str
+      number_of_examples: 2
+      model_name: gpt-3.5-turbo   # [INFO] we use gpt-3.5-turbo here just for demo
+      output_csv_path: music_specification.csv
+  source_type: machine_generated
+
+variations:
+  - name: task
+    generator_name: openai_prompt_based_variation_generator
+    generator_config:
+      model_name: gpt-4
+      number_of_variations: 2
+      diversify: false
+      max_tokens: 2000
+      variables: null
+      prompt: 
+        - content: |-
+            Your object is to construct a concise instruction prompt for GPT-4. This prompt will instruct GPT-4 as a music producer to write music composition specifications based on the requirements for key, rhythm, melody, and music instrument for an audience of SONGWRITERS.
+            Points to emphasize in your instruction:
+              -  GPT4 Answers should have a short music composition specification and should be clear and short, answers should focus on the melody for the music.
+              -  The songwriting specification must be kept short, short, short, short, short as possible. The requirement should have a variety of music genres or styles.
+              -  Be sure to use words that are as easy to understand as possible so songwriters can come up with musics according to the requirements.
+              -  Please limit the output to within 300 words
+              - {key} represent the tonal center and the set of notes used in a composition.
+              - {rhythm} represent the beat or the unit of time in music
+              - {melody} represents the specific sequence of single notes that form the recognizable and thematic part of the music.
+              - {music_instrument} represents the instrument played to produce the music.
+              - At all times, GPT-4 must give a response as an music composition specification.
+
+            Craft your instruction Ensure that GPT-4 is able to fully understand the key, rhythm, melody, and instrument played of the music and write descriptive and detailed composition requirements.
+            keep your output crisp: only the prompt, devoid of any extraneous content.
+
+          role: system
+
+evaluators:
+  - evaluator_type: individual
+    metric_calculators:
+      - method: AVERAGE
+    name: openai_prompt_based_evaluator
+    display_name: specification_quality
+    prompt: |-
+      You are assessing a submitted music composition specification based on a given task based on a criterion. Here is the data:
+      - Task: Given the key, rhythm, melody, music instrument, music genre, generate one music composition specification.
+      - Does the music composition specification give clear instructions? A well-written music composition specification should be easy to understand and provide songwriters clear instruction for writing the music.
+      [Input]: key : {key}, rhythm: {rhythm}, melody : {melody}, music_instrument: {music_instrument}
+      [Result]: {raw_output}
+      Answer the question by selecting one of the following options:
+      A The music composition specification is of very low quality and lacks clear instruction for songwriter to write the music.
+      B The music composition specification has some issues with clear instruction and details, but has potential for improvement.
+      C The music composition specification is of satisfactory quality, but there is room for improvement.
+      D The music composition specification is well-written and demonstrates good instruction.
+      E The music composition specification is exceptionally well-written, demonstrating strong and clear instruction for songwriters to compose the music.
+    choices: ["A", "B", "C", "D", "E"]
+    # model_name specify the llm model , e.g. a16z-infra/llama-2-13b-chat:9dff94b1bed5af738655d4a7cbcdcde2bd503aa85c94334fe1f42af7f3dd5ee3
+    model_name: gpt-4
+    description: "evaluate the quality of the generated music composition specification"
+    scale_description: "0-4"
+    choice_scores:
+      A: 0
+      B: 1
+      C: 2
+      D: 3
+      E: 4
+
+human_rating_configs:
+  - name: relevance
+    instructions: Rate the relevance of the music to the composition specification.
+    scale: [1, 5]
+
+  - name: music_quality
+    instructions: Rate the quality of the generated music audio.
+    scale: [1, 5]
+
+
+selection_strategy:
+  ahp_selection:
+    criteria:
+      - "openai_prompt_based_evaluator: specification_quality"
+      - average_token_usage
+      - average_latency
+    criteria_maximization:
+      "openai_prompt_based_evaluator: specification_quality": true
+      average_latency: false
+      average_token_usage: false
+    criteria_weights:
+      "openai_prompt_based_evaluator: specification_quality": 1
+      average_latency: 0.0
+      average_token_usage: 0.0
+    normalize_func: "z-score"
+
+enhancer:
+  name: "optimize_by_prompt_enhancer"
+  model_name: "gpt-4"
+  max_iterations: 2
+  enhance_var: ["task"]
+  head_meta_instruction: |
+    Now you will help me generate a prompt which is used to generate a corresponding
+    music composition specification according to the main key of the music which is [key], the rhythm of the audio which is {rhythm} 
+    melody characteristics of the music which is [melody], music instrument required for producing the music which is [music_instrument]. 
+    I already have some prompt and its evaluation results :
+    
+  end_meta_instruction: |
+    Give me a new prompt that is different from all pairs above, and has a evaluation value higher than any of above.
+

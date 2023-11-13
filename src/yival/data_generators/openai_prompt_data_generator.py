@@ -16,7 +16,7 @@ import os
 import pickle
 import re
 from typing import Any, Dict, Iterator, List
-
+from demo.audio_generate import load_audio
 import openai
 from tenacity import retry, stop_after_attempt, wait_random_exponential
 from tqdm import tqdm
@@ -230,7 +230,7 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                         model=self.config.model_name,
                         messages=messages,
                         n=1,
-                        max_tokens=4000,
+                        max_tokens=3000,
                         temperature=0.5,
                         request_timeout=200,
                     )
