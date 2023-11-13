@@ -36,6 +36,7 @@ PROMPT_TEMPLATE = """
     only consider the content of the previous context information, 
     generate 5 questions based on the following query. 
     Answer ONLY a python list containing all the questions generated.
+    Keep your output crisp, with only a '[]' bracketed list.
     {QUERY}
 """
 
@@ -101,6 +102,7 @@ class DocumentDataGenerator(BaseDataGenerator):
             content = content + str(self.config.num_questions_per_chunk) + " questions based on the following query."
             content = content + "Answer ONLY a python list containing all the questions generated.\n"
             content = content + "Context information is below.\n---------------------\n\n"
+            content = content + "Keep your output crisp, with only a '[]' bracketed list.\n"
             content = content + self.config.question_gen_query + "\n"
             if self.config.text_question_template:
                 content = content + "Please generate the questions according to the following template:\n" + self.config.text_question_template + "\n"
