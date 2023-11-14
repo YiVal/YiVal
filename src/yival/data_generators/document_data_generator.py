@@ -15,6 +15,10 @@ import pickle
 import re
 from typing import Any, Dict, Iterator, List
 
+from langchain.document_loaders import UnstructuredFileLoader, UnstructuredFileIOLoader, GoogleDriveLoader, GCSFileLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.schema import Document
+
 from tqdm import tqdm
 
 from yival.common import utils
@@ -22,11 +26,6 @@ from yival.common.model_utils import llm_completion
 from yival.data_generators.base_data_generator import BaseDataGenerator
 from yival.schemas.data_generator_configs import DocumentDataGeneratorConfig
 from yival.schemas.model_configs import Request
-from langchain.schema import Document
-from langchain.document_loaders import UnstructuredFileLoader
-from langchain.document_loaders import GoogleDriveLoader
-from langchain.document_loaders import GCSFileLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 PROMPT_TEMPLATE = """
     Context information is below.
@@ -70,8 +69,10 @@ class DocumentDataGenerator(BaseDataGenerator):
             doc = loader.load()[0]
             return doc
         elif source == 'drive':
-            loader = GoogleDriveLoader(file_ids=[document])  
-            doc = loader.load()
+            loader = GoogleDriveLoader(file_ids=[document],
+                                       file_loader_cls=UnstructuredFileIOLoader,
+                                       file_loader_kwargs={"mode": "elements"},)  
+            doc = loader.load()[0]
             return doc
         else:
             return None
