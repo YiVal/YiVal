@@ -230,7 +230,6 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                         model=self.config.model_name,
                         messages=messages,
                         n=1,
-                        max_tokens=3000,
                         temperature=0.5,
                         request_timeout=200,
                     )
