@@ -1,8 +1,11 @@
 '''This script is used to generate image from a building design prompt'''
 
 import os
+from io import BytesIO
 
+import requests
 from openai import OpenAI
+from PIL import Image
 
 from yival.logger.token_logger import TokenLogger
 from yival.schemas.experiment_config import MultimodalOutput
@@ -37,26 +40,29 @@ def prompt_generation(prompt: str) -> str:
     return res
 
 
-# def load_image(response):
-#     '''load image from response'''
-#     print("[INFO] start load images")
-#     url = f"{BASE_URL}/getImage"
-#     image_urls = response['response']['imageUrls']
-#     image_list = []
-#     for image_url in image_urls:
-#         payload = json.dumps({"imgUrl": image_url})
-#         response = s.post(url, headers=HEADERS, data=payload)
-#         if response.status_code == 200:
-#             image_data = response.content
-#             image = Image.open(io.BytesIO(image_data))
-#             image_list.append(image)
-#         else:
-#             print(
-#                 f"[Error] Failed to load image from {image_url}. Response code: {response.status_code}"
-#             )
-#     print("[INFO] Successfully load images.")
+def load_image(images):
+    '''load image from response'''
+    print("[INFO] start load images")
 
-#     return image_list
+    image_dict = {}
+    for image in images:
+        image_url = image.url
+        try:
+            response = requests.get(image_url)
+            if response.status_code == 200:
+                image = Image.open(BytesIO(response.content))
+                image_dict[image_url] = image
+            else:
+                print(
+                    f"[Error] Failed to load image from {image_url}. Response code: {response.status_code}"
+                )
+        except Exception as e:
+            print(
+                f"[Error] Failed to load image from {image_url}. Error: {str(e)}"
+            )
+
+    print("[INFO] Successfully load images.")
+    return image_dict
 
 
 def building_design(location: str, function: str, state: ExperimentState):
@@ -75,17 +81,17 @@ def building_design(location: str, function: str, state: ExperimentState):
             )
         )
     )
-    print(f"prompt: {prompt}")
+
     response = client.images.generate(
         model="dall-e-3", prompt=prompt, n=1, size="1024x1024"
     )
-    print(f"response: {response}")
-    # image_res = MultimodalOutput(
-    #     text_output=response['response']['content'],
-    #     image_output=response['response']['imageUrls'],
-    # )
-    # return image_res
-    return response
+    print(f"\nresponse: {response}\n")
+    image_res = MultimodalOutput(
+        #     text_output=response.data.revised_prompt,
+        text_output=prompt,
+        image_output=load_image(response.data),
+    )
+    return image_res
 
 
 def main():

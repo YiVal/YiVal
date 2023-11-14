@@ -276,17 +276,17 @@ class MultimodalOutput:
 
     Attributes:
     - text_output (str): Text output for this example.
-    - image_output (PIL.Image.Image): Image output for this example.
+    - image_output (dict(stl, PIL.Image.Image)): Image output for this example.
     """
     text_output: Optional[str] = None
-    image_output: Optional[List[Image.Image]] = None
+    image_output: Optional[Dict[str, Image.Image]] = None
     video_output: Optional[List[str]] = None
     context: Optional[Context] = None
 
     def asdict(self) -> Dict[str, Any]:
         return {
             "text_output": self.text_output,
-            "image_output": "PIL Image List" if self.image_output else
+            "image_output": "PIL Image dict" if self.image_output else
             None,  # You might want to serialize the image differently
             "video_output": "video URL List" if self.video_output else None
         }

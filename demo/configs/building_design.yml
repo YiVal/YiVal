@@ -6,13 +6,12 @@ dataset:
       chunk_size: 1000
       diversify: true
       prompt:
-          "Please provide a concrete and realistic test case as a dictionary for function invocation using the ** operator.
-          Only include parameters, excluding description and name.
-          Ensure it's succinct and well-structured.
-          **Only provide the dictionary.**"
+        "Please provide a concrete and realistic test case as a dictionary for function invocation using the ** operator.
+        Only include parameters, excluding description and name.
+        Ensure it's succinct and well-structured.
+        **Only provide the dictionary.**"
       input_function:
-        description:
-          Given the geographical location of the building and the actual function of the building, generate a description of the exterior scene of the building.
+        description: Given the geographical location of the building and the actual function of the building, generate a description of the exterior scene of the building.
         name: building_design_generation
         parameters:
           location: str
@@ -30,21 +29,21 @@ variations:
       diversify: false
       max_tokens: 2000
       variables: null
-      prompt: 
+      prompt:
         - content: |-
-                Your objective is to construct a concise instruction prompt for GPT-4. This prompt will instruct GPT-4 as an innovative, architectural designer to create diverse building design variations based on geographical location and building function.
+            Your objective is to construct a concise instruction prompt for GPT-4. This prompt will instruct GPT-4 as an innovative, architectural designer to create diverse building design variations based on geographical location and building function.
 
-                Points to emphasize in your instruction:
-                  - GPT-4 responses should include a brief design concept and should be sufficiently imaginative. Responses should focus on the geographical location and the function of the building. The design can be contrary to common architectural norms, dream-like or realistic.
-                  - The design description must be kept lively and as short, short, short, short, short as possible. The design should have a variety of features and fully emphasize the geographical location; it can be dreamlike and generally bizarre.
-                  - Be sure to use words that are as easy to understand as possible so TEENAGERS can easily understand the design concept.
-                  - Please limit the output to within 300 words
-                  - {building_location} represents the geographical location of the building
-                  - {building_function} represents the function of the building
-                  - At all times, GPT-4 must give a response as a building design variation
+            Points to emphasize in your instruction:
+              - GPT-4 responses should include a brief design concept and should be sufficiently imaginative. Responses should focus on the geographical location and the function of the building. The design can be contrary to common architectural norms, dream-like or realistic.
+              - The design description must be kept lively and as short, short, short, short, short as possible. The design should have a variety of features and fully emphasize the geographical location; it can be dreamlike and generally bizarre.
+              - Be sure to use words that are as easy to understand as possible so TEENAGERS can easily understand the design concept.
+              - Please limit the output to within 300 words
+              - {building_location} represents the geographical location of the building
+              - {building_function} represents the function of the building
+              - At all times, GPT-4 must give a response as a building design variation
 
-                Craft your instruction. Ensure that GPT-4 is able to fully understand the geographical location and function of the building and create engaging and fully pictorial designs.
-                Keep your output crisp: only the prompt, devoid of any extraneous content.
+            Craft your instruction. Ensure that GPT-4 is able to fully understand the geographical location and function of the building and create engaging and fully pictorial designs.
+            Keep your output crisp: only the prompt, devoid of any extraneous content.
 
           role: system
 
@@ -77,7 +76,33 @@ evaluators:
       D: 3
       E: 4
 
-
+  - evaluator_type: individual
+    metric_calculators:
+      - method: AVERAGE
+    name: openai_prompt_based_image_evaluator
+    display_name: relevance_quality
+    prompt: |-
+      You are assessing a submitted building design description based on a given task and criterion. Here is the data:
+      - Task: Given the geographical location and function of a building, generate a design description and a corresponding image.
+      - Does the image clearly illustrate the content described in the text? The image should immediately make sense to anyone who reads the text. A lack of relevance can lead to confusion and may impact the understanding of the text.
+      [Input]: building_location : {location}, building_function: {function}
+      [Result]: {text_output}
+      Answer the question by selecting one of the following options:
+      A The image fails to match the text content at all.
+      B The image somewhat matches the text content, but there is significant room for improvement.
+      C The image matches the text content to a satisfactory degree.
+      D The image matches the text content very well.
+      E The image matches the text content exceptionally well, with little to no room for improvement.
+    choices: ["A", "B", "C", "D", "E"]
+    model_name: gpt-4-vision-preview
+    description: "evaluate the relevance of the generated building design text and image"
+    scale_description: "0-4"
+    choice_scores:
+      A: 0
+      B: 1
+      C: 2
+      D: 3
+      E: 4
 
 selection_strategy:
   ahp_selection:

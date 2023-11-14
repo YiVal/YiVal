@@ -173,6 +173,20 @@ class OpenAIPromptBasedEvaluatorConfig(EvaluatorConfig):
 
 
 @dataclass
+class OpenAIPromptBasedImageEvaluatorConfig(EvaluatorConfig):
+    evaluator_type: EvaluatorType = EvaluatorType.INDIVIDUAL
+    prompt: Union[str, List[Dict[str, str]]] = ""
+    choices: List[str] = field(default_factory=list)
+    model_name: str = "gpt-4-vision-preview"
+    description: str = "This is the description of the evaluator."
+    scale_description: str = "0-4"
+    choice_scores: Optional[Dict[str, float]] = None
+
+    def asdict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass
 class RougeEvaluatorConfig(EvaluatorConfig):
     evaluator_type: EvaluatorType = EvaluatorType.INDIVIDUAL
     description: str = " This is the description of the evaluator"

@@ -4,8 +4,9 @@ import pickle
 from typing import Any, Dict, Iterator, List
 
 from openai import OpenAI
-from tqdm import tqdm
 from openai.types.chat import ChatCompletionMessage
+from tqdm import tqdm
+
 from ..common import utils
 # from ..common.model_utils import llm_completion
 from ..schemas.experiment_config import WrapperVariation
