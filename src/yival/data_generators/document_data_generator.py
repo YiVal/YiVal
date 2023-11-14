@@ -16,8 +16,8 @@ import re
 from typing import Any, Dict, Iterator, List
 
 from langchain.document_loaders import UnstructuredFileLoader, GoogleDriveLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema import Document
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 from tqdm import tqdm
 
@@ -67,12 +67,12 @@ class DocumentDataGenerator(BaseDataGenerator):
             return doc
         elif source == 'file':
             file_loader = UnstructuredFileLoader(document)
-            docs = file_loader.load()[0]
+            docs = file_loader.load()
             doc = docs[0]
             return doc
         elif source == 'drive':
             drive_loader = GoogleDriveLoader(file_ids=[document])
-            docs = drive_loader.load()[0]
+            docs = drive_loader.load()
             doc = docs[0]
             return doc
         else:
