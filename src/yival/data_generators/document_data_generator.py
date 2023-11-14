@@ -5,6 +5,7 @@ Supported types of document sources include:
     - unstructured files: Text, PDF, PowerPoint, HTML, Images, 
         Excel spreadsheets, Word documents, Markdown, etc.
     - documents from Google Drive (provide file id).
+Currently support only one document a time.
 """
 import ast
 import asyncio
@@ -62,14 +63,14 @@ class DocumentDataGenerator(BaseDataGenerator):
         
     def load_document(self, source: str, document: str) -> Document:
         if source == 'text':
-            doc = Document(page_content=document)
+            doc = Document(page_content = document)
             return doc
         elif source == 'file':
-            loader = UnstructuredFileLoader(file_path = document)
-            doc = loader.load()
+            loader = UnstructuredFileLoader(document)
+            doc = loader.load()[0]
             return doc
         elif source == 'drive':
-            loader = GoogleDriveLoader(file_id=document)  
+            loader = GoogleDriveLoader(file_ids=[document])  
             doc = loader.load()
             return doc
         else:
