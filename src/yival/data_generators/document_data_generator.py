@@ -15,10 +15,9 @@ import pickle
 import re
 from typing import Any, Dict, Iterator, List
 
-from langchain.document_loaders import UnstructuredFileLoader, GoogleDriveLoader
+from langchain.document_loaders import GoogleDriveLoader, UnstructuredFileLoader
 from langchain.schema import Document
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-
 from tqdm import tqdm
 
 from yival.common import utils
@@ -41,17 +40,18 @@ PROMPT_TEMPLATE = """
     {QUERY}
 """
 
+
 class DocumentDataGenerator(BaseDataGenerator):
     config: DocumentDataGeneratorConfig
     default_config: DocumentDataGeneratorConfig = DocumentDataGeneratorConfig(
-        prompt = PROMPT_TEMPLATE,
-        document = "",
-        source = "text",
-        num_questions_per_chunk = 5,
-        text_question_template = None,
-        document_chunk_size = 512,
-        number_of_examples = 1,
-        question_gen_query = f"You are a Teacher/Professor. Your task is to setup \
+        prompt=PROMPT_TEMPLATE,
+        document="",
+        source="text",
+        num_questions_per_chunk=5,
+        text_question_template=None,
+        document_chunk_size=512,
+        number_of_examples=1,
+        question_gen_query=f"You are a Teacher/Professor. Your task is to setup \
                         5 questions for an upcoming quiz/examination. The questions \
                         should be diverse in nature across the document. Restrict \
                         the questions to the context information provided."
@@ -60,10 +60,10 @@ class DocumentDataGenerator(BaseDataGenerator):
     def __init__(self, config: DocumentDataGeneratorConfig):
         super().__init__(config)
         self.config = config
-        
+
     def load_document(self, source: str, document: str):
         if source == 'text':
-            doc = Document(page_content = document)
+            doc = Document(page_content=document)
             return doc
         elif source == 'file':
             file_loader = UnstructuredFileLoader(document)
@@ -80,9 +80,9 @@ class DocumentDataGenerator(BaseDataGenerator):
 
     def get_doc_context(self, doc: Document, chunk_size: int) -> List[str]:
         # Split Document into chunks
-        splitter = RecursiveCharacterTextSplitter(chunk_size = chunk_size) 
+        splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size)
         splits = splitter.split_documents([doc])
-        
+
         # Generate contexts from splits
         contexts = [str(split.page_content) for split in splits]
         return contexts
@@ -96,13 +96,15 @@ class DocumentDataGenerator(BaseDataGenerator):
             contexts = self.get_doc_context(document, self.config.chunk_size)
         else:
             raise TypeError
-        
+
         contents = []
         for context in contexts:
             content = "Context information is below.\n---------------------\n\n" + context + "\n"
             content = content + "---------------------\nPlease do not introduce priori knowledge,\n"
             content = content + "only consider the content of the previous context information,\n generate "
-            content = content + str(self.config.num_questions_per_chunk) + " questions based on the following query."
+            content = content + str(
+                self.config.num_questions_per_chunk
+            ) + " questions based on the following query."
             content = content + "Answer ONLY a python list containing all the questions generated.\n"
             content = content + "Context information is below.\n---------------------\n\n"
             content = content + "Keep your output crisp, with only a '[]' bracketed list.\n"
@@ -118,7 +120,7 @@ class DocumentDataGenerator(BaseDataGenerator):
     ):
         """Process the output from GPT API and update data lists."""
         output_ls = eval(output_content)
-            
+
         input_data_instance = InputData(
             example_id=super().generate_example_id(output_content),
             content={"data": output_ls}
@@ -135,7 +137,7 @@ class DocumentDataGenerator(BaseDataGenerator):
                 for i in range(0, len(all_data), self.config.chunk_size):
                     yield all_data[i:i + self.config.chunk_size]
             return
-        
+
         chunk: List[InputData] = []
 
         while len(all_data) < self.config.number_of_examples:
@@ -196,9 +198,7 @@ BaseDataGenerator.register_data_generator(
 def main():
     import time
     start_time = time.time()
-    generator = DocumentDataGenerator(
-        DocumentDataGenerator.default_config
-    )
+    generator = DocumentDataGenerator(DocumentDataGenerator.default_config)
     res = generator.generate_examples()
 
     for d in res:
