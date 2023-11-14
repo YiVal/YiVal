@@ -15,7 +15,7 @@ import pickle
 import re
 from typing import Any, Dict, Iterator, List
 
-from langchain.document_loaders import UnstructuredFileLoader, UnstructuredFileIOLoader, GoogleDriveLoader, GCSFileLoader
+from langchain.document_loaders import UnstructuredFileLoader, GoogleDriveLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema import Document
 
@@ -66,12 +66,14 @@ class DocumentDataGenerator(BaseDataGenerator):
             doc = Document(page_content = document)
             return doc
         elif source == 'file':
-            loader = UnstructuredFileLoader(document)
-            doc = loader.load()[0]
+            file_loader = UnstructuredFileLoader(document)
+            docs = file_loader.load()[0]
+            doc = docs[0]
             return doc
         elif source == 'drive':
-            loader = GoogleDriveLoader(file_ids=[document])
-            doc = loader.load()[0]
+            drive_loader = GoogleDriveLoader(file_ids=[document])
+            docs = drive_loader.load()[0]
+            doc = docs[0]
             return doc
         else:
             return None
