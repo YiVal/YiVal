@@ -24,6 +24,7 @@ from tqdm import tqdm
 from yival.common import utils
 from yival.common.model_utils import llm_completion
 from yival.data_generators.base_data_generator import BaseDataGenerator
+from yival.schemas.common_structures import InputData
 from yival.schemas.data_generator_configs import DocumentDataGeneratorConfig
 from yival.schemas.model_configs import Request
 
@@ -60,7 +61,7 @@ class DocumentDataGenerator(BaseDataGenerator):
         super().__init__(config)
         self.config = config
         
-    def load_document(self, source: str, document: str) -> Document:
+    def load_document(self, source: str, document: str):
         if source == 'text':
             doc = Document(page_content = document)
             return doc
@@ -69,9 +70,7 @@ class DocumentDataGenerator(BaseDataGenerator):
             doc = loader.load()[0]
             return doc
         elif source == 'drive':
-            loader = GoogleDriveLoader(file_ids=[document],
-                                       file_loader_cls=UnstructuredFileIOLoader,
-                                       file_loader_kwargs={"mode": "elements"},)  
+            loader = GoogleDriveLoader(file_ids=[document])
             doc = loader.load()[0]
             return doc
         else:
@@ -112,15 +111,21 @@ class DocumentDataGenerator(BaseDataGenerator):
         return [{"role": "user", "content": content} for content in contents]
 
     def process_output(
-        self, output_content: str, all_data: List[List[str]],
-        chunk: List[List[str]]
+        self, output_content: str, all_data: List[InputData],
+        chunk: List[InputData]
     ):
         """Process the output from GPT API and update data lists."""
-        all_data.append(eval(output_content))
-        chunk.append(eval(output_content))
+        output_ls = eval(output_content)
+            
+        input_data_instance = InputData(
+            example_id=super().generate_example_id(output_content),
+            content={"data": output_ls}
+        )
+        all_data.append(input_data_instance)
+        chunk.append(input_data_instance)
 
-    def generate_examples(self) -> Iterator[List[List[str]]]:
-        all_data: List[List[str]] = []
+    def generate_examples(self) -> Iterator[List[InputData]]:
+        all_data: List[InputData] = []
         # Loading data from existing path if exists
         if self.config.output_path and os.path.exists(self.config.output_path):
             with open(self.config.output_path, 'rb') as file:
@@ -129,7 +134,7 @@ class DocumentDataGenerator(BaseDataGenerator):
                     yield all_data[i:i + self.config.chunk_size]
             return
         
-        chunk: List[List[str]] = []
+        chunk: List[InputData] = []
 
         while len(all_data) < self.config.number_of_examples:
             messages = self.prepare_messages()
