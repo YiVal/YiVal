@@ -1,6 +1,6 @@
 # This is a generated template. Modify the values as needed.
 
-custom_function: /Users/taofeng/YiVal/demo.headline_generation.headline_generation
+custom_function: demo.headline_generation.headline_generation
 dataset:
   data_generators:
     openai_prompt_data_generator:

@@ -6,9 +6,13 @@ from typing import List
 import pandas as pd  # type: ignore
 from dash import html  # type: ignore
 from PIL import Image
+from pydub import AudioSegment
 
 from yival.schemas.experiment_config import GroupedExperimentResult
 
+ffmpeg_executable = "/opt/homebrew/Cellar/ffmpeg/6.0_1/bin/ffmpeg"
+
+AudioSegment.converter = ffmpeg_executable
 
 def sanitize_group_key(group_key: str):
     try:
@@ -30,9 +34,6 @@ def sanitize_group_key(group_key: str):
 
 def sanitize_column_name(name):
     return name.replace('"', '').replace(':', '')
-
-
-import pandas as pd
 
 
 def highlight_best_values(df: pd.DataFrame, *cols) -> list:
@@ -83,12 +84,33 @@ def image_to_base64(image: Image.Image) -> str:
     img_str = base64.b64encode(buffered.getvalue()).decode()
     return img_str
 
+def audio_to_base64(audio: AudioSegment) -> str:
+    '''Converts an image to base64 string.'''
+    format = 'wav'
+    temp_audio_file = f'temporary_audio.{format}'
+    audio.export(temp_audio_file, format=format)
+
+    # Read the exported audio file as bytes
+    with open(temp_audio_file, 'rb') as audio_file:
+        audio_bytes = audio_file.read()
+
+    # Encode the audio data as base64
+    audio_base64 = base64.b64encode(audio_bytes).decode()
+
+    # Print the data URI
+    audio_str = f"data:audio/{format};base64,{audio_base64}"
+    return audio_str
 
 def process_raw_output(raw_output):
     if isinstance(raw_output, list) and all(
         isinstance(item, Image.Image) for item in raw_output
     ):
         return [image_to_base64(image) for image in raw_output]
+    
+    if isinstance(raw_output, list) and all(
+        isinstance(item, AudioSegment) for item in raw_output
+    ):
+        return [audio_to_base64(audio) for audio in raw_output]
     else:
         return raw_output
 
@@ -96,14 +118,18 @@ def process_raw_output(raw_output):
 def generate_group_key_combination_data(
     group_experiment_results: List[GroupedExperimentResult]
 ) -> pd.DataFrame:
+    print("group_experiment_results")
+    print(group_experiment_results)
     data_list = []
     all_combos = set()
     for group in group_experiment_results:
         group_key = group.group_key
+
         group_key = sanitize_group_key(group_key)
         if group_key == "":
             pass
         row_dict = {"Test Data": group_key}
+ 
         for exp_result in group.experiment_results:
             combo_str = sanitize_column_name(
                 str(exp_result.combination).replace("{", "").replace("}", "")
@@ -119,6 +145,10 @@ def generate_group_key_combination_data(
                 process_raw_output(
                     getattr(exp_result.raw_output, 'video_output', None)
                 ),
+                "audio_output":
+                process_raw_output(
+                    getattr(exp_result.raw_output, 'audio_output', None)
+                ),
                 "evaluator_outputs":
                 "\n".join([
                     f"{e.name} : {e.display_name} = {e.result}"
@@ -131,11 +161,13 @@ def generate_group_key_combination_data(
                 for video_url in nested_output['video_output']:
                     video_text += f"<yival_video_output>{video_url}</yival_video_output>"
 
-            formatted_output = f"<yival_raw_output>{nested_output['text_output']}</yival_raw_output>{nested_output['image_output']}{video_text}\n{nested_output['evaluator_outputs']}"
+            # formatted_output = f"<yival_raw_output>{nested_output['text_output']}</yival_raw_output>{nested_output['image_output']}{video_text}\n{nested_output['evaluator_outputs']}"
+            formatted_output = f"<yival_raw_output>{nested_output['text_output']}</yival_raw_output>{nested_output['image_output']}\n{nested_output['audio_output']}\n{video_text}\n{nested_output['evaluator_outputs']}"
             row_dict[combo_str] = formatted_output
             all_combos.add(combo_str)
         data_list.append(row_dict)
-
+    # print("generate_group_key_combination_data datalist: ")
+    # print(data_list)
     df = pd.DataFrame(data_list)
     # Ensure all combo columns exist
     for combo in all_combos:

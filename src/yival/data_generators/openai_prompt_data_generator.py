@@ -16,7 +16,7 @@ import os
 import pickle
 import re
 from typing import Any, Dict, Iterator, List
-
+from demo.audio_generate import load_audio
 import openai
 from tenacity import retry, stop_after_attempt, wait_random_exponential
 from tqdm import tqdm

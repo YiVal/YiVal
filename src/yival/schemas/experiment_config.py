@@ -22,12 +22,23 @@ from .selector_strategies import BaseConfig, SelectionOutput
 from .trainer_configs import BaseTrainerConfig
 from .varation_generator_configs import BaseVariationGeneratorConfig
 from .wrapper_configs import BaseWrapperConfig
+from pydub import AudioSegment
+import shutil
 
 # Registry for supported custom classes
 # TODO Fix it, this is not working right now
 CLASS_REGISTRY: Dict[str, Type] = {
     # "ClassA": ClassA
+    "key": str, 
+    "rhythm": str, 
+    "melody": str,
+    "music_instrument": str, 
+    "music_genre": str
 }
+
+ffmpeg_executable = shutil.which("ffmpeg")
+
+AudioSegment.converter = ffmpeg_executable
 
 
 @dataclass
@@ -280,14 +291,15 @@ class MultimodalOutput:
     """
     text_output: Optional[str] = None
     image_output: Optional[List[Image.Image]] = None
+    audio_output: Optional[List[AudioSegment]] = None
     video_output: Optional[List[str]] = None
     context: Optional[Context] = None
 
     def asdict(self) -> Dict[str, Any]:
         return {
             "text_output": self.text_output,
-            "image_output": "PIL Image List" if self.image_output else
-            None,  # You might want to serialize the image differently
+            "image_output": "PIL Image List" if self.image_output else None,  # You might want to serialize the image differently
+            "audio_output": "audio URL List" if self.audio_output else None,
             "video_output": "video URL List" if self.video_output else None
         }
 
