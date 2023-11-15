@@ -8,8 +8,7 @@
         height="100" style="vertical-align: middle;">
         YiVal
     </h1>
-     <p align="center">⚡ Build any Generative AI application with evaluation
-    and enhancement ⚡</p>
+     <p align="center">⚡ Auto Prompting ⚡</p>
 </p>
 
 <!-- markdownlint-disable-next-line MD013 -->
@@ -26,7 +25,7 @@ us: [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/YiValai.svg
 
 ## What is YiVal?
 
-**YiVal: Your Auto-tuning Assistant for GenAI Applications**  
+**YiVal: Your Automatic Prompt Engineering Assistant for GenAI Applications**
 YiVal is a state-of-the-art tool designed to streamline the tuning process for
 your GenAI app prompts and **ANY** configs in the loop. With YiVal, manual adjustments
 are a thing of the past. This **data-driven and evaluation-centric** approach ensures
