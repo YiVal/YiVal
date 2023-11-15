@@ -293,7 +293,7 @@ def df_to_table(df):
 def create_dash_app(
     experiment_data: Experiment, experiment_config: ExperimentConfig,
     function_args: Dict[str, Any], all_combinations, state, logger, evaluator,
-    interactive_mode
+    interactive_mode, autogen
 ):
 
     def parallel_task(data_point, all_combinations, logger, evaluator):
@@ -321,53 +321,60 @@ def create_dash_app(
         return None
 
     def generate_navigation():
-        return dbc.NavbarSimple(
-            children=[
-                dbc.NavItem(
-                    dbc.NavLink(
-                        "Experiment Results Analysis",
-                        href="/experiment-results"
-                    )
-                ),
-                dbc.NavItem(
-                    dbc.NavLink(
-                        "Detailed Experiment Results", href="/group-key-combo"
-                    )
-                ),
-                dbc.NavItem(
-                    dbc.NavLink(
-                        "Enhancer Experiment Results Analysis",
-                        href="/enhancer-experiment-results"
-                    )
-                ),
-                dbc.NavItem(
-                    dbc.NavLink(
-                        "Enhancer Detailed Experiment Results",
-                        href="/enhancer-group-key-combo"
-                    )
-                ),
-                dbc.NavItem(
-                    dbc.Button(
-                        "Export Data",
-                        id="export-btn",
-                        color="primary",
-                        className="ml-2"
-                    )
-                ),
+
+        children_list = [
+            dbc.NavItem(
+                dbc.NavLink(
+                    "Experiment Results Analysis", href="/experiment-results"
+                )
+            ),
+            dbc.NavItem(
+                dbc.NavLink(
+                    "Detailed Experiment Results", href="/group-key-combo"
+                )
+            ),
+            dbc.NavItem(
+                dbc.NavLink(
+                    "Enhancer Experiment Results Analysis",
+                    href="/enhancer-experiment-results"
+                )
+            ),
+            dbc.NavItem(
+                dbc.NavLink(
+                    "Enhancer Detailed Experiment Results",
+                    href="/enhancer-group-key-combo"
+                )
+            ),
+            dbc.NavItem(
+                dbc.Button(
+                    "Export Data",
+                    id="export-btn",
+                    color="primary",
+                    className="ml-2"
+                )
+            ),
+            dbc.NavItem(dbc.NavLink(
+                "Playground",
+                href="/interactive",
+            )),
+            dbc.NavItem(dbc.NavLink("Data Analysis", href="/data-analysis")),
+            dbc.NavItem(
+                dbc.NavLink(
+                    "Use Best Combinations",
+                    href="/use-best-result",
+                )
+            ),
+        ]
+        if autogen:
+            children_list.insert(
+                0,
                 dbc.NavItem(dbc.NavLink(
-                    "Playground",
-                    href="/interactive",
-                )),
-                dbc.NavItem(
-                    dbc.NavLink("Data Analysis", href="/data-analysis")
-                ),
-                dbc.NavItem(
-                    dbc.NavLink(
-                        "Use Best Combinations",
-                        href="/use-best-result",
-                    )
-                ),
-            ],
+                    "Create Task",
+                    href="/create-task",
+                ))
+            )
+        return dbc.NavbarSimple(
+            children=children_list,
             brand="YiVal",
             brand_href="/",
             color="primary",
@@ -471,6 +478,8 @@ def create_dash_app(
         return df
 
     def experiment_results_layout():
+        if not experiment_data.combination_aggregated_metrics:
+            return html.Div([html.H3("No Experiment Result data available.")])
 
         df = generate_combo_metrics_data(
             experiment_data.combination_aggregated_metrics,
@@ -542,6 +551,9 @@ def create_dash_app(
         ])
 
     def data_analysis_layout():
+        if not experiment_data.combination_aggregated_metrics:
+            return html.Div([html.H3("No Experiment Result data available.")])
+
         return html.Div([
             html.H3("Data Analysis", style={'textAlign': 'center'}),
             analysis_layout(df),
@@ -568,6 +580,9 @@ def create_dash_app(
         ])
 
     def combo_page_layout():
+        if not experiment_data.combination_aggregated_metrics:
+            return html.Div([html.H3("No Experiment Result data available.")])
+
         return html.Div([
             html.H3(
                 "Detailed Experiment Results", style={'textAlign': 'center'}
@@ -645,6 +660,9 @@ def create_dash_app(
         ])
 
     def analysis_layout(df):
+        if not experiment_data.combination_aggregated_metrics:
+            return html.Div([html.H3("No Experiment Result data available.")])
+
         evaluator_outputs = [
             col for col in df.columns
             if (col != 'Prompt Variations' and 'Sample' not in col)
@@ -684,6 +702,7 @@ def create_dash_app(
     def enhancer_combo_page_layout():
         if not experiment_data.enhancer_output:
             return html.Div([html.H3("No Enhancer Output data available.")])
+
         return html.Div([
             html.H3(
                 "Enhancer Detailed Experiment Results",
@@ -1280,6 +1299,8 @@ def create_dash_app(
         ])
 
     def use_best_result_layout():
+        if not experiment_data.combination_aggregated_metrics:
+            return html.Div([html.H3("No Experiment Result data available.")])
         if experiment_data.enhancer_output:
             best_combination = experiment_data.enhancer_output.selection_output.best_combination
         elif experiment_data.selection_output:
@@ -1622,14 +1643,81 @@ def create_dash_app(
             }
         )
 
+    def input_task_layout():
+        return html.Div([
+            html.Label(
+                '[?] What task would you like to set up? For example:',
+                style={'margin': '10px'}
+            ),
+            dcc.Input(
+                id='task',
+                type='text',
+                placeholder='Task',
+                value=default_task,
+                style={
+                    'width': '100%',
+                    'height': '50px',
+                    'fontSize': '18px',
+                    'margin': '10px'
+                }
+            ),
+            html.Label(
+                '[?] Provide input for the task, separated by comma. For example:',
+                style={'margin': '10px'}
+            ),
+            dcc.Input(
+                id='context_info',
+                type='text',
+                placeholder='Context Info',
+                value=default_context_info,
+                style={
+                    'width': '100%',
+                    'height': '50px',
+                    'fontSize': '18px',
+                    'margin': '10px'
+                }
+            ),
+            html.Label(
+                '[?] Please provide evaluation aspects (optional):',
+                style={'margin': '10px'}
+            ),
+            dcc.Input(
+                id='evaluation_aspects',
+                type='text',
+                placeholder='Evaluation Aspects (optional)',
+                value=default_evaluation_aspects,
+                style={
+                    'width': '100%',
+                    'height': '50px',
+                    'fontSize': '18px',
+                    'margin': '10px'
+                }
+            ),
+            html.Button(
+                'Submit',
+                id='submit-button',
+                n_clicks=0,
+                style={
+                    'fontSize': '18px',
+                    'margin': '10px'
+                }
+            ),
+            html.Div(id='output-task-div')
+        ],
+                        style={
+                            'backgroundColor': '#f0f0f0',
+                            'padding': '20px'
+                        })
+
     app = dash.Dash(__name__, external_stylesheets=[dbc.themes.FLATLY])
 
     app.config.suppress_callback_exceptions = True
 
-    df = generate_combo_metrics_data(
-        experiment_data.combination_aggregated_metrics,
-        experiment_data.group_experiment_results
-    )
+    if not autogen:
+        df = generate_combo_metrics_data(
+            experiment_data.combination_aggregated_metrics,
+            experiment_data.group_experiment_results
+        )
 
     @app.callback(
         dash.dependencies.Output('page-content', 'children'),
@@ -1657,6 +1745,8 @@ def create_dash_app(
             return use_best_result_layout()
         elif pathname == '/data-analysis':
             return data_analysis_layout()
+        elif pathname == '/create-task':
+            return input_task_layout()
         else:
             return index_page()
 
@@ -2207,6 +2297,51 @@ def create_dash_app(
     def toggle_collapse(n, is_open):
         return not is_open
 
+    @app.callback(
+        Output('output-task-div', 'children'),
+        [Input('submit-button', 'n_clicks')], [
+            State('task', 'value'),
+            State('context_info', 'value'),
+            State('evaluation_aspects', 'value')
+        ]
+    )
+    def update_task_output(n_clicks, task, context_info, evaluation_aspects):
+        if n_clicks > 0:
+            parameters = context_info.split(",")
+            aspect = []
+            if evaluation_aspects:
+                aspect = evaluation_aspects.split(",")
+
+            if task != default_task and context_info != default_context_info and evaluation_aspects != default_evaluation_aspects:
+                auto_generate_config(task, parameters, aspect)
+                print(
+                    colored(
+                        "\n[INFO][auto_gen] Generating configuration...",
+                        "yellow"
+                    )
+                )
+                subprocess.run([
+                    "yival", "run", "auto_generated_config.yaml",
+                    "--output_path=auto_generated.pkl"
+                ])
+            else:
+                print(
+                    colored(
+                        "\n[INFO][auto_gen] Using default configuration...",
+                        "yellow"
+                    )
+                )
+                subprocess.run([
+                    "yival", "run", "default_auto_generated_config.yaml",
+                    "--output_path=default_auto_generated.pkl"
+                ])
+
+            return 'Configuration generated and yival run completed.'
+
+    default_task = "generate tiktok video title"
+    default_context_info = "target_audience,content_summary"
+    default_evaluation_aspects = ""
+
     app.layout = html.Div(
         [
             html.Div(
@@ -2257,210 +2392,7 @@ def create_dash_app(
         ],
         className="main-wrapper"
     )
-
     return app
-
-
-def create_input_app():
-    default_task = "generate tiktok video title"
-    default_context_info = "target_audience,content_summary"
-    default_evaluation_aspects = ""
-
-    def generate_navigation():
-        return dbc.NavbarSimple(
-            children=[
-                dbc.NavItem(dbc.NavLink(
-                    "Create Task",
-                    href="/create_task",
-                )),
-            ],
-            brand="YiVal",
-            brand_href="/",
-            color="primary",
-            dark=True,
-        )
-
-    def index_page():
-        return html.Div([
-            html.H1("Yijing (I Ching)"),
-            html.Button('Cast Your Fortune', id='cast-fortune'),
-            html.Div(id='hexagram-container')
-        ])
-
-    def input_task_layout():
-        return html.Div([
-            html.Label(
-                '[?] What task would you like to set up? For example:',
-                style={'margin': '10px'}
-            ),
-            dcc.Input(
-                id='task',
-                type='text',
-                placeholder='Task',
-                value=default_task,
-                style={
-                    'width': '100%',
-                    'height': '50px',
-                    'fontSize': '18px',
-                    'margin': '10px'
-                }
-            ),
-            html.Label(
-                '[?] Provide input for the task, separated by comma. For example:',
-                style={'margin': '10px'}
-            ),
-            dcc.Input(
-                id='context_info',
-                type='text',
-                placeholder='Context Info',
-                value=default_context_info,
-                style={
-                    'width': '100%',
-                    'height': '50px',
-                    'fontSize': '18px',
-                    'margin': '10px'
-                }
-            ),
-            html.Label(
-                '[?] Please provide evaluation aspects (optional):',
-                style={'margin': '10px'}
-            ),
-            dcc.Input(
-                id='evaluation_aspects',
-                type='text',
-                placeholder='Evaluation Aspects (optional)',
-                value=default_evaluation_aspects,
-                style={
-                    'width': '100%',
-                    'height': '50px',
-                    'fontSize': '18px',
-                    'margin': '10px'
-                }
-            ),
-            html.Button(
-                'Submit',
-                id='submit-button',
-                n_clicks=0,
-                style={
-                    'fontSize': '18px',
-                    'margin': '10px'
-                }
-            ),
-            html.Div(id='output-div')
-        ],
-                        style={
-                            'backgroundColor': '#f0f0f0',
-                            'padding': '20px'
-                        })
-
-    app = dash.Dash(
-        __name__,
-        suppress_callback_exceptions=True,
-        external_stylesheets=[dbc.themes.FLATLY]
-    )
-
-    @app.callback(
-        Output('output-div', 'children'), [Input('submit-button', 'n_clicks')],
-        [
-            State('task', 'value'),
-            State('context_info', 'value'),
-            State('evaluation_aspects', 'value')
-        ]
-    )
-    def update_output(n_clicks, task, context_info, evaluation_aspects):
-        if n_clicks > 0:
-            parameters = context_info.split(",")
-            aspect = []
-            if evaluation_aspects:
-                aspect = evaluation_aspects.split(",")
-
-            if task != default_task and context_info != default_context_info and evaluation_aspects != default_evaluation_aspects:
-                auto_generate_config(task, parameters, aspect)
-                print(
-                    colored(
-                        "\n[INFO][auto_gen] Generating configuration...",
-                        "yellow"
-                    )
-                )
-                subprocess.run([
-                    "yival", "run", "auto_generated_config.yaml",
-                    "--output_path=auto_generated.pkl"
-                ])
-            else:
-                print(
-                    colored(
-                        "\n[INFO][auto_gen] Using default configuration...",
-                        "yellow"
-                    )
-                )
-                subprocess.run([
-                    "yival", "run", "default_auto_generated_config.yaml",
-                    "--output_path=default_auto_generated.pkl"
-                ])
-
-            return 'Configuration generated and yival run completed.'
-
-    @app.callback(
-        dash.dependencies.Output('page-content', 'children'),
-        [dash.dependencies.Input('url', 'pathname')]
-    )
-    def display_page(pathname):
-        if pathname == '/create_task':
-            return input_task_layout()
-        else:
-            return index_page()
-
-    @app.callback(
-        Output('hexagram-container', 'children'),
-        [Input('cast-fortune', 'n_clicks')]
-    )
-    def update_hexagram(n_clicks):
-        import random
-        hexagram = random.choice(HEXAGRAMS)
-        return [
-            generate_hexagram_figure(hexagram["figure"]),
-            html.H4(hexagram["name"]),
-            html.P(hexagram["description"]),
-            html.P(
-                hexagram["reading"],
-                style={
-                    "color": "blue",
-                    "fontStyle": "italic"
-                }
-            )
-        ]
-
-    app.layout = html.Div(
-        [
-            dcc.Location(id='url', refresh=False),
-            generate_navigation(),
-            html.Div(
-                id='page-content',
-                style={
-                    'fontFamily': 'Arial, sans-serif',
-                    'margin': '2% 10%',
-                    'padding': '2% 3%',
-                    'border': '1px solid #ddd',
-                    'borderRadius': '5px',
-                    'backgroundColor': '#f9f9f9',
-                    'fontSize': '18px',
-                    'boxShadow': '0 4px 8px 0 rgba(0, 0, 0, 0.1)',
-                }
-            )
-        ],
-        className="main-content",
-        style={
-            'backgroundColor': '#f9f9f9',  # Light Grey
-            'padding': '20px'
-        }
-    )
-
-    return app
-
-
-def display_input_dash(port=8073):
-    app = create_input_app()
-    threading.Thread(target=run_app, args=(app, False, port)).start()
 
 
 def display_results_dash(
@@ -2471,34 +2403,37 @@ def display_results_dash(
     logger,
     evaluator,
     interactive=False,
-    port=8074
+    autogen=False,
+    port=8074,
 ):
-    if experiment_data.enhancer_output:
-        for group_result in experiment_data.enhancer_output.group_experiment_results:
-            experiment_results = []
-            seen = set()
-            for r in group_result.experiment_results:
-                if str(r.combination) in seen:
-                    continue
-                else:
-                    seen.add(str(r.combination))
-                    experiment_results.append(r)
-            group_result.experiment_results = experiment_results
-    function_args = get_function_args(
-        experiment_config["custom_function"], experiment_config["dataset"]
-    )
-    function_args["yival_expected_result (Optional)"] = 'str'
-    app = create_dash_app(
-        experiment_data, experiment_config, function_args, all_combinations,
-        state, logger, evaluator, interactive
-    )
-    threading.Thread(target=run_app, args=(app, False, port)).start()
-
-
-def run_app(app, debug, port):
+    if not autogen:
+        if experiment_data.enhancer_output:
+            for group_result in experiment_data.enhancer_output.group_experiment_results:
+                experiment_results = []
+                seen = set()
+                for r in group_result.experiment_results:
+                    if str(r.combination) in seen:
+                        continue
+                    else:
+                        seen.add(str(r.combination))
+                        experiment_results.append(r)
+                group_result.experiment_results = experiment_results
+        function_args = get_function_args(
+            experiment_config["custom_function"], experiment_config["dataset"]
+        )
+        function_args["yival_expected_result (Optional)"] = 'str'
+        app = create_dash_app(
+            experiment_data, experiment_config, function_args,
+            all_combinations, state, logger, evaluator, interactive, autogen
+        )
+    else:
+        app = create_dash_app(
+            experiment_data, experiment_config, {}, all_combinations, state,
+            logger, evaluator, interactive, autogen
+        )
     if os.environ.get("ngrok", False):
         public_url = ngrok.connect(port)
         print(f"Access Yival from this public URL :{public_url}")
-        app.run(debug=debug, port=port)
+        app.run(debug=False, port=port)
     else:
-        app.run(debug=debug, port=port)
+        app.run(debug=False, port=port)

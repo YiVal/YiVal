@@ -3,8 +3,13 @@ import subprocess
 
 from termcolor import colored
 
+from yival import logger
 from yival.common.auto_cofig_utils import auto_generate_config
-from yival.experiment.app.app import display_input_dash  # type: ignore
+from yival.experiment import evaluator
+from yival.experiment.app.app import display_results_dash  # type: ignore
+
+from ..schemas.experiment_config import Experiment
+from ..states.experiment_state import ExperimentState
 
 try:
     import inquirer
@@ -23,7 +28,16 @@ def format_input(input_str):
 
 
 def run_auto_gen():
-    display_input_dash()
+    display_results_dash(
+        Experiment([], []),
+        None, [],
+        ExperimentState.get_instance(),
+        logger,
+        evaluator,
+        True,
+        True,
+        port=8050
+    )
     print(colored("\nProcess completed!", "green"))
 
 

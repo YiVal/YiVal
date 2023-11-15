@@ -4,11 +4,12 @@ dataset:
     openai_prompt_data_generator:
       chunk_size: 10000
       diversify: true
-      expected_param_name: ''
+      expected_param_name: ""
       fixed_input:
         task: tiktok headline generation
       input_function:
-        description: The function generates a catchy and engaging headline for a TikTok
+        description:
+          The function generates a catchy and engaging headline for a TikTok
           video that is tailored to attract the target audience. It analyzes the preferences
           and interests of the target audience to craft a headline that is most likely
           to pique their interest and encourage them to view the video. This involves
@@ -25,7 +26,8 @@ dataset:
       number_of_examples: 5
       output_csv_path: generate_engaging_tiktok_headline_generated_data.csv
       output_path: generate_engaging_tiktok_headline_generated_data.pkl
-      prompt: "\n        \"Please provide a concrete and realistic test case as a\
+      prompt:
+        "\n        \"Please provide a concrete and realistic test case as a\
         \ dictionary for function invocation using the ** operator.\n        Only\
         \ include parameters, excluding description and name.\n        Ensure it's\
         \ succinct and well-structured.\n        **Only provide the dictionary.**\"\
@@ -33,12 +35,14 @@ dataset:
   source_type: machine_generated
 description: Auto generated config for tiktok headline generation
 enhancer:
-  end_meta_instruction: Give me a new prompt that is different from all pairs above,
+  end_meta_instruction:
+    Give me a new prompt that is different from all pairs above,
     and has evaluation values on accuracy, relevance, engagement, that are higher
     than any of above.
   enhance_var:
-  - task
-  head_meta_instruction: "Given a TikTok video context and target audience, generate\
+    - task
+  head_meta_instruction:
+    "Given a TikTok video context and target audience, generate\
     \ a corresponding TikTok video headline\n\nParameters:\n    tiktok_video_context\
     \ : str\n    target_audience : str\n\n==>\nNow you will help me generate a prompt\
     \ which is used to generate a corresponding TikTok video headline according to\
@@ -48,222 +52,232 @@ enhancer:
   model_name: gpt-4
   name: optimize_by_prompt_enhancer
 evaluators:
-- choice_scores:
-    A: 0
-    B: 1
-    C: 2
-    D: 3
-    E: 4
-  choices:
-  - A
-  - B
-  - C
-  - D
-  - E
-  description: Does the headline accurately reflect the content of the TikTok video?
-    The headline should not mislead the audience about the video's content, but rather
-    provide an accurate and enticing preview of what viewers can expect.
-  display_name: accuracy
-  evaluator_type: individual
-  metric_calculators:
-  - method: AVERAGE
-  model_name: gpt-4
-  name: openai_prompt_based_evaluator
-  prompt: 'You are assessing a submitted answer on a given task based on a criterion.
-    Here is the data:
+  - choice_scores:
+      A: 0
+      B: 1
+      C: 2
+      D: 3
+      E: 4
+    choices:
+      - A
+      - B
+      - C
+      - D
+      - E
+    description:
+      Does the headline accurately reflect the content of the TikTok video?
+      The headline should not mislead the audience about the video's content, but rather
+      provide an accurate and enticing preview of what viewers can expect.
+    display_name: accuracy
+    evaluator_type: individual
+    metric_calculators:
+      - method: AVERAGE
+    model_name: gpt-4
+    name: openai_prompt_based_evaluator
+    prompt:
+      "You are assessing a submitted answer on a given task based on a criterion.
+      Here is the data:
 
-    The function generates a catchy and engaging headline for a TikTok video that
-    is tailored to attract the target audience. It analyzes the preferences and interests
-    of the target audience to craft a headline that is most likely to pique their
-    interest and encourage them to view the video. This involves understanding trending
-    topics, popular keywords, and the overall sentiment of the target audience. The
-    function could leverage machine learning or AI algorithms to better predict headlines
-    that will resonate with the target audience, ultimately aiming to increase the
-    visibility and reach of the TikTok video.
+      The function generates a catchy and engaging headline for a TikTok video that
+      is tailored to attract the target audience. It analyzes the preferences and interests
+      of the target audience to craft a headline that is most likely to pique their
+      interest and encourage them to view the video. This involves understanding trending
+      topics, popular keywords, and the overall sentiment of the target audience. The
+      function could leverage machine learning or AI algorithms to better predict headlines
+      that will resonate with the target audience, ultimately aiming to increase the
+      visibility and reach of the TikTok video.
 
-    Does the headline accurately reflect the content of the TikTok video? The headline
-    should not mislead the audience about the video''s content, but rather provide
-    an accurate and enticing preview of what viewers can expect.
+      Does the headline accurately reflect the content of the TikTok video? The headline
+      should not mislead the audience about the video's content, but rather provide
+      an accurate and enticing preview of what viewers can expect.
 
-    [Input]: target_audioence: {{target_audioence}}
+      [Input]: target_audioence: {{target_audioence}}
 
-    [Result]: {raw_output}
+      [Result]: {raw_output}
 
-    Answer the question by selecting one of the following options:
+      Answer the question by selecting one of the following options:
 
-    A It fails to meet the criterion at all.
+      A It fails to meet the criterion at all.
 
-    B It somewhat meets the criterion, but there is significant room for improvement.
+      B It somewhat meets the criterion, but there is significant room for improvement.
 
-    C It meets the criterion to a satisfactory degree.
+      C It meets the criterion to a satisfactory degree.
 
-    D It meets the criterion very well.
+      D It meets the criterion very well.
 
-    E It meets the criterion exceptionally well, with little to no room for improvement.'
-  scale_description: 0-4
-- choice_scores:
-    A: 0
-    B: 1
-    C: 2
-    D: 3
-    E: 4
-  choices:
-  - A
-  - B
-  - C
-  - D
-  - E
-  description: Does the headline incorporate trending topics, popular keywords, or
-    sentiments that are relevant to the target audience? The headline should demonstrate
-    an understanding of the target audience's interests and preferences, and leverage
-    these insights to attract viewers.
-  display_name: relevance
-  evaluator_type: individual
-  metric_calculators:
-  - method: AVERAGE
-  model_name: gpt-4
-  name: openai_prompt_based_evaluator
-  prompt: 'You are assessing a submitted answer on a given task based on a criterion.
-    Here is the data:
+      E It meets the criterion exceptionally well, with little to no room for improvement."
+    scale_description: 0-4
+  - choice_scores:
+      A: 0
+      B: 1
+      C: 2
+      D: 3
+      E: 4
+    choices:
+      - A
+      - B
+      - C
+      - D
+      - E
+    description:
+      Does the headline incorporate trending topics, popular keywords, or
+      sentiments that are relevant to the target audience? The headline should demonstrate
+      an understanding of the target audience's interests and preferences, and leverage
+      these insights to attract viewers.
+    display_name: relevance
+    evaluator_type: individual
+    metric_calculators:
+      - method: AVERAGE
+    model_name: gpt-4
+    name: openai_prompt_based_evaluator
+    prompt:
+      "You are assessing a submitted answer on a given task based on a criterion.
+      Here is the data:
 
-    The function generates a catchy and engaging headline for a TikTok video that
-    is tailored to attract the target audience. It analyzes the preferences and interests
-    of the target audience to craft a headline that is most likely to pique their
-    interest and encourage them to view the video. This involves understanding trending
-    topics, popular keywords, and the overall sentiment of the target audience. The
-    function could leverage machine learning or AI algorithms to better predict headlines
-    that will resonate with the target audience, ultimately aiming to increase the
-    visibility and reach of the TikTok video.
+      The function generates a catchy and engaging headline for a TikTok video that
+      is tailored to attract the target audience. It analyzes the preferences and interests
+      of the target audience to craft a headline that is most likely to pique their
+      interest and encourage them to view the video. This involves understanding trending
+      topics, popular keywords, and the overall sentiment of the target audience. The
+      function could leverage machine learning or AI algorithms to better predict headlines
+      that will resonate with the target audience, ultimately aiming to increase the
+      visibility and reach of the TikTok video.
 
-    Does the headline incorporate trending topics, popular keywords, or sentiments
-    that are relevant to the target audience? The headline should demonstrate an understanding
-    of the target audience''s interests and preferences, and leverage these insights
-    to attract viewers.
+      Does the headline incorporate trending topics, popular keywords, or sentiments
+      that are relevant to the target audience? The headline should demonstrate an understanding
+      of the target audience's interests and preferences, and leverage these insights
+      to attract viewers.
 
-    [Input]: target_audioence: {{target_audioence}}
+      [Input]: target_audioence: {{target_audioence}}
 
-    [Result]: {raw_output}
+      [Result]: {raw_output}
 
-    Answer the question by selecting one of the following options:
+      Answer the question by selecting one of the following options:
 
-    A It fails to meet the criterion at all.
+      A It fails to meet the criterion at all.
 
-    B It somewhat meets the criterion, but there is significant room for improvement.
+      B It somewhat meets the criterion, but there is significant room for improvement.
 
-    C It meets the criterion to a satisfactory degree.
+      C It meets the criterion to a satisfactory degree.
 
-    D It meets the criterion very well.
+      D It meets the criterion very well.
 
-    E It meets the criterion exceptionally well, with little to no room for improvement.'
-  scale_description: 0-4
-- choice_scores:
-    A: 0
-    B: 1
-    C: 2
-    D: 3
-    E: 4
-  choices:
-  - A
-  - B
-  - C
-  - D
-  - E
-  description: Is the headline catchy and engaging? The headline should be crafted
-    in a way that grabs the attention of the target audience and encourages them to
-    watch the video. This could involve the use of humor, intrigue, or other tactics
-    to pique interest.
-  display_name: engagement
-  evaluator_type: individual
-  metric_calculators:
-  - method: AVERAGE
-  model_name: gpt-4
-  name: openai_prompt_based_evaluator
-  prompt: 'You are assessing a submitted answer on a given task based on a criterion.
-    Here is the data:
+      E It meets the criterion exceptionally well, with little to no room for improvement."
+    scale_description: 0-4
+  - choice_scores:
+      A: 0
+      B: 1
+      C: 2
+      D: 3
+      E: 4
+    choices:
+      - A
+      - B
+      - C
+      - D
+      - E
+    description:
+      Is the headline catchy and engaging? The headline should be crafted
+      in a way that grabs the attention of the target audience and encourages them to
+      watch the video. This could involve the use of humor, intrigue, or other tactics
+      to pique interest.
+    display_name: engagement
+    evaluator_type: individual
+    metric_calculators:
+      - method: AVERAGE
+    model_name: gpt-4
+    name: openai_prompt_based_evaluator
+    prompt:
+      "You are assessing a submitted answer on a given task based on a criterion.
+      Here is the data:
 
-    The function generates a catchy and engaging headline for a TikTok video that
-    is tailored to attract the target audience. It analyzes the preferences and interests
-    of the target audience to craft a headline that is most likely to pique their
-    interest and encourage them to view the video. This involves understanding trending
-    topics, popular keywords, and the overall sentiment of the target audience. The
-    function could leverage machine learning or AI algorithms to better predict headlines
-    that will resonate with the target audience, ultimately aiming to increase the
-    visibility and reach of the TikTok video.
+      The function generates a catchy and engaging headline for a TikTok video that
+      is tailored to attract the target audience. It analyzes the preferences and interests
+      of the target audience to craft a headline that is most likely to pique their
+      interest and encourage them to view the video. This involves understanding trending
+      topics, popular keywords, and the overall sentiment of the target audience. The
+      function could leverage machine learning or AI algorithms to better predict headlines
+      that will resonate with the target audience, ultimately aiming to increase the
+      visibility and reach of the TikTok video.
 
-    Is the headline catchy and engaging? The headline should be crafted in a way that
-    grabs the attention of the target audience and encourages them to watch the video.
-    This could involve the use of humor, intrigue, or other tactics to pique interest.
+      Is the headline catchy and engaging? The headline should be crafted in a way that
+      grabs the attention of the target audience and encourages them to watch the video.
+      This could involve the use of humor, intrigue, or other tactics to pique interest.
 
-    [Input]: target_audioence: {{target_audioence}}
+      [Input]: target_audioence: {{target_audioence}}
 
-    [Result]: {raw_output}
+      [Result]: {raw_output}
 
-    Answer the question by selecting one of the following options:
+      Answer the question by selecting one of the following options:
 
-    A It fails to meet the criterion at all.
+      A It fails to meet the criterion at all.
 
-    B It somewhat meets the criterion, but there is significant room for improvement.
+      B It somewhat meets the criterion, but there is significant room for improvement.
 
-    C It meets the criterion to a satisfactory degree.
+      C It meets the criterion to a satisfactory degree.
 
-    D It meets the criterion very well.
+      D It meets the criterion very well.
 
-    E It meets the criterion exceptionally well, with little to no room for improvement.'
-  scale_description: 0-4
+      E It meets the criterion exceptionally well, with little to no room for improvement."
+    scale_description: 0-4
 human_rating_configs:
-- instructions: Does the headline accurately reflect the content of the TikTok video?
-    The headline should not mislead the audience about the video's content, but rather
-    provide an accurate and enticing preview of what viewers can expect.
-  name: accuracy
-  scale:
-  - 0
-  - 4
-- instructions: Does the headline incorporate trending topics, popular keywords, or
-    sentiments that are relevant to the target audience? The headline should demonstrate
-    an understanding of the target audience's interests and preferences, and leverage
-    these insights to attract viewers.
-  name: relevance
-  scale:
-  - 0
-  - 4
-- instructions: Is the headline catchy and engaging? The headline should be crafted
-    in a way that grabs the attention of the target audience and encourages them to
-    watch the video. This could involve the use of humor, intrigue, or other tactics
-    to pique interest.
-  name: engagement
-  scale:
-  - 0
-  - 4
+  - instructions:
+      Does the headline accurately reflect the content of the TikTok video?
+      The headline should not mislead the audience about the video's content, but rather
+      provide an accurate and enticing preview of what viewers can expect.
+    name: accuracy
+    scale:
+      - 0
+      - 4
+  - instructions:
+      Does the headline incorporate trending topics, popular keywords, or
+      sentiments that are relevant to the target audience? The headline should demonstrate
+      an understanding of the target audience's interests and preferences, and leverage
+      these insights to attract viewers.
+    name: relevance
+    scale:
+      - 0
+      - 4
+  - instructions:
+      Is the headline catchy and engaging? The headline should be crafted
+      in a way that grabs the attention of the target audience and encourages them to
+      watch the video. This could involve the use of humor, intrigue, or other tactics
+      to pique interest.
+    name: engagement
+    scale:
+      - 0
+      - 4
 selection_strategy:
   ahp_selection:
     criteria:
-    - 'openai_prompt_based_evaluator: accuracy'
-    - 'openai_prompt_based_evaluator: relevance'
-    - 'openai_prompt_based_evaluator: engagement'
-    - average_token_usage
-    - average_latency
+      - "openai_prompt_based_evaluator: accuracy"
+      - "openai_prompt_based_evaluator: relevance"
+      - "openai_prompt_based_evaluator: engagement"
+      - average_token_usage
+      - average_latency
     criteria_maximization:
       average_latency: false
       average_token_usage: false
-      'openai_prompt_based_evaluator: accuracy': true
-      'openai_prompt_based_evaluator: engagement': true
-      'openai_prompt_based_evaluator: relevance': true
+      "openai_prompt_based_evaluator: accuracy": true
+      "openai_prompt_based_evaluator: engagement": true
+      "openai_prompt_based_evaluator: relevance": true
     criteria_weights:
       average_latency: 0
       average_token_usage: 0
-      'openai_prompt_based_evaluator: accuracy': 0.3333333333333333
-      'openai_prompt_based_evaluator: engagement': 0.3333333333333333
-      'openai_prompt_based_evaluator: relevance': 0.3333333333333333
+      "openai_prompt_based_evaluator: accuracy": 0.3333333333333333
+      "openai_prompt_based_evaluator: engagement": 0.3333333333333333
+      "openai_prompt_based_evaluator: relevance": 0.3333333333333333
 variations:
-- generator_config: null
-  generator_name: null
-  name: task
-  variations:
-  - instantiated_value: 'tiktok headline generation based on the following info
+  - generator_config: null
+    generator_name: null
+    name: task
+    variations:
+      - instantiated_value:
+          "tiktok headline generation based on the following info
 
-      target_audioence: {target_audioence}'
-    value: 'tiktok headline generation based on the following info
+          target_audioence: {target_audioence}"
+        value: "tiktok headline generation based on the following info
 
-      target_audioence: {target_audioence}'
-    value_type: str
-    variation_id: null
+          target_audioence: {target_audioence}"
+        value_type: str
+        variation_id: null
