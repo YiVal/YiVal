@@ -123,7 +123,7 @@ of random tech startup business names.
     ```powershell
     setx OPENAI_API_KEY $YOUR_OPENAI_API_KEY
     ```
-    
+
 3. **Define YiVal Configuration**:
    Create a configuration file named `config_data_generation.yml` for automated
    test dataset generation with the following content:
