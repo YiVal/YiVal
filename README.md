@@ -112,8 +112,16 @@ of random tech startup business names.
 2. **Set OpenAI API Key**: Replace `$YOUR_OPENAI_API_KEY` with your
    actual OpenAI API key.
 
+    On macOS or Linux systems,
+
     ```bash
     export OPENAI_API_KEY=$YOUR_OPENAI_API_KEY
+    ```
+
+    On Windows systems,
+
+    ```powershell
+    setx OPENAI_API_KEY $YOUR_OPENAI_API_KEY
     ```
 
 3. **Define YiVal Configuration**:
