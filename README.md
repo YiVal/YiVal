@@ -113,11 +113,13 @@ of random tech startup business names.
    actual OpenAI API key.
 
     On macOS or Linux systems,
+
     ```bash
     export OPENAI_API_KEY=$YOUR_OPENAI_API_KEY
     ```
 
     On Windows systems, 
+    
     ```powershell
     setx OPENAI_API_KEY $YOUR_OPENAI_API_KEY
     ```
