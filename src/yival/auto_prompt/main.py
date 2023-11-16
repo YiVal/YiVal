@@ -41,6 +41,22 @@ def run_auto_gen():
         evaluator,
         True,
         True,
+        False,
+        port=8050
+    )
+    print(colored("\nProcess completed!", "green"))
+
+
+def run_demo():
+    display_results_dash(
+        Experiment([], []),
+        None, [],
+        ExperimentState.get_instance(),
+        logger,
+        evaluator,
+        True,
+        True,
+        True,
         port=8050
     )
     print(colored("\nProcess completed!", "green"))
