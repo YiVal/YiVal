@@ -26,6 +26,7 @@ from PIL import Image
 from pyngrok import ngrok
 from termcolor import colored
 
+from ...auto_prompt.default_task import DefaultValueProvider
 from ...common.auto_cofig_utils import auto_generate_config
 from ...schemas.common_structures import InputData
 from ...schemas.experiment_config import (
@@ -293,7 +294,7 @@ def df_to_table(df):
 def create_dash_app(
     experiment_data: Experiment, experiment_config: ExperimentConfig,
     function_args: Dict[str, Any], all_combinations, state, logger, evaluator,
-    interactive_mode, autogen
+    interactive_mode, autogen, demo
 ):
 
     def parallel_task(data_point, all_combinations, logger, evaluator):
@@ -1644,70 +1645,179 @@ def create_dash_app(
         )
 
     def input_task_layout():
-        return html.Div([
-            html.Label(
-                '[?] What task would you like to set up? For example:',
-                style={'margin': '10px'}
-            ),
-            dcc.Input(
-                id='task',
-                type='text',
-                placeholder='Task',
-                value=default_task,
-                style={
-                    'width': '100%',
-                    'height': '50px',
-                    'fontSize': '18px',
-                    'margin': '10px'
-                }
-            ),
-            html.Label(
-                '[?] Provide input for the task, separated by comma. For example:',
-                style={'margin': '10px'}
-            ),
-            dcc.Input(
-                id='context_info',
-                type='text',
-                placeholder='Context Info',
-                value=default_context_info,
-                style={
-                    'width': '100%',
-                    'height': '50px',
-                    'fontSize': '18px',
-                    'margin': '10px'
-                }
-            ),
-            html.Label(
-                '[?] Please provide evaluation aspects (optional):',
-                style={'margin': '10px'}
-            ),
-            dcc.Input(
-                id='evaluation_aspects',
-                type='text',
-                placeholder='Evaluation Aspects (optional)',
-                value=default_evaluation_aspects,
-                style={
-                    'width': '100%',
-                    'height': '50px',
-                    'fontSize': '18px',
-                    'margin': '10px'
-                }
-            ),
-            html.Button(
-                'Submit',
-                id='submit-button',
-                n_clicks=0,
-                style={
-                    'fontSize': '18px',
-                    'margin': '10px'
-                }
-            ),
-            html.Div(id='output-task-div')
-        ],
+        if demo != True:
+            return html.Div([
+                html.Label(
+                    '[?] What task would you like to set up? For example:',
+                    style={'margin': '10px'}
+                ),
+                dcc.Input(
+                    id='task',
+                    type='text',
+                    placeholder='Task',
+                    value=default_task,
+                    style={
+                        'width': '100%',
+                        'height': '50px',
+                        'fontSize': '18px',
+                        'margin': '10px'
+                    }
+                ),
+                html.Label(
+                    '[?] Provide input for the task, separated by comma. For example:',
+                    style={'margin': '10px'}
+                ),
+                dcc.Input(
+                    id='context_info',
+                    type='text',
+                    placeholder='Context Info',
+                    value=default_context_info,
+                    style={
+                        'width': '100%',
+                        'height': '50px',
+                        'fontSize': '18px',
+                        'margin': '10px'
+                    }
+                ),
+                html.Label(
+                    '[?] Please provide evaluation aspects (optional):',
+                    style={'margin': '10px'}
+                ),
+                dcc.Input(
+                    id='evaluation_aspects',
+                    type='text',
+                    placeholder='Evaluation Aspects (optional)',
+                    value=default_evaluation_aspects,
+                    style={
+                        'width': '100%',
+                        'height': '50px',
+                        'fontSize': '18px',
+                        'margin': '10px'
+                    }
+                ),
+                html.Button(
+                    'Submit',
+                    id='submit-button',
+                    n_clicks=0,
+                    style={
+                        'fontSize': '18px',
+                        'margin': '10px'
+                    }
+                ),
+                html.Div(id='output-task-div')
+            ],
+                            style={
+                                'backgroundColor': '#f0f0f0',
+                                'padding': '20px'
+                            })
+        else:
+            return html.Div([
+                html.Div([
+                    html.Div([
+                        html.Button(
+                            'Update 1',
+                            id='update-button-1',
+                            n_clicks=0,
+                            style={
+                                'fontSize': '18px',
+                                'margin': '10px'
+                            }
+                        ),
+                        html.Button(
+                            'Update 2',
+                            id='update-button-2',
+                            n_clicks=0,
+                            style={
+                                'fontSize': '18px',
+                                'margin': '10px'
+                            }
+                        ),
+                        html.Button(
+                            'Update 3',
+                            id='update-button-3',
+                            n_clicks=0,
+                            style={
+                                'fontSize': '18px',
+                                'margin': '10px'
+                            }
+                        )
+                    ],
+                             style={
+                                 'fontSize': '18px',
+                                 'margin': '10px',
+                                 'color': 'white',
+                                 'border': 'none',
+                                 'padding': '15px 32px',
+                                 'textAlign': 'center',
+                                 'textDecoration': 'none',
+                                 'display': 'inline-block'
+                             }),
+                    html.Div([
+                        html.Label(
+                            '[?] What task would you like to set up? For example:',
+                            style={'margin': '10px'}
+                        ),
+                        dcc.Input(
+                            id='task',
+                            type='text',
+                            placeholder='Task',
+                            value='',
+                            style={
+                                'width': '100%',
+                                'height': '50px',
+                                'fontSize': '18px',
+                                'margin': '10px'
+                            }
+                        ),
+                        html.Label(
+                            '[?] Provide input for the task, separated by comma. For example:',
+                            style={'margin': '10px'}
+                        ),
+                        dcc.Input(
+                            id='context_info',
+                            type='text',
+                            placeholder='Context Info',
+                            value='',
+                            style={
+                                'width': '100%',
+                                'height': '50px',
+                                'fontSize': '18px',
+                                'margin': '10px'
+                            }
+                        ),
+                        html.Label(
+                            '[?] Please provide evaluation aspects (optional):',
+                            style={'margin': '10px'}
+                        ),
+                        dcc.Input(
+                            id='evaluation_aspects',
+                            type='text',
+                            placeholder='Evaluation Aspects (optional)',
+                            value='',
+                            style={
+                                'width': '100%',
+                                'height': '50px',
+                                'fontSize': '18px',
+                                'margin': '10px'
+                            }
+                        )
+                    ]),
+                    html.Button(
+                        'Submit',
+                        id='submit-button',
+                        n_clicks=0,
                         style={
-                            'backgroundColor': '#f0f0f0',
-                            'padding': '20px'
-                        })
+                            'fontSize': '18px',
+                            'margin': '10px'
+                        }
+                    ),
+                    html.Div(id='output-task-div')
+                ],
+                         style={
+                             'backgroundColor': '#f0f0f0',
+                             'padding': '20px'
+                         })
+            ])
 
     app = dash.Dash(__name__, external_stylesheets=[dbc.themes.FLATLY])
 
@@ -1718,6 +1828,24 @@ def create_dash_app(
             experiment_data.combination_aggregated_metrics,
             experiment_data.group_experiment_results
         )
+
+    @app.callback(
+        Output('task', 'value'),
+        Output('context_info', 'value'),
+        Output('evaluation_aspects', 'value'),
+        Input('update-button-1', 'n_clicks'),
+        Input('update-button-2', 'n_clicks'),
+        Input('update-button-3', 'n_clicks'),
+    )
+    def update_input_values(n1, n2, n3):
+        ctx = dash.callback_context
+        if not ctx.triggered:
+            return dash.no_update, dash.no_update, dash.no_update
+        else:
+            button_id = ctx.triggered[0]['prop_id'].split('.')[0]
+
+        input_values = DefaultValueProvider.get_default_values(button_id)
+        return input_values.task, input_values.context_info, input_values.evaluation_aspects
 
     @app.callback(
         dash.dependencies.Output('page-content', 'children'),
@@ -2404,6 +2532,7 @@ def display_results_dash(
     evaluator,
     interactive=False,
     autogen=False,
+    demo=False,
     port=8074,
 ):
     if not autogen:
@@ -2424,12 +2553,13 @@ def display_results_dash(
         function_args["yival_expected_result (Optional)"] = 'str'
         app = create_dash_app(
             experiment_data, experiment_config, function_args,
-            all_combinations, state, logger, evaluator, interactive, autogen
+            all_combinations, state, logger, evaluator, interactive, autogen,
+            demo
         )
     else:
         app = create_dash_app(
             experiment_data, experiment_config, {}, all_combinations, state,
-            logger, evaluator, interactive, autogen
+            logger, evaluator, interactive, autogen, demo
         )
     if os.environ.get("ngrok", False):
         public_url = ngrok.connect(port)

@@ -11,14 +11,16 @@ Example:
 import traceback
 from argparse import ArgumentParser, Namespace
 
-from ..auto_prompt.main import run_auto_gen
+from ..auto_prompt.main import run_auto_gen, run_demo
 
 
 def add_arguments_to(subparser):
-    """Add arguments to subcommand gen."""
-    parser: ArgumentParser = subparser.add_parser("gen", help=run_gen.__doc__)
-    parser.description = run_gen.__doc__
-    parser.set_defaults(func=run_gen)
+    """Add arguments to subcommand task."""
+    parser: ArgumentParser = subparser.add_parser(
+        "task", help=run_task.__doc__
+    )
+    parser.description = run_task.__doc__
+    parser.set_defaults(func=run_task)
 
     parser.add_argument(
         "--display",
@@ -28,10 +30,10 @@ def add_arguments_to(subparser):
     )
 
 
-def run_gen(args: Namespace):
+def run_task(args: Namespace):
     """Run the auto generate task."""
     try:
-        run_auto_gen()
+        run_demo()
         print("Auto prompt completed!")
     except Exception as excetion:
         print("Failed to run the auto generate.\nError:", str(excetion))
