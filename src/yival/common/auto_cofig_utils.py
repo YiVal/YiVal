@@ -1,3 +1,4 @@
+import re
 from typing import Any, Dict
 
 import yaml
@@ -96,11 +97,12 @@ HEAD_META_PROMPT_TEMPLATE: str = """Generate head meata prompt for the task :
     parameters
     {parameters}
 
-
+    Below are some examples:
+    
     Example 1:
     
     Given an tech startup business, generate one corresponding landing
-    page headline
+    page headline for {{tech_startup_business}} specialize in {{business}} and target {{target_people}}
         
     parameters:
         tech_startup_business: str
@@ -112,10 +114,11 @@ HEAD_META_PROMPT_TEMPLATE: str = """Generate head meata prompt for the task :
     Now you will help me generate a prompt which is used to generate a corresponding
     landing page headline according for a startup business named [tech_startup_business],
     specializing in [business], and target_peopleing [target_people].
-    I already have some prompt and its evaluation results :
+    I already have some prompt and its evaluation results:
     
     Example 2:
     Given the species of an animal and its character, generate a corresponding story
+    for {{species}} which is {{character}}
     
     Parameters:
         species: str
@@ -124,12 +127,23 @@ HEAD_META_PROMPT_TEMPLATE: str = """Generate head meata prompt for the task :
     ==>
     Now you will help me generate a prompt which is used to generate a corresponding
     story according to the species of an animal which is [species] and its character [character]. 
-    I already have some prompt and its evaluation results :    
+    I already have some prompt and its evaluation results:
+    
+    Head meta prompt:
+    
 """
 
 
 def get_evaluation_aspects(aspects: list[str]) -> list[str]:
     return aspects
+
+
+def extract_variables(text) -> list[str]:
+    # Regular expression pattern to find {{variable_name}}
+    pattern = r"\{\{(\w+)\}\}"
+
+    # Find all matches and return them as a list
+    return re.findall(pattern, text)
 
 
 def extract_arguments(data):
@@ -328,17 +342,16 @@ def write_to_yaml(config: ExperimentConfig, filepath: str) -> None:
     return
 
 
-def auto_generate_config(
-    task: str, parameters: list[str], additional_aspect: list[str]
-) -> None:
-    description = auto_data_generation_prompt(task, parameters)
-    function_name = auto_data_generation_function_name_prompt(description)
+def auto_generate_config(prompt: str, additional_aspect: list[str]) -> None:
+    parameters = extract_variables(prompt)
+    description = auto_data_generation_prompt(prompt, parameters)
+    function_name = auto_data_generation_function_name_prompt(prompt)
     parameters_dict = {}
     for p in parameters:
         parameters_dict[p] = "str"
     generator_config = OpenAIPromptBasedGeneratorConfig(
         chunk_size=10000,
-        number_of_examples=1,
+        number_of_examples=5,
         output_path=function_name + "_generated_data.pkl",
         output_csv_path=function_name + "_generated_data.csv",
         input_function={
@@ -346,30 +359,26 @@ def auto_generate_config(
             "name": function_name,
             "parameters": parameters_dict
         },
-        fixed_input={"task": task}
     )
+
     dataset_config = DatasetConfig(
         source_type="machine_generated",  # type: ignore
         data_generators={"openai_prompt_data_generator": generator_config}
     )
-    print(colored("\n[INFO][auto_gen] Generate evaluation aspects", "green"))
+    print(colored("\n[INFO] Generate evaluation aspects", "green"))
     evaulation_prospect = auto_evaluation_prospect(description)
     if len(additional_aspect) > 0:
         for aspect in additional_aspect:
-            new_aspect = generate_manual_aspect(task, aspect)
+            new_aspect = generate_manual_aspect(prompt, aspect)
             evaulation_prospect += '\n' + new_aspect
     evaulation_prospect_dict = output_aspects_for_eval(evaulation_prospect)
-    print(evaulation_prospect_dict)
+
     evaulator_configs: list[OpenAIPromptBasedEvaluatorConfig] = []
     human_rating_configs: list[HumanRatingConfig] = []
-    prompt_lines = [task + " based on the following info"]
-    for key in parameters:
-        prompt_lines.append(f"{key}: {{{key}}}")
 
-    prompt_str = "\n".join(prompt_lines)
     variation_config = WrapperConfig(
         name="task",
-        variations=[WrapperVariation(value_type="str", value=prompt_str)]
+        variations=[WrapperVariation(value_type="str", value=prompt)]
     )
     end_meta_message = "Give me a new prompt that is different from all pairs above, and has evaluation values on "
 
@@ -400,10 +409,10 @@ def auto_generate_config(
     enhancer_config = OptimizeByPromptEnhancerConfig(
         name="optimize_by_prompt_enhancer",
         enhance_var=["task"],
-        head_meta_instruction=auto_head_meta_prompt(task, parameters),
+        head_meta_instruction=auto_head_meta_prompt(prompt, parameters),
         end_meta_instruction=end_meta_message,
         model_name="gpt-4",
-        max_iterations=3
+        max_iterations=2
     )
     criteria = []
     criteria_weights = {}
@@ -429,7 +438,7 @@ def auto_generate_config(
         criteria_maximization=criteria_maximization,
     )
     config = ExperimentConfig(
-        description="Auto generated config for " + task,
+        description="Auto generated config for " + prompt,
         human_rating_configs=human_rating_configs,
         dataset=dataset_config,
         evaluators=evaulator_configs,  # type: ignore
@@ -442,15 +451,16 @@ def auto_generate_config(
 
 
 def main():
-    # auto_generate_config(
-    #     "generate first paragraph of an email",
-    #     ["title"]
-    # )
-    print(
-        generate_manual_aspect(
-            "generate first paragraph of an email", "humble tone"
-        )
-    )
+    test = """
+        Given generate a short tiktok video title based on the following info\ncontent_summary:
+        {{content_summary}}\ntarget_audience: {{target_audience}}    
+    """
+    auto_generate_config(test, ["has emojis", "is cute"])
+    # print(
+    #     generate_manual_aspect(
+    #         "generate first paragraph of an email", "humble tone"
+    #     )
+    #)
     # #print(res)
     # # res = auto_evaluation_prospect(
     # #     "The function is designed to create a script for TikTok videos. It takes into consideration the specific topic of the content as well as the target audience for whom the TikTok video is created. It uses this information to draft a suitable, engaging and relevant script for the making TikTok video based on the provided content topic and audience preferences. The function is useful for those looking to create tailored content suitable for their audience on the TikTok platform."

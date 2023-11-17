@@ -17,10 +17,7 @@ def completion_with_backpff(**kwargs):
     return response
 
 
-def complete_task(
-    task: str,
-    **kwargs,
-) -> MultimodalOutput:
+def complete_task(**kwargs, ) -> MultimodalOutput:
     state = kwargs.pop("state")
     args = kwargs
     time.sleep(random.choice([1, 2, 3]))
@@ -29,7 +26,7 @@ def complete_task(
     # Ensure you have your OpenAI API key set up
     openai.api_key = os.getenv("OPENAI_API_KEY")
 
-    prompt_lines = ["Complete the following task:", task]
+    prompt_lines = ["Complete the following task:"]
     for key in kwargs.keys():
         prompt_lines.append(f"{key}: {{{key}}}")
 

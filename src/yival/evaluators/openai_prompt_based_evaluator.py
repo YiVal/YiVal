@@ -21,15 +21,16 @@ from tenacity import before_sleep_log, retry, stop_after_attempt, wait_random
 logging.basicConfig(level=logging.ERROR)
 logger = logging.getLogger(__name__)
 
-from ..schemas.evaluator_config import (
+from yival.common.utils import create_assistant, create_assistant_and_get_response
+from yival.evaluators.base_evaluator import BaseEvaluator
+from yival.schemas.evaluator_config import (
     EvaluatorOutput,
     EvaluatorType,
     MethodCalculationMethod,
     MetricCalculatorConfig,
     OpenAIPromptBasedEvaluatorConfig,
 )
-from ..schemas.experiment_config import ExperimentResult, InputData, MultimodalOutput
-from .base_evaluator import BaseEvaluator
+from yival.schemas.experiment_config import ExperimentResult, InputData, MultimodalOutput
 
 CLASSIFY_STR = """
 First, write out in a step by step manner your reasoning to be sure that your
@@ -151,6 +152,12 @@ class OpenAIPromptBasedEvaluator(BaseEvaluator):
     def __init__(self, config: OpenAIPromptBasedEvaluatorConfig):
         super().__init__(config)
         self.config = config
+        self.assistant_id = create_assistant(
+            name="Evaluator",
+            instructions="Evaluate ",
+            tools=[],
+            model="gpt-4-1106-preview"
+        )
 
     def evaluate(self, experiment_result: ExperimentResult) -> EvaluatorOutput:
         """Evaluate the experiment result using OpenAI's prompt-based evaluation."""
@@ -165,16 +172,11 @@ class OpenAIPromptBasedEvaluator(BaseEvaluator):
         prompt[-1]["content"] += "\n\n" + CLASSIFY_STR.format(
             choices=choices_to_string(self.config.choices)
         )
-        response = completion_with_backpff(
-            model="gpt-4",
-            messages=prompt,
-            temperature=0.5,
-            n=1,
-            max_tokens=1000,
-            request_timeout=60,
+
+        response_content = create_assistant_and_get_response(
+            prompt[-1]["content"], assistant_id=self.assistant_id
         )
-        #response = openai.ChatCompletion.create(model="gpt-4", messages=prompt, temperature=0.5)
-        response_content = response['choices'][0]['message']['content']
+
         choice = extract_choice_from_response(
             response_content, self.config.choices
         )
@@ -206,6 +208,8 @@ class OpenAIPromptBasedEvaluator(BaseEvaluator):
             max_tokens=1000,
             request_timeout=60,
         )
+        # import pdb
+        # pdb.set_trace()
         #response = openai.ChatCompletion.create(model="gpt-4", messages=prompt, temperature=0.5)
         response_content = response['choices'][0]['message']['content']
         choice = extract_choice_from_response(
