@@ -34,6 +34,7 @@ class OpenAIPromptBasedGeneratorConfig(BaseDataGeneratorConfig):
     # Whether to diversify the generated examples.
     diversify: bool = True
     max_token = 2000
+    single_shot: bool = False
 
     # Expected Value name
     expected_param_name: str = ""

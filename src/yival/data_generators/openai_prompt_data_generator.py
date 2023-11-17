@@ -12,6 +12,7 @@ the generated data.
 import ast
 import asyncio
 import csv
+import json
 import os
 import pickle
 import re
@@ -47,6 +48,23 @@ def dict_to_description(data, indent=0):
         else:
             narrative.append(f"{prefix}- '{key}' is described as '{value}'.")
     return '\n'.join(narrative)
+
+
+def extract_list_of_dicts(text):
+    # Regular expression to find dictionary-like structures
+    pattern = r'\{[^\}]*\}'
+    matches = re.findall(pattern, text)
+
+    # Convert matched strings to dictionaries
+    extracted_dicts = []
+    for match in matches:
+        try:
+            dict_data = json.loads(match)
+            extracted_dicts.append(dict_data)
+        except json.JSONDecodeError as e:
+            print(f"Error decoding JSON from {match}: {e}")
+
+    return extracted_dicts
 
 
 def extract_dict_from_gpt_output(output) -> Dict[str, Any] | None:
@@ -102,6 +120,7 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                 "tech_startup_business": "str"
             }
         },
+        single_shot=True,
         number_of_examples=5,
         diversify=False,
     )
@@ -110,7 +129,8 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
         super().__init__(config)
         self.config = config
 
-    def prepare_messages(self, all_data_content) -> List[Dict[str, Any]]:
+    def prepare_messages(self, all_data_content,
+                         number_of_examples) -> List[Dict[str, Any]]:
         """Prepare the messages for GPT API based on configurations."""
         if not self.config.prompt:
             self.config.prompt = DEFAULT_PROMPT
@@ -118,7 +138,9 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
             content = self.config.prompt + "\n\n Here is the function details \n\n" + dict_to_description(
                 self.config.input_function
             )
-            if self.config.diversify and all_data_content:
+            if self.config.single_shot:
+                content += f"\n\n Please generate {number_of_examples} examples and put them in a list []. \n\n"
+            elif self.config.diversify and all_data_content:
                 content += f"\n\n Given the last {min(len(all_data_content), 10)} examples, please generate diverse results to ensure comprehensive evaluation. \nREMEMBER DON'T GENERATE THE SAME SAMPLE AS BELOW! \n\n" + join_dicts_to_string(
                     all_data_content
                 )
@@ -136,6 +158,43 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
             })
 
         return messages
+
+    def process_outputs(
+        self,
+        output_content: str,
+        all_data: List[InputData],
+        chunk: List[InputData],
+        fixed_input: Dict[str, Any] | None = {}
+    ):
+        """Process the output from GPT API and update data lists."""
+        generated_examples = extract_list_of_dicts(output_content)
+
+        # cut the generated_example keys
+        if generated_examples:
+            keys_to_keep = self.config.input_function.get('parameters',
+                                                          {}).keys()
+            for example in generated_examples:
+                example = {k: example[k] for k in keys_to_keep if k in example}
+                if not example or set(example.keys()) != set(
+                    self.config.input_function.get('parameters', {}).keys()
+                ):
+                    continue
+                expected_value = example.get(
+                    self.config.expected_param_name, None
+                )
+
+                if expected_value:
+                    example.pop(self.config.expected_param_name)
+                if fixed_input:
+                    example.update(fixed_input)
+
+                input_data_instance = InputData(
+                    example_id=super().generate_example_id(output_content),
+                    content=example,
+                    expected_result=expected_value
+                )
+                all_data.append(input_data_instance)
+                chunk.append(input_data_instance)
 
     def process_output(
         self,
@@ -190,9 +249,11 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
         chunk: List[InputData] = []
         all_data_content: List[Dict[str, Any]] = []
 
-        if not self.config.diversify:
+        if not self.config.diversify and not self.config.single_shot:
             while len(all_data) < self.config.number_of_examples:
-                messages = self.prepare_messages(all_data_content)
+                messages = self.prepare_messages(
+                    all_data_content, self.config.number_of_examples
+                )
                 message_batches = [
                     messages
                 ] * (self.config.number_of_examples - len(all_data))
@@ -216,6 +277,33 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                         chunk,
                         self.config.fixed_input  # pyright: ignore
                     )
+        elif self.config.single_shot:
+            last_len = len(all_data)
+            with tqdm(
+                total=self.config.number_of_examples,
+                desc="Generating Examples",
+                unit="example"
+            ) as pbar:
+                messages = self.prepare_messages(
+                    all_data_content, self.config.number_of_examples
+                )
+                while len(all_data) < self.config.number_of_examples:
+                    output = completion_with_backpff(
+                        model=self.config.model_name,
+                        messages=messages,
+                        n=1,
+                        temperature=0.5,
+                        request_timeout=200,
+                    )
+                    self.process_outputs(  # pyright: ignore
+                        output.choices[0].message.content,
+                        all_data,
+                        chunk,
+                        self.config.fixed_input  # pyright: ignore
+                    )
+                    if len(all_data) > last_len:
+                        pbar.update(len(all_data) - last_len)
+                        last_len = len(all_data)
         else:
             with tqdm(
                 total=self.config.number_of_examples,
@@ -225,7 +313,9 @@ class OpenAIPromptDataGenerator(BaseDataGenerator):
                 last_len = len(all_data)
                 # call_option = self.config.call_option if self.config.call_option else {}
                 while len(all_data) < self.config.number_of_examples:
-                    messages = self.prepare_messages(all_data_content)
+                    messages = self.prepare_messages(
+                        all_data_content, self.config.number_of_examples
+                    )
                     output = completion_with_backpff(
                         model=self.config.model_name,
                         messages=messages,
