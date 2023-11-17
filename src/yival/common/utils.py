@@ -9,6 +9,7 @@ from collections import deque
 
 import aiohttp
 import openai
+import requests
 from aiohttp_socks import ProxyConnector  # type: ignore
 
 SECONDS_TO_PAUSE_AFTER_RATE_LIMIT_ERROR = 15
@@ -207,3 +208,219 @@ async def parallel_completions(
         responses = await asyncio.gather(*tasks)
 
     return responses
+
+
+def create_thread():
+    """
+    Send a request to the OpenAI API to create a thread.
+
+    :param api_key: API key for authorization.
+    :return: Response from the API.
+    """
+    # URL for the API endpoint to create threads
+    url = "https://api.openai.com/v1/threads"
+
+    api_key = os.getenv("OPENAI_API_KEY")
+
+    # Headers to be sent with the request
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}",
+        "OpenAI-Beta": "assistants=v1"
+    }
+
+    # Send the POST request with an empty data payload
+    response = requests.post(url, headers=headers, data='')
+
+    # Return the response object
+    return response.json()["id"]
+
+
+def create_assistant(name, tools, model, instructions):
+    """
+    Send a request to create an assistant with the specified parameters.
+    
+    :param name: Name of the assistant.
+    :param tools: List of tools to be used by the assistant.
+    :param model: Model version of the assistant.
+    :param instructions: Role of the assistant.
+    :param api_key: API key for authorization.
+    :return: Response from the API.
+    """
+    # URL for the API endpoint
+    url = "https://api.openai.com/v1/assistants"
+    api_key = os.getenv("OPENAI_API_KEY")
+
+    # Headers to be sent with the request
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}",
+        "OpenAI-Beta": "assistants=v1"
+    }
+
+    # Data payload for creating the assistant
+    payload = {
+        "name": name,
+        "tools": tools,
+        "model": model,
+        "instructions": instructions
+    }
+
+    # Send the POST request
+    response = requests.post(url, json=payload, headers=headers)
+    # Return the response object
+    return response.json()["id"]
+
+
+def post_message_to_thread(thread_id, content):
+    """
+    Send a message to a specific thread on the OpenAI API.
+
+    :param thread_id: The identifier of the thread.
+    :param content: The content of the message to be sent.
+    :return: Response from the API.
+    """
+    # Retrieve the API key from an environment variable
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        raise ValueError("The OPENAI_API_KEY environment variable is not set.")
+
+    # URL for the API endpoint to post a message to a thread
+    url = f"https://api.openai.com/v1/threads/{thread_id}/messages"
+
+    # Headers to be sent with the request
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}",
+        "OpenAI-Beta": "assistants=v1"
+    }
+
+    # Data payload for the message
+    payload = {"role": "user", "content": content}
+
+    # Send the POST request with the message data payload
+    response = requests.post(url, json=payload, headers=headers)
+
+    # Return the response object
+    return response
+
+
+def create_run(thread_id, assistant_id):
+    """
+    Start a run for an assistant in a specific thread on the OpenAI API.
+
+    :param thread_id: The identifier of the thread.
+    :param assistant_id: The identifier of the assistant.
+    :return: Response from the API.
+    """
+    # Retrieve the API key from an environment variable
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        raise ValueError("The OPENAI_API_KEY environment variable is not set.")
+
+    # URL for the API endpoint to create a run within a thread
+    url = f"https://api.openai.com/v1/threads/{thread_id}/runs"
+
+    # Headers to be sent with the request
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}",
+        "OpenAI-Beta": "assistants=v1"
+    }
+
+    # Data payload for creating the run
+    payload = {
+        "assistant_id": assistant_id,
+    }
+
+    # Send the POST request with the payload
+    response = requests.post(url, json=payload, headers=headers)
+
+    # Return the response object
+    return response.json()["id"]
+
+
+def list_messages(thread_id):
+    """
+    List messages in a specific thread on the OpenAI API.
+
+    :param thread_id: The identifier of the thread.
+    :return: Response from the API.
+    """
+    # Retrieve the API key from an environment variable
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        raise ValueError("The OPENAI_API_KEY environment variable is not set.")
+
+    # URL for the API endpoint to list messages in a thread
+    url = f"https://api.openai.com/v1/threads/{thread_id}/messages"
+
+    # Headers to be sent with the request
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}",
+        "OpenAI-Beta": "assistants=v1"
+    }
+
+    # Send the GET request
+    response = requests.get(url, headers=headers)
+
+    # Return the response object
+    return response.json()
+
+
+def create_assistant_and_get_response(input_message, assistant_id):
+    # Helper function to check run status and wait until it is completed
+    def wait_for_run_completion(thread_id, run_id):
+        while True:
+            if check_run_status(thread_id, run_id):
+                break  # Exit the loop if the run is completed
+            time.sleep(
+                1
+            )  # Sleep for some time before checking again to avoid rate limiting
+
+    # Reuse the previous functions, modifying them if necessary for the current context
+
+    # Assuming create_thread(), post_message_to_thread(), create_run(), check_run_status(), and list_messages() are already defined
+
+    # Start the workflow
+    thread_id = create_thread()
+    post_message_to_thread(thread_id, input_message)
+    run_id = create_run(thread_id, assistant_id)
+    wait_for_run_completion(thread_id, run_id)  # Wait for the run to complete
+    messages = list_messages(thread_id)  # Retrieve the list of messages
+    return messages['data'][0]['content'][0]['text']['value']
+
+
+def check_run_status(thread_id, run_id) -> bool:
+    """
+    Check the status of a run within a thread on the OpenAI API.
+
+    :param thread_id: The identifier of the thread.
+    :param run_id: The identifier of the run.
+    :return: True if the status is 'completed', False otherwise.
+    """
+    # Retrieve the API key from an environment variable
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        raise ValueError("The OPENAI_API_KEY environment variable is not set.")
+
+    # URL for the API endpoint to get the status of a run within a thread
+    url = f"https://api.openai.com/v1/threads/{thread_id}/runs/{run_id}"
+
+    # Headers to be sent with the request
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "OpenAI-Beta": "assistants=v1"
+    }
+
+    # Send the GET request
+    response = requests.get(url, headers=headers)
+
+    # Check if the response status code is 200 and if the status in the response JSON is 'completed'
+    if response.status_code == 200:
+        status = response.json().get('status')
+        return status == "completed" or status == "failed" or status == "queued"
+    else:
+        # Handle different status codes or provide more detailed error information here if necessary
+        return False
