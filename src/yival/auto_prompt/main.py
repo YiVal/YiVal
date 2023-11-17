@@ -1,4 +1,5 @@
 import argparse
+import asyncio
 import re
 import subprocess
 
@@ -64,7 +65,7 @@ def main():
         ","
     ) if evaluation_aspects_input else []
 
-    auto_generate_config(formatted_prompt, aspects)
+    asyncio.run(auto_generate_config(formatted_prompt, aspects))
 
     print(colored("\nGenerating configuration...", "yellow"))
 
