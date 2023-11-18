@@ -47,3 +47,33 @@ class OpenAIPromptBasedGeneratorConfig(BaseDataGeneratorConfig):
 
     def asdict(self):
         return asdict(self)
+
+
+@dataclass
+class DocumentDataGeneratorConfig(BaseDataGeneratorConfig):
+    """
+    Generate question data from documents.
+    """
+    max_token = 2000
+    model_name: str = "gpt-4"
+    prompt: str = ""
+    document: str = ""
+
+    # The source of the document. "text" for plain text in `document` field,
+    # "file" for local unstructured file path in `document` field,
+    # "drive" for file id in google drive.
+    source: str = "text"
+
+    # For per example, the number of questions you want in per chunk.
+    num_questions_per_chunk: int = 5
+
+    # The template you want for the generated questions
+    text_question_template: Optional[str] = None
+    question_gen_query: str = ""
+
+    number_of_examples: int = 1
+    document_chunk_size: int = 512
+    output_csv_path: Optional[str] = None
+
+    def asdict(self):
+        return asdict(self)
