@@ -52,6 +52,7 @@ def main():
     )
     parser.parse_args()
 
+    name = input("Please enter the name of the experiment: ")
     # Directly read the prompt and evaluation aspects using input()
     prompt_input = input(
         "Please enter the prompt (use {{}} to wrap around input variables): "
@@ -60,18 +61,17 @@ def main():
         "Please provide evaluation aspects (optional): "
     )
 
-    formatted_prompt = format_input(prompt_input)
     aspects = evaluation_aspects_input.split(
         ","
     ) if evaluation_aspects_input else []
 
-    asyncio.run(auto_generate_config(formatted_prompt, aspects))
+    asyncio.run(auto_generate_config(prompt_input, aspects))
 
     print(colored("\nGenerating configuration...", "yellow"))
 
     subprocess.run([
         "yival", "run", "auto_generated_config.yaml",
-        "--output_path=auto_generated.pkl"
+        f"--output_path={name}.pkl"
     ])
 
     print(colored("\nProcess completed!", "green"))
