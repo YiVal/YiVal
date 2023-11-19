@@ -1,6 +1,13 @@
+import asyncio
+import os
+import re
 from typing import Any, Dict
 
+import aiohttp
+# for exponential backoff
+import openai
 import yaml
+from aiohttp_socks import ProxyConnector  # type: ignore
 from termcolor import colored
 
 from yival.common.model_utils import llm_completion
@@ -96,11 +103,12 @@ HEAD_META_PROMPT_TEMPLATE: str = """Generate head meata prompt for the task :
     parameters
     {parameters}
 
-
+    Below are some examples:
+    
     Example 1:
     
     Given an tech startup business, generate one corresponding landing
-    page headline
+    page headline for {{tech_startup_business}} specialize in {{business}} and target {{target_people}}
         
     parameters:
         tech_startup_business: str
@@ -112,10 +120,11 @@ HEAD_META_PROMPT_TEMPLATE: str = """Generate head meata prompt for the task :
     Now you will help me generate a prompt which is used to generate a corresponding
     landing page headline according for a startup business named [tech_startup_business],
     specializing in [business], and target_peopleing [target_people].
-    I already have some prompt and its evaluation results :
+    I already have some prompt and its evaluation results:
     
     Example 2:
     Given the species of an animal and its character, generate a corresponding story
+    for {{species}} which is {{character}}
     
     Parameters:
         species: str
@@ -124,12 +133,23 @@ HEAD_META_PROMPT_TEMPLATE: str = """Generate head meata prompt for the task :
     ==>
     Now you will help me generate a prompt which is used to generate a corresponding
     story according to the species of an animal which is [species] and its character [character]. 
-    I already have some prompt and its evaluation results :    
+    I already have some prompt and its evaluation results:
+    
+    Head meta prompt:
+    
 """
 
 
 def get_evaluation_aspects(aspects: list[str]) -> list[str]:
     return aspects
+
+
+def extract_variables(text) -> list[str]:
+    # Regular expression pattern to find {{variable_name}}
+    pattern = r"\{\{(\w+)\}\}"
+
+    # Find all matches and return them as a list
+    return re.findall(pattern, text)
 
 
 def extract_arguments(data):
@@ -237,65 +257,64 @@ def output_aspects_for_eval(response: str) -> str:
     return extract_arguments(response)
 
 
-def auto_data_generation_prompt(task: str, parameters: list[str]) -> str:
+async def auto_data_generation_prompt(task: str, parameters: list[str]) -> str:
     parameter = "\n".join(parameters)
-    response = llm_completion(
-        Request(
-            model_name="gpt-4",
-            prompt=DATA_GENERATION_PROMPT_TEMPLATE.format(
-                task=task, parameter=parameter
-            )
-        )
-    ).output
+    prompt = [{
+        "role":
+        "user",
+        "content":
+        DATA_GENERATION_PROMPT_TEMPLATE.format(task=task, parameter=parameter)
+    }]
+    response = await acompletion(model="gpt-4", messages=prompt, temperature=0)
     return response['choices'][0]['message']['content']
 
 
-def auto_data_generation_function_name_prompt(description: str) -> str:
-    response = llm_completion(
-        Request(
-            model_name="gpt-4",
-            prompt=DATA_GENERATION_FUNCTION_NAME_PROMPT_TEMPLATE.format(
-                description=description
-            )
+async def auto_data_generation_function_name_prompt(description: str) -> str:
+    prompt = [{
+        "role":
+        "user",
+        "content":
+        DATA_GENERATION_FUNCTION_NAME_PROMPT_TEMPLATE.format(
+            description=description
         )
-    ).output
+    }]
+    response = await acompletion(model="gpt-4", messages=prompt, temperature=0)
     return response['choices'][0]['message']['content']
 
 
-def auto_evaluation_prospect(task: str) -> str:
-    response = llm_completion(
-        Request(
-            model_name="gpt-4",
-            prompt=EVALUATION_GENERATION_PROMPT_TEMPLATE.format(task=task),
-            params={"temperature": 0}
-        )
-    ).output
+async def auto_evaluation_prospect(task: str) -> str:
+    prompt = [{
+        "role":
+        "user",
+        "content":
+        EVALUATION_GENERATION_PROMPT_TEMPLATE.format(task=task)
+    }]
+    response = await acompletion(model="gpt-4", messages=prompt, temperature=0)
     return response['choices'][0]['message']['content']
 
 
-def generate_manual_aspect(task: str, aspect: str) -> str:
-    response = llm_completion(
-        Request(
-            model_name="gpt-4",
-            prompt=EVALUATION_ASPECT_GENERATION_PROMPT_TEMPLATE.format(
-                task=task, aspect=aspect
-            ),
-            params={"temperature": 0}
+async def generate_manual_aspect(task: str, aspect: str) -> str:
+    prompt = [{
+        "role":
+        "user",
+        "content":
+        EVALUATION_ASPECT_GENERATION_PROMPT_TEMPLATE.format(
+            task=task, aspect=aspect
         )
-    ).output
+    }]
+    response = await acompletion(model="gpt-4", messages=prompt, temperature=0)
     return response['choices'][0]['message']['content']
 
 
-def auto_head_meta_prompt(task: str, parameters: list[str]) -> str:
+async def auto_head_meta_prompt(task: str, parameters: list[str]) -> str:
     parameter = "\n".join(parameters)
-    response = llm_completion(
-        Request(
-            model_name="gpt-4",
-            prompt=HEAD_META_PROMPT_TEMPLATE.format(
-                task=task, parameters=parameter
-            )
-        )
-    ).output
+    prompt = [{
+        "role":
+        "user",
+        "content":
+        HEAD_META_PROMPT_TEMPLATE.format(task=task, parameters=parameter)
+    }]
+    response = await acompletion(model="gpt-4", messages=prompt, temperature=0)
     return response['choices'][0]['message']['content']
 
 
@@ -328,48 +347,87 @@ def write_to_yaml(config: ExperimentConfig, filepath: str) -> None:
     return
 
 
-def auto_generate_config(
-    task: str, parameters: list[str], additional_aspect: list[str]
+async def acompletion(**kwargs):
+    url = "https://api.openai.com/v1/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {openai.api_key}",
+        "Content-Type": "application/json"
+    }
+
+    proxy = os.environ.get("all_proxy")
+    if proxy:
+        connector = ProxyConnector.from_url(proxy)
+    else:
+        connector = None
+    kwargs.pop('request_timeout', None)
+
+    async with aiohttp.ClientSession(connector=connector) as session:
+        async with session.post(url, headers=headers, json=kwargs) as response:
+            return await response.json()
+
+
+async def auto_generate_config(
+    prompt: str, additional_aspect: list[str]
 ) -> None:
-    description = auto_data_generation_prompt(task, parameters)
-    function_name = auto_data_generation_function_name_prompt(description)
+    parameters = extract_variables(prompt)
+    description_task = asyncio.create_task(
+        auto_data_generation_prompt(prompt, parameters)
+    )
+    function_name_task = asyncio.create_task(
+        auto_data_generation_function_name_prompt(prompt)
+    )
+    description, function_name = await asyncio.gather(
+        description_task, function_name_task
+    )
+
     parameters_dict = {}
     for p in parameters:
         parameters_dict[p] = "str"
     generator_config = OpenAIPromptBasedGeneratorConfig(
         chunk_size=10000,
-        number_of_examples=1,
+        number_of_examples=5,
         output_path=function_name + "_generated_data.pkl",
         output_csv_path=function_name + "_generated_data.csv",
+        single_shot=True,
+        diversify=False,
         input_function={
             "description": description,
             "name": function_name,
             "parameters": parameters_dict
         },
-        fixed_input={"task": task}
     )
+
     dataset_config = DatasetConfig(
         source_type="machine_generated",  # type: ignore
         data_generators={"openai_prompt_data_generator": generator_config}
     )
-    print(colored("\n[INFO][auto_gen] Generate evaluation aspects", "green"))
-    evaulation_prospect = auto_evaluation_prospect(description)
-    if len(additional_aspect) > 0:
-        for aspect in additional_aspect:
-            new_aspect = generate_manual_aspect(task, aspect)
-            evaulation_prospect += '\n' + new_aspect
-    evaulation_prospect_dict = output_aspects_for_eval(evaulation_prospect)
-    print(evaulation_prospect_dict)
+    print(colored("\n[INFO] Generate evaluation aspects", "green"))
+    # evaulation_prospect = auto_evaluation_prospect(description)
+    # if len(additional_aspect) > 0:
+    #     for aspect in additional_aspect:
+    #         new_aspect = generate_manual_aspect(prompt, aspect)
+    #         evaulation_prospect += '\n' + new_aspect
+
+    evaluation_prospect_task = asyncio.create_task(
+        auto_evaluation_prospect(description)
+    )
+    aspect_tasks = [
+        asyncio.create_task(generate_manual_aspect(prompt, aspect))
+        for aspect in additional_aspect if aspect
+    ]
+    aspects = await asyncio.gather(*aspect_tasks)
+    evaluation_prospect = await evaluation_prospect_task
+    evaluation_prospect += '\n' + '\n'.join(aspects)
+    evaulation_prospect_dict = output_aspects_for_eval(evaluation_prospect)
+
+    head_meta_prompt = await auto_head_meta_prompt(prompt, parameters)
+
     evaulator_configs: list[OpenAIPromptBasedEvaluatorConfig] = []
     human_rating_configs: list[HumanRatingConfig] = []
-    prompt_lines = [task + " based on the following info"]
-    for key in parameters:
-        prompt_lines.append(f"{key}: {{{key}}}")
 
-    prompt_str = "\n".join(prompt_lines)
     variation_config = WrapperConfig(
         name="task",
-        variations=[WrapperVariation(value_type="str", value=prompt_str)]
+        variations=[WrapperVariation(value_type="str", value=prompt)]
     )
     end_meta_message = "Give me a new prompt that is different from all pairs above, and has evaluation values on "
 
@@ -400,10 +458,10 @@ def auto_generate_config(
     enhancer_config = OptimizeByPromptEnhancerConfig(
         name="optimize_by_prompt_enhancer",
         enhance_var=["task"],
-        head_meta_instruction=auto_head_meta_prompt(task, parameters),
+        head_meta_instruction=head_meta_prompt,
         end_meta_instruction=end_meta_message,
         model_name="gpt-4",
-        max_iterations=3
+        max_iterations=2
     )
     criteria = []
     criteria_weights = {}
@@ -429,7 +487,7 @@ def auto_generate_config(
         criteria_maximization=criteria_maximization,
     )
     config = ExperimentConfig(
-        description="Auto generated config for " + task,
+        description="Auto generated config for " + prompt,
         human_rating_configs=human_rating_configs,
         dataset=dataset_config,
         evaluators=evaulator_configs,  # type: ignore
@@ -442,15 +500,16 @@ def auto_generate_config(
 
 
 def main():
-    # auto_generate_config(
-    #     "generate first paragraph of an email",
-    #     ["title"]
-    # )
-    print(
-        generate_manual_aspect(
-            "generate first paragraph of an email", "humble tone"
-        )
-    )
+    test = """
+        Given generate a short tiktok video title based on the following info\ncontent_summary:
+        {{content_summary}}\ntarget_audience: {{target_audience}}    
+    """
+    asyncio.run(auto_generate_config(test, ["has emojis", "is cute"]))
+    # print(
+    #     generate_manual_aspect(
+    #         "generate first paragraph of an email", "humble tone"
+    #     )
+    #)
     # #print(res)
     # # res = auto_evaluation_prospect(
     # #     "The function is designed to create a script for TikTok videos. It takes into consideration the specific topic of the content as well as the target audience for whom the TikTok video is created. It uses this information to draft a suitable, engaging and relevant script for the making TikTok video based on the provided content topic and audience preferences. The function is useful for those looking to create tailored content suitable for their audience on the TikTok platform."

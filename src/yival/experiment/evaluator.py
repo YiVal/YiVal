@@ -1,4 +1,4 @@
-import asyncio
+from concurrent.futures import ThreadPoolExecutor
 from typing import List, Union
 
 from ..evaluators.base_evaluator import BaseEvaluator
@@ -12,7 +12,7 @@ from ..schemas.evaluator_config import (
 from ..schemas.experiment_config import Experiment, ExperimentResult
 
 
-async def evaluate_config(config, result):
+def evaluate_config(config, result):
     if not isinstance(config, dict):
         config_dict = config.asdict()
     else:
@@ -29,10 +29,7 @@ async def evaluate_config(config, result):
                     config_data = config_dict.asdict()
                 config_instance = config_cls(**config_data)
                 evaluator = evaluator_cls(config_instance)
-                if config_dict["name"] == "openai_prompt_based_evaluator":
-                    return await evaluator.aevaluate(result)
-                else:
-                    return evaluator.evaluate(result)
+                return evaluator.evaluate(result)
     return None
 
 
@@ -50,19 +47,18 @@ class Evaluator:
     async def evaluate_individual_result(
         self, result: ExperimentResult
     ) -> List[EvaluatorOutput]:
-        tasks = [evaluate_config(config, result) for config in self.configs]
-        return await asyncio.gather(*tasks)
-        # with ThreadPoolExecutor(max_workers=4) as executor:
-        #     futures = [
-        #         executor.submit(evaluate_config, config, result)
-        #         for config in self.configs
-        #     ]
-
-        # # Gather results, filter out None results
-        # return [
-        #     future.result() for future in futures
-        #     if future.result() is not None
-        # ]
+        # tasks = [evaluate_config(config, result) for config in self.configs]
+        # return await asyncio.gather(*tasks)
+        with ThreadPoolExecutor() as executor:
+            futures = [
+                executor.submit(evaluate_config, config, result)
+                for config in self.configs
+            ]
+        # Gather results, filter out None results
+        return [
+            future.result() for future in futures
+            if future.result() is not None
+        ]
 
     # def evaluate_individual_result(
     #     self, result: ExperimentResult
