@@ -11,9 +11,21 @@ class InputValues:
         self.evaluation_aspects = evaluation_aspects
 
 
-input_values1 = InputValues('task 1', 'context info 1', 'evaluation aspects 1')
-input_values2 = InputValues('task 2', 'context info 2', 'evaluation aspects 2')
-input_values3 = InputValues('task 3', 'context info 3', 'evaluation aspects 3')
+input_values1 = InputValues(
+    'Tiktok Headline Generation Bot',
+    'generate a short tiktok video title based on the {{content summary}} and {{target_audience}}',
+    'emoji, oneline'
+)
+input_values2 = InputValues(
+    'Email Auto Reply Bot',
+    'generate a short automatic email reply based on the {{email_subject}} and {{user_availability}}',
+    'politeness, clarity'
+)
+input_values3 = InputValues(
+    'Fitness Plan Bot',
+    'create a fitness plan based on the {{fitness_goal}} and {{current_fitness_level}}',
+    'feasibility, progression'
+)
 
 
 class DefaultValueProvider:
@@ -27,4 +39,4 @@ class DefaultValueProvider:
         elif button_id == 'update-button-3':
             return input_values3
         else:
-            return InputValues('', '', '')
+            raise ValueError(f"Invalid button_id: {button_id}")
