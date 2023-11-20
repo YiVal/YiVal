@@ -35,3 +35,37 @@
     width: 50%;
     height: auto;
 }
+
+.task-button {
+    font-size: 18px;
+    margin: 10px;
+    background-color: #A8A8A8;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition-duration: 0.4s;
+}
+.jump-button {
+    font-size: 18px;
+    margin: 10px;
+    background-color: #CBB3E6;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    transition-duration: 0.4s;
+}
+
+.jump-button-hide {
+    display: none;
+}
+
+.jump-button-show {
+    display: block;
+}

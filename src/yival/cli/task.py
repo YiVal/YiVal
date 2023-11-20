@@ -11,7 +11,7 @@ Example:
 import traceback
 from argparse import ArgumentParser, Namespace
 
-from ..auto_prompt.main import run_auto_gen, run_demo
+from ..auto_prompt.main import run_demo
 
 
 def add_arguments_to(subparser):

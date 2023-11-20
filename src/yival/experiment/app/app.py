@@ -1648,7 +1648,7 @@ def create_dash_app(
         if demo != True:
             return html.Div([
                 html.Label(
-                    '[?] What task would you like to set up? For example:',
+                    '[?] Please enter the name of the experiment: ',
                     style={'margin': '10px'}
                 ),
                 dcc.Input(
@@ -1664,7 +1664,7 @@ def create_dash_app(
                     }
                 ),
                 html.Label(
-                    '[?] Provide input for the task, separated by comma. For example:',
+                    '[?] Please enter the prompt (use {{}} to wrap around input variables): ',
                     style={'margin': '10px'}
                 ),
                 dcc.Input(
@@ -1715,46 +1715,27 @@ def create_dash_app(
                 html.Div([
                     html.Div([
                         html.Button(
-                            'Update 1',
+                            'Tiktok Headline Generation Bot',
                             id='update-button-1',
                             n_clicks=0,
-                            style={
-                                'fontSize': '18px',
-                                'margin': '10px'
-                            }
+                            className='task-button',
                         ),
                         html.Button(
-                            'Update 2',
+                            'Email Auto Reply Bot',
                             id='update-button-2',
                             n_clicks=0,
-                            style={
-                                'fontSize': '18px',
-                                'margin': '10px'
-                            }
+                            className='task-button',
                         ),
                         html.Button(
-                            'Update 3',
+                            'Fitness Plan Bot',
                             id='update-button-3',
                             n_clicks=0,
-                            style={
-                                'fontSize': '18px',
-                                'margin': '10px'
-                            }
+                            className='task-button',
                         )
-                    ],
-                             style={
-                                 'fontSize': '18px',
-                                 'margin': '10px',
-                                 'color': 'white',
-                                 'border': 'none',
-                                 'padding': '15px 32px',
-                                 'textAlign': 'center',
-                                 'textDecoration': 'none',
-                                 'display': 'inline-block'
-                             }),
+                    ]),
                     html.Div([
                         html.Label(
-                            '[?] What task would you like to set up? For example:',
+                            '[?] Please enter the name of the experiment:',
                             style={'margin': '10px'}
                         ),
                         dcc.Input(
@@ -1770,7 +1751,7 @@ def create_dash_app(
                             }
                         ),
                         html.Label(
-                            '[?] Provide input for the task, separated by comma. For example:',
+                            '[?] Please enter the prompt (use {{}} to wrap around input variables): ',
                             style={'margin': '10px'}
                         ),
                         dcc.Input(
@@ -1804,12 +1785,32 @@ def create_dash_app(
                     ]),
                     html.Button(
                         'Submit',
-                        id='submit-button',
+                        id='submit-button-fix',
                         n_clicks=0,
                         style={
                             'fontSize': '18px',
-                            'margin': '10px'
+                            'margin': '10px',
+                            'backgroundColor': '#85AED8',
+                            'color': 'white',
+                            'border': 'none',
+                            'padding': '10px 20px',
+                            'borderRadius': '5px',
+                            'cursor': 'pointer',
+                            'textDecoration': 'none',
+                            'display': 'inline-block',
+                            'transitionDuration': '0.4s'
                         }
+                    ),
+                    html.A(
+                        id='open-result-tab',
+                        target='_blank',
+                        children=[
+                            html.Button(
+                                'Open result tab',
+                                id='open-result-tab-button',
+                                className='jump-button jump-button-hide'
+                            )
+                        ]
                     ),
                     html.Div(id='output-task-div')
                 ],
@@ -1828,6 +1829,27 @@ def create_dash_app(
             experiment_data.combination_aggregated_metrics,
             experiment_data.group_experiment_results
         )
+
+    @app.callback(
+        Output('open-result-tab', 'href'),
+        Input('submit-button-fix', 'n_clicks'),
+        State('task', 'value'),
+    )
+    def update_link(n, task):
+        if n is not None and task == 'Tiktok Headline Generation Bot':
+            return 'http://ec2-35-85-28-134.us-west-2.compute.amazonaws.com:8074/enhancer-experiment-results'
+        else:
+            return dash.no_update
+
+    @app.callback(
+        Output('open-result-tab-button', 'className'),
+        Input('submit-button-fix', 'n_clicks'),
+    )
+    def show_link(n):
+        if n > 0:
+            return 'jump-button jump-button-show'
+        else:
+            return 'jump-button jump-button-hide'
 
     @app.callback(
         Output('task', 'value'),
@@ -2435,13 +2457,13 @@ def create_dash_app(
     )
     def update_task_output(n_clicks, task, context_info, evaluation_aspects):
         if n_clicks > 0:
-            parameters = context_info.split(",")
-            aspect = []
-            if evaluation_aspects:
-                aspect = evaluation_aspects.split(",")
+            name = task
+            prompt_input = context_info
+            aspects = evaluation_aspects.split(","
+                                               ) if evaluation_aspects else []
 
-            if task != default_task and context_info != default_context_info and evaluation_aspects != default_evaluation_aspects:
-                auto_generate_config(task, parameters, aspect)
+            if task != default_task or context_info != default_context_info or evaluation_aspects != default_evaluation_aspects:
+                asyncio.run(auto_generate_config(prompt_input, aspects))
                 print(
                     colored(
                         "\n[INFO][auto_gen] Generating configuration...",
@@ -2450,7 +2472,7 @@ def create_dash_app(
                 )
                 subprocess.run([
                     "yival", "run", "auto_generated_config.yaml",
-                    "--output_path=auto_generated.pkl"
+                    f"--output_path={name}.pkl"
                 ])
             else:
                 print(
@@ -2466,9 +2488,9 @@ def create_dash_app(
 
             return 'Configuration generated and yival run completed.'
 
-    default_task = "generate tiktok video title"
-    default_context_info = "target_audience,content_summary"
-    default_evaluation_aspects = ""
+    default_task = "Tiktok Headline Generation Bot"
+    default_context_info = "generate a short tiktok video title based on the {{content summary}} and {{target_audience}}"
+    default_evaluation_aspects = "emoji, oneline"
 
     app.layout = html.Div(
         [
