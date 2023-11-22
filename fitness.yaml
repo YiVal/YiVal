@@ -1,0 +1,385 @@
+custom_function: demo.complete_task.complete_task
+dataset:
+  data_generators:
+    openai_prompt_data_generator:
+      chunk_size: 10000
+      diversify: false
+      expected_param_name: ''
+      input_function:
+        description: This function generates a personalized fitness plan. It takes
+          into consideration the individual's specific fitness goal, whether it's
+          weight loss, muscle gain, endurance improvement, etc. Additionally, it also
+          factors in the individual's current fitness level to ensure the plan is
+          suitable and safe. The function uses these inputs to create a tailored plan
+          that includes recommended exercises, workout frequency, and intensity levels.
+        name: create_fitness_plan_based_on_goal_and_current_level
+        parameters:
+          current_fitness_level: str
+          fitness_goal: str
+      model_name: gpt-4
+      number_of_examples: 5
+      output_csv_path: create_fitness_plan_based_on_goal_and_current_level_generated_data.csv
+      output_path: create_fitness_plan_based_on_goal_and_current_level_generated_data.pkl
+      prompt: "\n        \"Please provide a concrete and realistic test case as a\
+        \ dictionary for function invocation using the ** operator.\n        Only\
+        \ include parameters, excluding description and name.\n        Ensure it's\
+        \ succinct and well-structured.\n        **Only provide the dictionary.**\"\
+        \    \n    "
+      single_shot: true
+  source_type: machine_generated
+description: Auto generated config for create a fitness plan based on the {{fitness_goal}}
+  and {{current_fitness_level}}
+enhancer:
+  end_meta_instruction: Give me a new prompt that is different from all pairs above,
+    and has evaluation values on goal alignment, suitability and safety, clarity and
+    specificity, feasibility, progression, that are higher than any of above.
+  enhance_var:
+  - task
+  head_meta_instruction: 'Now you will help me generate a prompt which is used to
+    create a fitness plan based on the fitness goal [fitness_goal] and current fitness
+    level [current_fitness_level]. I already have some prompt and its evaluation results:'
+  max_iterations: 2
+  model_name: gpt-4
+  name: optimize_by_prompt_enhancer
+evaluators:
+- choice_scores:
+    A: 0
+    B: 1
+    C: 2
+    D: 3
+    E: 4
+  choices:
+  - A
+  - B
+  - C
+  - D
+  - E
+  description: Does the fitness plan align with the individual's specific fitness
+    goal? The plan should be tailored to help the individual achieve their specific
+    goal, whether it's weight loss, muscle gain, endurance improvement, etc.
+  display_name: goal alignment
+  evaluator_type: individual
+  metric_calculators:
+  - method: AVERAGE
+  model_name: gpt-4
+  name: openai_prompt_based_evaluator
+  prompt: 'You are assessing a submitted answer on a given task based on a criterion.
+    Here is the data:
+
+    This function generates a personalized fitness plan. It takes into consideration
+    the individual''s specific fitness goal, whether it''s weight loss, muscle gain,
+    endurance improvement, etc. Additionally, it also factors in the individual''s
+    current fitness level to ensure the plan is suitable and safe. The function uses
+    these inputs to create a tailored plan that includes recommended exercises, workout
+    frequency, and intensity levels.
+
+    Does the fitness plan align with the individual''s specific fitness goal? The
+    plan should be tailored to help the individual achieve their specific goal, whether
+    it''s weight loss, muscle gain, endurance improvement, etc.
+
+    [Input]: fitness_goal: {{fitness_goal}}
+
+    current_fitness_level: {{current_fitness_level}}
+
+    [Result]: {raw_output}
+
+    Answer the question by selecting one of the following options:
+
+    A It fails to meet the criterion at all.
+
+    B It somewhat meets the criterion, but there is significant room for improvement.
+
+    C It meets the criterion to a satisfactory degree.
+
+    D It meets the criterion very well.
+
+    E It meets the criterion exceptionally well, with little to no room for improvement.'
+  scale_description: 0-4
+- choice_scores:
+    A: 0
+    B: 1
+    C: 2
+    D: 3
+    E: 4
+  choices:
+  - A
+  - B
+  - C
+  - D
+  - E
+  description: Does the fitness plan take into account the individual's current fitness
+    level? The plan should be suitable and safe for the individual, considering their
+    current fitness level to avoid injury or overexertion.
+  display_name: suitability and safety
+  evaluator_type: individual
+  metric_calculators:
+  - method: AVERAGE
+  model_name: gpt-4
+  name: openai_prompt_based_evaluator
+  prompt: 'You are assessing a submitted answer on a given task based on a criterion.
+    Here is the data:
+
+    This function generates a personalized fitness plan. It takes into consideration
+    the individual''s specific fitness goal, whether it''s weight loss, muscle gain,
+    endurance improvement, etc. Additionally, it also factors in the individual''s
+    current fitness level to ensure the plan is suitable and safe. The function uses
+    these inputs to create a tailored plan that includes recommended exercises, workout
+    frequency, and intensity levels.
+
+    Does the fitness plan take into account the individual''s current fitness level?
+    The plan should be suitable and safe for the individual, considering their current
+    fitness level to avoid injury or overexertion.
+
+    [Input]: fitness_goal: {{fitness_goal}}
+
+    current_fitness_level: {{current_fitness_level}}
+
+    [Result]: {raw_output}
+
+    Answer the question by selecting one of the following options:
+
+    A It fails to meet the criterion at all.
+
+    B It somewhat meets the criterion, but there is significant room for improvement.
+
+    C It meets the criterion to a satisfactory degree.
+
+    D It meets the criterion very well.
+
+    E It meets the criterion exceptionally well, with little to no room for improvement.'
+  scale_description: 0-4
+- choice_scores:
+    A: 0
+    B: 1
+    C: 2
+    D: 3
+    E: 4
+  choices:
+  - A
+  - B
+  - C
+  - D
+  - E
+  description: Does the fitness plan provide clear and specific recommendations? The
+    plan should include detailed instructions on the recommended exercises, workout
+    frequency, and intensity levels to ensure the individual can follow it effectively.
+  display_name: clarity and specificity
+  evaluator_type: individual
+  metric_calculators:
+  - method: AVERAGE
+  model_name: gpt-4
+  name: openai_prompt_based_evaluator
+  prompt: 'You are assessing a submitted answer on a given task based on a criterion.
+    Here is the data:
+
+    This function generates a personalized fitness plan. It takes into consideration
+    the individual''s specific fitness goal, whether it''s weight loss, muscle gain,
+    endurance improvement, etc. Additionally, it also factors in the individual''s
+    current fitness level to ensure the plan is suitable and safe. The function uses
+    these inputs to create a tailored plan that includes recommended exercises, workout
+    frequency, and intensity levels.
+
+    Does the fitness plan provide clear and specific recommendations? The plan should
+    include detailed instructions on the recommended exercises, workout frequency,
+    and intensity levels to ensure the individual can follow it effectively.
+
+    [Input]: fitness_goal: {{fitness_goal}}
+
+    current_fitness_level: {{current_fitness_level}}
+
+    [Result]: {raw_output}
+
+    Answer the question by selecting one of the following options:
+
+    A It fails to meet the criterion at all.
+
+    B It somewhat meets the criterion, but there is significant room for improvement.
+
+    C It meets the criterion to a satisfactory degree.
+
+    D It meets the criterion very well.
+
+    E It meets the criterion exceptionally well, with little to no room for improvement.'
+  scale_description: 0-4
+- choice_scores:
+    A: 0
+    B: 1
+    C: 2
+    D: 3
+    E: 4
+  choices:
+  - A
+  - B
+  - C
+  - D
+  - E
+  description: Does the fitness plan take into account the individual's current fitness
+    level and align with their fitness goal? It should be realistic and achievable,
+    considering the individual's capabilities and the goal they want to reach.
+  display_name: feasibility
+  evaluator_type: individual
+  metric_calculators:
+  - method: AVERAGE
+  model_name: gpt-4
+  name: openai_prompt_based_evaluator
+  prompt: 'You are assessing a submitted answer on a given task based on a criterion.
+    Here is the data:
+
+    This function generates a personalized fitness plan. It takes into consideration
+    the individual''s specific fitness goal, whether it''s weight loss, muscle gain,
+    endurance improvement, etc. Additionally, it also factors in the individual''s
+    current fitness level to ensure the plan is suitable and safe. The function uses
+    these inputs to create a tailored plan that includes recommended exercises, workout
+    frequency, and intensity levels.
+
+    Does the fitness plan take into account the individual''s current fitness level
+    and align with their fitness goal? It should be realistic and achievable, considering
+    the individual''s capabilities and the goal they want to reach.
+
+    [Input]: fitness_goal: {{fitness_goal}}
+
+    current_fitness_level: {{current_fitness_level}}
+
+    [Result]: {raw_output}
+
+    Answer the question by selecting one of the following options:
+
+    A It fails to meet the criterion at all.
+
+    B It somewhat meets the criterion, but there is significant room for improvement.
+
+    C It meets the criterion to a satisfactory degree.
+
+    D It meets the criterion very well.
+
+    E It meets the criterion exceptionally well, with little to no room for improvement.'
+  scale_description: 0-4
+- choice_scores:
+    A: 0
+    B: 1
+    C: 2
+    D: 3
+    E: 4
+  choices:
+  - A
+  - B
+  - C
+  - D
+  - E
+  description: Does the fitness plan clearly outline the steps needed to achieve the
+    specified fitness goal from the current fitness level? It should be immediately
+    clear to anyone who reads the plan what exercises, diet, and lifestyle changes
+    are required to progress from the current fitness level to the desired fitness
+    goal.
+  display_name: progression
+  evaluator_type: individual
+  metric_calculators:
+  - method: AVERAGE
+  model_name: gpt-4
+  name: openai_prompt_based_evaluator
+  prompt: 'You are assessing a submitted answer on a given task based on a criterion.
+    Here is the data:
+
+    This function generates a personalized fitness plan. It takes into consideration
+    the individual''s specific fitness goal, whether it''s weight loss, muscle gain,
+    endurance improvement, etc. Additionally, it also factors in the individual''s
+    current fitness level to ensure the plan is suitable and safe. The function uses
+    these inputs to create a tailored plan that includes recommended exercises, workout
+    frequency, and intensity levels.
+
+    Does the fitness plan clearly outline the steps needed to achieve the specified
+    fitness goal from the current fitness level? It should be immediately clear to
+    anyone who reads the plan what exercises, diet, and lifestyle changes are required
+    to progress from the current fitness level to the desired fitness goal.
+
+    [Input]: fitness_goal: {{fitness_goal}}
+
+    current_fitness_level: {{current_fitness_level}}
+
+    [Result]: {raw_output}
+
+    Answer the question by selecting one of the following options:
+
+    A It fails to meet the criterion at all.
+
+    B It somewhat meets the criterion, but there is significant room for improvement.
+
+    C It meets the criterion to a satisfactory degree.
+
+    D It meets the criterion very well.
+
+    E It meets the criterion exceptionally well, with little to no room for improvement.'
+  scale_description: 0-4
+human_rating_configs:
+- instructions: Does the fitness plan align with the individual's specific fitness
+    goal? The plan should be tailored to help the individual achieve their specific
+    goal, whether it's weight loss, muscle gain, endurance improvement, etc.
+  name: goal alignment
+  scale:
+  - 0
+  - 4
+- instructions: Does the fitness plan take into account the individual's current fitness
+    level? The plan should be suitable and safe for the individual, considering their
+    current fitness level to avoid injury or overexertion.
+  name: suitability and safety
+  scale:
+  - 0
+  - 4
+- instructions: Does the fitness plan provide clear and specific recommendations?
+    The plan should include detailed instructions on the recommended exercises, workout
+    frequency, and intensity levels to ensure the individual can follow it effectively.
+  name: clarity and specificity
+  scale:
+  - 0
+  - 4
+- instructions: Does the fitness plan take into account the individual's current fitness
+    level and align with their fitness goal? It should be realistic and achievable,
+    considering the individual's capabilities and the goal they want to reach.
+  name: feasibility
+  scale:
+  - 0
+  - 4
+- instructions: Does the fitness plan clearly outline the steps needed to achieve
+    the specified fitness goal from the current fitness level? It should be immediately
+    clear to anyone who reads the plan what exercises, diet, and lifestyle changes
+    are required to progress from the current fitness level to the desired fitness
+    goal.
+  name: progression
+  scale:
+  - 0
+  - 4
+selection_strategy:
+  ahp_selection:
+    criteria:
+    - 'openai_prompt_based_evaluator: goal alignment'
+    - 'openai_prompt_based_evaluator: suitability and safety'
+    - 'openai_prompt_based_evaluator: clarity and specificity'
+    - 'openai_prompt_based_evaluator: feasibility'
+    - 'openai_prompt_based_evaluator: progression'
+    - average_token_usage
+    - average_latency
+    criteria_maximization:
+      average_latency: false
+      average_token_usage: false
+      'openai_prompt_based_evaluator: clarity and specificity': true
+      'openai_prompt_based_evaluator: feasibility': true
+      'openai_prompt_based_evaluator: goal alignment': true
+      'openai_prompt_based_evaluator: progression': true
+      'openai_prompt_based_evaluator: suitability and safety': true
+    criteria_weights:
+      average_latency: 0
+      average_token_usage: 0
+      'openai_prompt_based_evaluator: clarity and specificity': 0.2
+      'openai_prompt_based_evaluator: feasibility': 0.2
+      'openai_prompt_based_evaluator: goal alignment': 0.2
+      'openai_prompt_based_evaluator: progression': 0.2
+      'openai_prompt_based_evaluator: suitability and safety': 0.2
+variations:
+- generator_config: null
+  generator_name: null
+  name: task
+  variations:
+  - instantiated_value: create a fitness plan based on the {{fitness_goal}} and {{current_fitness_level}}
+    value: create a fitness plan based on the {{fitness_goal}} and {{current_fitness_level}}
+    value_type: str
+    variation_id: null

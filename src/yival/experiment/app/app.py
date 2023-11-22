@@ -6,6 +6,7 @@ import hashlib
 import io
 import json
 import os
+import pickle
 import re
 import subprocess
 import textwrap
@@ -28,6 +29,9 @@ from termcolor import colored
 
 from ...auto_prompt.default_task import DefaultValueProvider
 from ...common.auto_cofig_utils import auto_generate_config
+from ...configs.config_utils import load_and_validate_configs
+from ...experiment.evaluator import Evaluator
+from ...logger.token_logger import TokenLogger
 from ...schemas.common_structures import InputData
 from ...schemas.experiment_config import (
     CombinationAggregatedMetrics,
@@ -38,6 +42,7 @@ from ...schemas.experiment_config import (
     GroupedExperimentResult,
     MultimodalOutput,
 )
+from ...states.experiment_state import ExperimentState
 from ..rate_limiter import RateLimiter
 from ..utils import (
     call_function_from_string,
@@ -53,6 +58,9 @@ from .utils import (
     sanitize_column_name,
     sanitize_group_key,
 )
+
+global_experiment_config = None
+global_experiment_data = None
 
 
 def include_image_base64(data_dict):
@@ -1783,35 +1791,8 @@ def create_dash_app(
                             }
                         )
                     ]),
-                    html.Button(
-                        'Submit',
-                        id='submit-button-fix',
-                        n_clicks=0,
-                        style={
-                            'fontSize': '18px',
-                            'margin': '10px',
-                            'backgroundColor': '#85AED8',
-                            'color': 'white',
-                            'border': 'none',
-                            'padding': '10px 20px',
-                            'borderRadius': '5px',
-                            'cursor': 'pointer',
-                            'textDecoration': 'none',
-                            'display': 'inline-block',
-                            'transitionDuration': '0.4s'
-                        }
-                    ),
-                    html.A(
-                        id='open-result-tab',
-                        target='_blank',
-                        children=[
-                            html.Button(
-                                'Open result tab',
-                                id='open-result-tab-button',
-                                className='jump-button jump-button-hide'
-                            )
-                        ]
-                    ),
+                    html.Div(id='text-prompt'),
+                    html.Div(id='dummy-output', style={'display': 'none'}),
                     html.Div(id='output-task-div')
                 ],
                          style={
@@ -1831,27 +1812,18 @@ def create_dash_app(
         )
 
     @app.callback(
-        Output('open-result-tab', 'href'),
-        Input('submit-button-fix', 'n_clicks'),
-        State('task', 'value'),
+        Output('dummy-output', 'children'),
+        Input('task', 'value'),
+        Input('context_info', 'value'),
+        Input('evaluation_aspects', 'value'),
     )
-    def update_link(n, task):
-        if n is not None and task == 'Tiktok Headline Generation Bot':
-            return 'http://ec2-35-85-28-134.us-west-2.compute.amazonaws.com:8074/enhancer-experiment-results'
-        else:
-            return dash.no_update
+    def trigger_function(task, context_info, evaluation_aspects):
+        if task and context_info and evaluation_aspects:
+            display_task(task)
+        return ''
 
     @app.callback(
-        Output('open-result-tab-button', 'className'),
-        Input('submit-button-fix', 'n_clicks'),
-    )
-    def show_link(n):
-        if n > 0:
-            return 'jump-button jump-button-show'
-        else:
-            return 'jump-button jump-button-hide'
-
-    @app.callback(
+        Output('text-prompt', 'children'),
         Output('task', 'value'),
         Output('context_info', 'value'),
         Output('evaluation_aspects', 'value'),
@@ -1862,12 +1834,13 @@ def create_dash_app(
     def update_input_values(n1, n2, n3):
         ctx = dash.callback_context
         if not ctx.triggered:
-            return dash.no_update, dash.no_update, dash.no_update
+            return '', dash.no_update, dash.no_update, dash.no_update
         else:
             button_id = ctx.triggered[0]['prop_id'].split('.')[0]
+            prompt = '*Please open the result page in command line*'
 
         input_values = DefaultValueProvider.get_default_values(button_id)
-        return input_values.task, input_values.context_info, input_values.evaluation_aspects
+        return prompt, input_values.task, input_values.context_info, input_values.evaluation_aspects
 
     @app.callback(
         dash.dependencies.Output('page-content', 'children'),
@@ -2589,3 +2562,33 @@ def display_results_dash(
         app.run(debug=False, port=port)
     else:
         app.run(debug=False, port=port)
+
+
+def display_task(task):
+    if task == 'Tiktok Headline Generation Bot':
+        experiment_config = load_and_validate_configs('tt.yaml')
+        with open("auto_generated_tt_0.pkl", 'rb') as file:
+            experiment: Experiment = pickle.load(file)
+    elif task == 'Email Auto Reply Bot':
+        experiment_config = load_and_validate_configs('email.yaml')
+        with open("auto_generated_email_0.pkl", 'rb') as file:
+            experiment: Experiment = pickle.load(file)
+    elif task == 'Fitness Plan Bot':
+        experiment_config = load_and_validate_configs('fitness.yaml')
+        with open("auto_generated_fitness_0.pkl", 'rb') as file:
+            experiment: Experiment = pickle.load(file)
+    else:
+        raise ValueError(f"Unknown task: {task}")
+    app = create_dash_app(
+        experiment,
+        experiment_config,
+        {},
+        [],
+        ExperimentState(),
+        TokenLogger(),
+        Evaluator([]),
+        False,
+        False,
+        False,
+    )
+    app.run_server(debug=False, port=8051)

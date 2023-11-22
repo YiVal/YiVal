@@ -1,0 +1,411 @@
+custom_function: demo.complete_task.complete_task
+dataset:
+  data_generators:
+    openai_prompt_data_generator:
+      chunk_size: 10000
+      diversify: true
+      expected_param_name: ""
+      fixed_input:
+        task: Generate a short tiktok video title
+      input_function:
+        description:
+          The function generates a short, intriguing, and engaging title
+          for a TikTok video based on the content summary and the target audience.
+          The title is specifically designed to capture the attention of the given
+          target audience. The content summary helps to understand the video's theme
+          or concept. Meanwhile, based on the input for the target audience, the function
+          customizes the title accordingly to make it relatable and appealing to them.
+        name: generate_tiktok_video_title_based_on_content_and_audience
+        parameters:
+          content_summary: str
+          target_audience: str
+      model_name: gpt-4
+      number_of_examples: 5
+      output_csv_path: generate_tiktok_video_title_based_on_content_and_audience_generated_data.csv
+      output_path: generate_tiktok_video_title_based_on_content_and_audience_generated_data.pkl
+      prompt:
+        "\n        \"Please provide a concrete and realistic test case as a\
+        \ dictionary for function invocation using the ** operator.\n        Only\
+        \ include parameters, excluding description and name.\n        Ensure it's\
+        \ succinct and well-structured.\n        **Only provide the dictionary.**\"\
+        \    \n    "
+  source_type: machine_generated
+description: Auto generated config for Generate a short tiktok video title
+enhancer:
+  end_meta_instruction:
+    Give me a new prompt that is different from all pairs above,
+    and has evaluation values on accuracy, relevance, intrigue, emoji, cute, that are higher than any of above.
+  enhance_var:
+    - task
+  head_meta_instruction:
+    "Example :\n\nGiven the summary of the Tiktok content and\
+    \ the target audience, generate a corresponding Tiktok video title.\n\nParameters:\n\
+    \    content_summary: str\n    target_audience: str\n\n==>\nNow you will help\
+    \ me generate a prompt which is used to generate a corresponding\nTiktok video\
+    \ title according to the content summary which is [content_summary] and targeting\
+    \ the audience [target_audience].\nI already have some prompt and its evaluation\
+    \ results :"
+  max_iterations: 3
+  model_name: gpt-4
+  name: optimize_by_prompt_enhancer
+evaluators:
+  - choice_scores:
+      A: 0
+      B: 1
+      C: 2
+      D: 3
+      E: 4
+    choices:
+      - A
+      - B
+      - C
+      - D
+      - E
+    description:
+      Does the title accurately reflect the content of the TikTok video?
+      The title should give a clear idea of what the video is about, without misleading
+      or confusing the viewer.
+    display_name: accuracy
+    evaluator_type: individual
+    metric_calculators:
+      - method: AVERAGE
+    model_name: gpt-4
+    name: openai_prompt_based_evaluator
+    prompt:
+      "You are assessing a submitted answer on a given task based on a criterion.
+      Here is the data:
+
+      The function generates a short, intriguing, and engaging title for a TikTok video
+      based on the content summary and the target audience. The title is specifically
+      designed to capture the attention of the given target audience. The content summary
+      helps to understand the video's theme or concept. Meanwhile, based on the input
+      for the target audience, the function customizes the title accordingly to make
+      it relatable and appealing to them.
+
+      Does the title accurately reflect the content of the TikTok video? The title should
+      give a clear idea of what the video is about, without misleading or confusing
+      the viewer.
+
+      [Input]: content_summary: {{content_summary}}
+
+      target_audience: {{target_audience}}
+
+      [Result]: {raw_output}
+
+      Answer the question by selecting one of the following options:
+
+      A It fails to meet the criterion at all.
+
+      B It somewhat meets the criterion, but there is significant room for improvement.
+
+      C It meets the criterion to a satisfactory degree.
+
+      D It meets the criterion very well.
+
+      E It meets the criterion exceptionally well, with little to no room for improvement."
+    scale_description: 0-4
+  - choice_scores:
+      A: 0
+      B: 1
+      C: 2
+      D: 3
+      E: 4
+    choices:
+      - A
+      - B
+      - C
+      - D
+      - E
+    description:
+      Is the title appealing and relevant to the target audience? The title
+      should be designed in a way that it captures the attention of the specified target
+      audience and makes them want to watch the video.
+    display_name: relevance
+    evaluator_type: individual
+    metric_calculators:
+      - method: AVERAGE
+    model_name: gpt-4
+    name: openai_prompt_based_evaluator
+    prompt:
+      "You are assessing a submitted answer on a given task based on a criterion.
+      Here is the data:
+
+      The function generates a short, intriguing, and engaging title for a TikTok video
+      based on the content summary and the target audience. The title is specifically
+      designed to capture the attention of the given target audience. The content summary
+      helps to understand the video's theme or concept. Meanwhile, based on the input
+      for the target audience, the function customizes the title accordingly to make
+      it relatable and appealing to them.
+
+      Is the title appealing and relevant to the target audience? The title should be
+      designed in a way that it captures the attention of the specified target audience
+      and makes them want to watch the video.
+
+      [Input]: content_summary: {{content_summary}}
+
+      target_audience: {{target_audience}}
+
+      [Result]: {raw_output}
+
+      Answer the question by selecting one of the following options:
+
+      A It fails to meet the criterion at all.
+
+      B It somewhat meets the criterion, but there is significant room for improvement.
+
+      C It meets the criterion to a satisfactory degree.
+
+      D It meets the criterion very well.
+
+      E It meets the criterion exceptionally well, with little to no room for improvement."
+    scale_description: 0-4
+  - choice_scores:
+      A: 0
+      B: 1
+      C: 2
+      D: 3
+      E: 4
+    choices:
+      - A
+      - B
+      - C
+      - D
+      - E
+    description:
+      Is the title catchy and intriguing? The title should not only be accurate
+      and relevant, but also interesting enough to make the viewer curious and want
+      to click on the video.
+    display_name: intrigue
+    evaluator_type: individual
+    metric_calculators:
+      - method: AVERAGE
+    model_name: gpt-4
+    name: openai_prompt_based_evaluator
+    prompt:
+      "You are assessing a submitted answer on a given task based on a criterion.
+      Here is the data:
+
+      The function generates a short, intriguing, and engaging title for a TikTok video
+      based on the content summary and the target audience. The title is specifically
+      designed to capture the attention of the given target audience. The content summary
+      helps to understand the video's theme or concept. Meanwhile, based on the input
+      for the target audience, the function customizes the title accordingly to make
+      it relatable and appealing to them.
+
+      Is the title catchy and intriguing? The title should not only be accurate and
+      relevant, but also interesting enough to make the viewer curious and want to click
+      on the video.
+
+      [Input]: content_summary: {{content_summary}}
+
+      target_audience: {{target_audience}}
+
+      [Result]: {raw_output}
+
+      Answer the question by selecting one of the following options:
+
+      A It fails to meet the criterion at all.
+
+      B It somewhat meets the criterion, but there is significant room for improvement.
+
+      C It meets the criterion to a satisfactory degree.
+
+      D It meets the criterion very well.
+
+      E It meets the criterion exceptionally well, with little to no room for improvement."
+    scale_description: 0-4
+  - choice_scores:
+      A: 0
+      B: 1
+      C: 2
+      D: 3
+      E: 4
+    choices:
+      - A
+      - B
+      - C
+      - D
+      - E
+    description:
+      Does the emoji used in the title accurately represent the content of
+      the TikTok video? The emoji should be relevant and provide a visual summary or
+      hint about the video's content.
+    display_name: emoji
+    evaluator_type: individual
+    metric_calculators:
+      - method: AVERAGE
+    model_name: gpt-4
+    name: openai_prompt_based_evaluator
+    prompt:
+      "You are assessing a submitted answer on a given task based on a criterion.
+      Here is the data:
+
+      The function generates a short, intriguing, and engaging title for a TikTok video
+      based on the content summary and the target audience. The title is specifically
+      designed to capture the attention of the given target audience. The content summary
+      helps to understand the video's theme or concept. Meanwhile, based on the input
+      for the target audience, the function customizes the title accordingly to make
+      it relatable and appealing to them.
+
+      Does the emoji used in the title accurately represent the content of the TikTok
+      video? The emoji should be relevant and provide a visual summary or hint about
+      the video's content.
+
+      [Input]: content_summary: {{content_summary}}
+
+      target_audience: {{target_audience}}
+
+      [Result]: {raw_output}
+
+      Answer the question by selecting one of the following options:
+
+      A It fails to meet the criterion at all.
+
+      B It somewhat meets the criterion, but there is significant room for improvement.
+
+      C It meets the criterion to a satisfactory degree.
+
+      D It meets the criterion very well.
+
+      E It meets the criterion exceptionally well, with little to no room for improvement."
+    scale_description: 0-4
+  - choice_scores:
+      A: 0
+      B: 1
+      C: 2
+      D: 3
+      E: 4
+    choices:
+      - A
+      - B
+      - C
+      - D
+      - E
+    description:
+      Does the title effectively convey a sense of cuteness or charm? The
+      title should immediately evoke feelings of adorableness or endearment to anyone
+      who reads it.
+    display_name: cute
+    evaluator_type: individual
+    metric_calculators:
+      - method: AVERAGE
+    model_name: gpt-4
+    name: openai_prompt_based_evaluator
+    prompt:
+      "You are assessing a submitted answer on a given task based on a criterion.
+      Here is the data:
+
+      The function generates a short, intriguing, and engaging title for a TikTok video
+      based on the content summary and the target audience. The title is specifically
+      designed to capture the attention of the given target audience. The content summary
+      helps to understand the video's theme or concept. Meanwhile, based on the input
+      for the target audience, the function customizes the title accordingly to make
+      it relatable and appealing to them.
+
+      Does the title effectively convey a sense of cuteness or charm? The title should
+      immediately evoke feelings of adorableness or endearment to anyone who reads it.
+
+      [Input]: content_summary: {{content_summary}}
+
+      target_audience: {{target_audience}}
+
+      [Result]: {raw_output}
+
+      Answer the question by selecting one of the following options:
+
+      A It fails to meet the criterion at all.
+
+      B It somewhat meets the criterion, but there is significant room for improvement.
+
+      C It meets the criterion to a satisfactory degree.
+
+      D It meets the criterion very well.
+
+      E It meets the criterion exceptionally well, with little to no room for improvement."
+    scale_description: 0-4
+human_rating_configs:
+  - instructions:
+      Does the title accurately reflect the content of the TikTok video?
+      The title should give a clear idea of what the video is about, without misleading
+      or confusing the viewer.
+    name: accuracy
+    scale:
+      - 0
+      - 4
+  - instructions:
+      Is the title appealing and relevant to the target audience? The title
+      should be designed in a way that it captures the attention of the specified target
+      audience and makes them want to watch the video.
+    name: relevance
+    scale:
+      - 0
+      - 4
+  - instructions:
+      Is the title catchy and intriguing? The title should not only be accurate
+      and relevant, but also interesting enough to make the viewer curious and want
+      to click on the video.
+    name: intrigue
+    scale:
+      - 0
+      - 4
+  - instructions:
+      Does the emoji used in the title accurately represent the content
+      of the TikTok video? The emoji should be relevant and provide a visual summary
+      or hint about the video's content.
+    name: emoji
+    scale:
+      - 0
+      - 4
+  - instructions:
+      Does the title effectively convey a sense of cuteness or charm? The
+      title should immediately evoke feelings of adorableness or endearment to anyone
+      who reads it.
+    name: cute
+    scale:
+      - 0
+      - 4
+selection_strategy:
+  ahp_selection:
+    criteria:
+      - "openai_prompt_based_evaluator: accuracy"
+      - "openai_prompt_based_evaluator: relevance"
+      - "openai_prompt_based_evaluator: intrigue"
+      - "openai_prompt_based_evaluator: emoji"
+      - "openai_prompt_based_evaluator: cute"
+      - average_token_usage
+      - average_latency
+    criteria_maximization:
+      average_latency: false
+      average_token_usage: false
+      "openai_prompt_based_evaluator: accuracy": true
+      "openai_prompt_based_evaluator: cute": true
+      "openai_prompt_based_evaluator: emoji": true
+      "openai_prompt_based_evaluator: intrigue": true
+      "openai_prompt_based_evaluator: relevance": true
+    criteria_weights:
+      average_latency: 0
+      average_token_usage: 0
+      "openai_prompt_based_evaluator: accuracy": 0.2
+      "openai_prompt_based_evaluator: cute": 0.2
+      "openai_prompt_based_evaluator: emoji": 0.2
+      "openai_prompt_based_evaluator: intrigue": 0.2
+      "openai_prompt_based_evaluator: relevance": 0.2
+variations:
+  - generator_config: null
+    generator_name: null
+    name: task
+    variations:
+      - instantiated_value:
+          "Generate a short tiktok video title based on the following
+          info
+
+          content_summary: {content_summary}
+
+          target_audience: {target_audience}"
+        value: "Generate a short tiktok video title based on the following info
+
+          content_summary: {content_summary}
+
+          target_audience: {target_audience}"
+        value_type: str
+        variation_id: null
