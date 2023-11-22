@@ -59,9 +59,6 @@ from .utils import (
     sanitize_group_key,
 )
 
-global_experiment_config = None
-global_experiment_data = None
-
 
 def include_image_base64(data_dict):
     """Check if a string includes a base64 encoded image."""
@@ -2569,26 +2566,52 @@ def display_task(task):
         experiment_config = load_and_validate_configs('tt.yaml')
         with open("auto_generated_tt_0.pkl", 'rb') as file:
             experiment: Experiment = pickle.load(file)
+        app = create_dash_app(
+            experiment,
+            experiment_config,
+            {},
+            [],
+            ExperimentState(),
+            TokenLogger(),
+            Evaluator([]),
+            False,
+            False,
+            False,
+        )
+        app.run_server(debug=False, port=8051)
     elif task == 'Email Auto Reply Bot':
         experiment_config = load_and_validate_configs('email.yaml')
         with open("auto_generated_email_0.pkl", 'rb') as file:
             experiment: Experiment = pickle.load(file)
+        app = create_dash_app(
+            experiment,
+            experiment_config,
+            {},
+            [],
+            ExperimentState(),
+            TokenLogger(),
+            Evaluator([]),
+            False,
+            False,
+            False,
+        )
+        app.run_server(debug=False, port=8052)
     elif task == 'Fitness Plan Bot':
         experiment_config = load_and_validate_configs('fitness.yaml')
         with open("auto_generated_fitness_0.pkl", 'rb') as file:
             experiment: Experiment = pickle.load(file)
+        app = create_dash_app(
+            experiment,
+            experiment_config,
+            {},
+            [],
+            ExperimentState(),
+            TokenLogger(),
+            Evaluator([]),
+            False,
+            False,
+            False,
+        )
+        app.run_server(debug=False, port=8053)
     else:
         raise ValueError(f"Unknown task: {task}")
-    app = create_dash_app(
-        experiment,
-        experiment_config,
-        {},
-        [],
-        ExperimentState(),
-        TokenLogger(),
-        Evaluator([]),
-        False,
-        False,
-        False,
-    )
-    app.run_server(debug=False, port=8051)
