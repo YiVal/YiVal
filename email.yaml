@@ -4,14 +4,17 @@ dataset:
     openai_prompt_data_generator:
       chunk_size: 10000
       diversify: false
-      expected_param_name: ''
+      expected_param_name: ""
       input_function:
-        description: The function is designed to create an automated email response.
-          It takes into account the subject of the received email and the availability
-          status of the user. Based on these inputs, it generates a brief reply that
-          communicates the user's current availability status in relation to the subject
-          matter of the email. This function is useful for managing communication
-          efficiently, especially when the user is unavailable to respond immediately.
+        description:
+          The function is designed to create an automated email response.
+          It uses the subject of the received email and the user's availability status
+          to generate a suitable reply. The function takes into account the context
+          of the email subject to create a relevant response. Additionally, it considers
+          the user's availability, allowing it to craft a reply that accurately reflects
+          whether the user is currently available or not. This function is ideal for
+          managing email responses efficiently, especially when the user is busy or
+          unavailable.
         name: generate_auto_email_reply_based_on_subject_and_availability
         parameters:
           email_subject: str
@@ -20,362 +23,391 @@ dataset:
       number_of_examples: 5
       output_csv_path: generate_auto_email_reply_based_on_subject_and_availability_generated_data.csv
       output_path: generate_auto_email_reply_based_on_subject_and_availability_generated_data.pkl
-      prompt: "\n        \"Please provide a concrete and realistic test case as a\
+      prompt:
+        "\n        \"Please provide a concrete and realistic test case as a\
         \ dictionary for function invocation using the ** operator.\n        Only\
         \ include parameters, excluding description and name.\n        Ensure it's\
         \ succinct and well-structured.\n        **Only provide the dictionary.**\"\
         \    \n    "
       single_shot: true
   source_type: machine_generated
-description: Auto generated config for generate a short automatic email reply based
+description:
+  Auto generated config for generate a short automatic email reply based
   on the {{email_subject}} and {{user_availability}}
 enhancer:
-  end_meta_instruction: Give me a new prompt that is different from all pairs above,
-    and has evaluation values on accuracy, relevance, clarity, politeness, clarity,
-    that are higher than any of above.
+  end_meta_instruction:
+    Give me a new prompt that is different from all pairs above,
+    and has evaluation values on context accuracy, availability representation, clarity,
+    politeness, clarity, that are higher than any of above.
   enhance_var:
-  - task
-  head_meta_instruction: 'Now you will help me generate a prompt which is used to
-    generate a short automatic email reply based on the subject of the email [email_subject]
-    and the user''s availability [user_availability]. I already have some prompt and
-    its evaluation results:'
+    - task
+  head_meta_instruction:
+    "Now you will help me generate a prompt which is used to
+    generate a short automatic email reply based on the email subject [email_subject]
+    and the user's availability [user_availability]. I already have some prompt and
+    its evaluation results:"
   max_iterations: 2
   model_name: gpt-4
   name: optimize_by_prompt_enhancer
 evaluators:
-- choice_scores:
-    A: 0
-    B: 1
-    C: 2
-    D: 3
-    E: 4
-  choices:
-  - A
-  - B
-  - C
-  - D
-  - E
-  description: Does the automated email response accurately reflect the user's availability
-    status? The function should generate a response that correctly communicates whether
-    the user is available or not, based on the input provided.
-  display_name: accuracy
-  evaluator_type: individual
-  metric_calculators:
-  - method: AVERAGE
-  model_name: gpt-4
-  name: openai_prompt_based_evaluator
-  prompt: 'You are assessing a submitted answer on a given task based on a criterion.
-    Here is the data:
+  - choice_scores:
+      A: 0
+      B: 1
+      C: 2
+      D: 3
+      E: 4
+    choices:
+      - A
+      - B
+      - C
+      - D
+      - E
+    description:
+      Does the automated email response accurately reflect the context of
+      the received email's subject? The function should be able to interpret the subject
+      of the email and generate a response that is relevant and appropriate to the context.
+    display_name: context accuracy
+    evaluator_type: individual
+    metric_calculators:
+      - method: AVERAGE
+    model_name: gpt-4
+    name: openai_prompt_based_evaluator
+    prompt:
+      "You are assessing a submitted answer on a given task based on a criterion.
+      Here is the data:
 
-    The function is designed to create an automated email response. It takes into
-    account the subject of the received email and the availability status of the user.
-    Based on these inputs, it generates a brief reply that communicates the user''s
-    current availability status in relation to the subject matter of the email. This
-    function is useful for managing communication efficiently, especially when the
-    user is unavailable to respond immediately.
+      The function is designed to create an automated email response. It uses the subject
+      of the received email and the user's availability status to generate a suitable
+      reply. The function takes into account the context of the email subject to create
+      a relevant response. Additionally, it considers the user's availability, allowing
+      it to craft a reply that accurately reflects whether the user is currently available
+      or not. This function is ideal for managing email responses efficiently, especially
+      when the user is busy or unavailable.
 
-    Does the automated email response accurately reflect the user''s availability
-    status? The function should generate a response that correctly communicates whether
-    the user is available or not, based on the input provided.
+      Does the automated email response accurately reflect the context of the received
+      email's subject? The function should be able to interpret the subject of the
+      email and generate a response that is relevant and appropriate to the context.
 
-    [Input]: email_subject: {{email_subject}}
+      [Input]: email_subject: {{email_subject}}
 
-    user_availability: {{user_availability}}
+      user_availability: {{user_availability}}
 
-    [Result]: {raw_output}
+      [Result]: {raw_output}
 
-    Answer the question by selecting one of the following options:
+      Answer the question by selecting one of the following options:
 
-    A It fails to meet the criterion at all.
+      A It fails to meet the criterion at all.
 
-    B It somewhat meets the criterion, but there is significant room for improvement.
+      B It somewhat meets the criterion, but there is significant room for improvement.
 
-    C It meets the criterion to a satisfactory degree.
+      C It meets the criterion to a satisfactory degree.
 
-    D It meets the criterion very well.
+      D It meets the criterion very well.
 
-    E It meets the criterion exceptionally well, with little to no room for improvement.'
-  scale_description: 0-4
-- choice_scores:
-    A: 0
-    B: 1
-    C: 2
-    D: 3
-    E: 4
-  choices:
-  - A
-  - B
-  - C
-  - D
-  - E
-  description: Does the automated email response appropriately address the subject
-    matter of the received email? The function should be able to identify and understand
-    the subject of the email to generate a relevant response.
-  display_name: relevance
-  evaluator_type: individual
-  metric_calculators:
-  - method: AVERAGE
-  model_name: gpt-4
-  name: openai_prompt_based_evaluator
-  prompt: 'You are assessing a submitted answer on a given task based on a criterion.
-    Here is the data:
+      E It meets the criterion exceptionally well, with little to no room for improvement."
+    scale_description: 0-4
+  - choice_scores:
+      A: 0
+      B: 1
+      C: 2
+      D: 3
+      E: 4
+    choices:
+      - A
+      - B
+      - C
+      - D
+      - E
+    description:
+      Does the automated email response correctly represent the user's availability
+      status? The function should take into account whether the user is available or
+      not and craft a response that accurately reflects this status.
+    display_name: availability representation
+    evaluator_type: individual
+    metric_calculators:
+      - method: AVERAGE
+    model_name: gpt-4
+    name: openai_prompt_based_evaluator
+    prompt:
+      "You are assessing a submitted answer on a given task based on a criterion.
+      Here is the data:
 
-    The function is designed to create an automated email response. It takes into
-    account the subject of the received email and the availability status of the user.
-    Based on these inputs, it generates a brief reply that communicates the user''s
-    current availability status in relation to the subject matter of the email. This
-    function is useful for managing communication efficiently, especially when the
-    user is unavailable to respond immediately.
+      The function is designed to create an automated email response. It uses the subject
+      of the received email and the user's availability status to generate a suitable
+      reply. The function takes into account the context of the email subject to create
+      a relevant response. Additionally, it considers the user's availability, allowing
+      it to craft a reply that accurately reflects whether the user is currently available
+      or not. This function is ideal for managing email responses efficiently, especially
+      when the user is busy or unavailable.
 
-    Does the automated email response appropriately address the subject matter of
-    the received email? The function should be able to identify and understand the
-    subject of the email to generate a relevant response.
+      Does the automated email response correctly represent the user's availability
+      status? The function should take into account whether the user is available or
+      not and craft a response that accurately reflects this status.
 
-    [Input]: email_subject: {{email_subject}}
+      [Input]: email_subject: {{email_subject}}
 
-    user_availability: {{user_availability}}
+      user_availability: {{user_availability}}
 
-    [Result]: {raw_output}
+      [Result]: {raw_output}
 
-    Answer the question by selecting one of the following options:
+      Answer the question by selecting one of the following options:
 
-    A It fails to meet the criterion at all.
+      A It fails to meet the criterion at all.
 
-    B It somewhat meets the criterion, but there is significant room for improvement.
+      B It somewhat meets the criterion, but there is significant room for improvement.
 
-    C It meets the criterion to a satisfactory degree.
+      C It meets the criterion to a satisfactory degree.
 
-    D It meets the criterion very well.
+      D It meets the criterion very well.
 
-    E It meets the criterion exceptionally well, with little to no room for improvement.'
-  scale_description: 0-4
-- choice_scores:
-    A: 0
-    B: 1
-    C: 2
-    D: 3
-    E: 4
-  choices:
-  - A
-  - B
-  - C
-  - D
-  - E
-  description: Is the automated email response clear and concise? The function should
-    generate a response that is easy to understand and not overly lengthy or complicated.
-  display_name: clarity
-  evaluator_type: individual
-  metric_calculators:
-  - method: AVERAGE
-  model_name: gpt-4
-  name: openai_prompt_based_evaluator
-  prompt: 'You are assessing a submitted answer on a given task based on a criterion.
-    Here is the data:
+      E It meets the criterion exceptionally well, with little to no room for improvement."
+    scale_description: 0-4
+  - choice_scores:
+      A: 0
+      B: 1
+      C: 2
+      D: 3
+      E: 4
+    choices:
+      - A
+      - B
+      - C
+      - D
+      - E
+    description:
+      Is the automated email response clear and understandable? Despite being
+      automated, the response should be written in a way that is easy for the recipient
+      to understand, avoiding any confusion or misinterpretation.
+    display_name: clarity
+    evaluator_type: individual
+    metric_calculators:
+      - method: AVERAGE
+    model_name: gpt-4
+    name: openai_prompt_based_evaluator
+    prompt:
+      "You are assessing a submitted answer on a given task based on a criterion.
+      Here is the data:
 
-    The function is designed to create an automated email response. It takes into
-    account the subject of the received email and the availability status of the user.
-    Based on these inputs, it generates a brief reply that communicates the user''s
-    current availability status in relation to the subject matter of the email. This
-    function is useful for managing communication efficiently, especially when the
-    user is unavailable to respond immediately.
+      The function is designed to create an automated email response. It uses the subject
+      of the received email and the user's availability status to generate a suitable
+      reply. The function takes into account the context of the email subject to create
+      a relevant response. Additionally, it considers the user's availability, allowing
+      it to craft a reply that accurately reflects whether the user is currently available
+      or not. This function is ideal for managing email responses efficiently, especially
+      when the user is busy or unavailable.
 
-    Is the automated email response clear and concise? The function should generate
-    a response that is easy to understand and not overly lengthy or complicated.
+      Is the automated email response clear and understandable? Despite being automated,
+      the response should be written in a way that is easy for the recipient to understand,
+      avoiding any confusion or misinterpretation.
 
-    [Input]: email_subject: {{email_subject}}
+      [Input]: email_subject: {{email_subject}}
 
-    user_availability: {{user_availability}}
+      user_availability: {{user_availability}}
 
-    [Result]: {raw_output}
+      [Result]: {raw_output}
 
-    Answer the question by selecting one of the following options:
+      Answer the question by selecting one of the following options:
 
-    A It fails to meet the criterion at all.
+      A It fails to meet the criterion at all.
 
-    B It somewhat meets the criterion, but there is significant room for improvement.
+      B It somewhat meets the criterion, but there is significant room for improvement.
 
-    C It meets the criterion to a satisfactory degree.
+      C It meets the criterion to a satisfactory degree.
 
-    D It meets the criterion very well.
+      D It meets the criterion very well.
 
-    E It meets the criterion exceptionally well, with little to no room for improvement.'
-  scale_description: 0-4
-- choice_scores:
-    A: 0
-    B: 1
-    C: 2
-    D: 3
-    E: 4
-  choices:
-  - A
-  - B
-  - C
-  - D
-  - E
-  description: Does the automatic email reply maintain a polite tone throughout? It
-    should convey the necessary information about the user's availability without
-    coming across as rude or dismissive. The language used should be professional
-    and respectful, regardless of the email subject.
-  display_name: politeness
-  evaluator_type: individual
-  metric_calculators:
-  - method: AVERAGE
-  model_name: gpt-4
-  name: openai_prompt_based_evaluator
-  prompt: 'You are assessing a submitted answer on a given task based on a criterion.
-    Here is the data:
+      E It meets the criterion exceptionally well, with little to no room for improvement."
+    scale_description: 0-4
+  - choice_scores:
+      A: 0
+      B: 1
+      C: 2
+      D: 3
+      E: 4
+    choices:
+      - A
+      - B
+      - C
+      - D
+      - E
+    description:
+      Does the automatic email reply maintain a polite and respectful tone?
+      It should consider the recipient's feelings and convey the user's unavailability
+      in a courteous manner. The language used should be professional and considerate,
+      avoiding any harsh or rude expressions.
+    display_name: politeness
+    evaluator_type: individual
+    metric_calculators:
+      - method: AVERAGE
+    model_name: gpt-4
+    name: openai_prompt_based_evaluator
+    prompt:
+      "You are assessing a submitted answer on a given task based on a criterion.
+      Here is the data:
 
-    The function is designed to create an automated email response. It takes into
-    account the subject of the received email and the availability status of the user.
-    Based on these inputs, it generates a brief reply that communicates the user''s
-    current availability status in relation to the subject matter of the email. This
-    function is useful for managing communication efficiently, especially when the
-    user is unavailable to respond immediately.
+      The function is designed to create an automated email response. It uses the subject
+      of the received email and the user's availability status to generate a suitable
+      reply. The function takes into account the context of the email subject to create
+      a relevant response. Additionally, it considers the user's availability, allowing
+      it to craft a reply that accurately reflects whether the user is currently available
+      or not. This function is ideal for managing email responses efficiently, especially
+      when the user is busy or unavailable.
 
-    Does the automatic email reply maintain a polite tone throughout? It should convey
-    the necessary information about the user''s availability without coming across
-    as rude or dismissive. The language used should be professional and respectful,
-    regardless of the email subject.
+      Does the automatic email reply maintain a polite and respectful tone? It should
+      consider the recipient's feelings and convey the user's unavailability in a
+      courteous manner. The language used should be professional and considerate, avoiding
+      any harsh or rude expressions.
 
-    [Input]: email_subject: {{email_subject}}
+      [Input]: email_subject: {{email_subject}}
 
-    user_availability: {{user_availability}}
+      user_availability: {{user_availability}}
 
-    [Result]: {raw_output}
+      [Result]: {raw_output}
 
-    Answer the question by selecting one of the following options:
+      Answer the question by selecting one of the following options:
 
-    A It fails to meet the criterion at all.
+      A It fails to meet the criterion at all.
 
-    B It somewhat meets the criterion, but there is significant room for improvement.
+      B It somewhat meets the criterion, but there is significant room for improvement.
 
-    C It meets the criterion to a satisfactory degree.
+      C It meets the criterion to a satisfactory degree.
 
-    D It meets the criterion very well.
+      D It meets the criterion very well.
 
-    E It meets the criterion exceptionally well, with little to no room for improvement.'
-  scale_description: 0-4
-- choice_scores:
-    A: 0
-    B: 1
-    C: 2
-    D: 3
-    E: 4
-  choices:
-  - A
-  - B
-  - C
-  - D
-  - E
-  description: Does the generated automatic email reply clearly communicate the user's
-    availability based on the email subject? It should be immediately clear to anyone
-    who reads the email reply when the user is available or not.
-  display_name: clarity
-  evaluator_type: individual
-  metric_calculators:
-  - method: AVERAGE
-  model_name: gpt-4
-  name: openai_prompt_based_evaluator
-  prompt: 'You are assessing a submitted answer on a given task based on a criterion.
-    Here is the data:
+      E It meets the criterion exceptionally well, with little to no room for improvement."
+    scale_description: 0-4
+  - choice_scores:
+      A: 0
+      B: 1
+      C: 2
+      D: 3
+      E: 4
+    choices:
+      - A
+      - B
+      - C
+      - D
+      - E
+    description:
+      Does the generated automatic email reply clearly communicate the user's
+      availability based on the email subject? It should be immediately clear to anyone
+      who reads the email reply what the user's availability is.
+    display_name: clarity
+    evaluator_type: individual
+    metric_calculators:
+      - method: AVERAGE
+    model_name: gpt-4
+    name: openai_prompt_based_evaluator
+    prompt:
+      "You are assessing a submitted answer on a given task based on a criterion.
+      Here is the data:
 
-    The function is designed to create an automated email response. It takes into
-    account the subject of the received email and the availability status of the user.
-    Based on these inputs, it generates a brief reply that communicates the user''s
-    current availability status in relation to the subject matter of the email. This
-    function is useful for managing communication efficiently, especially when the
-    user is unavailable to respond immediately.
+      The function is designed to create an automated email response. It uses the subject
+      of the received email and the user's availability status to generate a suitable
+      reply. The function takes into account the context of the email subject to create
+      a relevant response. Additionally, it considers the user's availability, allowing
+      it to craft a reply that accurately reflects whether the user is currently available
+      or not. This function is ideal for managing email responses efficiently, especially
+      when the user is busy or unavailable.
 
-    Does the generated automatic email reply clearly communicate the user''s availability
-    based on the email subject? It should be immediately clear to anyone who reads
-    the email reply when the user is available or not.
+      Does the generated automatic email reply clearly communicate the user's availability
+      based on the email subject? It should be immediately clear to anyone who reads
+      the email reply what the user's availability is.
 
-    [Input]: email_subject: {{email_subject}}
+      [Input]: email_subject: {{email_subject}}
 
-    user_availability: {{user_availability}}
+      user_availability: {{user_availability}}
 
-    [Result]: {raw_output}
+      [Result]: {raw_output}
 
-    Answer the question by selecting one of the following options:
+      Answer the question by selecting one of the following options:
 
-    A It fails to meet the criterion at all.
+      A It fails to meet the criterion at all.
 
-    B It somewhat meets the criterion, but there is significant room for improvement.
+      B It somewhat meets the criterion, but there is significant room for improvement.
 
-    C It meets the criterion to a satisfactory degree.
+      C It meets the criterion to a satisfactory degree.
 
-    D It meets the criterion very well.
+      D It meets the criterion very well.
 
-    E It meets the criterion exceptionally well, with little to no room for improvement.'
-  scale_description: 0-4
+      E It meets the criterion exceptionally well, with little to no room for improvement."
+    scale_description: 0-4
 human_rating_configs:
-- instructions: Does the automated email response accurately reflect the user's availability
-    status? The function should generate a response that correctly communicates whether
-    the user is available or not, based on the input provided.
-  name: accuracy
-  scale:
-  - 0
-  - 4
-- instructions: Does the automated email response appropriately address the subject
-    matter of the received email? The function should be able to identify and understand
-    the subject of the email to generate a relevant response.
-  name: relevance
-  scale:
-  - 0
-  - 4
-- instructions: Is the automated email response clear and concise? The function should
-    generate a response that is easy to understand and not overly lengthy or complicated.
-  name: clarity
-  scale:
-  - 0
-  - 4
-- instructions: Does the automatic email reply maintain a polite tone throughout?
-    It should convey the necessary information about the user's availability without
-    coming across as rude or dismissive. The language used should be professional
-    and respectful, regardless of the email subject.
-  name: politeness
-  scale:
-  - 0
-  - 4
-- instructions: Does the generated automatic email reply clearly communicate the user's
-    availability based on the email subject? It should be immediately clear to anyone
-    who reads the email reply when the user is available or not.
-  name: clarity
-  scale:
-  - 0
-  - 4
+  - instructions:
+      Does the automated email response accurately reflect the context of
+      the received email's subject? The function should be able to interpret the subject
+      of the email and generate a response that is relevant and appropriate to the context.
+    name: context accuracy
+    scale:
+      - 0
+      - 4
+  - instructions:
+      Does the automated email response correctly represent the user's availability
+      status? The function should take into account whether the user is available or
+      not and craft a response that accurately reflects this status.
+    name: availability representation
+    scale:
+      - 0
+      - 4
+  - instructions:
+      Is the automated email response clear and understandable? Despite
+      being automated, the response should be written in a way that is easy for the
+      recipient to understand, avoiding any confusion or misinterpretation.
+    name: clarity
+    scale:
+      - 0
+      - 4
+  - instructions:
+      Does the automatic email reply maintain a polite and respectful tone?
+      It should consider the recipient's feelings and convey the user's unavailability
+      in a courteous manner. The language used should be professional and considerate,
+      avoiding any harsh or rude expressions.
+    name: politeness
+    scale:
+      - 0
+      - 4
+  - instructions:
+      Does the generated automatic email reply clearly communicate the user's
+      availability based on the email subject? It should be immediately clear to anyone
+      who reads the email reply what the user's availability is.
+    name: clarity
+    scale:
+      - 0
+      - 4
 selection_strategy:
   ahp_selection:
     criteria:
-    - 'openai_prompt_based_evaluator: accuracy'
-    - 'openai_prompt_based_evaluator: relevance'
-    - 'openai_prompt_based_evaluator: clarity'
-    - 'openai_prompt_based_evaluator: politeness'
-    - 'openai_prompt_based_evaluator: clarity'
-    - average_token_usage
-    - average_latency
+      - "openai_prompt_based_evaluator: context accuracy"
+      - "openai_prompt_based_evaluator: availability representation"
+      - "openai_prompt_based_evaluator: clarity"
+      - "openai_prompt_based_evaluator: politeness"
+      - "openai_prompt_based_evaluator: clarity"
+      - average_token_usage
+      - average_latency
     criteria_maximization:
       average_latency: false
       average_token_usage: false
-      'openai_prompt_based_evaluator: accuracy': true
-      'openai_prompt_based_evaluator: clarity': true
-      'openai_prompt_based_evaluator: politeness': true
-      'openai_prompt_based_evaluator: relevance': true
+      "openai_prompt_based_evaluator: availability representation": true
+      "openai_prompt_based_evaluator: clarity": true
+      "openai_prompt_based_evaluator: context accuracy": true
+      "openai_prompt_based_evaluator: politeness": true
     criteria_weights:
       average_latency: 0
       average_token_usage: 0
-      'openai_prompt_based_evaluator: accuracy': 0.2
-      'openai_prompt_based_evaluator: clarity': 0.2
-      'openai_prompt_based_evaluator: politeness': 0.2
-      'openai_prompt_based_evaluator: relevance': 0.2
+      "openai_prompt_based_evaluator: availability representation": 0.2
+      "openai_prompt_based_evaluator: clarity": 0.2
+      "openai_prompt_based_evaluator: context accuracy": 0.2
+      "openai_prompt_based_evaluator: politeness": 0.2
 variations:
-- generator_config: null
-  generator_name: null
-  name: task
-  variations:
-  - instantiated_value: generate a short automatic email reply based on the {{email_subject}}
-      and {{user_availability}}
-    value: generate a short automatic email reply based on the {{email_subject}} and
-      {{user_availability}}
-    value_type: str
-    variation_id: null
+  - generator_config: null
+    generator_name: null
+    name: task
+    variations:
+      - instantiated_value:
+          generate a short automatic email reply based on the {{email_subject}}
+          and {{user_availability}}
+        value:
+          generate a short automatic email reply based on the {{email_subject}} and
+          {{user_availability}}
+        value_type: str
+        variation_id: null
