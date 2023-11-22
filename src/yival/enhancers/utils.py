@@ -1,5 +1,19 @@
 import re
-from typing import Dict, List
+from typing import Dict, List, Union, Tuple
+from ..schemas.experiment_config import Experiment, ExperimentResult
+from ..common.model_utils import llm_completion
+from ..schemas.model_configs import Request
+
+def find_origin_combo_key(experiment: Experiment) -> str:
+    """
+    Find the combo key from best_combination
+    Ensure that we have selector config
+    """
+    if experiment.selection_output is not None:
+        combo_key = experiment.selection_output.best_combination
+        return combo_key
+    else:
+        raise ValueError("Selection output is None")
 
 
 def format_input_from_dict(input_dict: Dict, enhance_var: List[str]) -> str:
@@ -108,6 +122,50 @@ def scratch_template_vars(prompt: str) -> List[str]:
     """
     return re.findall(r"\{(\w+)\}", prompt)
 
+
+def openai_call(dialogues:Union[str, List[Dict[str, str]]],model_name="gpt-4") -> str:
+    response = llm_completion(
+            Request(
+                model_name=model_name,
+                prompt=dialogues,
+                params={"temperature": 1.0}
+            )
+        ).output
+    llm_output_str = response["choices"][0]["message"]["content"]
+    return llm_output_str
+
+
+def extract_from_experiment_result(exp_result:ExperimentResult) -> str:
+    input = exp_result.input_data.content
+    output = exp_result.raw_output.text_output
+    evaluate_str = ""
+    for eval in exp_result.evaluator_outputs:
+        evaluate_str = evaluate_str + f"* {eval.name}-{eval.display_name} score: {eval.result}\n"
+    result = f"input:{input}\noutput:{output}\nevaluate result:{evaluate_str}"
+    return result
+    
+def construct_solution_score_pairs(
+    cache: List[Tuple[Dict, Dict]], enhance_var: List[str]
+) -> str:
+    """
+    Construct the solution_score_pairs for the full prompt.
+    This part will be longer after each iteration.
+    To avoid the input is too long for llm , we will cut the cache to the
+    latest five outputs
+    """
+    prompt = ""
+    for prompt_dict, eval_dict in cache[-5:]:
+        prompt += 'Input:\n'
+        prompt += format_input_from_dict(prompt_dict, enhance_var)
+        prompt += 'Evaluation:\n'
+        for evaluator_name, score in eval_dict.items():
+            display = evaluator_name.split(":")[-1].strip()
+            if display == "average_token_usage" or display == "average_latency":
+                continue
+            prompt += f"{display}: {score} "
+        prompt += '\n'
+
+    return prompt
 
 if __name__ == "__main__":
     input = """

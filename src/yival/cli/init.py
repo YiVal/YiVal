@@ -8,6 +8,7 @@ from ..enhancers.openai_prompt_based_combination_enhancer import (
     OpenAIPromptBasedCombinationEnhancer,
 )
 from ..enhancers.optimize_by_prompt_enhancer import OptimizeByPromptEnhancer
+from ..enhancers.pe2_enhancer import PE2Enhancer
 from ..evaluators.bertscore_evaluator import BertScoreEvaluator
 from ..evaluators.openai_elo_evaluator import OpenAIEloEvaluator
 from ..evaluators.openai_prompt_based_evaluator import OpenAIPromptBasedEvaluator
@@ -51,6 +52,7 @@ def _prevent_unused_imports():
     #Enhancer
     _ = OpenAIPromptBasedCombinationEnhancer
     _ = OptimizeByPromptEnhancer
+    _ = PE2Enhancer
 
     #Strategy
     _ = AHPSelection
