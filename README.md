@@ -158,6 +158,8 @@ of random tech startup business names.
 5. **Check the Generated Dataset**:
    The generated test dataset will be stored in `generated_examples.csv`.
 
+Please refer to [YiVal Docs Page](https://yival.github.io/YiValApi/) for more details about YiVal!
+
 ## Demo
 
 [Demo Video](https://user-images.githubusercontent.com/68423614/275689372-c3d3497c-1dc4-48bd-860b-a773f11db9f7.mp4)
