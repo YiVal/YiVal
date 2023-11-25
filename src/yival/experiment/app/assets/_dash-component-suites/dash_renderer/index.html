@@ -13,8 +13,8 @@
             {%scripts%}
             <script>
                 var openNewTab = function(url) {
-                    window.open(url, '_blank');
-                };
+                            window.open(url, '_blank');
+                        };
             </script>
             {%renderer%}
         </footer>
@@ -23,6 +23,6 @@
 
 <script>
     document.getElementById('open-result-tab-button').addEventListener('click', function() {
-        openNewTab(document.getElementById('open-result-tab').href);
-    });
-</script>
+            openNewTab(document.getElementById('open-result-tab').href);
+        });
+    </script>

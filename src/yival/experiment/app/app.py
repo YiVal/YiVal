@@ -21,6 +21,7 @@ import pandas as pd  # type: ignore
 import plotly.express as px  # type: ignore
 from dash import dash_table, dcc, html  # type: ignore
 from dash.dependencies import ALL, MATCH, Input, Output, State
+from dash.exceptions import PreventUpdate
 from dash_dangerously_set_inner_html import DangerouslySetInnerHTML
 from PIL import Image
 from pyngrok import ngrok
@@ -1836,8 +1837,13 @@ def create_dash_app(
         State('task', 'value'),
     )
     def update_link(n, task):
-        if n is not None and task == 'Tiktok Headline Generation Bot':
-            return 'http://ec2-35-85-28-134.us-west-2.compute.amazonaws.com:8074/enhancer-experiment-results'
+        if n is not None:
+            if task == 'Tiktok Headline Generation Bot':
+                return 'http://ec2-35-85-28-134.us-west-2.compute.amazonaws.com:8074/enhancer-experiment-results'
+            elif task == 'Task 2':
+                return 'http://link-to-task-2.com'
+            elif task == 'Task 3':
+                return 'http://link-to-task-3.com'
         else:
             return dash.no_update
 
@@ -1868,6 +1874,27 @@ def create_dash_app(
 
         input_values = DefaultValueProvider.get_default_values(button_id)
         return input_values.task, input_values.context_info, input_values.evaluation_aspects
+
+    # @app.callback(
+    #     [Output('update-button-1', 'href'),
+    #     Output('update-button-2', 'href'),
+    #     Output('update-button-3', 'href')],
+    #     [Input('update-button-1', 'n_clicks'),
+    #     Input('update-button-2', 'n_clicks'),
+    #     Input('update-button-3', 'n_clicks')]
+    # )
+    # def update_button_urls(n1, n2, n3):
+    #     ctx = dash.callback_context
+    #     if not ctx.triggered:
+    #         raise PreventUpdate
+    #     else:
+    #         button_id = ctx.triggered[0]['prop_id'].split('.')[0]
+    #         if button_id == 'update-button-1':
+    #             return 'http://ec2-35-85-28-134.us-west-2.compute.amazonaws.com:8074/enhancer-experiment-results', dash.no_update, dash.no_update
+    #         elif button_id == 'update-button-2':
+    #             return dash.no_update, 'http://example.com', dash.no_update  # replace with your actual url
+    #         elif button_id == 'update-button-3':
+    #             return dash.no_update, dash.no_update, 'http://example.com'  # replace with your actual url
 
     @app.callback(
         dash.dependencies.Output('page-content', 'children'),
