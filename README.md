@@ -58,27 +58,27 @@ effortlessly with YiVal!
 
 **[Tiktok title autotune](http://ec2-35-85-28-134.us-west-2.compute.amazonaws.com:8074/enhancer-experiment-results)**
 
-## Installation
-
-### Runtime Setup Using Docker
+## Using Docker
 Install Docker and pull ourimage on DockerHub:
 
 ```bash
-docker pull newbeewzh/yival_docker_test:latest
+docker pull yival/release:latest
 ```
 
 Run our image:
 
 ```bash
-docker run --it newbeewzh/yival_docker_test:latest
+docker run --it yival/release:latest
 ```
 
-If you are developer using GPU with Pytorch, or need jupyter lab for development:
+VSCode with Docker extension is recommended for running and developments. If you are developer using GPU with Pytorch, or need jupyter lab for data science:
 
 ```bash
-docker pull newbeewzh/yival_docker_test:cu12_torch_conda_jupyter
-docker run --gpus all --it -p 8888:8888 newbeewzh/yival_docker_test:cu12_torch_conda_jupyter
+docker pull yival/release:cu12_torch_jupyter
+docker run --gpus all --it -p 8888:8888 yival/release:cu12_torch_jupyter
 ```
+
+## Installation
 
 ### Prerequisites
 
