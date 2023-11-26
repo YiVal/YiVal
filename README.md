@@ -60,6 +60,26 @@ effortlessly with YiVal!
 
 ## Installation
 
+### Runtime Setup Using Docker
+Install Docker and pull ourimage on DockerHub:
+
+```bash
+docker pull newbeewzh/yival_docker_test:latest
+```
+
+Run our image:
+
+```bash
+docker run --it newbeewzh/yival_docker_test:latest
+```
+
+If you are developer using GPU with Pytorch, or need jupyter lab for development:
+
+```bash
+docker pull newbeewzh/yival_docker_test:cu12_torch_conda_jupyter
+docker run --gpus all --it -p 8888:8888 newbeewzh/yival_docker_test:cu12_torch_conda_jupyter
+```
+
 ### Prerequisites
 
 - **Python Version**: Ensure you have `Python 3.10` or later installed.
