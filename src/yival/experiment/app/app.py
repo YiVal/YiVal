@@ -1825,8 +1825,7 @@ def create_dash_app(
         elif task == 'Fitness Plan Bot':
             return 'http://ec2-35-85-28-134.us-west-2.compute.amazonaws.com:8003/enhancer-experiment-results'
         else:
-            return dash.no_update   
-
+            return dash.no_update
 
     @app.callback(
         Output('task', 'value'),
