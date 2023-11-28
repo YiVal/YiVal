@@ -3,23 +3,23 @@ sidebar_position: 11
 
 ---
 
-# Finetune 
+# Finetune
 
-##  `OpenAIFineTuneUtils`
+## `OpenAIFineTuneUtils`
 
-###   Introduction 
+### Introduction
 
   This module is designed to fine-tune OpenAI's GPT model using a specified dataset and conditions. It provides a utility for extracting relevant results from an experiment, transforming this data into the desired format, and then leveraging OpenAI's API to perform fine-tuning.
 
   It takes ExperimentResult dump (pkl), and filtered conditions to extract the result.
 
-###   Class Definition 
+### Class Definition
 
-####    Description
+#### Description
 
-####    Attributes
+#### Attributes
 
-###   Example 
+### Example
 
 ```Python
 def main():
@@ -29,9 +29,9 @@ def main():
     )
 ```
 
-##  `SFTTrainer`
+## `SFTTrainer`
 
-###   Introduction 
+### Introduction
 
   The `SFTTrainer` class is designed to finetune a pre-trainer model on a specific task. It's a part of the yival framework that allows for easy and efficient fine-tuning of models. The class is built on top of the Hugging Face Transformers library and provides a high-level, easy-to-use API for fine-tuning.
 
@@ -39,91 +39,89 @@ def main():
 
   We recommend two ways to use Yival's SFTTrainer.
 
-- Use various dataset generators built into Yival (including huggingface, openai_generator, etc.) for data upload or generation, and then finetune the model 
+- Use various dataset generators built into Yival (including huggingface, openai_generator, etc.) for data upload or generation, and then finetune the model
 - Provide a custom_func, use advanced models like GPT-4 for data generation, and customize the selection criteria. The model is then finetuned based on the selected data.
 
-###   `DataSetConfig` 
+### `DataSetConfig`
 
-####    Description
+#### Description
 
    Configuration class for the training arguments. It specifies various parameters including per device train batch size, gradient accumulation steps, gradient checkpointing, max grad norm, num train epochs, learning rate, bf16, save total limit, logging steps, optim, lr scheduler type, warmup ratio, and log level.
 
-####    Attributes
+#### Attributes
 
 - **`per_device_train_batch_size(int)`**:
-  - specifies the batch size for training per device.
+    - specifies the batch size for training per device.
 - **`gradient_accumulation_steps(int)`**:
-  - specifies the number of steps to accumulate gradients before updating.
+    - specifies the number of steps to accumulate gradients before updating.
 - **`gradient_checkpointing(bool)`**:
-  - specifies whether to use gradient checkpointing to save memory.
+    - specifies whether to use gradient checkpointing to save memory.
 - **`max_grad_norm(float)`**:
-  - specifies the maximum norm of the gradients.
+    - specifies the maximum norm of the gradients.
 - **`num_train_epochs(int)`**:
-  - specifies the number of training epochs.
+    - specifies the number of training epochs.
 - **`learning_rate(float)`**:
-  - specifies the learning rate.
+    - specifies the learning rate.
 - **`bf16(bool)`**:
-  - specifies whether to use bf16 precision for training.
+    - specifies whether to use bf16 precision for training.
 - **`save_total_limit(int)`**:
-  - specifies the total number of checkpoints to save.
+    - specifies the total number of checkpoints to save.
 - **`logging_steps(int)`**:
-  - specifies the number of steps between logging.
+    - specifies the number of steps between logging.
 - **`optim(str)`**:
-  - specifies the optimizer to use for training.
+    - specifies the optimizer to use for training.
 - **`lr_scheduler_type(str)`**:
-  - specifies the type of learning rate scheduler to use.
+    - specifies the type of learning rate scheduler to use.
 - **`warmup_ratio(float)`**:
-  - specifies the warmup ratio for the learning rate scheduler.
+    - specifies the warmup ratio for the learning rate scheduler.
 - **`log_level(str)`**:
-  - specifies the log level.
+    - specifies the log level.
 
-###   `TrainArguments`
+### `TrainArguments`
 
-####    Description
+#### Description
 
    Configuration class for the dataset. It specifies various parameters including prompt key, completion key, formatting prompts format, and condition.
 
-####    Attributes
+#### Attributes
 
-###   `BnbConfig`
+### `BnbConfig`
 
-####    Description
+#### Description
 
    Configuration class for the bits and bytes. It specifies whether to load in 4 bit or 8 bit.
 
-####    Attributes
+#### Attributes
 
 - **`load_in_4_bit(bool)`**:
-  - specifies whether to load in 4 bit.
+    - specifies whether to load in 4 bit.
 - **`load_in_8_bit(bool)`**:
-  - specifies whether to load in 8 bit.
+    - specifies whether to load in 8 bit.
 
+### `LoRAConfig`
 
-
-###   `LoRAConfig`
-
-####    Description
+#### Description
 
    Configuration class for the LoRA. It specifies various parameters including r, lora alpha, bias, task type, lora dropout, and inference mode.
 
-####    Attributes
+#### Attributes
 
 - **`r(int)`**:
-  - specifies the rank for the LoRA.
+    - specifies the rank for the LoRA.
 - **`lora_alpha(int)`**:
-  - specifies the alpha for the LoRA.
+    - specifies the alpha for the LoRA.
 - **`bias(str)`**:
-  - specifies the bias for the LoRA.
+    - specifies the bias for the LoRA.
 - **`task_type(str)`**:
 - specifies the task type for the LoRA.
 - **`lora_dropout(float)`**:
-  - specifies the dropout for the LoRA.
+    - specifies the dropout for the LoRA.
 - **`inference_mode(bool)`**:
-  - specifies whether to use inference mode for the LoRA.
+    - specifies whether to use inference mode for the LoRA.
 
-###   Example 
+### Example
 
-####    Dataset load and finetune model in yival config
+#### Dataset load and finetune model in yival config
 
 ```YAML
 description: Generated experiment config
@@ -257,15 +255,14 @@ trainer:
   enable_bits_and_bytes: False
 ```
 
-##  `BackUpSFTTrainer`
+## `BackUpSFTTrainer`
 
-###   Introduction
+### Introduction
 
-###   Class Definition
+### Class Definition
 
-####    Description
+#### Description
 
-####    Attributes
+#### Attributes
 
-###   Example
-
+### Example

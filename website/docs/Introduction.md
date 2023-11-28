@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Introduction
 
-YiVal is a versatile platform and framework designed to streamline the evaluation and enhancement of your Generative AI applications. Its core mission is to comprehensively simplify and optimize the development process for Generative AI applications. 
+YiVal is a versatile platform and framework designed to streamline the evaluation and enhancement of your Generative AI applications. Its core mission is to comprehensively simplify and optimize the development process for Generative AI applications.
 
 YiVal achieves this by taking a generative AI task and utilizing it to generate data tailored for a specific objective. It then explores all potential combinations, subsequently evaluating and selecting the optimal parameters for enhancement.
 
@@ -24,4 +24,4 @@ YiVal serves as a versatile tool for various purposes:
 
 - **Unified Platform:** Simplify your workflow by accessing all these capabilities within a single, user-friendly interface, making enhancement and evaluation more efficient.
 
-YiVal offers an open-source framework that caters to a wide range of users, from individuals and beginners to enterprises. For beginners, the platform provides an automated agent mode, offering a seamless one-click experience for creating applications. Enterprise users, on the other hand, can leverage both experiment and production modes to optimize and enhance complex models, providing flexibility and scalability to suit different needs. To address your specific needs tailored just for you, please reach out to us at **[contact information].**
+YiVal offers an open-source framework that caters to a wide range of users, from individuals and beginners to enterprises. For beginners, the platform provides an automated agent mode, offering a seamless one-click experience for creating applications. Enterprise users, on the other hand, can leverage both experiment and production modes to optimize and enhance complex models, providing flexibility and scalability to suit different needs. To address your specific needs tailored just for you, please reach out to us at **contactus@yival.io**
