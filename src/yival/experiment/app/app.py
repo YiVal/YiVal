@@ -21,11 +21,13 @@ import pandas as pd  # type: ignore
 import plotly.express as px  # type: ignore
 from dash import dash_table, dcc, html  # type: ignore
 from dash.dependencies import ALL, MATCH, Input, Output, State
+from dash.exceptions import PreventUpdate
 from dash_dangerously_set_inner_html import DangerouslySetInnerHTML
 from PIL import Image
 from pyngrok import ngrok
 from termcolor import colored
 
+from ...auto_prompt.default_task import DefaultValueProvider
 from ...common.auto_cofig_utils import auto_generate_config
 from ...schemas.common_structures import InputData
 from ...schemas.experiment_config import (
@@ -293,7 +295,7 @@ def df_to_table(df):
 def create_dash_app(
     experiment_data: Experiment, experiment_config: ExperimentConfig,
     function_args: Dict[str, Any], all_combinations, state, logger, evaluator,
-    interactive_mode, autogen
+    interactive_mode, autogen, demo
 ):
 
     def parallel_task(data_point, all_combinations, logger, evaluator):
@@ -1644,70 +1646,180 @@ def create_dash_app(
         )
 
     def input_task_layout():
-        return html.Div([
-            html.Label(
-                '[?] What task would you like to set up? For example:',
-                style={'margin': '10px'}
-            ),
-            dcc.Input(
-                id='task',
-                type='text',
-                placeholder='Task',
-                value=default_task,
-                style={
-                    'width': '100%',
-                    'height': '50px',
-                    'fontSize': '18px',
-                    'margin': '10px'
-                }
-            ),
-            html.Label(
-                '[?] Provide input for the task, separated by comma. For example:',
-                style={'margin': '10px'}
-            ),
-            dcc.Input(
-                id='context_info',
-                type='text',
-                placeholder='Context Info',
-                value=default_context_info,
-                style={
-                    'width': '100%',
-                    'height': '50px',
-                    'fontSize': '18px',
-                    'margin': '10px'
-                }
-            ),
-            html.Label(
-                '[?] Please provide evaluation aspects (optional):',
-                style={'margin': '10px'}
-            ),
-            dcc.Input(
-                id='evaluation_aspects',
-                type='text',
-                placeholder='Evaluation Aspects (optional)',
-                value=default_evaluation_aspects,
-                style={
-                    'width': '100%',
-                    'height': '50px',
-                    'fontSize': '18px',
-                    'margin': '10px'
-                }
-            ),
-            html.Button(
-                'Submit',
-                id='submit-button',
-                n_clicks=0,
-                style={
-                    'fontSize': '18px',
-                    'margin': '10px'
-                }
-            ),
-            html.Div(id='output-task-div')
-        ],
+        if demo != True:
+            return html.Div([
+                html.Label(
+                    '[?] Please enter the name of the experiment: ',
+                    style={'margin': '10px'}
+                ),
+                dcc.Input(
+                    id='task',
+                    type='text',
+                    placeholder='Task',
+                    value=default_task,
+                    style={
+                        'width': '100%',
+                        'height': '50px',
+                        'fontSize': '18px',
+                        'margin': '10px'
+                    }
+                ),
+                html.Label(
+                    '[?] Please enter the prompt (use {{}} to wrap around input variables): ',
+                    style={'margin': '10px'}
+                ),
+                dcc.Input(
+                    id='context_info',
+                    type='text',
+                    placeholder='Context Info',
+                    value=default_context_info,
+                    style={
+                        'width': '100%',
+                        'height': '50px',
+                        'fontSize': '18px',
+                        'margin': '10px'
+                    }
+                ),
+                html.Label(
+                    '[?] Please provide evaluation aspects (optional):',
+                    style={'margin': '10px'}
+                ),
+                dcc.Input(
+                    id='evaluation_aspects',
+                    type='text',
+                    placeholder='Evaluation Aspects (optional)',
+                    value=default_evaluation_aspects,
+                    style={
+                        'width': '100%',
+                        'height': '50px',
+                        'fontSize': '18px',
+                        'margin': '10px'
+                    }
+                ),
+                html.Button(
+                    'Submit',
+                    id='submit-button',
+                    n_clicks=0,
+                    style={
+                        'fontSize': '18px',
+                        'margin': '10px'
+                    }
+                ),
+                html.Div(id='output-task-div')
+            ],
+                            style={
+                                'backgroundColor': '#f0f0f0',
+                                'padding': '20px'
+                            })
+        else:
+            return html.Div([
+                html.Div([
+                    html.Div([
+                        html.Button(
+                            'Tiktok Headline Generation Bot',
+                            id='update-button-1',
+                            n_clicks=0,
+                            className='task-button',
+                        ),
+                        html.Button(
+                            'Email Auto Reply Bot',
+                            id='update-button-2',
+                            n_clicks=0,
+                            className='task-button',
+                        ),
+                        html.Button(
+                            'Fitness Plan Bot',
+                            id='update-button-3',
+                            n_clicks=0,
+                            className='task-button',
+                        )
+                    ]),
+                    html.Div([
+                        html.Label(
+                            '[?] Please enter the name of the experiment:',
+                            style={'margin': '10px'}
+                        ),
+                        dcc.Input(
+                            id='task',
+                            type='text',
+                            placeholder='Task',
+                            value='',
+                            style={
+                                'width': '100%',
+                                'height': '50px',
+                                'fontSize': '18px',
+                                'margin': '10px'
+                            }
+                        ),
+                        html.Label(
+                            '[?] Please enter the prompt (use {{}} to wrap around input variables): ',
+                            style={'margin': '10px'}
+                        ),
+                        dcc.Input(
+                            id='context_info',
+                            type='text',
+                            placeholder='Context Info',
+                            value='',
+                            style={
+                                'width': '100%',
+                                'height': '50px',
+                                'fontSize': '18px',
+                                'margin': '10px'
+                            }
+                        ),
+                        html.Label(
+                            '[?] Please provide evaluation aspects (optional):',
+                            style={'margin': '10px'}
+                        ),
+                        dcc.Input(
+                            id='evaluation_aspects',
+                            type='text',
+                            placeholder='Evaluation Aspects (optional)',
+                            value='',
+                            style={
+                                'width': '100%',
+                                'height': '50px',
+                                'fontSize': '18px',
+                                'margin': '10px'
+                            }
+                        )
+                    ]),
+                    html.Button(
+                        'Submit',
+                        id='submit-button-fix',
+                        n_clicks=0,
                         style={
-                            'backgroundColor': '#f0f0f0',
-                            'padding': '20px'
-                        })
+                            'fontSize': '18px',
+                            'margin': '10px',
+                            'backgroundColor': '#85AED8',
+                            'color': 'white',
+                            'border': 'none',
+                            'padding': '10px 20px',
+                            'borderRadius': '5px',
+                            'cursor': 'pointer',
+                            'textDecoration': 'none',
+                            'display': 'inline-block',
+                            'transitionDuration': '0.4s'
+                        }
+                    ),
+                    html.A(
+                        id='open-result-tab',
+                        target='_blank',
+                        children=[
+                            html.Button(
+                                'Open result tab',
+                                id='open-result-tab-button',
+                                className='jump-button jump-button-hide'
+                            )
+                        ]
+                    ),
+                    html.Div(id='output-task-div')
+                ],
+                         style={
+                             'backgroundColor': '#f0f0f0',
+                             'padding': '20px'
+                         })
+            ])
 
     app = dash.Dash(__name__, external_stylesheets=[dbc.themes.FLATLY])
 
@@ -1718,6 +1830,50 @@ def create_dash_app(
             experiment_data.combination_aggregated_metrics,
             experiment_data.group_experiment_results
         )
+
+    @app.callback(
+        Output('open-result-tab', 'href'),
+        Input('submit-button-fix', 'n_clicks'),
+        State('task', 'value'),
+    )
+    def update_link(n, task):
+        if n is not None:
+            if task == 'Tiktok Headline Generation Bot':
+                return 'http://ec2-35-85-28-134.us-west-2.compute.amazonaws.com:8074/enhancer-experiment-results'
+            elif task == 'Task 2':
+                return 'http://link-to-task-2.com'
+            elif task == 'Task 3':
+                return 'http://link-to-task-3.com'
+        else:
+            return dash.no_update
+
+    @app.callback(
+        Output('open-result-tab-button', 'className'),
+        Input('submit-button-fix', 'n_clicks'),
+    )
+    def show_link(n):
+        if n > 0:
+            return 'jump-button jump-button-show'
+        else:
+            return 'jump-button jump-button-hide'
+
+    @app.callback(
+        Output('task', 'value'),
+        Output('context_info', 'value'),
+        Output('evaluation_aspects', 'value'),
+        Input('update-button-1', 'n_clicks'),
+        Input('update-button-2', 'n_clicks'),
+        Input('update-button-3', 'n_clicks'),
+    )
+    def update_input_values(n1, n2, n3):
+        ctx = dash.callback_context
+        if not ctx.triggered:
+            return dash.no_update, dash.no_update, dash.no_update
+        else:
+            button_id = ctx.triggered[0]['prop_id'].split('.')[0]
+
+        input_values = DefaultValueProvider.get_default_values(button_id)
+        return input_values.task, input_values.context_info, input_values.evaluation_aspects
 
     @app.callback(
         dash.dependencies.Output('page-content', 'children'),
@@ -2307,13 +2463,13 @@ def create_dash_app(
     )
     def update_task_output(n_clicks, task, context_info, evaluation_aspects):
         if n_clicks > 0:
-            parameters = context_info.split(",")
-            aspect = []
-            if evaluation_aspects:
-                aspect = evaluation_aspects.split(",")
+            name = task
+            prompt_input = context_info
+            aspects = evaluation_aspects.split(","
+                                               ) if evaluation_aspects else []
 
-            if task != default_task and context_info != default_context_info and evaluation_aspects != default_evaluation_aspects:
-                auto_generate_config(task, parameters, aspect)
+            if task != default_task or context_info != default_context_info or evaluation_aspects != default_evaluation_aspects:
+                asyncio.run(auto_generate_config(prompt_input, aspects))
                 print(
                     colored(
                         "\n[INFO][auto_gen] Generating configuration...",
@@ -2322,7 +2478,7 @@ def create_dash_app(
                 )
                 subprocess.run([
                     "yival", "run", "auto_generated_config.yaml",
-                    "--output_path=auto_generated.pkl"
+                    f"--output_path={name}.pkl"
                 ])
             else:
                 print(
@@ -2338,9 +2494,9 @@ def create_dash_app(
 
             return 'Configuration generated and yival run completed.'
 
-    default_task = "generate tiktok video title"
-    default_context_info = "target_audience,content_summary"
-    default_evaluation_aspects = ""
+    default_task = "Tiktok Headline Generation Bot"
+    default_context_info = "generate a short tiktok video title based on the {{content summary}} and {{target_audience}}"
+    default_evaluation_aspects = "emoji, oneline"
 
     app.layout = html.Div(
         [
@@ -2404,6 +2560,7 @@ def display_results_dash(
     evaluator,
     interactive=False,
     autogen=False,
+    demo=False,
     port=8074,
 ):
     if not autogen:
@@ -2424,12 +2581,13 @@ def display_results_dash(
         function_args["yival_expected_result (Optional)"] = 'str'
         app = create_dash_app(
             experiment_data, experiment_config, function_args,
-            all_combinations, state, logger, evaluator, interactive, autogen
+            all_combinations, state, logger, evaluator, interactive, autogen,
+            demo
         )
     else:
         app = create_dash_app(
             experiment_data, experiment_config, {}, all_combinations, state,
-            logger, evaluator, interactive, autogen
+            logger, evaluator, interactive, autogen, demo
         )
     if os.environ.get("ngrok", False):
         public_url = ngrok.connect(port)
