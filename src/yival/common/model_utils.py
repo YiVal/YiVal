@@ -64,7 +64,7 @@ def llm_completion(
     model provider.
 
     Parameters:
-        request (Request): The request object containing the model name and 
+        request (Request): The request object containing the model name and
         other details.
         provider (ModelProvider | None, optional): The model provider object.
         If None,  a provider will be determined based on the

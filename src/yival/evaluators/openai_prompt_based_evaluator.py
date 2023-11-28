@@ -7,20 +7,30 @@ the model's responses to determine the quality or correctness of a given
 experiment result.
 """
 import copy
+import logging
+import os
 import string
 from typing import Any, Dict, Iterable, List, Optional, Union
 
-from ..common.model_utils import llm_completion
-from ..schemas.evaluator_config import (
+import aiohttp
+# for exponential backoff
+import openai
+from aiohttp_socks import ProxyConnector  # type: ignore
+from tenacity import before_sleep_log, retry, stop_after_attempt, wait_random
+
+logging.basicConfig(level=logging.ERROR)
+logger = logging.getLogger(__name__)
+
+from yival.common.utils import create_assistant, create_assistant_and_get_response
+from yival.evaluators.base_evaluator import BaseEvaluator
+from yival.schemas.evaluator_config import (
     EvaluatorOutput,
     EvaluatorType,
     MethodCalculationMethod,
     MetricCalculatorConfig,
     OpenAIPromptBasedEvaluatorConfig,
 )
-from ..schemas.experiment_config import ExperimentResult, InputData, MultimodalOutput
-from ..schemas.model_configs import Request
-from .base_evaluator import BaseEvaluator
+from yival.schemas.experiment_config import ExperimentResult, InputData, MultimodalOutput
 
 CLASSIFY_STR = """
 First, write out in a step by step manner your reasoning to be sure that your
@@ -93,6 +103,40 @@ def format_template(
     return res
 
 
+@retry(
+    wait=wait_random(min=1, max=20),
+    stop=stop_after_attempt(100),
+    before_sleep=before_sleep_log(logger, logging.DEBUG)
+)
+def completion_with_backpff(**kwargs):
+    response = openai.ChatCompletion.create(**kwargs)
+    return response
+
+
+@retry(
+    wait=wait_random(min=1, max=20),
+    stop=stop_after_attempt(100),
+)
+async def acompletion_with_backpff(**kwargs):
+    url = "https://api.openai.com/v1/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {openai.api_key}",
+        "Content-Type": "application/json"
+    }
+
+    proxy = os.environ.get("all_proxy")
+    if proxy:
+        connector = ProxyConnector.from_url(proxy)
+    else:
+        connector = None
+    kwargs.pop('request_timeout', None)
+
+    async with aiohttp.ClientSession(connector=connector) as session:
+        async with session.post(url, headers=headers, json=kwargs) as response:
+
+            return await response.json()
+
+
 def choices_to_string(choice_strings: Iterable[str]) -> str:
     """Converts a list of choices into a formatted string."""
     return " or ".join(f'"{choice}"' for choice in choice_strings)
@@ -108,6 +152,12 @@ class OpenAIPromptBasedEvaluator(BaseEvaluator):
     def __init__(self, config: OpenAIPromptBasedEvaluatorConfig):
         super().__init__(config)
         self.config = config
+        self.assistant_id = create_assistant(
+            name="Evaluator",
+            instructions="Evaluate ",
+            tools=[],
+            model="gpt-4-1106-preview"
+        )
 
     def evaluate(self, experiment_result: ExperimentResult) -> EvaluatorOutput:
         """Evaluate the experiment result using OpenAI's prompt-based evaluation."""
@@ -123,20 +173,49 @@ class OpenAIPromptBasedEvaluator(BaseEvaluator):
             choices=choices_to_string(self.config.choices)
         )
 
-        response = llm_completion(
-            Request(
-                model_name=self.config.model_name,
-                prompt=prompt,
-                params={"temperature": 0.0}
-            )
-        ).output
-        response_content = response['choices'][0]['message']['content']
+        response_content = create_assistant_and_get_response(
+            prompt[-1]["content"], assistant_id=self.assistant_id
+        )
 
         choice = extract_choice_from_response(
             response_content, self.config.choices
         )
         score = calculate_choice_score(choice, self.config.choice_scores)
+        return EvaluatorOutput(
+            name=self.config.name,
+            result=score if score is not None else choice,
+            display_name=self.config.display_name,
+            metric_calculators=self.config.metric_calculators
+        )
 
+    async def aevaluate(self, experiment_result: ExperimentResult) -> Any:
+        assert isinstance(self.config, OpenAIPromptBasedEvaluatorConfig)
+        format_dict = copy.deepcopy(experiment_result.input_data.content)
+        format_dict["raw_output"] = experiment_result.raw_output.text_output
+
+        prompt = format_template(self.config.prompt, format_dict)
+        if isinstance(prompt, str):
+            prompt = [{"role": "user", "content": prompt}]
+
+        prompt[-1]["content"] += "\n\n" + CLASSIFY_STR.format(
+            choices=choices_to_string(self.config.choices)
+        )
+        response = await acompletion_with_backpff(
+            model="gpt-4",
+            messages=prompt,
+            temperature=0.5,
+            n=1,
+            max_tokens=1000,
+            request_timeout=60,
+        )
+        # import pdb
+        # pdb.set_trace()
+        #response = openai.ChatCompletion.create(model="gpt-4", messages=prompt, temperature=0.5)
+        response_content = response['choices'][0]['message']['content']
+        choice = extract_choice_from_response(
+            response_content, self.config.choices
+        )
+        score = calculate_choice_score(choice, self.config.choice_scores)
         return EvaluatorOutput(
             name=self.config.name,
             result=score if score is not None else choice,

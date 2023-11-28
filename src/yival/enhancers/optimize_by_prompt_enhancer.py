@@ -22,16 +22,17 @@ and more examples in paper appendix
 """
 
 import copy
+import itertools
 import json
-import logging
 from typing import Dict, List, Tuple
 
 from ..common.model_utils import llm_completion
 from ..experiment.evaluator import Evaluator
 from ..experiment.lite_experiment import LiteExperimentRunner
 from ..experiment.rate_limiter import RateLimiter
-from ..experiment.utils import generate_experiment
+from ..experiment.utils import generate_experiment, get_selection_strategy
 from ..logger.token_logger import TokenLogger
+from ..result_selectors.selection_context import SelectionContext
 from ..schemas.combination_enhancer_configs import OptimizeByPromptEnhancerConfig
 from ..schemas.common_structures import InputData
 from ..schemas.experiment_config import (
@@ -42,7 +43,13 @@ from ..schemas.experiment_config import (
 )
 from ..schemas.model_configs import Request
 from .base_combination_enhancer import BaseCombinationEnhancer
-from .utils import construct_output_format, format_input_from_dict, scratch_variations_from_str
+from .utils import (
+    construct_output_format,
+    construct_template_restrict,
+    format_input_from_dict,
+    scratch_template_vars,
+    scratch_variations_from_str,
+)
 
 rate_limiter = RateLimiter(60 / 60)
 
@@ -104,7 +111,7 @@ def construct_solution_score_pairs(
 def construct_opro_full_prompt(
     cache: List[Tuple[Dict, Dict]], head_meta_instruction: str,
     optimation_task_format: str | None, end_meta_instruction: str,
-    enhance_var: List[str]
+    enhance_var: List[str], template_vars: List[str] | None
 ) -> str:
     """
     Construct full opro prompt , which has a format as follow
@@ -119,6 +126,8 @@ def construct_opro_full_prompt(
     if optimation_task_format:
         full_prompt += (optimation_task_format + '\n')
     full_prompt += (end_meta_instruction + '\n')
+    if template_vars:
+        full_prompt += construct_template_restrict(template_vars)
     full_prompt += construct_output_format(enhance_var)
 
     return full_prompt
@@ -205,12 +214,26 @@ class OptimizeByPromptEnhancer(BaseCombinationEnhancer):
 
         #init cache with the best combo
         best_combo, score = find_combo_with_score(experiment)
+        cache.append((best_combo, score))
+
+        for combo_me in experiment.combination_aggregated_metrics:
+            if combo_me.combo_key == json.dumps(best_combo):
+                results.extend(combo_me.experiment_results)
 
         #ensure that all variation in enhance_var appears best_combo
         assert set(self.config.enhance_var).issubset(set(best_combo.keys()))
 
         variations_now = best_combo
-        logging.info(f"[INFO][opro] first variations is {variations_now}")
+        template_vars = [
+            scratch_template_vars(str_value)
+            for str_value in best_combo.values()
+        ]
+        if template_vars:
+            template_vars = list(itertools.chain(*template_vars))  #type:ignore
+        else:
+            template_vars = None  #type:ignore
+
+        print(f"[INFO][opro] first variations is {variations_now}")
 
         lite_experiment_runner = LiteExperimentRunner(
             config=self.updated_config,
@@ -221,43 +244,40 @@ class OptimizeByPromptEnhancer(BaseCombinationEnhancer):
         )
 
         #optimize by prompt for max_iterations times
-        for i in range(self.config.max_iterations + 1):
-            logging.info(
-                f"[INFO][optimize_by_prompt_enhancer] start iteration [{i}]"
+        for i in range(self.config.max_iterations):
+            print(
+                f"[INFO][optimize_by_prompt_enhancer] start iteration[{i+1}]"
+            )
+            opro_prompt = construct_opro_full_prompt(
+                cache,
+                self.config.head_meta_instruction,
+                self.config.optimation_task_format,
+                self.config.end_meta_instruction,
+                self.config.enhance_var,
+                template_vars  #type: ignore
             )
 
-            #update variations and run experiment
+            gen_variations = self.fetch_next_variations(opro_prompt)
+            if not gen_variations:
+                print(
+                    f"[INFO][optimize_by_prompt_enhancer] fetch next variations error"
+                )
+            else:
+                print(
+                    f"[INFO][optimize_by_prompt_enhancer] generate new variations: {gen_variations}"
+                )
+
             lite_experiment_runner.set_variations([{
                 key: [value]
-                for key, value in variations_now.items()
+                for key, value in gen_variations.items()
             }])
 
             experiment = lite_experiment_runner.run_experiment(
                 enable_selector=True
             )
             experiments.append(experiment)
-
-            #fetch next prompt
             best_combo, score = find_combo_with_score(experiment)
             cache.append((best_combo, score))
-
-            opro_prompt = construct_opro_full_prompt(
-                cache, self.config.head_meta_instruction,
-                self.config.optimation_task_format,
-                self.config.end_meta_instruction, self.config.enhance_var
-            )
-
-            gen_variations = self.fetch_next_variations(opro_prompt)
-
-            if not gen_variations:
-                logging.info(
-                    f"[INFO][optimize_by_prompt_enhancer] fetch next variations error"
-                )
-            else:
-                logging.info(
-                    f"[INFO][optimize_by_prompt_enhancer] generate new variations: {gen_variations}"
-                )
-                variations_now = gen_variations
 
         for exp in experiments:
             for res in exp.combination_aggregated_metrics:
@@ -266,12 +286,20 @@ class OptimizeByPromptEnhancer(BaseCombinationEnhancer):
         experiment = generate_experiment(
             results, evaluator, evaluate_group=False, evaluate_all=False
         )
+        enable_custom_func = "custom_function" in self.updated_config  #type: ignore
+        strategy = get_selection_strategy(self.updated_config)
+        if strategy and enable_custom_func:
+            context_trade_off = SelectionContext(strategy=strategy)
+            experiment.selection_output = context_trade_off.execute_selection( # type: ignore
+                experiment=experiment
+            )
 
         enhancer_output = EnhancerOutput(
             group_experiment_results=experiment.group_experiment_results,
             combination_aggregated_metrics=experiment.
             combination_aggregated_metrics,
-            original_best_combo_key=original_combo_key
+            original_best_combo_key=original_combo_key,
+            selection_output=experiment.selection_output
         )
 
         return enhancer_output

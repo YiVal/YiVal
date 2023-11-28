@@ -115,7 +115,7 @@ class ExperimentRunner:
             with tqdm(
                 total=total_combinations, desc="Processing", unit="item"
             ) as pbar:
-                with ThreadPoolExecutor() as executor:
+                with ThreadPoolExecutor(max_workers=10) as executor:
                     for res in executor.map(
                         self.parallel_task, data,
                         [all_combinations] * len(data), [logger] * len(data),
@@ -140,7 +140,7 @@ class ExperimentRunner:
 
     def parallel_task(self, data_point, all_combinations, logger, evaluator):
         """Task to be run in parallel for processing data points."""
-        RateLimiter(30 / 60)()  # Ensure rate limit
+        RateLimiter(1000 / 60)()  # Ensure rate limit
         return run_single_input(
             data_point,
             self.config,
@@ -158,7 +158,7 @@ class ExperimentRunner:
         async_eval: bool = False
     ):
         """Run the experiment based on the source type and provided configuration."""
-        base_port = 8073
+        base_port = 8074
         display_threads = []
         for idx, config in enumerate(self.configs):
             self.config = config
@@ -229,10 +229,6 @@ class ExperimentRunner:
                     with open(config_output_path, 'wb') as file:
                         pickle.dump(experiment, file)
                 if display and enable_custom_func:
-                    # display_results_dash(
-                    #     experiment, self.config, all_combinations,
-                    #     ExperimentState.get_instance(), logger, evaluator, port=base_port+idx
-                    # )
                     t = Thread(
                         target=display_results_dash,
                         args=(
@@ -251,7 +247,8 @@ class ExperimentRunner:
             elif source_type == "user_input":
                 display_results_dash(
                     Experiment([], []), self.config, all_combinations,
-                    ExperimentState.get_instance(), logger, evaluator, True
+                    ExperimentState.get_instance(), logger, evaluator, True,
+                    False, False
                 )
         for t in display_threads:
             t.join()
