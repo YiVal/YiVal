@@ -5,9 +5,9 @@ sidebar_position: 13
 
 # Combination Improver
 
-##  `BaseCombinationImprover`
+## `BaseCombinationImprover`
 
-###   Introduction
+### Introduction
 
   This module defines the base class for combination improvers. Combination improvers are responsible for improving the combination of experiments based on their experiment results.
 
