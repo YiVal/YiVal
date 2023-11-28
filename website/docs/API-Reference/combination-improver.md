@@ -3,35 +3,35 @@ sidebar_position: 13
 
 ---
 
-#  Combination Improver
+# Combination Improver
 
-##  `BaseCombinationImprover`
+## `BaseCombinationImprover`
 
-###  Introduction
+### Introduction
 
   This module defines the base class for combination improvers. Combination improvers are responsible for improving the combination of experiments based on their experiment results.
 
-###  Class Definition
+### Class Definition
 
-####  Description
+#### Description
 
-####  Attributes
+#### Attributes
 
-###  Example 
+### Example
 
-##  `OpenAIPromptBasedCombinationImprover`
+## `OpenAIPromptBasedCombinationImprover`
 
-###  Introduction 
+### Introduction 
 
   This module provides an implementation of a combination improver using OpenAI's model to suggest improvements. It leverages the capabilities of OpenAI's language model to analyze the results of an experiment and provide suggestions on how to improve the combination of parameters. The module offers a prompt-based mechanism where the language model is prompted with structured information about the experiment and its results. The model then responds with potential improvements.
 
-###  Class Definition 
+### Class Definition 
 
-####  Description
+#### Description
 
    The configuration object is specifically tailored for the `OpenAIPromptBasedCombinationImprover` class. It provides settings to control the iterative improvement process using OpenAI's model for suggesting combination improvements.
 
-####  Attributes
+#### Attributes
 
 - **`openai_model_name(str)`****:** 
   - Specifies the OpenAI model to be used. 
@@ -51,11 +51,11 @@ sidebar_position: 13
 
 
 
-###   Example 
+### Example 
 
-##  `OptimizeByPromptImprover`
+## `OptimizeByPromptImprover`
 
-###   Introduction 
+### Introduction 
 
   This module offers an implementation of Optimization by PROmpting (OPRO), a method inspired by the paper [Optimization by PROmpting](https://arxiv.org/pdf/2309.03409.pdf)). OPRO leverages the capabilities of large language models (LLMs) like GPT-4 to optimize tasks by iteratively refining prompts.
 
@@ -74,15 +74,15 @@ sidebar_position: 13
 
   For practical demonstrations of this concept, refer to the file `demo/configs/headline_generation_improve.yml` and the appendix of the aforementioned paper.
 
-###   Class Definition 
+### Class Definition 
 
-####    `OptimizeByPromptImproverConfig(BaseCombinationImproverConfig)`
+#### `OptimizeByPromptImproverConfig(BaseCombinationImproverConfig)`
 
-#####     Description
+##### Description
 
 ​    The configuration object tailored for the `OptimizeByPromptImprover` class, controlling how the optimization by prompting is executed.
 
-#####     Attributes
+##### Attributes
 
 - **`improve_var(List[str])`**: 
   - List of variables that need improvement.
@@ -99,9 +99,9 @@ sidebar_position: 13
   - The maximum number of optimization iterations. 
   - The default value is `3`.
 
-#####     Example
+##### Example
 
-######      Use OPRO Improver to Enhace Experiment Results 
+###### Use OPRO Improver to Enhace Experiment Results 
 
 ```Python
 # Create an OPRO configuration
@@ -121,7 +121,7 @@ improver = OptimizeByPromptImprover(improver_config)
 improved_output = improver.improve(experiment, config, evaluator, token_logger)
 ```
 
-######      Using the OpenAIPromptBasedCombinationImprover in YiVal config
+###### Using the OpenAIPromptBasedCombinationImprover in YiVal config
 
 ```YAML
 improver:
@@ -146,15 +146,15 @@ improver:
 
 
 
-##  Custom Combination Improver Guide: `improve` 
+## Custom Combination Improver Guide: `improve` 
 
   This module defines the base class for combination improvers. Combination improvers are responsible for improving the combination of experiments based on their experiment results.
 
-###   Introduction
+### Introduction
 
   Combination improvers play a pivotal role in the experimental framework by optimizing the combination of experiments based on their outcomes. By leveraging combination improvers, experiments can be fine-tuned to achieve better results. This guide will outline the process of creating a custom combination improver.
 
-###   Overview of Base Combination Improver
+### Overview of Base Combination Improver
 
   The `BaseCombinationImprover` class provides the foundational structure for all combination improvers. It offers methods to:
 
@@ -164,7 +164,7 @@ improver:
 
   The main responsibility of a combination improver is to improve the setup of experiments based on their results.
 
-###   Implementing a Custom Combination Improver
+### Implementing a Custom Combination Improver
 
   To create a custom combination improver, one should inherit from the `BaseCombinationImprover` class and implement the `improve` abstract method:
 
@@ -193,7 +193,7 @@ class CustomCombinationImprover(BaseCombinationImprover):
         pass
 ```
 
-###   Config
+### Config
 
 ```Plaintext
 custom_improvers:
@@ -208,7 +208,7 @@ improver:
   name: custom_improver
 ```
 
-###   Conclusion
+### Conclusion
 
   By following this guide, you have successfully created and registered a custom combination improver named `CustomCombinationImprover` within the experimental framework. This custom improver will allow you to optimize experiment combinations based on specific logic and criteria you define. As experiments evolve and grow in complexity, custom combination improvers like the one you've developed will become instrumental in achieving more refined and better results.
 
