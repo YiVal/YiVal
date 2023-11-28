@@ -1784,24 +1784,6 @@ def create_dash_app(
                             }
                         )
                     ]),
-                    html.Button(
-                        'Submit',
-                        id='submit-button-fix',
-                        n_clicks=0,
-                        style={
-                            'fontSize': '18px',
-                            'margin': '10px',
-                            'backgroundColor': '#85AED8',
-                            'color': 'white',
-                            'border': 'none',
-                            'padding': '10px 20px',
-                            'borderRadius': '5px',
-                            'cursor': 'pointer',
-                            'textDecoration': 'none',
-                            'display': 'inline-block',
-                            'transitionDuration': '0.4s'
-                        }
-                    ),
                     html.A(
                         id='open-result-tab',
                         target='_blank',
@@ -1809,7 +1791,7 @@ def create_dash_app(
                             html.Button(
                                 'Open result tab',
                                 id='open-result-tab-button',
-                                className='jump-button jump-button-hide'
+                                className='jump-button jump-button-show'
                             )
                         ]
                     ),
@@ -1833,29 +1815,18 @@ def create_dash_app(
 
     @app.callback(
         Output('open-result-tab', 'href'),
-        Input('submit-button-fix', 'n_clicks'),
-        State('task', 'value'),
+        Input('task', 'value'),
     )
-    def update_link(n, task):
-        if n is not None:
-            if task == 'Tiktok Headline Generation Bot':
-                return 'http://ec2-35-85-28-134.us-west-2.compute.amazonaws.com:8074/enhancer-experiment-results'
-            elif task == 'Task 2':
-                return 'http://link-to-task-2.com'
-            elif task == 'Task 3':
-                return 'http://link-to-task-3.com'
+    def update_link(task):
+        if task == 'Tiktok Headline Generation Bot':
+            return 'http://ec2-35-85-28-134.us-west-2.compute.amazonaws.com:8074/enhancer-experiment-results'
+        elif task == 'Email Auto Reply Bot':
+            return 'http://ec2-35-85-28-134.us-west-2.compute.amazonaws.com:8004/enhancer-experiment-results'
+        elif task == 'Fitness Plan Bot':
+            return 'http://ec2-35-85-28-134.us-west-2.compute.amazonaws.com:8003/enhancer-experiment-results'
         else:
-            return dash.no_update
+            return dash.no_update   
 
-    @app.callback(
-        Output('open-result-tab-button', 'className'),
-        Input('submit-button-fix', 'n_clicks'),
-    )
-    def show_link(n):
-        if n > 0:
-            return 'jump-button jump-button-show'
-        else:
-            return 'jump-button jump-button-hide'
 
     @app.callback(
         Output('task', 'value'),
