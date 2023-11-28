@@ -163,6 +163,7 @@ Please refer to [YiVal Docs Page](https://yival.github.io/YiValApi/) for more de
 ## Demo
 
 [Demo Video](https://github.com/YiVal/YiVal/assets/80620352/f2438449-2c13-45d1-a660-a783c5ae4eb6)
+
 [Demo Video](https://github.com/YiVal/YiVal/assets/80620352/1a2916c1-de6a-452a-88e0-fb4461e7c04b)
 
 | Use Case Demo | Supported Features                                                                                                                                                                                                                                                                                                                                                                                                                                                             | Colab Link |Blog Post Link   |
