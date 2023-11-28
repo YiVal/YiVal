@@ -11,17 +11,17 @@ sidebar_position: 13
 
   This module defines the base class for combination improvers. Combination improvers are responsible for improving the combination of experiments based on their experiment results.
 
-###   Class Definition
+### Class Definition
 
-####    Description
+#### Description
 
-####    Attributes
+#### Attributes
 
-###   Example 
+### Example 
 
-##  `OpenAIPromptBasedCombinationImprover`
+## `OpenAIPromptBasedCombinationImprover`
 
-###   Introduction 
+### Introduction 
 
   This module provides an implementation of a combination improver using OpenAI's model to suggest improvements. It leverages the capabilities of OpenAI's language model to analyze the results of an experiment and provide suggestions on how to improve the combination of parameters. The module offers a prompt-based mechanism where the language model is prompted with structured information about the experiment and its results. The model then responds with potential improvements.
 
