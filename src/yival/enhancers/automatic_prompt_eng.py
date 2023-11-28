@@ -393,12 +393,7 @@ class AutomaticPromptEng(BaseCombinationEnhancer):
         )
         
         for p in P: 
-            print("p",p)
             temp_p = deepcopy(p)
-            print("#####################################TEMP PROMPT#############################################")
-            print(temp_p)
-            print("#############################################################################################")
-                       
             gen_variations = scratch_variations_from_str(temp_p, self.config.enhance_var)
             if not gen_variations:
                 print(
@@ -467,10 +462,6 @@ class AutomaticPromptEng(BaseCombinationEnhancer):
                         i += 1
                     except SyntaxError:
                         continue
-            
-            print("################################CROSS OVER PROMPTS################################")
-            print("cross_over prompts:", crossover_prompts)
-            print("################################END################################")
             
             # STEP2: MUTATE
             print("************************** STEP2 ************************(********)")
@@ -544,7 +535,6 @@ class AutomaticPromptEng(BaseCombinationEnhancer):
             else:
                 best_prompt += "\n"
             
-            # temp_prompt = construct_full_prompt(best_prompt,enhance_var,template_vars)
             gen_variations = scratch_variations_from_str(best_prompt, self.config.enhance_var)
             
             print("gen_variation:", gen_variations)
