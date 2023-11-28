@@ -248,7 +248,7 @@ class ExperimentRunner:
                 display_results_dash(
                     Experiment([], []), self.config, all_combinations,
                     ExperimentState.get_instance(), logger, evaluator, True,
-                    False
+                    False, False
                 )
         for t in display_threads:
             t.join()

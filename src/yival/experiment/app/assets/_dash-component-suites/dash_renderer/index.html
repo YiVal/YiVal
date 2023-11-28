@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {%metas%}
+        <title>{%title%}</title>
+        {%favicon%}
+        {%css%}
+    </head>
+    <body>
+        {%app_entry%}
+        <footer>
+            {%config%}
+            {%scripts%}
+            <script>
+                var openNewTab = function(url) {
+                            window.open(url, '_blank');
+                        };
+            </script>
+            {%renderer%}
+        </footer>
+    </body>
+</html>
+
+<script>
+    document.getElementById('open-result-tab-button').addEventListener('click', function() {
+            openNewTab(document.getElementById('open-result-tab').href);
+        });
+    </script>

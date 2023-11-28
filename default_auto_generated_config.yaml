@@ -3,52 +3,46 @@ dataset:
   data_generators:
     openai_prompt_data_generator:
       chunk_size: 10000
-      diversify: true
+      diversify: false
       expected_param_name: ""
-      fixed_input:
-        task: tiktok headline generation
       input_function:
         description:
-          The function generates a catchy and engaging headline for a TikTok
-          video that is tailored to attract the target audience. It analyzes the preferences
-          and interests of the target audience to craft a headline that is most likely
-          to pique their interest and encourage them to view the video. This involves
-          understanding trending topics, popular keywords, and the overall sentiment
-          of the target audience. The function could leverage machine learning or
-          AI algorithms to better predict headlines that will resonate with the target
-          audience, ultimately aiming to increase the visibility and reach of the
-          TikTok video.
-        name: generate_engaging_tiktok_headline
+          This function creates a concise and engaging TikTok video title.
+          It uses the provided content summary and target audience to generate a title
+          that is relevant and appealing to the specified demographic. The function
+          takes into consideration the interests and preferences of the target audience
+          to ensure the title is attractive and encourages viewership.
+        name: generate_tiktok_video_title_based_on_content_and_audience
         parameters:
           target_audience: str
-          content_summary: str
       model_name: gpt-4
       number_of_examples: 5
-      output_csv_path: generate_engaging_tiktok_headline_generated_data.csv
-      output_path: generate_engaging_tiktok_headline_generated_data.pkl
+      output_csv_path: generate_tiktok_video_title_based_on_content_and_audience_generated_data.csv
+      output_path: generate_tiktok_video_title_based_on_content_and_audience_generated_data.pkl
       prompt:
         "\n        \"Please provide a concrete and realistic test case as a\
         \ dictionary for function invocation using the ** operator.\n        Only\
         \ include parameters, excluding description and name.\n        Ensure it's\
         \ succinct and well-structured.\n        **Only provide the dictionary.**\"\
         \    \n    "
+      single_shot: true
   source_type: machine_generated
-description: Auto generated config for tiktok headline generation
+description:
+  Auto generated config for generate a short tiktok video title based on
+  the {{content summary}} and {{target_audience}}
 enhancer:
   end_meta_instruction:
     Give me a new prompt that is different from all pairs above,
-    and has evaluation values on accuracy, relevance, engagement, that are higher
-    than any of above.
+    and has evaluation values on accuracy, appeal, keyword usage, emoji, oneline,
+    that are higher than any of above.
   enhance_var:
     - task
   head_meta_instruction:
-    "Given a TikTok video context and target audience, generate\
-    \ a corresponding TikTok video headline\n\nParameters:\n    tiktok_video_context\
-    \ : str\n    target_audience : str\n\n==>\nNow you will help me generate a prompt\
-    \ which is used to generate a corresponding TikTok video headline according to\
-    \ the tiktok_video_context [tiktok_video_context] and its target audience [target_audience].\
-    \ I already have some prompt and its evaluation results :"
-  max_iterations: 3
+    "Now you will help me generate a prompt which is used to
+    generate a corresponding TikTok video title based on the content summary [content
+    summary] and target audience [target audience]. I already have some prompt and
+    its evaluation results:"
+  max_iterations: 2
   model_name: gpt-4
   name: optimize_by_prompt_enhancer
 evaluators:
@@ -65,9 +59,8 @@ evaluators:
       - D
       - E
     description:
-      Does the headline accurately reflect the content of the TikTok video?
-      The headline should not mislead the audience about the video's content, but rather
-      provide an accurate and enticing preview of what viewers can expect.
+      Does the title accurately reflect the content of the TikTok video?
+      The title should give viewers a clear idea of what to expect from the video content.
     display_name: accuracy
     evaluator_type: individual
     metric_calculators:
@@ -78,20 +71,16 @@ evaluators:
       "You are assessing a submitted answer on a given task based on a criterion.
       Here is the data:
 
-      The function generates a catchy and engaging headline for a TikTok video that
-      is tailored to attract the target audience. It analyzes the preferences and interests
-      of the target audience to craft a headline that is most likely to pique their
-      interest and encourage them to view the video. This involves understanding trending
-      topics, popular keywords, and the overall sentiment of the target audience. The
-      function could leverage machine learning or AI algorithms to better predict headlines
-      that will resonate with the target audience, ultimately aiming to increase the
-      visibility and reach of the TikTok video.
+      This function creates a concise and engaging TikTok video title. It uses the provided
+      content summary and target audience to generate a title that is relevant and appealing
+      to the specified demographic. The function takes into consideration the interests
+      and preferences of the target audience to ensure the title is attractive and encourages
+      viewership.
 
-      Does the headline accurately reflect the content of the TikTok video? The headline
-      should not mislead the audience about the video's content, but rather provide
-      an accurate and enticing preview of what viewers can expect.
+      Does the title accurately reflect the content of the TikTok video? The title should
+      give viewers a clear idea of what to expect from the video content.
 
-      [Input]: target_audioence: {{target_audioence}}
+      [Input]: target_audience: {{target_audience}}
 
       [Result]: {raw_output}
 
@@ -120,11 +109,10 @@ evaluators:
       - D
       - E
     description:
-      Does the headline incorporate trending topics, popular keywords, or
-      sentiments that are relevant to the target audience? The headline should demonstrate
-      an understanding of the target audience's interests and preferences, and leverage
-      these insights to attract viewers.
-    display_name: relevance
+      Is the title appealing and engaging to the target audience? The title
+      should be crafted in a way that it attracts the attention of the specified demographic
+      and encourages them to watch the video.
+    display_name: appeal
     evaluator_type: individual
     metric_calculators:
       - method: AVERAGE
@@ -134,21 +122,17 @@ evaluators:
       "You are assessing a submitted answer on a given task based on a criterion.
       Here is the data:
 
-      The function generates a catchy and engaging headline for a TikTok video that
-      is tailored to attract the target audience. It analyzes the preferences and interests
-      of the target audience to craft a headline that is most likely to pique their
-      interest and encourage them to view the video. This involves understanding trending
-      topics, popular keywords, and the overall sentiment of the target audience. The
-      function could leverage machine learning or AI algorithms to better predict headlines
-      that will resonate with the target audience, ultimately aiming to increase the
-      visibility and reach of the TikTok video.
+      This function creates a concise and engaging TikTok video title. It uses the provided
+      content summary and target audience to generate a title that is relevant and appealing
+      to the specified demographic. The function takes into consideration the interests
+      and preferences of the target audience to ensure the title is attractive and encourages
+      viewership.
 
-      Does the headline incorporate trending topics, popular keywords, or sentiments
-      that are relevant to the target audience? The headline should demonstrate an understanding
-      of the target audience's interests and preferences, and leverage these insights
-      to attract viewers.
+      Is the title appealing and engaging to the target audience? The title should be
+      crafted in a way that it attracts the attention of the specified demographic and
+      encourages them to watch the video.
 
-      [Input]: target_audioence: {{target_audioence}}
+      [Input]: target_audience: {{target_audience}}
 
       [Result]: {raw_output}
 
@@ -177,11 +161,10 @@ evaluators:
       - D
       - E
     description:
-      Is the headline catchy and engaging? The headline should be crafted
-      in a way that grabs the attention of the target audience and encourages them to
-      watch the video. This could involve the use of humor, intrigue, or other tactics
-      to pique interest.
-    display_name: engagement
+      Does the title incorporate trending or popular keywords relevant to
+      the target audience? Using trending or popular keywords can increase the visibility
+      of the video and attract more viewers from the target audience.
+    display_name: keyword usage
     evaluator_type: individual
     metric_calculators:
       - method: AVERAGE
@@ -191,20 +174,122 @@ evaluators:
       "You are assessing a submitted answer on a given task based on a criterion.
       Here is the data:
 
-      The function generates a catchy and engaging headline for a TikTok video that
-      is tailored to attract the target audience. It analyzes the preferences and interests
-      of the target audience to craft a headline that is most likely to pique their
-      interest and encourage them to view the video. This involves understanding trending
-      topics, popular keywords, and the overall sentiment of the target audience. The
-      function could leverage machine learning or AI algorithms to better predict headlines
-      that will resonate with the target audience, ultimately aiming to increase the
-      visibility and reach of the TikTok video.
+      This function creates a concise and engaging TikTok video title. It uses the provided
+      content summary and target audience to generate a title that is relevant and appealing
+      to the specified demographic. The function takes into consideration the interests
+      and preferences of the target audience to ensure the title is attractive and encourages
+      viewership.
 
-      Is the headline catchy and engaging? The headline should be crafted in a way that
-      grabs the attention of the target audience and encourages them to watch the video.
-      This could involve the use of humor, intrigue, or other tactics to pique interest.
+      Does the title incorporate trending or popular keywords relevant to the target
+      audience? Using trending or popular keywords can increase the visibility of the
+      video and attract more viewers from the target audience.
 
-      [Input]: target_audioence: {{target_audioence}}
+      [Input]: target_audience: {{target_audience}}
+
+      [Result]: {raw_output}
+
+      Answer the question by selecting one of the following options:
+
+      A It fails to meet the criterion at all.
+
+      B It somewhat meets the criterion, but there is significant room for improvement.
+
+      C It meets the criterion to a satisfactory degree.
+
+      D It meets the criterion very well.
+
+      E It meets the criterion exceptionally well, with little to no room for improvement."
+    scale_description: 0-4
+  - choice_scores:
+      A: 0
+      B: 1
+      C: 2
+      D: 3
+      E: 4
+    choices:
+      - A
+      - B
+      - C
+      - D
+      - E
+    description:
+      Does the emoji used in the title clearly represent the content summary
+      and target audience? It should be immediately clear to anyone who sees the emoji
+      what the TikTok video's content and target audience are.
+    display_name: emoji
+    evaluator_type: individual
+    metric_calculators:
+      - method: AVERAGE
+    model_name: gpt-4
+    name: openai_prompt_based_evaluator
+    prompt:
+      "You are assessing a submitted answer on a given task based on a criterion.
+      Here is the data:
+
+      This function creates a concise and engaging TikTok video title. It uses the provided
+      content summary and target audience to generate a title that is relevant and appealing
+      to the specified demographic. The function takes into consideration the interests
+      and preferences of the target audience to ensure the title is attractive and encourages
+      viewership.
+
+      Does the emoji used in the title clearly represent the content summary and target
+      audience? It should be immediately clear to anyone who sees the emoji what the
+      TikTok video's content and target audience are.
+
+      [Input]: target_audience: {{target_audience}}
+
+      [Result]: {raw_output}
+
+      Answer the question by selecting one of the following options:
+
+      A It fails to meet the criterion at all.
+
+      B It somewhat meets the criterion, but there is significant room for improvement.
+
+      C It meets the criterion to a satisfactory degree.
+
+      D It meets the criterion very well.
+
+      E It meets the criterion exceptionally well, with little to no room for improvement."
+    scale_description: 0-4
+  - choice_scores:
+      A: 0
+      B: 1
+      C: 2
+      D: 3
+      E: 4
+    choices:
+      - A
+      - B
+      - C
+      - D
+      - E
+    description:
+      Does the generated TikTok video title succinctly summarize the content
+      and target audience in a single line? The title should be concise, catchy, and
+      effectively encapsulate the essence of the content and its intended audience in
+      one line.
+    display_name: oneline
+    evaluator_type: individual
+    metric_calculators:
+      - method: AVERAGE
+    model_name: gpt-4
+    name: openai_prompt_based_evaluator
+    prompt:
+      "You are assessing a submitted answer on a given task based on a criterion.
+      Here is the data:
+
+      This function creates a concise and engaging TikTok video title. It uses the provided
+      content summary and target audience to generate a title that is relevant and appealing
+      to the specified demographic. The function takes into consideration the interests
+      and preferences of the target audience to ensure the title is attractive and encourages
+      viewership.
+
+      Does the generated TikTok video title succinctly summarize the content and target
+      audience in a single line? The title should be concise, catchy, and effectively
+      encapsulate the essence of the content and its intended audience in one line.
+
+      [Input]: target_audience: {{target_audience}}
 
       [Result]: {raw_output}
 
@@ -222,28 +307,42 @@ evaluators:
     scale_description: 0-4
 human_rating_configs:
   - instructions:
-      Does the headline accurately reflect the content of the TikTok video?
-      The headline should not mislead the audience about the video's content, but rather
-      provide an accurate and enticing preview of what viewers can expect.
+      Does the title accurately reflect the content of the TikTok video?
+      The title should give viewers a clear idea of what to expect from the video content.
     name: accuracy
     scale:
       - 0
       - 4
   - instructions:
-      Does the headline incorporate trending topics, popular keywords, or
-      sentiments that are relevant to the target audience? The headline should demonstrate
-      an understanding of the target audience's interests and preferences, and leverage
-      these insights to attract viewers.
-    name: relevance
+      Is the title appealing and engaging to the target audience? The title
+      should be crafted in a way that it attracts the attention of the specified demographic
+      and encourages them to watch the video.
+    name: appeal
     scale:
       - 0
       - 4
   - instructions:
-      Is the headline catchy and engaging? The headline should be crafted
-      in a way that grabs the attention of the target audience and encourages them to
-      watch the video. This could involve the use of humor, intrigue, or other tactics
-      to pique interest.
-    name: engagement
+      Does the title incorporate trending or popular keywords relevant to
+      the target audience? Using trending or popular keywords can increase the visibility
+      of the video and attract more viewers from the target audience.
+    name: keyword usage
+    scale:
+      - 0
+      - 4
+  - instructions:
+      Does the emoji used in the title clearly represent the content summary
+      and target audience? It should be immediately clear to anyone who sees the emoji
+      what the TikTok video's content and target audience are.
+    name: emoji
+    scale:
+      - 0
+      - 4
+  - instructions:
+      Does the generated TikTok video title succinctly summarize the content
+      and target audience in a single line? The title should be concise, catchy, and
+      effectively encapsulate the essence of the content and its intended audience in
+      one line.
+    name: oneline
     scale:
       - 0
       - 4
@@ -251,33 +350,38 @@ selection_strategy:
   ahp_selection:
     criteria:
       - "openai_prompt_based_evaluator: accuracy"
-      - "openai_prompt_based_evaluator: relevance"
-      - "openai_prompt_based_evaluator: engagement"
+      - "openai_prompt_based_evaluator: appeal"
+      - "openai_prompt_based_evaluator: keyword usage"
+      - "openai_prompt_based_evaluator: emoji"
+      - "openai_prompt_based_evaluator: oneline"
       - average_token_usage
       - average_latency
     criteria_maximization:
       average_latency: false
       average_token_usage: false
       "openai_prompt_based_evaluator: accuracy": true
-      "openai_prompt_based_evaluator: engagement": true
-      "openai_prompt_based_evaluator: relevance": true
+      "openai_prompt_based_evaluator: appeal": true
+      "openai_prompt_based_evaluator: emoji": true
+      "openai_prompt_based_evaluator: keyword usage": true
+      "openai_prompt_based_evaluator: oneline": true
     criteria_weights:
       average_latency: 0
       average_token_usage: 0
-      "openai_prompt_based_evaluator: accuracy": 0.3333333333333333
-      "openai_prompt_based_evaluator: engagement": 0.3333333333333333
-      "openai_prompt_based_evaluator: relevance": 0.3333333333333333
+      "openai_prompt_based_evaluator: accuracy": 0.2
+      "openai_prompt_based_evaluator: appeal": 0.2
+      "openai_prompt_based_evaluator: emoji": 0.2
+      "openai_prompt_based_evaluator: keyword usage": 0.2
+      "openai_prompt_based_evaluator: oneline": 0.2
 variations:
   - generator_config: null
     generator_name: null
     name: task
     variations:
       - instantiated_value:
-          "tiktok headline generation based on the following info
-
-          target_audioence: {target_audioence}"
-        value: "tiktok headline generation based on the following info
-
-          target_audioence: {target_audioence}"
+          generate a short tiktok video title based on the {{content
+          summary}} and {{target_audience}}
+        value:
+          generate a short tiktok video title based on the {{content summary}} and
+          {{target_audience}}
         value_type: str
         variation_id: null
