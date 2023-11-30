@@ -46,6 +46,5 @@ class PE2EnhancerConfig(BaseCombinationEnhancerConfig):
     full_prompt_description: str
     max_iterations: int = 3
     batch_size: int = 3
-    step_size: Optional[str] = None
+    step_size: Optional[int] = None
     max_token: Optional[int] = 200
-    

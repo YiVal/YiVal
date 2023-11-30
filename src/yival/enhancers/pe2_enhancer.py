@@ -5,15 +5,32 @@ This module provides an implementation of Microsoft `prompt engineering a prompt
 
 import copy
 import json
+from typing import Dict, List, Tuple
 
-
-from ..logger.token_logger import TokenLogger
 from ..experiment.evaluator import Evaluator
-from ..schemas.experiment_config import EnhancerOutput, Experiment, ExperimentConfig, ExperimentResult
+from ..experiment.lite_experiment import LiteExperimentRunner
+from ..experiment.rate_limiter import RateLimiter
+from ..experiment.utils import generate_experiment, get_selection_strategy
+from ..logger.token_logger import TokenLogger
+from ..result_selectors.selection_context import SelectionContext
 from ..schemas.combination_enhancer_configs import PE2EnhancerConfig
+from ..schemas.experiment_config import (
+    EnhancerOutput,
+    Experiment,
+    ExperimentConfig,
+    ExperimentResult,
+)
 from .base_combination_enhancer import BaseCombinationEnhancer
-from .utils import construct_solution_score_pairs, find_origin_combo_key, openai_call, extract_from_experiment_result, scratch_variations_from_str
-from typing import List,Tuple,Dict
+from .optimize_by_prompt_enhancer import collect_all_data
+from .utils import (
+    construct_solution_score_pairs,
+    extract_from_experiment_result,
+    find_origin_combo_key,
+    openai_call,
+    scratch_variations_from_str,
+)
+
+rate_limiter = RateLimiter(60 / 60)
 
 PROMPT_ENGINEER_TUTORIAL = """
 Prompt engineering is a relatively new discipline for developing and optimizing prompts to efficiently use language models (LMs) for a wide variety of applications and research topics. Prompt engineering skills help to better understand the capabilities and limitations of large language models (LLMs). Researchers use prompt engineering to improve the capacity of LLMs on a wide range of common and complex tasks such as question answering and arithmetic reasoning. Developers use prompt engineering to design robust and effective prompting techniques that interface with LLMs and other tools.
@@ -69,46 +86,52 @@ Now please carefully review your reasoning in Step1 and help with Step 2: refini
 {generate_restrict}
 
 * Please help edit the prompt so that the updated propmt will not fail on these examples anymore, and achieves better result
-* Reply only with the prompt. Do not include other text or reason.
-* Reply in the given format: prompt = { your generated prompt }
+* Reply only with the prompt in the new line. Do not include other text or reason.
+* Reply in the given format: prompt=
 """
 
-GEN_SUMMARY="""
+GEN_SUMMARY = """
 Noe please summarize what changes you've made to the prompt, in the following format. Make
 sure the summary is concise and contains no more than 200 words.
 
 "* At step 
 """
 
-def construct_examples_from_experiment(experiment:Experiment, combo_key:str, batch_size:int) -> str:
+
+def construct_examples_from_experiment(
+    experiment: Experiment, combo_key: str, batch_size: int
+) -> str:
     result = ""
     count = 0
     for item in experiment.combination_aggregated_metrics:
         if item.combo_key == combo_key:
             for exp_result in item.experiment_results:
-                result = result + '\n' + f"Examples {count}: \n"+ extract_from_experiment_result(exp_result)
+                result = result + '\n' + f"Examples {count}: \n" + extract_from_experiment_result(
+                    exp_result
+                )
                 count = count + 1
                 if count == batch_size:
                     break
     return result
 
 
-def build_history(cache: List[Tuple[Dict, Dict]], enhance_var: List[str]) -> str:
+def build_history(
+    cache: List[Tuple[Dict, Dict]], enhance_var: List[str]
+) -> str:
     history = """
     ## Prompt Refinement History from the Past
     Note that higher accuracy means better. If some edits are useful in the past, it may be a good
     idea to make edits along the same direction.
     """
-    history = history + construct_solution_score_pairs(cache,enhance_var)
+    history = history + construct_solution_score_pairs(cache, enhance_var)
     return history
 
 
-
-def build_restrict(step_size:int, max_token:int) -> str:
+def build_restrict(step_size: int | None, max_token: int | None) -> str:
     restrict = ""
-    if step_size != 0:
+    if step_size:
         restrict = restrict + f"* You are allowed to change up to {step_size} words in the original prompt.\n"
-    if max_token != 0 :
+    if max_token:
         restrict = restrict + f"* The total length of the prompt should be less than {max_token} words\n"
     return restrict
 
@@ -118,7 +141,7 @@ class PE2Enhancer(BaseCombinationEnhancer):
         enhance_var=["task"],
         name="pe2_enhancer",
         enable_prompt_instruction=True,
-        full_prompt_description= "",
+        full_prompt_description="",
         batch_size=3
     )
 
@@ -127,66 +150,129 @@ class PE2Enhancer(BaseCombinationEnhancer):
         self.config: PE2EnhancerConfig = config
 
     def enhance(
-            self, experiment:Experiment, config:ExperimentConfig,
-            evaluator:Evaluator, token_logger:TokenLogger
-    )->EnhancerOutput:
+        self, experiment: Experiment, config: ExperimentConfig,
+        evaluator: Evaluator, token_logger: TokenLogger
+    ) -> EnhancerOutput:
         experiments: List[Experiment] = []
         results: List[ExperimentResult] = []
-        cache: List[Tuple[Dict,Dict]] = []
+        cache: List[Tuple[Dict, Dict]] = []
         original_combo_key = find_origin_combo_key(experiment)
         self.updated_config = copy.deepcopy(config)
-        prompt = json.loads(original_combo_key)[self.config.enhance_var[0]]
-        print(f"[INFO] prompt: {prompt}")
+        current_prompt = json.loads(original_combo_key)[
+            self.config.enhance_var[0]]
+        # print(f"[INFO] prompt: {current_prompt}")
+
+        lite_experiment_runner = LiteExperimentRunner(
+            config=self.updated_config,
+            limiter=rate_limiter,
+            data=collect_all_data(experiment),
+            token_logger=token_logger,
+            evaluator=evaluator
+        )
 
         for i in range(self.config.max_iterations):
-            dialogues = [{"role":"system","content":"You are a helpful assistant."}]
+            dialogues = [{
+                "role": "system",
+                "content": "You are a helpful assistant."
+            }]
             # instruction for prompt-engineer
             if self.config.enable_prompt_instruction:
-                dialogues.append({"role":"user","content":f"Let's read a blogpost on prompt engineering.\n {PROMPT_ENGINEER_TUTORIAL}"})
-            
+                dialogues.append({
+                    "role":
+                    "user",
+                    "content":
+                    f"Let's read a blogpost on prompt engineering.\n {PROMPT_ENGINEER_TUTORIAL}"
+                })
+
             # two step instruction
-            two_step_task_instructioin = TWO_TASK_DESCRIPTION.format(batch_size=self.config.batch_size)
-            dialogues.append({"role":"user", "content": two_step_task_instructioin})
+            two_step_task_instructioin = TWO_TASK_DESCRIPTION.format(
+                batch_size=self.config.batch_size
+            )
+            dialogues.append({
+                "role": "user",
+                "content": two_step_task_instructioin
+            })
             response = openai_call(dialogues)
             # print(f"[DEBUG] response now: {response}")
-            dialogues.append({"role":"assistant","content":response})
+            dialogues.append({"role": "assistant", "content": response})
 
             # step-by-step reasoning template
             step_by_step_reasoning = PROMPT_DESCRIPTION.format(
-                examples = construct_examples_from_experiment(experiment, original_combo_key, self.config.batch_size),
-                prompt = original_combo_key,
-                full_prompt_description = self.config.full_prompt_description
+                examples=construct_examples_from_experiment(
+                    experiment, original_combo_key, self.config.batch_size
+                ),
+                prompt=original_combo_key,
+                full_prompt_description=self.config.full_prompt_description
             )
             # print(f"\n[DEBUG] step_by_step_reasoning prompt: {step_by_step_reasoning}")
-            dialogues.append({"role":"user","content":step_by_step_reasoning})
+            dialogues.append({
+                "role": "user",
+                "content": step_by_step_reasoning
+            })
             response = openai_call(dialogues)
             # print(f"[DEBUG] result: {response}")
-            dialogues.append({"role":"assistant", "content":response})
+            dialogues.append({"role": "assistant", "content": response})
 
             # generate new prompt
             gen_prompt = PROMPT_GEN.format(
-                history=build_history(cache,self.config.enhance_var),
-                prompt=prompt,
-                generate_restrict = build_restrict(self.config.step_size,self.config.max_token),
+                history=build_history(cache, self.config.enhance_var),
+                prompt=current_prompt,
+                generate_restrict=build_restrict(
+                    self.config.step_size, self.config.max_token
+                ),
             )
-            print(f"[DEBUG] gen_prompt: {gen_prompt}")
-            dialogues.append({"role":"user", "content":gen_prompt})
+            # print(f"[DEBUG] gen_prompt: {gen_prompt}")
+            dialogues.append({"role": "user", "content": gen_prompt})
             response = openai_call(dialogues)
-            print(f"[DEBUG] response: {response}")
+            # print(f"[DEBUG] response: {response}")
 
-            generate_prompt = scratch_variations_from_str(
-                response, ["prompt"]
+            generate_prompt = scratch_variations_from_str(response, ["prompt"])
+
+            # print(f"[INFO] generate vars: {generate_prompt}")
+            # print(f"[INFO] generate prompt items: {generate_prompt.items()}")
+
+            if "prompt" in generate_prompt:
+                current_prompt = generate_prompt["prompt"]
+            else:
+                print(
+                    f"[Error] fetch no prompt from llm response, response:{response}"
+                )
+
+            lite_experiment_runner.set_variations([{
+                "task": [current_prompt],
+            }])
+
+            experiment = lite_experiment_runner.run_experiment(
+                enable_selector=True
+            )
+            experiments.append(experiment)
+
+        for exp in experiments:
+            for res in exp.combination_aggregated_metrics:
+                results.extend(res.experiment_results)
+
+        experiment = generate_experiment(
+            results, evaluator, evaluate_group=False, evaluate_all=False
+        )
+        enable_custom_func = "custom_function" in self.updated_config  #type: ignore
+        strategy = get_selection_strategy(self.updated_config)
+        if strategy and enable_custom_func:
+            context_trade_off = SelectionContext(strategy=strategy)
+            experiment.selection_output = context_trade_off.execute_selection( # type: ignore
+                experiment=experiment
             )
 
-            print(f"[DEBUG] generate_prompt: {generate_prompt}")
+        enhancer_output = EnhancerOutput(
+            group_experiment_results=experiment.group_experiment_results,
+            combination_aggregated_metrics=experiment.
+            combination_aggregated_metrics,
+            original_best_combo_key=original_combo_key,
+            selection_output=experiment.selection_output
+        )
 
-            # run experiment
+        return enhancer_output
 
-            print("\n\n\n\n",experiment)
-            exit()
 
 BaseCombinationEnhancer.register_enhancer(
-    "pe2_enhancer",
-    PE2Enhancer,
-    PE2EnhancerConfig
+    "pe2_enhancer", PE2Enhancer, PE2EnhancerConfig
 )

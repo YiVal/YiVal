@@ -35,6 +35,7 @@ def headline_generation(
         )
     )
 
+
     model_name = str(
         StringWrapper("gpt-3.5-turbo", name="model_name", state=state)
     )

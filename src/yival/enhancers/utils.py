@@ -1,8 +1,10 @@
 import re
-from typing import Dict, List, Union, Tuple
-from ..schemas.experiment_config import Experiment, ExperimentResult
+from typing import Dict, List, Tuple, Union
+
 from ..common.model_utils import llm_completion
+from ..schemas.experiment_config import Experiment, ExperimentResult
 from ..schemas.model_configs import Request
+
 
 def find_origin_combo_key(experiment: Experiment) -> str:
     """
@@ -123,27 +125,32 @@ def scratch_template_vars(prompt: str) -> List[str]:
     return re.findall(r"\{(\w+)\}", prompt)
 
 
-def openai_call(dialogues:Union[str, List[Dict[str, str]]],model_name="gpt-4") -> str:
+def openai_call(
+    dialogues: Union[str, List[Dict[str, str]]],
+    model_name="gpt-3.5-turbo"
+) -> str:
     response = llm_completion(
-            Request(
-                model_name=model_name,
-                prompt=dialogues,
-                params={"temperature": 1.0}
-            )
-        ).output
+        Request(
+            model_name=model_name,
+            prompt=dialogues,
+            params={"temperature": 0.5}
+        )
+    ).output
     llm_output_str = response["choices"][0]["message"]["content"]
     return llm_output_str
 
 
-def extract_from_experiment_result(exp_result:ExperimentResult) -> str:
+def extract_from_experiment_result(exp_result: ExperimentResult) -> str:
     input = exp_result.input_data.content
     output = exp_result.raw_output.text_output
     evaluate_str = ""
+    assert exp_result.evaluator_outputs is not None
     for eval in exp_result.evaluator_outputs:
         evaluate_str = evaluate_str + f"* {eval.name}-{eval.display_name} score: {eval.result}\n"
     result = f"input:{input}\noutput:{output}\nevaluate result:{evaluate_str}"
     return result
-    
+
+
 def construct_solution_score_pairs(
     cache: List[Tuple[Dict, Dict]], enhance_var: List[str]
 ) -> str:
@@ -166,6 +173,7 @@ def construct_solution_score_pairs(
         prompt += '\n'
 
     return prompt
+
 
 if __name__ == "__main__":
     input = """
