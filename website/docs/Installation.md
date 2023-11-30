@@ -1,5 +1,5 @@
 ---
-sidebar_position: 2
+thsidebar_position: 2
 ---
 # Installation
 
@@ -23,7 +23,6 @@ pip install yival
 If you're interested in contributing or configuring a development environment, Poetry is the recommended choice. Below are the step-by-step instructions to help you get started:
 
 1. **Install Poetry**: If you haven't already, [install Poetry](https://python-poetry.org/docs/#installation).
-
 2. **Clone the Repository**:
 
 ```Python
@@ -39,7 +38,23 @@ poetry install --sync
 
 ## Create Your First YiVal Program
 
-Once the setup is complete, you can swiftly begin your journey with YiVal by creating datasets containing randomly generated tech startup business names following the instructions below. You can find a step-by-step guide below to begin creating your first YiVal program:
+Once the setup is complete, you can swiftly begin your journey with YiVal by creating datasets containing randomly generated tech startup business names following the instructions below. You can find a step-by-step guide below to begin creating your first YiVal program. Here we provide 2 ways to start with:
+
+### Run With Poetry
+
+1. **Set OpenAI API Key**: Replace `$YOUR_OPENAI_API_KEY` with your actual OpenAI API key.
+
+```Shell
+export OPENAI_API_KEY=$YOUR_OPENAI_API_KEY
+```
+
+2. **Execute YiVal**: Run the following command from within the `/YiVal` directory:
+
+```Plaintext
+poetry run yival gen
+```
+
+### Run With YiVal
 
 1. **Navigate to the** **`yival`** **Directory**:
 
