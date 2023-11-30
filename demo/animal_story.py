@@ -5,8 +5,8 @@ import json
 import os
 import time
 
-import openai
 import requests
+from openai import OpenAI
 from PIL import Image
 from requests.adapters import HTTPAdapter  # type: ignore
 from requests.packages.urllib3.util.retry import Retry  # type: ignore
@@ -31,19 +31,30 @@ def prompt_generation(prompt: str, style) -> str:
     '''generate prompt for chatgpt based on the input'''
     logger = TokenLogger()
     logger.reset()
-    openai.api_key = os.getenv("OPENAI_API_KEY")
-    messages = [{"role": "user", "content": prompt}]
-    response = openai.ChatCompletion.create(
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    response = client.chat.completions.create(
         model="gpt-3.5-turbo",
-        messages=messages,
+        messages=[{
+            "role": "user",
+            "content": prompt
+        }],
         temperature=1.0,
         max_tokens=3000
     )
-    res = str(
-        f'Drawing style: {style}, ' +
-        response['choices'][0]['message']['content'][:1000]
-    )
-    token_usage = response['usage']['total_tokens']
+
+    if response.choices[0].message.content is not None:
+        res = str(
+            f'Drawing style: {style}, ' +
+            response.choices[0].message.content[:1000]
+        )
+    else:
+        res = "No content found"
+
+    if response.usage is not None:
+        token_usage = response.usage.total_tokens
+    else:
+        token_usage = 0
+
     logger.log(token_usage)
     return res
 

@@ -16,7 +16,7 @@ yival = 'yival.__main__:main'
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.13"
-openai = "0.27.10"
+openai = "1.1.1"
 hydra-core = "^1.3.2"
 omegaconf = "^2.3.0"
 fuzzywuzzy = "^0.18.0"
@@ -31,6 +31,7 @@ dash = "^2.11.1"
 pandas = "^2.0.3"
 dash-bootstrap-components = "^1.4.2"
 aiohttp-socks = "^0.8.0"
+
 pyngrok = "^6.0.0"
 faiss-cpu = "^1.7.4"
 langchain = "^0.0.275"
@@ -39,7 +40,7 @@ pillow = "9.4.0"
 types-requests = "^2.31.0.2"
 types-pillow = "^10.0.0.2"
 dash-dangerously-set-inner-html = "^0.0.2"
-litellm = "0.1.607"
+litellm = "^1.7.11"
 torch = ">=2.0.0, !=2.0.1, !=2.1.0"
 transformers = "^4.33.0"
 psutil = "^5.9.5"
@@ -63,6 +64,7 @@ pytesseract = "0.3.10"
 google-api-python-client = "2.84.0"
 google-auth-httplib2 = "0.1.1"
 google-auth-oauthlib = "1.0.0"
+httpx = { version = "^0.23.0", extras = ["socks"] }
 
 [tool.poetry.extras]
 trainers = ["peft","trl","bitsandbytes","scipy"]

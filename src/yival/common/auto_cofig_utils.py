@@ -8,9 +8,9 @@ import aiohttp
 import openai
 import yaml
 from aiohttp_socks import ProxyConnector  # type: ignore
+from openai import OpenAI
 from termcolor import colored
 
-from yival.common.model_utils import llm_completion
 from yival.schemas.combination_enhancer_configs import OptimizeByPromptEnhancerConfig
 from yival.schemas.data_generator_configs import OpenAIPromptBasedGeneratorConfig
 from yival.schemas.dataset_config import DatasetConfig

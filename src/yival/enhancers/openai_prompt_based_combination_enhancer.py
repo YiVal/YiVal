@@ -9,10 +9,11 @@ information about the experiment and its results, and the model responds with
 potential enhancements.
 """
 import copy
+import os
 from concurrent.futures import ThreadPoolExecutor
 from typing import List, Optional
 
-import openai
+from openai import OpenAI
 from tqdm import tqdm
 
 from ..experiment.evaluator import Evaluator
@@ -256,26 +257,29 @@ class OpenAIPromptBasedCombinationEnhancer(BaseCombinationEnhancer):
                     results.append(r)
                 results.extend(combo.experiment_results)
             evaluator_result = find_evaluator_results(configs, combo)
-            message = [{
-                "role":
-                "user",
-                "content":
-                construct_prompt(
-                    evaluator_result, combo.combo_key, prior_iterations
-                )
-            }]
+
             prior_iterations.append(combo.combo_key)
             while True:
                 try:
-
-                    response = openai.ChatCompletion.create(
-                        model="gpt-4", messages=message, max_tokens=5000
+                    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+                    response = client.chat.completions.create(
+                        model="gpt-4",
+                        messages=[{
+                            "role":
+                            "user",
+                            "content":
+                            construct_prompt(
+                                evaluator_result, combo.combo_key,
+                                prior_iterations
+                            )
+                        }],
+                        max_tokens=5000
                     )
-                    exper = extract_dict_from_string(
-                        response["choices"][0]["message"]["content"]
-                    )
-                    if exper:
-                        extracted_dict = eval(exper)
+                    if response.choices[0].message.content is not None:
+                        respon = response.choices[0].message.content
+                        exper = extract_dict_from_string(respon)
+                        if exper:
+                            extracted_dict = eval(exper)
                     else:
                         continue
                     break

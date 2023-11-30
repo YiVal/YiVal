@@ -3,6 +3,7 @@ import random
 import time
 
 import openai
+from openai import OpenAI
 from tenacity import retry, stop_after_attempt, wait_random
 
 from yival.logger.token_logger import TokenLogger
@@ -13,7 +14,10 @@ from yival.wrappers.string_wrapper import StringWrapper
 
 @retry(wait=wait_random(min=1, max=20), stop=stop_after_attempt(5))
 def completion_with_backpff(**kwargs):
-    response = openai.ChatCompletion.create(**kwargs)
+    request_timeout = kwargs.pop("request_timeout")
+    openai.timeout = request_timeout
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    response = client.chat.completions.create(**kwargs)
     return response
 
 
@@ -52,10 +56,8 @@ def complete_task(**kwargs, ) -> MultimodalOutput:
         max_tokens=1000,
         request_timeout=20
     )
-    res = MultimodalOutput(
-        text_output=response['choices'][0]['message']['content'],
-    )
-    token_usage = response['usage']['total_tokens']
+    res = MultimodalOutput(text_output=response.choices[0].message.content, )
+    token_usage = response.usage.total_tokens
     logger.log(token_usage)
     return res
 

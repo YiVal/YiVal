@@ -6,19 +6,18 @@ dataset:
       chunk_size: 1000
       diversify: true
       prompt:
-          "Please provide a concrete and realistic test case as a dictionary for function invocation using the ** operator.
-          Only include parameters, excluding description and name.
-          Ensure it's succinct and well-structured.
-          **Only provide the dictionary.**"
+        "Please provide a concrete and realistic test case as a dictionary for function invocation using the ** operator.
+        Only include parameters, excluding description and name.
+        Ensure it's succinct and well-structured.
+        **Only provide the dictionary.**"
       input_function:
-        description:
-          Given the species of an animal and its character, generate a corresponding story
+        description: Given the species of an animal and its character, generate a corresponding story
         name: animal_story_generation
         parameters:
           species: str
           character: str
           drawing_style: str
-      number_of_examples: 2
+      number_of_examples: 1
       model_name: gpt-4
   source_type: machine_generated
 
@@ -27,11 +26,11 @@ variations:
     generator_name: openai_prompt_based_variation_generator
     generator_config:
       model_name: gpt-4
-      number_of_variations: 2
+      number_of_variations: 1
       diversify: false
       max_tokens: 2000
       variables: null
-      prompt: 
+      prompt:
         - content: |-
             Your object is to construct a concise instruction prompt for GPT-4. This prompt will instruct GPT-4 as a gentle, imaginative children's writer to write all kinds of cute, kid-friendly stories based on animal species and personalities for an audience of YOUNG ADULTS and TEENAGERS.
             Points to emphasize in your instruction:
@@ -87,7 +86,6 @@ human_rating_configs:
     instructions: Rate the quality of the generated image.
     scale: [1, 5]
 
-
 selection_strategy:
   ahp_selection:
     criteria:
@@ -107,12 +105,12 @@ selection_strategy:
 enhancer:
   name: "optimize_by_prompt_enhancer"
   model_name: "gpt-4"
-  max_iterations: 2
+  max_iterations: 1
   enhance_var: ["task"]
   head_meta_instruction: |
     Now you will help me generate a prompt which is used to generate a corresponding
     story according to the species of an animal which is [animal_species] and its character [animal_character]. 
     I already have some prompt and its evaluation results :
-    
+
   end_meta_instruction: |
     Give me a new prompt that is different from all pairs above, and has a evaluation value higher than any of above.

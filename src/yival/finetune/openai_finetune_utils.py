@@ -8,6 +8,7 @@ from typing import Dict, List
 import numpy as np
 import openai
 import tiktoken
+from openai import OpenAI
 
 from yival.dataset.data_utils import (
     evaluate_condition,
@@ -251,36 +252,36 @@ def finetune(
                 f.write(json_str + "\n")
 
         with open("tmp.jsonl", "rb") as f:
-            output = openai.File.create(
+            client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+            output = client.files.create(
                 file=f,
                 purpose="fine-tune",
             )
             print(output)
             while True:
                 try:
-                    model_details = openai.FineTuningJob.create(
-                        training_file=output["id"],
+                    model_details = client.fine_tuning.jobs.create(
+                        training_file=output.id,
                         model="gpt-3.5-turbo",
                         suffix=model_suffx if model_suffx else ""
                     )
-                    print("Fine-tuning job started: %s", model_details["id"])
+                    print("Fine-tuning job started: %s", model_details.id)
                     break
-                except openai.error.InvalidRequestError as e:
+                except openai.BadRequestError as e:
                     print(e)
                     print("Waiting for file to be ready...")
                     time.sleep(60)
 
-            ft_job = openai.FineTuningJob.retrieve(model_details["id"])
+            ft_job = client.fine_tuning.jobs.retrieve(model_details.id)
             print(ft_job)
-            while ft_job["status"] != "succeeded" and ft_job["status"
-                                                             ] != "failed":
-                ft_job = openai.FineTuningJob.retrieve(model_details["id"])
+            while ft_job.status != "succeeded" and ft_job.status != "failed":
+                ft_job = client.fine_tuning.jobs.retrieve(model_details.id)
 
                 print(ft_job)
                 time.sleep(60)
 
-            print("Fine-tuning job finished: %s", model_details["id"])
-            return ft_job["fine_tuned_model"]
+            print("Fine-tuning job finished: %s", model_details.id)
+            return ft_job.fine_tuned_model  # type: ignore
         return ""
     else:
         print("Something is wrong, please check the data format.")

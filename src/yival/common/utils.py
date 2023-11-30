@@ -174,9 +174,10 @@ async def parallel_completions(
         list: A list of responses containing completions for each message
             batch.
     """
+    api_key = os.getenv("OPENAI_API_KEY")
     url = "https://api.openai.com/v1/chat/completions"
     headers = {
-        "Authorization": f"Bearer {openai.api_key}",
+        "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json"
     }
 

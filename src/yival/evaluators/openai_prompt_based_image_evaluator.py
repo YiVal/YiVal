@@ -1,6 +1,6 @@
 """
-OpenAIPromptBasedEvaluator is an evaluator that uses OpenAI's prompt-based
-system for evaluations.
+OpenAIPromptBasedImageEvaluator is an evaluator that uses OpenAI's prompt-based
+system for image evaluations.
 
 The evaluator interfaces with the OpenAI API to present tasks and interpret
 the model's responses to determine the quality or correctness of a given
@@ -22,16 +22,15 @@ from tenacity import before_sleep_log, retry, stop_after_attempt, wait_random
 logging.basicConfig(level=logging.ERROR)
 logger = logging.getLogger(__name__)
 
-from yival.common.utils import create_assistant, create_assistant_and_get_response
-from yival.evaluators.base_evaluator import BaseEvaluator
-from yival.schemas.evaluator_config import (
+from ..schemas.evaluator_config import (
     EvaluatorOutput,
     EvaluatorType,
     MethodCalculationMethod,
     MetricCalculatorConfig,
-    OpenAIPromptBasedEvaluatorConfig,
+    OpenAIPromptBasedImageEvaluatorConfig,
 )
-from yival.schemas.experiment_config import ExperimentResult, InputData, MultimodalOutput
+from ..schemas.experiment_config import ExperimentResult, InputData, MultimodalOutput
+from .base_evaluator import BaseEvaluator
 
 CLASSIFY_STR = """
 First, write out in a step by step manner your reasoning to be sure that your
@@ -118,106 +117,68 @@ def completion_with_backpff(**kwargs):
     return response
 
 
-@retry(
-    wait=wait_random(min=1, max=20),
-    stop=stop_after_attempt(100),
-)
-async def acompletion_with_backpff(**kwargs):
-    api_key = os.getenv("OPENAI_API_KEY")
-    url = "https://api.openai.com/v1/chat/completions"
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json"
-    }
-
-    proxy = os.environ.get("all_proxy")
-    if proxy:
-        connector = ProxyConnector.from_url(proxy)
-    else:
-        connector = None
-    kwargs.pop('request_timeout')
-    async with aiohttp.ClientSession(connector=connector) as session:
-        async with session.post(url, headers=headers, json=kwargs) as response:
-
-            return await response.json()
-
-
 def choices_to_string(choice_strings: Iterable[str]) -> str:
     """Converts a list of choices into a formatted string."""
     return " or ".join(f'"{choice}"' for choice in choice_strings)
 
 
-class OpenAIPromptBasedEvaluator(BaseEvaluator):
-    """Evaluator using OpenAI's prompt-based evaluation."""
+class OpenAIPromptBasedImageEvaluator(BaseEvaluator):
+    """Evaluator using OpenAI's prompt-based image evaluation."""
 
-    default_config = OpenAIPromptBasedEvaluatorConfig(
-        name="openai_prompt_based_evaluator"
+    default_config = OpenAIPromptBasedImageEvaluatorConfig(
+        name="openai_prompt_based_image_evaluator"
     )
 
-    def __init__(self, config: OpenAIPromptBasedEvaluatorConfig):
+    def __init__(self, config: OpenAIPromptBasedImageEvaluatorConfig):
         super().__init__(config)
         self.config = config
-        self.assistant_id = create_assistant(
-            name="Evaluator",
-            instructions="Evaluate ",
-            tools=[],
-            model="gpt-4-1106-preview"
-        )
 
     def evaluate(self, experiment_result: ExperimentResult) -> EvaluatorOutput:
         """Evaluate the experiment result using OpenAI's prompt-based evaluation."""
-        assert isinstance(self.config, OpenAIPromptBasedEvaluatorConfig)
+        assert isinstance(self.config, OpenAIPromptBasedImageEvaluatorConfig)
         format_dict = copy.deepcopy(experiment_result.input_data.content)
-        format_dict["raw_output"] = experiment_result.raw_output.text_output
 
-        prompt = format_template(self.config.prompt, format_dict)
-        if isinstance(prompt, str):
-            prompt = [{"role": "user", "content": prompt}]
+        if isinstance(experiment_result.combination, dict):
+            first_key = next(iter(experiment_result.combination))
+            format_dict["text_output"] = experiment_result.combination[first_key]
+        else:
+            format_dict["image_output"] = None
 
-        prompt[-1]["content"] += "\n\n" + CLASSIFY_STR.format(
+        if isinstance(experiment_result.raw_output.image_output, dict):
+            first_image_url = next(iter(experiment_result.raw_output.image_output))
+            format_dict["image_output"] = first_image_url
+        else:
+            format_dict["image_output"] = None
+
+
+        formatted_prompt = str(format_template(self.config.prompt, format_dict))
+        formatted_prompt += "\n\n" + CLASSIFY_STR.format(
             choices=choices_to_string(self.config.choices)
         )
+        messages = [{
+            "role":
+            "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": formatted_prompt
+                },
+                {
+                    "type": "image_url",
+                    "image_url": format_dict["image_output"]
+                },
+            ],
+        }]
 
-        response_content = create_assistant_and_get_response(
-            prompt[-1]["content"], assistant_id=self.assistant_id
-        )
-        # response = openai.ChatCompletion.create(model="gpt-4", messages=prompt, temperature=0.5)
-        # response_content = response.choices[0].message.content
-        choice = extract_choice_from_response(
-            response_content, self.config.choices
-        )
-        score = calculate_choice_score(choice, self.config.choice_scores)
-        return EvaluatorOutput(
-            name=self.config.name,
-            result=score if score is not None else choice,
-            display_name=self.config.display_name,
-            metric_calculators=self.config.metric_calculators
-        )
-
-    async def aevaluate(self, experiment_result: ExperimentResult) -> Any:
-        assert isinstance(self.config, OpenAIPromptBasedEvaluatorConfig)
-        format_dict = copy.deepcopy(experiment_result.input_data.content)
-        format_dict["raw_output"] = experiment_result.raw_output.text_output
-
-        prompt = format_template(self.config.prompt, format_dict)
-        if isinstance(prompt, str):
-            prompt = [{"role": "user", "content": prompt}]
-
-        prompt[-1]["content"] += "\n\n" + CLASSIFY_STR.format(
-            choices=choices_to_string(self.config.choices)
-        )
-        response = await acompletion_with_backpff(
-            model="gpt-4",
-            messages=prompt,
+        response = completion_with_backpff(
+            model="gpt-4-vision-preview",
+            messages=messages,
             temperature=0.5,
             n=1,
             max_tokens=1000,
             request_timeout=60,
         )
-        # import pdb
-        # pdb.set_trace()
-        #response = openai.ChatCompletion.create(model="gpt-4", messages=prompt, temperature=0.5)
-        response_content = response['choices'][0]['message']['content']
+        response_content = response.choices[0].message.content
         choice = extract_choice_from_response(
             response_content, self.config.choices
         )
@@ -231,15 +192,15 @@ class OpenAIPromptBasedEvaluator(BaseEvaluator):
 
 
 BaseEvaluator.register_evaluator(
-    "openai_prompt_based_evaluator", OpenAIPromptBasedEvaluator,
-    OpenAIPromptBasedEvaluatorConfig
+    "openai_prompt_based_image_evaluator", OpenAIPromptBasedImageEvaluator,
+    OpenAIPromptBasedImageEvaluatorConfig
 )
 
 
 def main():
-    """Main function to test the OpenAIPromptBasedEvaluator."""
-    evaluator_config = OpenAIPromptBasedEvaluatorConfig(
-        name="openai_prompt_based_evaluator",
+    """Main function to test the OpenAIPromptBasedImageEvaluator."""
+    evaluator_config = OpenAIPromptBasedImageEvaluatorConfig(
+        name="openai_prompt_based_image_evaluator",
         display_name="math calculator",
         metric_calculators=[
             MetricCalculatorConfig(
@@ -274,7 +235,7 @@ def main():
         token_usage=50
     )
 
-    evaluator = OpenAIPromptBasedEvaluator(evaluator_config)
+    evaluator = OpenAIPromptBasedImageEvaluator(evaluator_config)
     result = evaluator.evaluate(experiment_result_example)
     print(result)
 

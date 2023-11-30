@@ -3,9 +3,9 @@ import os
 import re
 
 import guardrails as gd
-import openai
 from guardrails.datatypes import PythonCode
 from guardrails.validators import BugFreePython
+from openai import OpenAI
 from pydantic import BaseModel, Field
 from rich import print
 
@@ -49,13 +49,14 @@ async def run_leetcode(
     use_guardrails = StringWrapper(
         "use_guardrails", name="use_guardrails", state=state
     )
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
     if str(use_guardrails) == "use_guardrails":
         try:
             guard = gd.Guard.from_pydantic(
                 output_class=BugFreePythonCode, prompt=prompt_guardrail
             )
             raw_llm_response, validated_response = await guard(
-                llm_api=openai.ChatCompletion.acreate,
+                llm_api=client.chat.completions.acreate,
                 prompt_params={"leetcode_problem": leetcode_problem},
                 model="gpt-3.5-turbo",
                 max_tokens=1000,
@@ -79,18 +80,18 @@ async def run_leetcode(
             return MultimodalOutput(text_output="guardrails throws exception")
 
     else:
-        openai.api_key = os.getenv("OPENAI_API_KEY")
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         prompt = prompt_raw.format(leetcode_problem=leetcode_problem)
         messages = [{"role": "user", "content": prompt}]
         # Use the chat-based completion
-        response = await openai.ChatCompletion.acreate(
+        response = await client.chat.completions.acreate(
             model="gpt-3.5-turbo",
             messages=messages,
             temperature=0,
             max_tokens=1000
         )
-        res = response['choices'][0]['message']['content']
-        token_usage = response['usage']['total_tokens']
+        res = response.choices[0].message.content
+        token_usage = response.usage.total_tokens
         extracted_text = re.search(r'```python\n(.*?)\n```', res, re.DOTALL)
         extracted_code = extracted_text.group(1).strip(
         ) if extracted_text else None

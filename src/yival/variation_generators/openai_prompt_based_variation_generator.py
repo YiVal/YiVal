@@ -3,10 +3,12 @@ import os
 import pickle
 from typing import Any, Dict, Iterator, List
 
+from openai import OpenAI
+from openai.types.chat import ChatCompletionMessage
 from tqdm import tqdm
 
 from ..common import utils
-from ..common.model_utils import llm_completion
+# from ..common.model_utils import llm_completion
 from ..schemas.experiment_config import WrapperVariation
 from ..schemas.model_configs import Request
 from ..schemas.varation_generator_configs import OpenAIPromptBasedVariationGeneratorConfig
@@ -92,6 +94,7 @@ class OpenAIPromptBasedVariationGenerator(BaseVariationGenerator):
 
         res: List[WrapperVariation] = []
         res_content: List[str] = []
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
         while len(res) < self.config.number_of_variations:
             messages = self.prepare_messages(res_content)
@@ -131,29 +134,28 @@ class OpenAIPromptBasedVariationGenerator(BaseVariationGenerator):
                     desc="Generating Variations",
                     unit="variation"
                 ) as pbar:
-                    output = llm_completion(
-                        Request(
-                            model_name=self.config.model_name,
-                            prompt=messages,
-                            params={
-                                "temperature": 1,
-                                "presence_penalty": 1,
-                                "max_tokens": self.config.max_tokens,
-                            }
-                        )
-                    ).output
+                    output = client.chat.completions.create(
+                        model=self.config.model_name,
+                        messages=messages,
+                        temperature=1.0,
+                        presence_penalty=1.0,
+                        max_tokens=self.config.max_tokens,
+                    )
                     if self.config.variables and not validate_output(
-                        output.choices[0].message.content,
+                        output.choices[0].message.content,  # type: ignore
                         self.config.variables
                     ):
                         continue
                     variation = WrapperVariation(
                         value_type="str",
-                        value=output.choices[0].message.content.strip("'").
+                        value=output.choices[0].message.content.
+                        strip("'").  # type: ignore
                         strip('"')
                     )
                     res.append(variation)
-                    res_content.append(output.choices[0].message.content)
+                    res_content.append(
+                        output.choices[0].message.content
+                    )  # type: ignore
                     pbar.update(1)
 
         if self.config.output_path:
