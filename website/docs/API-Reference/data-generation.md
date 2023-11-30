@@ -2,67 +2,63 @@
 sidebar_position: 9
 ---
 
-# Data Generation  
+# Data Generation
 
-##  `BaseDataGenerator`
+## `BaseDataGenerator`
 
-###   Introduction 
+### Introduction
 
-  This class provides a blueprint for data generators and offers methods to register new generators, retrieve registered generators, and fetch their configurations.
+This class provides a blueprint for data generators and offers methods to register new generators, retrieve registered generators, and fetch their configurations.
 
+### Class Definition
 
+#### Description
 
-###   Class Definition 
+#### Attributes
 
-####    Description
+### Example
 
-####    Attributes
+## `OpenAIPromptDataGenerator`
 
+### Introduction
 
+This module provides a mechanism for data generation using OpenAI's models. It aims to generate data examples programmatically based on a given prompt and configuration. The generated examples can be used for various purposes including testing, simulations, and more. The module offers utility functions to process and transform the generated data, ensuring it's structured and usable for subsequent operations.
 
-###   Example
+### Class Definition
 
-##  `OpenAIPromptDataGenerator`
+#### Description
 
-###   Introduction 
+This configuration object is specifically tailored for the `OpenAIPromptDataGenerator` class. It provides settings to guide the generation of test cases using OpenAI models based on a given prompt.
 
-  This module provides a mechanism for data generation using OpenAI's models. It aims to generate data examples programmatically based on a given prompt and configuration. The generated examples can be used for various purposes including testing, simulations, and more. The module offers utility functions to process and transform the generated data, ensuring it's structured and usable for subsequent operations.
-
-###   Class Definition 
-
-####    Description
-
-   This configuration object is specifically tailored for the `OpenAIPromptDataGenerator` class. It provides settings to guide the generation of test cases using OpenAI models based on a given prompt.
-
-####    Attributes
+#### Attributes
 
 - **`model_name(str)`**:
-  -  Specifies the OpenAI model to be used for generating the test cases. 
-  - The default value is `"gpt-4"`.
-- **`prompt (Union[str, List[Dict[str, str]]])`**: 
-  - The instruction or set of instructions given to the OpenAI model for generating test cases. It can be a single string or a list of messages. 
-  - The default value is  an empty string or `""`.
+    - Specifies the OpenAI model to be used for generating the test cases.
+    - The default value is `"gpt-4"`.
+- **`prompt (Union[str, List[Dict[str, str]]])`**:
+    - The instruction or set of instructions given to the OpenAI model for generating test cases. It can be a single string or a list of messages.
+    - The default value is an empty string or `""`.
 - **`input_function (Dict[str, Any])`**:
-  -  Details of the function for which test cases are to be generated. Contains information like function name, description, and parameters. 
-  - The default value is an empty dictionary or `{}`.
-- **`diversify(bool)`**: 
-  - A flag that determines if the generated test cases should be diversified to ensure comprehensive evaluation. 
-  - The default value is set to `True`.
-- **`max_token(int)`**: 
-  - Specifies the maximum number of tokens allowed for the prompt. 
-  - The default value is set to `2000`.
-- **`expected_param_name(str)`**: 
-  - Indicates the name of the parameter that contains expected values in the generated test cases.
-- **`call_option(Optional[CallOption])`**: 
-  - Provides additional options for calling the OpenAI model. 
-  - The default value is `None`.
-- **`output_csv_path(Optional[str])`**: 
-  - The path to save the generated test cases in a CSV format. 
-  - The default value is `None`.
+    - Details of the function for which test cases are to be generated. Contains information like function name, description, and parameters.
+    - The default value is an empty dictionary or `{}`.
+- **`diversify(bool)`**:
+    - A flag that determines if the generated test cases should be diversified to ensure comprehensive evaluation.
+    - The default value is set to `True`.
+- **`max_token(int)`**:
+    - Specifies the maximum number of tokens allowed for the prompt.
+    - The default value is set to `2000`.
+- **`expected_param_name(str)`**:
+    - Indicates the name of the parameter that contains expected values in the generated test cases.
+- **`call_option(Optional[CallOption])`**:
+    - Provides additional options for calling the OpenAI model.
+    - The default value is `None`.
+- **`output_csv_path(Optional[str])`**:
+    - The path to save the generated test cases in a CSV format.
+    - The default value is `None`.
 
-###   Example
+### Example
 
-####    Generate Data and Save Test Case
+#### Generate Data and Save Test Case
 
 ```Python
 # Create a configuration for data generation
@@ -89,7 +85,7 @@ data_generator = OpenAIPromptDataGenerator(generator_config)
 data_generator.generate_examples()
 ```
 
-####    Use OpenAI Prompt Data Generator in the YiVal config
+#### Use OpenAI Prompt Data Generator in the YiVal config
 
 ```YAML
 dataset:
@@ -116,25 +112,21 @@ dataset:
   source_type: machine_generated
 ```
 
+### [Source Code](https://github.com/YiVal/YiVal/blob/master/src/yival/data_generators/openai_prompt_data_generator.py)
 
+## Custom Data Generator Guide: `ListStringDataGenerator`
 
-###   [Source Code](https://github.com/YiVal/YiVal/blob/master/src/yival/data_generators/openai_prompt_data_generator.py)
+This guide will walk you through creating a custom data generator using the provided `BaseDataGenerator`.
 
+### Introduction
 
+The ability to programmatically generate data is crucial in scenarios where synthetic or mock data is required, such as in testing, simulations, and more. The provided foundational architecture for data generators allows flexibility and extensibility, enabling you to create custom data generators tailored to specific needs.
 
-##  Custom Data Generator Guide: `ListStringDataGenerator`
+In this guide, we will demonstrate how to create a custom data generator by extending the BaseDataGenerator. Our custom generator will output a list of predefined strings. By following this guide, you'll gain an understanding of the structure and process, enabling you to develop even more complex generators as needed.
 
-  This guide will walk you through creating a custom data generator using the provided `BaseDataGenerator`.
+### Subclassing the `BaseDataGenerator`
 
-###   Introduction
-
-  The ability to programmatically generate data is crucial in scenarios where synthetic or mock data is required, such as in testing, simulations, and more. The provided foundational architecture for data generators allows flexibility and extensibility, enabling you to create custom data generators tailored to specific needs.
-
-  In this guide, we will demonstrate how to create a custom data generator by extending the BaseDataGenerator. Our custom generator will output a list of predefined strings. By following this guide, you'll gain an understanding of the structure and process, enabling you to develop even more complex generators as needed.
-
-###   Subclassing the `BaseDataGenerator`
-
-  First, create a `ListStringDataGenerator` that simply outputs a list of strings as specified in its configuration.
+First, create a `ListStringDataGenerator` that simply outputs a list of strings as specified in its configuration.
 
 ```Python
 from typing import Iterator, List
@@ -152,11 +144,11 @@ class ListStringDataGenerator(BaseDataGenerator):
             yield [InputData(example_id=self.generate_example_id(string_data), content=string_data)]
 ```
 
-------
+---
 
-###   Providing a Configuration Class
+### Providing a Configuration Class
 
-  To specify the list of strings our generator should output, define a custom configuration class:
+To specify the list of strings our generator should output, define a custom configuration class:
 
 ```Python
 from dataclasses import dataclass, field
@@ -172,9 +164,9 @@ class ListStringGeneratorConfig(BaseDataGeneratorConfig):
     strings_to_generate: List[str] = field(default_factory=list)
 ```
 
-###   Config
+### Config
 
-  In your configuration (YAML), you can now specify the use of this data generator:
+In your configuration (YAML), you can now specify the use of this data generator:
 
 ```YAML
 custom_data_generators:

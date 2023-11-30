@@ -5,48 +5,48 @@ sidebar_position: 12
 
 # Variation Generator
 
-##  `BaseVariationImprover`
+## `BaseVariationImprover`
 
-###   Introduction
+### Introduction
 
   This module defines the base class for combination improvers. Combination improvers are responsible for improving the combination of experiments based on their experiment results.
 
-###   Class Definition
+### Class Definition
 
-####    Description
+#### Description
 
-####    Attributes
+#### Attributes
 
-###   Example 
+### Example
 
-##  `OpenAIPromptBasedVariationGenerator`
+## `OpenAIPromptBasedVariationGenerator`
 
-###   Introduction 
+### Introduction
 
   A variation generator that uses the GPT-4 model to generate variations based on the provided prompt configurations.
 
-###   Class Definition 
+### Class Definition
 
-####    Description
+#### Description
 
    A data class defining the configuration for the `OpenAIPromptBasedVariationGenerator`.
 
-####    Attributes
+#### Attributes
 
-- **`model_name(str)`**: 
-  - The name of the model to be used. The default value is `"gpt-4"`.
-- **`prompt(Union[str, List[Dict[str, str]]])`**: 
-  - The prompt or set of prompts that guide the generation of variations.
-- **`diversify(bool)`**: 
-  - Whether to ensure diversification in the generated responses.
-- **`variables(Optional[List[str]])`**: 
-  - Specific variables that should be included in the generated variations.
-- **`max_tokens(int)`**: 
-  - The maximum number of tokens for the generated response. The default value is `7000`.
+- **`model_name(str)`**:
+    - The name of the model to be used. The default value is `"gpt-4"`.
+- **`prompt(Union[str, List[Dict[str, str]]])`**:
+    - The prompt or set of prompts that guide the generation of variations.
+- **`diversify(bool)`**:
+    - Whether to ensure diversification in the generated responses.
+- **`variables(Optional[List[str]])`**:
+    - Specific variables that should be included in the generated variations.
+- **`max_tokens(int)`**:
+    - The maximum number of tokens for the generated response. The default value is `7000`.
 
-###   Example
+### Example
 
-####    Using `OpenAIPromptBasedVariationGenerator`
+#### Using `OpenAIPromptBasedVariationGenerator`
 
 ```Python
     generator = OpenAIPromptBasedVariationGenerator(
@@ -71,7 +71,7 @@ sidebar_position: 12
         print(d)
 ```
 
-####    Using the `OpenAIPromptBasedCombinationImprover` in YiVal config
+#### Using the `OpenAIPromptBasedCombinationImprover` in YiVal config
 
 ```Python
 variations:
@@ -117,19 +117,19 @@ variations:
         - tech_startup_business
 ```
 
-##  Custom Variation Generator Subclass Guide: `generate_variations`
+## Custom Variation Generator Subclass Guide: `generate_variations`
 
  This guide explains how to create a custom variation generator subclass based on the `BaseVariationGenerator` for experimental variations.
 
-###   Understand the Base
+### Understand the Base
 
   The `BaseVariationGenerator` provides foundational methods and attributes for all variation generators. Subclasses should implement the `generate_variations` method to define the logic for producing variations.
 
-1. ###### Example: SimpleVariationGenerator
+#### Example: SimpleVariationGenerator
 
   Let's design a generator that simply returns variations based on the configurations provided.
 
-###   Define the Configuration Class
+### Define the Configuration Class
 
   Firstly, you'll need a configuration class specific to your generator:
 
@@ -144,7 +144,7 @@ class SimpleVariationGeneratorConfig(BaseVariationGeneratorConfig):
 
   This configuration class inherits from `BaseVariationGeneratorConfig` and has an additional attribute, `variations`, which is a list of variation strings.
 
-###   Implement the Variation Generator
+### Implement the Variation Generator
 
   Now, let's create the custom variation generator:
 
@@ -167,7 +167,7 @@ class SimpleVariationGenerator(BaseVariationGenerator):
 
   Here, the `generate_variations` method simply converts the list of variation strings from the configuration into a list of `WrapperVariation` objects and yields it.
 
-2. ###### Using the Custom Variation Generator in Configuration
+#### Using the Custom Variation Generator in Configuration
 
   In your configuration (YAML), you can now specify the use of this variation generator:
 
@@ -189,4 +189,3 @@ variations:
 ```
 
   This configuration will use the `SimpleVariationGenerator` and produce the variations "variation1" and "variation2".
-
