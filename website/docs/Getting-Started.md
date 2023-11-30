@@ -2,9 +2,9 @@
 sidebar_position: 3
 ---
 
-# Getting Started 
+# Getting Started
 
-YiVal is easy to set up and use. Here, we will explore using YiVal's framework and Facebook AI Similarity Search (FAISS) library to Simplify Prompt Generation for LLMs with Retrieval Methods. Automating and optimizing this task using YiVal will ensure the generation of contextually relevant prompts. 
+YiVal is easy to set up and use. Here, we will explore using YiVal's framework and Facebook AI Similarity Search (FAISS) library to Simplify Prompt Generation for LLMs with Retrieval Methods. Automating and optimizing this task using YiVal will ensure the generation of contextually relevant prompts.
 
 ## Prerequisites & Installation
 
@@ -12,7 +12,7 @@ After making sure we have all the **prerequisites** to install YiVal, we begin i
 
 ## YiVal's Role in Retrieval
 
-In this task, we use FAISS to store prompts to be able to quickly search and retrieve the prompts. In addition, FAISS allows us to turn prompts into vectors, which facilitates finding the ideal prompt. YiVal simplifies experimentation with AI applications and tasks while being integrated with FAISS, in two main ways: 
+In this task, we use FAISS to store prompts to be able to quickly search and retrieve the prompts. In addition, FAISS allows us to turn prompts into vectors, which facilitates finding the ideal prompt. YiVal simplifies experimentation with AI applications and tasks while being integrated with FAISS, in two main ways:
 
 1. **Find Matching Prompts**: Based on a given situation, Yival searches the FAISS database to find similar prompts.
 2. **Refine with GPT**: Sometimes, the initially found prompts might not be perfect. So, we use GPT to rerank them, ensuring that we pick the most suitable one.
@@ -36,11 +36,11 @@ response = openai.ChatCompletion.create(
 )
 ```
 
- Notice that there was no need to provide a predefined prompt using this approach. 
+Notice that there was no need to provide a predefined prompt using this approach.
 
-## **YiVal Configuration File** 
+## **YiVal Configuration File**
 
- Now, we start working on creating a YiVal configuration file. Here is an example of YiVal Configuration file for `travel guide` use case: 
+Now, we start working on creating a YiVal configuration file. Here is an example of YiVal Configuration file for `travel guide` use case:
 
 ```YAML
 custom_function: demo.auto_prompt_bot.reply
@@ -61,10 +61,10 @@ variations:
     generator_name: retrivel_variation_generator
 ```
 
- Here we have specified the dataset to be from user input and used `demo.auto_prompt_bot.reply` as a custom function and used `retrivel_variation_generator` to generate a prompt related to `travel guide` use case.
+Here we have specified the dataset to be from user input and used `demo.auto_prompt_bot.reply` as a custom function and used `retrivel_variation_generator` to generate a prompt related to `travel guide` use case.
 
 ## Real-Time Results
 
- You can see the results achieved in real-time below. Please check this [notebook](https://colab.research.google.com/drive/1L7miRwTQSZfm5xOKBakWOG5bOumMynpv?usp=sharing#scrollTo=r5I9F1kJlSj2) to learn about this process in further detail.
+You can see the results achieved in real-time below. Please check this [notebook](https://colab.research.google.com/drive/1L7miRwTQSZfm5xOKBakWOG5bOumMynpv?usp=sharing#scrollTo=r5I9F1kJlSj2) to learn about this process in further detail.
 
 ![img](Getting-Started_imgs/-16995993052711.png)

@@ -1,54 +1,50 @@
 ---
 sidebar_position: 2
 ---
-
-# Common Utils 
+# Common Utils
 
 ## `HFInference`
 
-### Introduction 
+### Introduction
 
-  The `HFInference` class facilitates local inference using models from the HuggingFace transformers library. It provides utilities to load and run inference on a specified model, ensuring efficient text generation directly on the host system.
+The `HFInference` class facilitates local inference using models from the HuggingFace transformers library. It provides utilities to load and run inference on a specified model, ensuring efficient text generation directly on the host system.
 
-### Class Definition 
+### Class Definition
 
 #### Description
 
-   The `HFInference` class provides an interface for local inference using HuggingFace models.
+The `HFInference` class provides an interface for local inference using HuggingFace models.
 
 #### Attributes
 
-- **`model_name(str)`**: 
-  - The name or path of the HuggingFace model to be loaded.
+- **`model_name(str)`**:
+    - The name or path of the HuggingFace model to be loaded.
 
 #### Methods
 
 - **`__init__(self, model_name: str)`**:
-  - Initializes the `HFInference` instance and loads the specified model.
-  - Parameters:
-    - `model_name (str)`: The name or path of the HuggingFace model.
 
-
-
+    - Initializes the `HFInference` instance and loads the specified model.
+    - Parameters:
+        - `model_name (str)`: The name or path of the HuggingFace model.
 - **`load_model(self, model_name: str) -> Tuple[PreTrainedModel, PreTrainedTokenizer]`**:
-  -    Loads the model and corresponding tokenizer from the transformers library.
-  -    Parameters:
+
+    - Loads the model and corresponding tokenizer from the transformers library.
+    - Parameters:
     - `model_name (str)`: The name or path of the HuggingFace model.
-  - Returns:
-    -  A tuple containing the loaded model and its tokenizer.
-
-
-
+    - Returns:
+        - A tuple containing the loaded model and its tokenizer.
 - **`generate(self, prompt: str, max_length: int = 200, temperature: float = 0, top_p: float = 0.99, repetition_penalty: float = 1)`**:
-  -    Generates text based on the provided prompt using the loaded model.
-  -   Parameters:
-    -  `prompt (str)`: The input text or prompt for the model.
-    -  `max_length (int)`: Maximum length of the generated text. The default value is `200`.
-    -  `temperature (float)`: Sampling temperature. The default value is `0`.
-    -  `top_p (float)`: Nucleus sampling's top-p value. The default value is `0.99`.
-    -  `repetition_penalty (float)`: Repetition penalty factor. The default value is `1`.
-  -   Returns:
-    - A generator that yields each generated token or word. 
+
+    - Generates text based on the provided prompt using the loaded model.
+    - Parameters:
+    - `prompt (str)`: The input text or prompt for the model.
+    - `max_length (int)`: Maximum length of the generated text. The default value is `200`.
+    - `temperature (float)`: Sampling temperature. The default value is `0`.
+    - `top_p (float)`: Nucleus sampling's top-p value. The default value is `0.99`.
+    - `repetition_penalty (float)`: Repetition penalty factor. The default value is `1`.
+    - Returns:
+    - A generator that yields each generated token or word.
 
 #### Notes
 
@@ -72,42 +68,42 @@ generated_text = " ".join(generated_tokens)
 print(generated_text)
 ```
 
-### [Source Code](https://security.larksuite.com/link/safety?target=https%3A%2F%2Fgithub.com%2FYiVal%2FYiVal%2Fblob%2Fmaster%2Fsrc%2Fyival%2Fcommon%2Fhuggingface%2Fhf.py&scene=ccm&logParams={"location"%3A"ccm_default"}&lang=en-US)
+### [Source Code](https://security.larksuite.com/link/safety?target=https%3A%2F%2Fgithub.com%2FYiVal%2FYiVal%2Fblob%2Fmaster%2Fsrc%2Fyival%2Fcommon%2Fhuggingface%2Fhf.py&scene=ccm&logParams={)
 
 ## `DocSimilarityUtils`
 
-### Introduction 
+### Introduction
 
-  This module provides utilities for obtaining embeddings of textual data using the OpenAI API and for computing the cosine similarity between two sets of embeddings.
+This module provides utilities for obtaining embeddings of textual data using the OpenAI API and for computing the cosine similarity between two sets of embeddings.
 
-### Class Definition 
+### Class Definition
 
 #### Description
 
-   Fetches the embedding for a given string using the OpenAI API.
+Fetches the embedding for a given string using the OpenAI API.
 
 #### Methods (Functions)
 
-- **`get_embedding(input_str: str) -> list[float]`****:**
-  - Fetches the embedding for a given string using the OpenAI API.
-  - Parameters: 
-    - **`input_str (str)`**: The input text for which the embedding is to be obtained.
-  - Returns: 
-    - **`list[float]`**: A list of floats representing the embedding of the input text.
+- **`get_embedding(input_str: str) -> list[float]`\*\***:\*\*
+    - Fetches the embedding for a given string using the OpenAI API.
+    - Parameters:
+        - **`input_str (str)`**: The input text for which the embedding is to be obtained.
+    - Returns:
+        - **`list[float]`**: A list of floats representing the embedding of the input text.
 - **`cosine_similarity(a: list[float], b: list[float]) -> float`**:
-  - Computes the cosine similarity between two sets of embeddings.
-  - Parameters:
-    - **`a (list[float])`**: The first set of embeddings.
-    - **`b (list[float])`**: The second set of embeddings.
-  - Returns:
-    - ​     **`float`**: A float value representing the cosine similarity between the two sets of embeddings.
-- **`get_cosine_simarity(doc1: str, doc2: str) -> float`****:**
-  - Computes the cosine similarity between the embeddings of two textual documents.
-  - Parameters:
-    - **`doc1 (str)`**: The first document text.
-    - **`doc2 (str)`**: The second document text.
-  - Returns:
-    - **`float`**: A float value representing the cosine similarity between the embeddings of the two documents.
+    - Computes the cosine similarity between two sets of embeddings.
+    - Parameters:
+        - **`a (list[float])`**: The first set of embeddings.
+        - **`b (list[float])`**: The second set of embeddings.
+    - Returns:
+        - **`float`**: A float value representing the cosine similarity between the two sets of embeddings.
+- **`get_cosine_simarity(doc1: str, doc2: str) -> float`\*\***:\*\*
+    - Computes the cosine similarity between the embeddings of two textual documents.
+    - Parameters:
+        - **`doc1 (str)`**: The first document text.
+        - **`doc2 (str)`**: The second document text.
+    - Returns:
+        - **`float`**: A float value representing the cosine similarity between the embeddings of the two documents.
 
 #### Notes
 
@@ -117,13 +113,13 @@ print(generated_text)
 ### Example
 
 ```Python
-# get_embedding example 
+# get_embedding example
 embedding = get_embedding("Hello, world!")
 print(embedding)
 ```
 
 ```Python
-# cosine_similarity example 
+# cosine_similarity example
 embedding1 = [0.2, 0.5, 0.8]
 embedding2 = [0.1, 0.6, 0.9]
 similarity = cosine_similarity(embedding1, embedding2)
@@ -131,7 +127,7 @@ print(similarity)
 ```
 
 ```Python
-# get_cosine_similarity example 
+# get_cosine_similarity example
 document1 = "The sun shines brightly."
 document2 = "It's a bright and sunny day."
 similarity = get_cosine_similarity(document1, document2)
@@ -142,19 +138,19 @@ print(similarity)
 
 ## `Utils`
 
-###  Introduction 
+### Introduction
 
-  This module provides common utility functions designed primarily for asynchronous interactions with OpenAI's API, managing rate limits, and obtaining embeddings.
+This module provides common utility functions designed primarily for asynchronous interactions with OpenAI's API, managing rate limits, and obtaining embeddings.
 
-###  Class Definition 
+### Class Definition
 
 #### `RateLimiter`
 
-#####   Description
+##### Description
 
-​    The `RateLimiter` class ensures that the rate of requests and token usage do not exceed specified limits.
+ The `RateLimiter` class ensures that the rate of requests and token usage do not exceed specified limits.
 
-#####  Attributes
+##### Attributes
 
 - `max_rate (int)`: Maximum number of requests allowed per second.
 - `max_tokens_per_minute (int)`: Maximum number of tokens allowed to be used per minute.
@@ -184,15 +180,13 @@ async def main():
 asyncio.run(main())
 ```
 
-
-
-### Function Definition 
+### Function Definition
 
 #### `parallel_completions(message_batches, model, max_tokens,temperature=1.3, presence_penalty=0, pbar=None, logit_bias=None) -> list`
 
 ##### Description
 
-​    Asynchronously performs parallel completions using OpenAI's API.
+ Asynchronously performs parallel completions using OpenAI's API.
 
 ##### Parameters
 
@@ -223,14 +217,11 @@ async def main():
         model="gpt-3.5-turbo",
         max_tokens=50
     )
-    
+
     for response in responses:
         print(response['choices'][0]['message']['content'])
 
 asyncio.run(main())
 ```
 
-###  [Source Code ](https://github.com/YiVal/YiVal/blob/master/src/yival/common/utils.py)
-
-
-
+### [Source Code](https://github.com/YiVal/YiVal/blob/master/src/yival/common/utils.py)
