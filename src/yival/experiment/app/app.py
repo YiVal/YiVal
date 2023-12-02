@@ -1789,7 +1789,7 @@ def create_dash_app(
                         target='_blank',
                         children=[
                             html.Button(
-                                'Open result tab',
+                                'Open result page',
                                 id='open-result-tab-button',
                                 className='jump-button jump-button-show'
                             )
@@ -1874,7 +1874,10 @@ def create_dash_app(
         elif pathname == '/create-task':
             return input_task_layout()
         else:
-            return index_page()
+            if autogen:
+                return input_task_layout()
+            else:
+                return index_page()
 
     @app.callback(
         Output('comparative-scatter-plot-token', 'figure'),
