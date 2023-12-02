@@ -30,6 +30,7 @@ The followings are 5 examples of using prompt to help the AI model generate imag
 
 
 class StableDiffusionAutoPrompt:
+
     def __init__(self):
         self.comments = []
         self.prompts = []
@@ -43,7 +44,9 @@ class StableDiffusionAutoPrompt:
     def generate_initial_prompt(self, prompt):
         initial_prompt = INITIAL_PROMPT + prompt
         messages = [{"role": "user", "content": initial_prompt}]
-        response = openai.ChatCompletion.create(model="gpt-4", messages=messages)
+        response = openai.ChatCompletion.create(
+            model="gpt-4", messages=messages
+        )
         self.add_prompt(response["choices"][0]["message"]["content"])
         return response["choices"][0]["message"]["content"]
 
@@ -52,18 +55,15 @@ class StableDiffusionAutoPrompt:
         prompt = HEAD_META_PROMPT_TEMPLATE
         for i, _ in enumerate(self.prompts):
             prompt = (
-                prompt
-                + "prompt:"
-                + self.prompts[i]
-                + "\n\n"
-                + "comment:"
-                + self.comments[i]
-                + "\n\n"
+                prompt + "prompt:" + self.prompts[i] + "\n\n" + "comment:" +
+                self.comments[i] + "\n\n"
             )
 
         prompt += END_META_PROMPT
         messages = [{"role": "user", "content": prompt}]
-        response = openai.ChatCompletion.create(model="gpt-4", messages=messages)
+        response = openai.ChatCompletion.create(
+            model="gpt-4", messages=messages
+        )
         self.add_prompt(response["choices"][0]["message"]["content"])
         return response["choices"][0]["message"]["content"]
 
@@ -74,15 +74,14 @@ def main():
     ## Step 1: Generate initial prompt
     print("----- first prompt -----")
     prompt = sd.generate_initial_prompt(
-        "a magic tree with red apples hanging on it and there is a road beside the tree"
+        "a magic tree with red apples hanging on it and there is a road besides the tree, realistic style"
     )
     print(prompt)
     # Initialize the pipeline with the desired model, setting the torch dtype and variant
 
     # Step 2: Pass prompt and coment
     print("----- second prompt -----")
-    print(sd.improve("change the tree to flower"))
-    print(sd.improve("Make sure there are only few apples hanging on the tree"))
+    print(sd.improve("change to green apples"))
 
 
 if __name__ == "__main__":
