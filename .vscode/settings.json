@@ -6,10 +6,7 @@
   },
   "editor.formatOnSave": true,
   "files.autoSave": "onFocusChange",
-  "isort.args": [
-    "-p",
-    "yival"
-  ],
+  "isort.args": ["-p", "yival"],
   "isort.check": true,
   "python.analysis.addImport.exactMatchOnly": true,
   "python.analysis.autoImportCompletions": true,
@@ -18,7 +15,7 @@
     "source.convertImportFormat",
     "source.unusedImports"
   ],
-  "python.formatting.provider": "black",
+  "python.formatting.provider": "yapf",
   // "python.linting.flake8Enabled": true,
   // "python.linting.pydocstyleEnabled": true,
   "python.linting.pylintEnabled": true,
@@ -37,7 +34,5 @@
   "markdown-preview-enhanced.mathRenderingOption": "MathJax",
   "markdown-preview-enhanced.previewTheme": "github-light.css",
   "markdown-preview-enhanced.codeBlockTheme": "monokai.css",
-  "githubPullRequests.ignoredPullRequestBranches": [
-    "master"
-  ]
+  "githubPullRequests.ignoredPullRequestBranches": ["master"]
 }
