@@ -61,6 +61,27 @@ effortlessly with YiVal!
 
 ## Installation
 
+### Docker Runtime
+
+Install Docker and pull ourimage on DockerHub:
+
+```bash
+docker pull yival/release:latest
+```
+
+Run our image:
+
+```bash
+docker run --it yival/release:latest
+```
+
+VSCode with Docker extension is recommended for running and developments. If you are developer using GPU with Pytorch, or need jupyter lab for data science:
+
+```bash
+docker pull yival/release:cu12_torch_jupyter
+docker run --gpus all --it -p 8888:8888 yival/release:cu12_torch_jupyter
+```
+
 ### Prerequisites
 
 - **Python Version**: Ensure you have `Python 3.10` or later installed.
