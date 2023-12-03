@@ -36,9 +36,6 @@ Prompt: Iron Man, (Arnold Tsang, Toru Nakayama), Masterpiece, Studio Quality, 6k
 Prompt: cute girl, crop-top, blond hair, black glasses, stretching, with background by greg rutkowski makoto shinkai kyoto animation key art feminine mid shot
 
 3.
-Prompt: Iron Man, (Arnold Tsang, Toru Nakayama), Masterpiece, Studio Quality, 6k , toa, toaair, 1boy, glowing, axe, mecha, science_fiction, solo, weapon, jungle , green_background, nature, outdoors, solo, tree, weapon, mask, dynamic lighting, detailed shading, digital texture painting
-
-4.
 Prompt: Ethereal gardens of marble built in a shining teal river in future city, gorgeous ornate multi-tiered fountain, futuristic, intricate elegant highly detailed lifelike photorealistic realistic painting, long shot, studio lighting, octane render, by Dorian Cleavenger
 
 Follow the examples, give one prompt that describe the following in detail in English.   Short concise, descriptive and use () and [] when needed.  Life depends on it. Start giving prompts directly without describing them in natural language:\n
