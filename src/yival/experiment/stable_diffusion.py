@@ -43,7 +43,29 @@ Follow the examples, give one prompt that describe the following in detail in En
 """
 
 HEAD_META_PROMPT_TEMPLATE = """
-Generate a image on stable diffussion
+Generate a image on stable diffussion with the guide
+Start by clearly defining your subject. For instance, "A mysterious sorceress with striking features, casting powerful lightning magic."
+Specify the artistic medium. Example: "The image should resemble a digital painting."
+ Include the desired artistic style. For instance, "The style should be hyperrealistic with fantasy and surrealist influences."
+Mention any artists whose style you want to emulate. For instance, "Incorporate elements reminiscent of the works of Stanley Artgerm Lau and Alphonse Mucha."
+If you want the image to reflect a specific website's style, like Artstation, mention it. Example: "The image should have an Artstation-like quality."
+Indicate your preference for the image's resolution and detail. For instance, "The image should be highly detailed with a sharp focus."
+Add any specific vibes or themes, like "Include sci-fi elements, a stunningly beautiful atmosphere, and a dystopian background."
+If you have a preference for certain colors, mention them. Example: "The dominant color should be iridescent gold."
+Describe the desired lighting. For instance, "Use cinematic lighting with dark, moody undertones."
+Include what you don't want in the image in negative prompt. Example: "ugly, tiling, poorly drawn hands, feet, face, extra limbs, disfigured or deformed figures, bad anatomy, watermarks, signatures, and low contrast."
+Adjust the importance of certain elements in your prompt using the (keyword: factor) syntax. A factor less than 1 makes the keyword less important, while a factor greater than 1 increases its importance.
+For example, if emphasizing the sorceress's lightning magic is crucial, you could use lightning magic: 1.5. Conversely, to de-emphasize an element, like dystopian background: 0.5.
+() and [] Syntax for Strength Adjustment:
+Use parentheses () to slightly increase and brackets [] to slightly decrease the strength of a keyword. Multiple parentheses or brackets multiply this effect.
+For instance, ((lightning magic)) makes the lightning magic more prominent, while [dystopian background] makes it less so.
+Use the [keyword1: keyword2: factor] syntax to transition from one keyword to another at a specific point during the image generation process.
+For example, sorceress[early phase: late phase: 0.5] can be used to start with a focus on the sorceress and transition to another theme halfway through the process.
+If aiming for consistency in certain features across multiple images, use multiple related keywords with weights.
+For example, (striking features:0.5), (mysterious aura:1.2) ensures that the sorceress's features and aura are blended consistently.
+Reinforce your negative prompts with weighting or strength adjustment for unwanted elements. Example: [(ugly:0.5), (poorly drawn hands:0)], indicating a strong avoidance of these elements. 
+Use color and lighting keywords with weights to emphasize or de-emphasize certain aspects.
+For instance, (iridescent gold: 1.3), (cinematic lighting: 1.2).
 I already have some prompts and their critcs: \n
 """
 
@@ -98,17 +120,17 @@ def main():
     sd = StableDiffusionAutoPrompt()
     ## Step 1: Generate initial prompt
     print("----- first prompt -----")
-    prompt = sd.generate_initial_prompt("王者荣耀孙尚香")
+    prompt = sd.generate_initial_prompt("a treasure chest")
     print(prompt)
     # Initialize the pipeline with the desired model, setting the torch dtype and variant
 
-    # Step 2: Pass prompt and coment
+    #Step 2: Pass prompt and coment
     print("----- second prompt -----")
-    print(sd.improve("it should be pop mart style"))
+    print(sd.improve("it must be cute"))
     print("----- 3 prompt -----")
-    print(sd.improve("she is an archer holding a bow"))
+    print(sd.improve("it must be wooden"))
     print("----- 4 prompt -----")
-    print(sd.improve("he hands should be clear"))
+    print(sd.improve("the back scene should fits in dark theme"))
 
 
 if __name__ == "__main__":
