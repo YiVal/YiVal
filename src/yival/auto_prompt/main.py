@@ -39,6 +39,7 @@ def run_auto_gen():
         ExperimentState.get_instance(),
         logger,
         evaluator,
+        False,
         True,
         True,
         False,
@@ -54,6 +55,7 @@ def run_demo():
         ExperimentState.get_instance(),
         logger,
         evaluator,
+        False,
         True,
         True,
         True,
@@ -87,7 +89,7 @@ def main():
 
     subprocess.run([
         "yival", "run", "auto_generated_config.yaml",
-        f"--output_path={name}.pkl"
+        f"--output_path={name}.pkl", "--enhance_page"
     ])
 
     print(colored("\nProcess completed!", "green"))
