@@ -1,38 +1,37 @@
 ---
 sidebar_position: 8
 ---
+# Logger
 
-# Logger 
+## `TokenLogger`
 
-##  `TokenLogger`
+### Introduction
 
-###   Introduction 
+### Class Definition
 
-###   Class Definition 
-
-####    Description
+#### Description
 
    The `TokenLogger` class is a singleton class designed to keep track of token usage. As a singleton, it ensures that there's only one instance of the logger throughout the runtime of the application. The class provides methods to log token usage, retrieve the current usage, and reset the counter.
 
-####    Methods 
+#### Methods
 
-###    `log`:
+### `log`
 
 - Logs or adds the number of tokens used to the current usage counter.
 - Parameters:
-  - `tokens(int)`: The number of tokens to add to the current usage counter.
+    - `tokens(int)`: The number of tokens to add to the current usage counter.
 
-###    `get_current_usage`:
+### `get_current_usage`
 
-- Retrieves the current token usage. 
+- Retrieves the current token usage.
 - Returns:
-  - `int`: The token usage of the current operation.
+    - `int`: The token usage of the current operation.
 
-###    `reset`:
+### `reset`
 
 - Resets the current token usage counter to zero.
 
-###   Example
+### Example
 
   To utilize the `TokenLogger`:
 

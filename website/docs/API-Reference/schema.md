@@ -18,39 +18,39 @@ sidebar_position: 1
 #### Attributes
 
 - **`description(str)`**:
-  - A brief description of the experiment.
+    - A brief description of the experiment.
 - **`dataset(DatasetConfig)`**:
-  - The configuration related to the dataset used in the experiment.
+    - The configuration related to the dataset used in the experiment.
 - **`custom_function(Optional[str])`**:
-  - A custom function for the experiment (if any).
+    - A custom function for the experiment (if any).
 - **`variations(Optional[List[WrapperConfig]])`**:
-  - A list of configurations for different variations or wrappers.
+    - A list of configurations for different variations or wrappers.
 - **`selection_strategy(Optional[Dict[str, BaseConfig]])`**:
-  - Strategy for selecting specific configurations or variations.
+    - Strategy for selecting specific configurations or variations.
 - **`wrapper_configs(Optional[Dict[str, BaseWrapperConfig]])`**:
-  - Configuration for specific wrappers.
+    - Configuration for specific wrappers.
 - **`combinations_to_run(Optional[List[Tuple[str, Any]]])`**:
-  - Specific combinations to execute during the experiment.
+    - Specific combinations to execute during the experiment.
 - **`evaluators(Optional[List[Union[EvaluatorConfig, ComparisonEvaluatorConfig, GlobalEvaluatorConfig]])]`**:
-  - Configuration for evaluators that assess the experiment's results.
+    - Configuration for evaluators that assess the experiment's results.
 - **`improver(Optional[BaseCombinationImproverConfig])`**:
-  - Configuration for the improver to enhance the combinations.
+    - Configuration for the improver to enhance the combinations.
 - **`trainer(Optional[BaseTrainerConfig])`**:
-  - Configuration for training models.
+    - Configuration for training models.
 - **`output(Optional[OutputConfig])`**:
-  - Configuration detailing the experiment's output format and destination.
+    - Configuration detailing the experiment's output format and destination.
 - **`human_rating_configs(Optional[List[HumanRatingConfig]])`**:
-  - Configuration for human raters evaluating the experiment.
+    - Configuration for human raters evaluating the experiment.
 - **`existing_experiment_path(Optional[str])`**:
-  - Path to a pre-existing experiment (if any).
+    - Path to a pre-existing experiment (if any).
 - **`version(Optional[str])`**:
-  - The version of the experiment.
+    - The version of the experiment.
 - **`output_parser(Optional[str])`**:
-  - Parser for the experiment's output.
+    - Parser for the experiment's output.
 - **`metadata(Optional[Dict[str, Any]])`**:
-  - Additional metadata related to the experiment.
+    - Additional metadata related to the experiment.
 - **`custom_reader, custom_combination_improver, custom_data_generators, custom_wrappers, custom_evaluators, custom_variation_generators, custom_selection_strategies, custom_improvers(all Optional[Dict[str, Dict[str, Any]]])`**:
-  - Custom configurations for various components of the experiment. Each custom attribute allows users to define specific configurations tailored to their requirements.
+    - Custom configurations for various components of the experiment. Each custom attribute allows users to define specific configurations tailored to their requirements.
 
 ### Example
 
@@ -100,11 +100,11 @@ variations:
 #### Attributes
 
 - **`content(Dict[str, Any])`**:
-  - A dictionary that encapsulates all the necessary input parameters for a custom function or experiment. This could include features, parameters, or any other required data points.
+    - A dictionary that encapsulates all the necessary input parameters for a custom function or experiment. This could include features, parameters, or any other required data points.
 - **`example_id(Optional[str])`**:
-  - A unique identifier for the individual data sample or example. This can be useful for tracking, referencing, or debugging purposes. The default value is `None`.
+    - A unique identifier for the individual data sample or example. This can be useful for tracking, referencing, or debugging purposes. The default value is `None`.
 - **`expected_result(Optional[Any])`**:
-  - Represents the expected outcome or result corresponding to the given input. This can be useful for evaluation, comparison, or validation tasks. The default value is `None`.
+    - Represents the expected outcome or result corresponding to the given input. This can be useful for evaluation, comparison, or validation tasks. The default value is `None`.
 
 ### Example
 

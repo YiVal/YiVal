@@ -295,7 +295,7 @@ def df_to_table(df):
 def create_dash_app(
     experiment_data: Experiment, experiment_config: ExperimentConfig,
     function_args: Dict[str, Any], all_combinations, state, logger, evaluator,
-    interactive_mode, autogen, demo
+    interactive_mode, autogen, demo, enhance_page
 ):
 
     def parallel_task(data_point, all_combinations, logger, evaluator):
@@ -1789,7 +1789,7 @@ def create_dash_app(
                         target='_blank',
                         children=[
                             html.Button(
-                                'Open result tab',
+                                'Open result page',
                                 id='open-result-tab-button',
                                 className='jump-button jump-button-show'
                             )
@@ -1874,7 +1874,12 @@ def create_dash_app(
         elif pathname == '/create-task':
             return input_task_layout()
         else:
-            return index_page()
+            if autogen:
+                return input_task_layout()
+            elif enhance_page:
+                return enhancer_experiment_results_layout()
+            else:
+                return index_page()
 
     @app.callback(
         Output('comparative-scatter-plot-token', 'figure'),
@@ -2448,7 +2453,7 @@ def create_dash_app(
                 )
                 subprocess.run([
                     "yival", "run", "auto_generated_config.yaml",
-                    f"--output_path={name}.pkl"
+                    f"--output_path={name}.pkl", "--enhance_page"
                 ])
             else:
                 print(
@@ -2459,7 +2464,8 @@ def create_dash_app(
                 )
                 subprocess.run([
                     "yival", "run", "default_auto_generated_config.yaml",
-                    "--output_path=default_auto_generated.pkl"
+                    "--output_path=default_auto_generated.pkl",
+                    "--enhance_page"
                 ])
 
             return 'Configuration generated and yival run completed.'
@@ -2528,6 +2534,7 @@ def display_results_dash(
     state,
     logger,
     evaluator,
+    enhance_page=False,
     interactive=False,
     autogen=False,
     demo=False,
@@ -2552,12 +2559,12 @@ def display_results_dash(
         app = create_dash_app(
             experiment_data, experiment_config, function_args,
             all_combinations, state, logger, evaluator, interactive, autogen,
-            demo
+            demo, enhance_page
         )
     else:
         app = create_dash_app(
             experiment_data, experiment_config, {}, all_combinations, state,
-            logger, evaluator, interactive, autogen, demo
+            logger, evaluator, interactive, autogen, demo, enhance_page
         )
     if os.environ.get("ngrok", False):
         public_url = ngrok.connect(port)

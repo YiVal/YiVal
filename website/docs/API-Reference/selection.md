@@ -3,52 +3,50 @@ sidebar_position: 6
 
 ---
 
-# Selection 
+# Selection
 
-##  `SelectionStrategy`
+## `SelectionStrategy`
 
-###   Introduction 
+### Introduction
 
   This module defines an abstract base class for selection strategies. A selection strategy determines how to select or prioritize specific experiments, scenarios, or configurations based on certain criteria.
 
-###   Class Definition 
+### Class Definition
 
-####    Description
+#### Description
 
-####    Attributes
+#### Attributes
 
+### Example
 
+### [Source Code](https://github.com/YiVal/YiVal/blob/master/src/yival/result_selectors/selection_strategy.py)
 
-###   Example
+## `AHPSelectionStrategy`
 
-###  [Source Code](https://github.com/YiVal/YiVal/blob/master/src/yival/result_selectors/selection_strategy.py)
-
-##  `AHPSelectionStrategy`
-
-###   Introduction 
+### Introduction
 
   This module provides the `AHPSelection` class, which is a selection strategy based on the Analytic Hierarchy Process (AHP). The strategy uses the provided criteria, their weights, and data from the experiment to rank the experiment combinations and select the best one.
 
-###   Class Definition 
+### Class Definition
 
-####    Description
+#### Description
 
    A data class defining the configuration for the AHPSelection strategy.
 
-####    Attributes
+#### Attributes
 
-- **`criteria(List[str])`**: 
-  - A list of criteria names to be considered during selection.
-- **`criteria_weights(Dict[str, float])`**: 
-  - A dictionary mapping each criterion to its weight.
-- **`criteria_maximization(Dict[str, bool])`**: 
-  - A dictionary indicating whether each criterion should be maximized (True) or minimized (False).
-- **`normalize_func(Optional[str])`**: 
-  - The name of the normalization function to be used, if any.
+- **`criteria(List[str])`**:
+    - A list of criteria names to be considered during selection.
+- **`criteria_weights(Dict[str, float])`**:
+    - A dictionary mapping each criterion to its weight.
+- **`criteria_maximization(Dict[str, bool])`**:
+    - A dictionary indicating whether each criterion should be maximized (True) or minimized (False).
+- **`normalize_func(Optional[str])`**:
+    - The name of the normalization function to be used, if any.
 
-###   Example
+### Example
 
-####    AHPSelection Configuration 
+#### AHPSelection Configuration
 
 ```Python
     combination_A = CombinationAggregatedMetrics(
@@ -113,7 +111,7 @@ sidebar_position: 6
    
 ```
 
-####    Use OpenAI Prompt Data Generator in the YiVal config
+#### Use OpenAI Prompt Data Generator in the YiVal config
 
 ```YAML
 selection_strategy:
@@ -133,13 +131,13 @@ selection_strategy:
     normalize_func: "z-score"
 ```
 
-##  Custom Selection Strategy Guide:  `CustomSelectionStrategy` 
+## Custom Selection Strategy Guide:  `CustomSelectionStrategy`
 
-###   Introduction
+### Introduction
 
   Selection strategies are paramount in the experimental framework, guiding the selection or prioritization of experiments, scenarios, or configurations. These strategies can be based on a variety of criteria, ranging from past performance to specific business rules. In this guide, we'll outline the process for creating your own custom selection strategy.
 
-###   The Essence of Selection Strategy
+### The Essence of Selection Strategy
 
   The `SelectionStrategy` class is the backbone of all selection strategies. It encapsulates core methods to:
 
@@ -149,7 +147,7 @@ selection_strategy:
 
   At its core, a selection strategy's primary task is to decide how to select or prioritize specific experiments or configurations.
 
-###   Crafting a Custom Selection Strategy
+### Crafting a Custom Selection Strategy
 
   To devise a custom selection strategy, you should inherit from the `SelectionStrategy` class and implement the `select` abstract method:
 
@@ -174,7 +172,7 @@ class CustomSelectionStrategy(SelectionStrategy):
         pass
 ```
 
-###   Config
+### Config
 
 ```YAML
 custom_selection_strategies:

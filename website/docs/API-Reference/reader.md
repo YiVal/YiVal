@@ -8,13 +8,13 @@ sidebar_position: 3
 
 ### Introduction
 
-  This module provides an abstract foundation for data readers. Data readers are responsible for reading data from various sources, and this module offers a base class to define and register new readers, retrieve existing ones, and fetch their configurations. The design encourages efficient parallel processing by reading data in chunks. 
+  This module provides an abstract foundation for data readers. Data readers are responsible for reading data from various sources, and this module offers a base class to define and register new readers, retrieve existing ones, and fetch their configurations. The design encourages efficient parallel processing by reading data in chunks.
 
 ### Class Definition
 
 #### Description
 
-#### Attributes 
+#### Attributes
 
 ### Example
 
@@ -22,11 +22,11 @@ sidebar_position: 3
 
 ## `CSV Reader`
 
-### Introduction 
+### Introduction
 
   The `CSVReader` class offers a streamlined interface for reading datasets from CSV files. Built atop the BaseReader class, it provides extensive configuration options, ensures error handling, and facilitates reading data in chunks.
 
-### Class Definition 
+### Class Definition
 
 #### `CSVReader(BaseReader)`
 
@@ -36,24 +36,24 @@ sidebar_position: 3
 
 ##### Attributes
 
-- **`config (CSVReaderConfig)`**: 
-  - A configuration object detailing the reader's parameters.
-- **`default_config (CSVReaderConfig)`**: 
-  - A default configuration for the reader.
+- **`config (CSVReaderConfig)`**:
+    - A configuration object detailing the reader's parameters.
+- **`default_config (CSVReaderConfig)`**:
+    - A default configuration for the reader.
 
-#####  Methods 
+##### Methods
 
 - **`__init__(self, config: CSVReaderConfig)`**:
-  - Initializes the CSVReader with the provided configuration.
-  - Parameters:
-    - `config (CSVReaderConfig)`: The configuration object designated for the CSVReader.
+    - Initializes the CSVReader with the provided configuration.
+    - Parameters:
+        - `config (CSVReaderConfig)`: The configuration object designated for the CSVReader.
 - **`read(self, path: str) -> Iterator[List[InputData]]`**:
-  - Reads the CSV file and yields chunks of `InputData`.
-  - Parameters:
-    - `path (str)`: Path pointing to the CSV file.
-  - Returns: An iterator that successively yields lists of `InputData`.
+    - Reads the CSV file and yields chunks of `InputData`.
+    - Parameters:
+        - `path (str)`: Path pointing to the CSV file.
+    - Returns: An iterator that successively yields lists of `InputData`.
 
-#####  Notes 
+##### Notes
 
 - The `read` method inspects headers in the CSV file and issues an error if absent.
 - Rows that lack data values are bypassed, but a log warning is recorded.
@@ -61,11 +61,11 @@ sidebar_position: 3
 - Data rows are consumed in chunks. When a chunk meets its specified size, it's yielded. The chunk size is determined by the `chunk_size` attribute in the `CSVReaderConfig`.
 - The class enables registration with the BaseReader through the `register_reader` method.
 
-#####   [Source Code ](https://github.com/YiVal/YiVal/blob/master/src/yival/data/csv_reader.py)
+##### [Source Code](https://github.com/YiVal/YiVal/blob/master/src/yival/data/csv_reader.py)
 
-####  `CSVReaderConfig(BaseReaderConfig)`
+#### `CSVReaderConfig(BaseReaderConfig)`
 
-#####  Description
+##### Description
 
 ​    The configuration object is tailored specifically for the `CSVReader` class.
 
@@ -74,13 +74,13 @@ sidebar_position: 3
 - **`use_first_column_as_id (bool)`**: A flag to determine if the first column should be used as an ID. The default value is `False`.
 - **`expected_result_column (Optional[str])`**: Specifies the column name that contains expected results, if any. The default  value is `None`.
 
-#####  [Source Code](https://github.com/YiVal/YiVal/blob/master/src/yival/schemas/reader_configs.py)
+##### [Source Code](https://github.com/YiVal/YiVal/blob/master/src/yival/schemas/reader_configs.py)
 
-###  Example
+### Example
 
    Here is a step-by-step guide on how to use `CSV Reader`given a CSV data
 
-####  Sample CSV Data (`my_dataset.csv`)
+#### Sample CSV Data (`my_dataset.csv`)
 
    Suppose we have a dataset concerning sales data for different products:
 
@@ -100,7 +100,7 @@ ProductID,ProductName,Sales,ExpectedOutput
 - `Sales` represent the number of units sold.
 - `ExpectedOutput` is a categorical value indicating the sales volume (High, Medium, Low).
 
-####  Using the CSVReader 
+#### Using the CSVReader
 
    Given the configuration below:
 
@@ -126,23 +126,19 @@ for chunk in csv_reader.read(csv_file_path):
 {'ProductID': '1003', 'ProductName': 'WidgetC', 'Sales': '300'}
 ```
 
-
-
    **Note:**
 
 - The row with `ProductID` 1004 is skipped because it has missing data in the `Sales` column.
 - The row with `ProductID` 1005 is skipped because it lacks an `ExpectedOutput`.
 - The `ExpectedOutput` column is not present in the content as it's marked for extraction.
 
-####  Results & Handling
+#### Results & Handling
 
    The data extracted by the CSVReader will be in the form of `InputData` objects. Each object will have:
 
 - `example_id`: The unique identifier (from the `ProductID` column, as specified by the `use_first_column_as_id` flag).
 - `content`: The actual content of the row (excluding the `ExpectedOutput` column).
 - `expected_result`: The extracted expected result from the `ExpectedOutput` column.
-
-
 
    For the row with `ProductID` 1001, the `InputData` object will look like:
 
@@ -154,7 +150,7 @@ InputData(
 )
 ```
 
-####  Using the CSVReader in YiVal config
+#### Using the CSVReader in YiVal config
 
 ```YAML
       dataset:
@@ -167,62 +163,62 @@ InputData(
 
 ## `HuggingFaceDatasetReader`
 
-###   Introduction 
+### Introduction
 
   The `HuggingFaceDatasetReader` class provides an interface to read datasets directly from the HuggingFace Datasets server. It allows for fetching data, transforming its structure, and filtering based on inclusion and exclusion patterns.
 
-###  Class Definition
+### Class Definition
 
-####   `HuggingFaceDatasetReader(BaseReader)`
+#### `HuggingFaceDatasetReader(BaseReader)`
 
-#####     Description
+##### Description
 
 ​    The `HuggingFaceDatasetReader` class, derived from `BaseReader`, is designed to read datasets from HuggingFace's Datasets server.
 
-#####   Attributes 
+##### Attributes
 
 - **`config (HuggingFaceDatasetReaderConfig)`**: Configuration object specifying the reader's parameters.
 
 - **`default_config (HuggingFaceDatasetReaderConfig)`**: Default configuration for the reader.
 
-#####  Methods 
+##### Methods
 
 - **`__init__(self, config: HuggingFaceDatasetReaderConfig)`**:
-  - Initializes the `HuggingFaceDatasetReader` with the provided configuration.
-  - Parameters:
-    - `config (HuggingFaceDatasetReaderConfig)`: The configuration object for the reader.
+    - Initializes the `HuggingFaceDatasetReader` with the provided configuration.
+    - Parameters:
+        - `config (HuggingFaceDatasetReaderConfig)`: The configuration object for the reader.
 - **`read(self, path: str) -> Iterator[List[InputData]]`**:
-  - Reads the dataset from the specified HuggingFace Datasets server's URL and yields lists of `InputData`.
-  - Parameters:
-    - `path (str)`: URL pointing to the HuggingFace Datasets server.
-  - Returns:
-    - An iterator that produces lists of `InputData`.
+    - Reads the dataset from the specified HuggingFace Datasets server's URL and yields lists of `InputData`.
+    - Parameters:
+        - `path (str)`: URL pointing to the HuggingFace Datasets server.
+    - Returns:
+        - An iterator that produces lists of `InputData`.
 
-####  `HuggingFaceDatasetReaderConfig(BaseReaderConfig)`
+#### `HuggingFaceDatasetReaderConfig(BaseReaderConfig)`
 
-#####  Description
+##### Description
 
 ​    The configuration object is specific to the `HuggingFaceDatasetReader` class.
 
-#####  Attributes
+##### Attributes
 
 - **`example_limit (int)`**:
-  - The maximum number of examples to fetch from the dataset. 
-  - The default value is `1`.
+    - The maximum number of examples to fetch from the dataset.
+    - The default value is `1`.
 - **`output_mapping (Dict[str, str])`**:
-  - A mapping to transform the keys in the dataset. The `Dict` key is the original dataset key, and the corresponding value is the new key. 
-  - The default value is an empty dictionary or `{}`.
+    - A mapping to transform the keys in the dataset. The `Dict` key is the original dataset key, and the corresponding value is the new key.
+    - The default value is an empty dictionary or `{}`.
 
 - **`include (List[str])`**:
-  - List of regex patterns. Only items matching these patterns will be included.
-  - The default value is an empty list or`[]`.
+    - List of regex patterns. Only items matching these patterns will be included.
+    - The default value is an empty list or`[]`.
 - **`exclude (List[str])`**:
-  -  List of regex patterns. Items matching these patterns will be excluded.
-  - The default value is an empty list or `[]`.
+    - List of regex patterns. Items matching these patterns will be excluded.
+    - The default value is an empty list or `[]`.
 
-###  Example 
+### Example
 
-####  Filtering Out Hard Leetcode Problems in HugginFace Dataset
+#### Filtering Out Hard Leetcode Problems in HugginFace Dataset
 
    In the example below, the reader fetches data from the given HuggingFace Datasets server's URL, transforms the key "question" to "leetcode_problem", and filters out any entry labeled as "Hard".
 
@@ -249,7 +245,7 @@ for data_chunk in reader.read(url):
         print(data.content)
 ```
 
-####  Using the HuggingFaceDatasetReader in YiVal config: 
+#### Using the HuggingFaceDatasetReader in YiVal config
 
 ```YAML
   dataset:
@@ -262,17 +258,17 @@ for data_chunk in reader.read(url):
         article: article
 ```
 
-###  [Source Code](https://github.com/YiVal/YiVal/blob/master/src/yival/data/huggingface_dataset_reader.py)
+### [Source Code](https://github.com/YiVal/YiVal/blob/master/src/yival/data/huggingface_dataset_reader.py)
 
 ## Custom Reader Guide: `TXTReader`
 
  This guide provides the steps to create custom data readers by subclassing the provided `BaseReader` class. The example demonstrates creating a `TXTReader` to read `.txt` files.
 
-###  Introduction
+### Introduction
 
   Data readers are responsible for reading data from various sources. By subclassing the `BaseReader`, you can create custom readers tailored to your specific data format needs.
 
-###  `BaseReader` Overview
+### `BaseReader` Overview
 
   The `BaseReader` class offers a blueprint for designing data readers. It has methods for:
 
@@ -282,9 +278,9 @@ for data_chunk in reader.read(url):
 
   The class provides an abstract method `read` that you must override in your custom reader. The method is designed to read data in chunks for efficient parallel processing.
 
-###  Creating a Custom Reader (`TXTReader`)
+### Creating a Custom Reader (`TXTReader`)
 
-####  Design the TXTReaderConfig Class
+#### Design the TXTReaderConfig Class
 
    Before creating the reader, design a configuration class specific to the `TXTReader`. This class will inherit from the base `BaseReaderConfig`:
 
@@ -303,7 +299,7 @@ class TXTReaderConfig(BaseReaderConfig):
         return asdict(self)
 ```
 
-####  Implement the TXTReader Class
+#### Implement the TXTReader Class
 
    Now, create the `TXTReader` class, subclassing the `BaseReader`:
 
@@ -360,7 +356,7 @@ class TXTReader(BaseReader):
                 yield chunk
 ```
 
-####  Config
+#### Config
 
    After defining the config and reader subclass, we can define the yml config file:
 
@@ -371,8 +367,6 @@ custom_reader:
         config_cls: /path/to/txt_reader_config.TXTReaderConfig
 ```
 
-
-
 ```YAML
 dataset:  
     source_type: dataset  
@@ -382,6 +376,6 @@ dataset:
     delimiter: "\n"
 ```
 
-###  Conclusion
+### Conclusion
 
   Creating custom data readers with the provided framework is straightforward. You can design readers tailored to various data formats by simply subclassing the `BaseReader` and overriding its `read` method. With this capability, you can efficiently read data in chunks, making it suitable for parallel processing and large datasets.

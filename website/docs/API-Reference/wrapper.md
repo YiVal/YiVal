@@ -2,71 +2,67 @@
 sidebar_position: 5
 ---
 
-# Wrapper 
+# Wrapper
 
-##  `BaseWrapper`
+## `BaseWrapper`
 
-###   Introduction 
+### Introduction
 
   This module introduces the `BaseWrapper` class, which serves as the fundamental structure for wrappers in the experimental framework. Wrappers manage experiment variations based on the global experiment state. They are crucial components to control and monitor different variations during an experiment's lifecycle.
 
-###   Class Definition 
+### Class Definition
 
-####    Description
+#### Description
 
    Base class for wrappers that manage experiment variations based on the global experiment state. This class provides the fundamental structure and methods for wrappers. Specific wrappers should inherit from this class and implement the necessary methods.
 
-####    Attributes
+#### Attributes
 
-- **`name(str)`**: 
-  - The name of the wrapper.
-- **`experiment_state(ExperimentState)`**: 
-  - The global state of the experiment.
-- **`config(BaseWrapperConfig)`**: 
-  - The configuration for the wrapper.
+- **`name(str)`**:
+    - The name of the wrapper.
+- **`experiment_state(ExperimentState)`**:
+    - The global state of the experiment.
+- **`config(BaseWrapperConfig)`**:
+    - The configuration for the wrapper.
 
-###   Example
+### Example
 
-###   [Source Code](https://github.com/YiVal/YiVal/blob/master/src/yival/wrappers/base_wrapper.py)
+### [Source Code](https://github.com/YiVal/YiVal/blob/master/src/yival/wrappers/base_wrapper.py)
 
+## `StringWrapper`
 
-
-
-
-##  `StringWrapper`
-
-###   Introduction 
+### Introduction
 
   This module provides a `StringWrapper` class designed to manage string variations based on the current experiment state. It helps in retrieving and formatting string variations in the context of an active experiment.
 
-###   Class Definition 
+### Class Definition
 
-####    Description
+#### Description
 
-####    Attributes
+#### Attributes
 
-###   Example
+### Example
 
 ```Python
 wrapper = StringWrapper(template="Hello, {name}!", name="greeting_experiment", variables={"name": "John"})
 print(str(wrapper))  # This will print the appropriate greeting based on the experiment state.
 ```
 
-###   [Source Code](https://github.com/YiVal/YiVal/blob/master/src/yival/wrappers/string_wrapper.py)
+### [Source Code](https://github.com/YiVal/YiVal/blob/master/src/yival/wrappers/string_wrapper.py)
 
-##  Custom Wrapper Guide: `NumberWrapper`
+## Custom Wrapper Guide: `NumberWrapper`
 
-###   Introduction
+### Introduction
 
   In the experimental framework, wrappers play a vital role in managing variations throughout an experiment's lifecycle. By creating custom wrappers, one can control and monitor variations tailored to specific needs, ensuring that the experiment operates smoothly and efficiently.
 
   In this guide, we will walk you through the process of creating a custom wrapper named `NumberWrapper`. This wrapper will handle variations specifically for numbers. By the end of this guide, you will have a clear understanding of creating and registering a custom wrapper within the experimental framework.
 
-###   Base Wrapper Overview
+### Base Wrapper Overview
 
   The `BaseWrapper` class provides the fundamental structure for wrappers. It comes equipped with methods to register new wrappers, retrieve registered ones, and fetch their configurations. The primary purpose of a wrapper is to manage experiment variations based on the global experiment state.
 
-###   Creating a `NumberWrapper`
+### Creating a `NumberWrapper`
 
   The `NumberWrapper` will be a custom wrapper designed to handle variations specifically for numbers.
 
@@ -106,7 +102,7 @@ class NumberWrapper(BaseWrapper):
 
   Here, the `NumberWrapper` class is responsible for retrieving a variation if one exists, otherwise it returns the original number. The `get_value` method is used to fetch the number, considering any variations.
 
-###   Registering the `NumberWrapper`
+### Registering the `NumberWrapper`
 
   To make the `NumberWrapper` usable within the experimental framework, it needs to be registered. The registration process involves mapping the wrapper's name to its class and configuration.
 
@@ -125,9 +121,9 @@ class NumberWrapperConfig(BaseWrapperConfig):
 
   By calling the `register_wrapper` method, the `NumberWrapper` becomes available for use in the experimental framework.
 
-###   Config
+### Config
 
-  Now you can configure the wrapper in the yml file: 
+  Now you can configure the wrapper in the yml file:
 
 ```YAML
 custom_wrappers:
@@ -138,6 +134,6 @@ custom_wrappers:
 
   And you should be able to use the wrapper in your code like a string wrapper.
 
-###   Conclusion
+### Conclusion
 
   By following this guide, you've successfully created and registered a custom wrapper named `NumberWrapper` in the experimental framework. This flexibility allows you to tailor experiments to specific needs, ensuring accurate and efficient results.
