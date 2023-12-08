@@ -140,18 +140,22 @@ class OpenAIPromptBasedImageEvaluator(BaseEvaluator):
 
         if isinstance(experiment_result.combination, dict):
             first_key = next(iter(experiment_result.combination))
-            format_dict["text_output"] = experiment_result.combination[first_key]
+            format_dict["text_output"] = experiment_result.combination[
+                first_key]
         else:
             format_dict["image_output"] = None
 
         if isinstance(experiment_result.raw_output.image_output, dict):
-            first_image_url = next(iter(experiment_result.raw_output.image_output))
+            first_image_url = next(
+                iter(experiment_result.raw_output.image_output)
+            )
             format_dict["image_output"] = first_image_url
         else:
             format_dict["image_output"] = None
 
-
-        formatted_prompt = str(format_template(self.config.prompt, format_dict))
+        formatted_prompt = str(
+            format_template(self.config.prompt, format_dict)
+        )
         formatted_prompt += "\n\n" + CLASSIFY_STR.format(
             choices=choices_to_string(self.config.choices)
         )
