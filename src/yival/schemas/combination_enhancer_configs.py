@@ -37,3 +37,14 @@ class OptimizeByPromptEnhancerConfig(BaseCombinationEnhancerConfig):
     optimation_task_format: Optional[str] = None
     model_name: str = "gpt-4"
     max_iterations: int = 3
+
+
+@dataclass
+class PE2EnhancerConfig(BaseCombinationEnhancerConfig):
+    enhance_var: List[str]
+    enable_prompt_instruction: bool
+    full_prompt_description: str
+    max_iterations: int = 3
+    batch_size: int = 3
+    step_size: Optional[int] = None
+    max_token: Optional[int] = 200

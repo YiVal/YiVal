@@ -1,0 +1,31 @@
+[DEBUG][custom_func] prompt now: Generate landing page headline for TechNova, company business is AI-based healthcare solutions, target_people is healthcare professionals
+[DEBUG][custom_func] prompt now: Based on a given TechNova, AI-based healthcare solutions, and healthcare professionals, generate a compelling and attractive landing page headline. Ensure that this headline prominently reflects the nature of the tech startup business and the company's business, and is tailored to the target audience.
+[INFO] prompt: Generate landing page headline for {tech_startup_business}, company business is {business}, target_people is {target_people}
+[DEBUG] gen_prompt: 
+Now please carefully review your reasoning in Step1 and help with Step 2: refining the prompt
+
+    ## Prompt Refinement History from the Past
+    Note that higher accuracy means better. If some edits are useful in the past, it may be a good
+    idea to make edits along the same direction.
+    
+
+## Current prompt
+Generate landing page headline for {tech_startup_business}, company business is {business}, target_people is {target_people}
+
+## Instructions
+* You are allowed to change up to None words in the original prompt.
+* The total length of the prompt should be less than 200 words
+
+
+* Please help edit the prompt so that the updated propmt will not fail on these examples anymore, and achieves better result
+* Reply only with the prompt in the new line. Do not include other text or reason.
+* Reply in the given format: prompt=
+
+[DEBUG] response: prompt= "Create an Impactful Landing Page Headline for {tech_startup_business}, Showcasing {business} Solutions for {target_people}"
+[INFO] generate vars: {'prompt': 'Create an Impactful Landing Page Headline for {tech_startup_business}, Showcasing {business} Solutions for {target_people}'}
+[INFO] generate prompt items: dict_items([('prompt', 'Create an Impactful Landing Page Headline for {tech_startup_business}, Showcasing {business} Solutions for {target_people}')])
+[DEBUG][custom_func] prompt now: Create an Impactful Landing Page Headline for TechNova, Showcasing AI-based healthcare solutions Solutions for healthcare professionals
+Dash is running on http://127.0.0.1:8074/
+
+ * Serving Flask app 'yival.experiment.app.app'
+ * Debug mode: off

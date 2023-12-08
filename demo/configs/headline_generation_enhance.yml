@@ -19,7 +19,7 @@ dataset:
           tech_startup_business: str
           business: str
           target_people: str
-      number_of_examples: 3
+      number_of_examples: 1
       output_path: null
   source_type: machine_generated
 
@@ -34,7 +34,7 @@ variations:
     generator_config:
       #model_name specify the llm model , e.g. a16z-infra/llama-2-13b-chat:9dff94b1bed5af738655d4a7cbcdcde2bd503aa85c94334fe1f42af7f3dd5ee3
       model_name: gpt-4
-      number_of_variations: 2
+      number_of_variations: 1
       diversify: false
       variables: null
       prompt:
@@ -167,15 +167,22 @@ human_rating_configs:
     scale: [1, 5]
 
 enhancer:
-  name: "optimize_by_prompt_enhancer"
-  model_name: "gpt-4"
-  max_iterations: 2
+  name: "pe2_enhancer"
+  enable_prompt_instruction: true
   enhance_var: ["task"]
-  head_meta_instruction: |
-    Now you will help me generate a prompt which is used to generate a corresponding
-    landing page headline according for a startup business named [tech_startup_business],
-    specializing in [business], and target_peopleing [target_people].
-    I already have some prompt and its evaluation results :
+  max_iterations: 1
+  full_prompt_description: "prompt.format(tech_startup_business=tech_startup_business, business=business, target_people=target_people)"
 
-  end_meta_instruction: |
-    Give me a new prompt that is different from all pairs above, and has a evaluation value higher than any of above.
+# enhancer:
+#   name: "optimize_by_prompt_enhancer"
+#   model_name: "gpt-4"
+#   max_iterations: 2
+#   enhance_var: ["task"]
+#   head_meta_instruction: |
+#     Now you will help me generate a prompt which is used to generate a corresponding
+#     landing page headline according for a startup business named [tech_startup_business],
+#     specializing in [business], and target_peopleing [target_people].
+#     I already have some prompt and its evaluation results :
+    
+#   end_meta_instruction: |
+#     Give me a new prompt that is different from all pairs above, and has a evaluation value higher than any of above.

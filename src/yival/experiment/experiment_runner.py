@@ -155,7 +155,8 @@ class ExperimentRunner:
         interactive: bool = False,
         output_path: Optional[str] = "abc.pkl",
         experiment_input_path: Optional[str] = "abc.pkl",
-        async_eval: bool = False
+        async_eval: bool = False,
+        enhance_page: bool = False
     ):
         """Run the experiment based on the source type and provided configuration."""
         base_port = 8074
@@ -233,7 +234,8 @@ class ExperimentRunner:
                         target=display_results_dash,
                         args=(
                             experiment, self.config, all_combinations,
-                            ExperimentState.get_instance(), logger, evaluator
+                            ExperimentState.get_instance(), logger, evaluator,
+                            enhance_page
                         ),
                         kwargs={"port": base_port + idx}
                     )
@@ -247,8 +249,8 @@ class ExperimentRunner:
             elif source_type == "user_input":
                 display_results_dash(
                     Experiment([], []), self.config, all_combinations,
-                    ExperimentState.get_instance(), logger, evaluator, True,
-                    False, False
+                    ExperimentState.get_instance(), logger, evaluator, False,
+                    True, False, False, False
                 )
         for t in display_threads:
             t.join()

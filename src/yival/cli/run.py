@@ -61,6 +61,13 @@ def add_arguments_to(subparser):
         help="Whether the custom function is async"
     )
 
+    parser.add_argument(
+        "--enhance_page",
+        action="store_true",
+        default=False,
+        help="Display the enhance page after the experiment."
+    )
+
 
 def run_experiment(args: Namespace):
     """Run the experiment using the provided YAML configuration file."""
@@ -71,7 +78,8 @@ def run_experiment(args: Namespace):
             interactive=args.interactive,
             output_path=args.output_path,
             experiment_input_path=args.experiment_input_path,
-            async_eval=args.async_eval
+            async_eval=args.async_eval,
+            enhance_page=args.enhance_page
         )
         print("Experiment completed!")
     except Exception as excetion:
