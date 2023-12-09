@@ -1,12 +1,14 @@
 # type: ignore
 
 import ast
+import asyncio
 import base64
 import hashlib
 import io
 import json
 import os
 import re
+import socket
 import subprocess
 import textwrap
 import threading
@@ -2527,6 +2529,15 @@ def create_dash_app(
     return app
 
 
+def find_available_port(start_port):
+    port = start_port
+    while True:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            if s.connect_ex(('localhost', port)) != 0:
+                return port
+            port += 1
+
+
 def display_results_dash(
     experiment_data: Experiment,
     experiment_config,
@@ -2540,6 +2551,8 @@ def display_results_dash(
     demo=False,
     port=8074,
 ):
+    port = find_available_port(port)
+
     if not autogen:
         if experiment_data.enhancer_output:
             for group_result in experiment_data.enhancer_output.group_experiment_results:
