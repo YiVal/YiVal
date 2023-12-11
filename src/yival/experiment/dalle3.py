@@ -1,8 +1,5 @@
 from openai import OpenAI
 
-from PIL import Image
-
-import threading
 import os
 
 INITIAL_PROMPT = """
@@ -33,18 +30,19 @@ Now, please provide a DALLE-3 prompt following the guidelines and examples given
 """
 
 INITIAL_EVAL_PROMPT = """
-The task here is to create a prompt that guides the AI in generating a thorough, critical evaluation. This prompt will be used in conjunction with the existing metrics: {metric}. The evaluation should rigorously examine common pain points in image generation such as the rendering of human hands, the generation of meaningful text, the uncanny valley effect of non-imaged characters, the realism of the generated image, the consistency of lighting, and the proportionality of objects.
+The task here is to create a prompt that guides the AI in generating a thorough, critical evaluation. This prompt will be used in conjunction with the existing metrics: {metric}. The evaluation should rigorously examine common pain points in image generation.
 
 Here is the guide to generate an evaluation prompt:
 
-Define the task: Clearly state the task that the AI needs to perform. For instance, "Critically evaluate the quality of the image and how well it reproduces the details described in the text, paying close attention to common pain points in image generation."
-Highlight key factors: Instruct the AI to focus on the clarity, color saturation, and contrast of the image for image quality. For text relevance, the AI should consider the color, size, and position of the objects in the image. Further, guide the AI to specifically scrutinize the rendering of human hands, the generation of meaningful text, the uncanny valley effect of non-imaged characters, the realism of the image, the consistency of lighting, and the proportionality of objects in the image.
+Define the task: Clearly state the task that the AI needs to perform. For instance, "Critically evaluate the quality of the image and how well it reproduces the details described in the {text content}, paying close attention to common pain points in image generation."
+Highlight key factors: Instruct the AI to focus on the clarity, color saturation, and contrast of the image for image quality. For text relevance, the AI should consider the color, size, and position of the objects in the image. Further, guide the AI to specifically scrutinize the examine common pain points in image generation.
 Provide answer options: Give a set of answer options that lean towards a more critical evaluation. This allows the AI to quantify its evaluation.
 Guide the AI's reasoning: Ask the AI to print only a single choice from the answer options first, then elaborate its reasoning in a meticulous, step-by-step manner. This ensures that the AI's conclusion is reasoned and not simply stated.
 Repeat the answer: Instruct the AI to repeat just the answer by itself on a new line at the end. This ensures clarity and avoids confusion.
 Here are some examples of evaluation prompts:
 
-Prompt: "Given an image and its corresponding {text content}, critically evaluate the quality of the image. Pay special attention to the possible rendering of human hands, the generation of meaningful text, the uncanny valley effect, realism, lighting consistency, and object proportionality in the image. Consider the clarity, color saturation, and contrast of the image. Select one of the following options: A) Very poor, B) Poor, C) Fair, D) Satisfactory, E) Good. First, print only a single choice from the options. Then, write out your reasoning in a step-by-step manner. Finally, repeat just the answer by itself on a new line."
+Prompt: "Given an image and its corresponding {text content}, critically evaluate the quality of the image. Pay special attention to the examine common pain points in image generation. Consider the clarity, color saturation, and contrast of the image. Select one of the following options: A) Very poor, B) Poor, C) Fair, D) Satisfactory, E) Good. First, print only a single choice from the options. Then, write out your reasoning in a step-by-step manner. Finally, repeat just the answer by itself on a new line."
+
 Now, please provide an evaluation prompt following the guidelines and examples given. Remember, your prompt should clearly define the task, highlight key factors, provide answer options, guide the AI's reasoning, and repeat the answer.
 """
 
@@ -98,7 +96,6 @@ class DALLEAutoPrompt:
     def generate_openai_based_evaluation_prompt(self, metric):
         initial_eval_prompt = INITIAL_EVAL_PROMPT.replace("{metric}", metric)
         client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-        print(f"initial_eval_prompt: {initial_eval_prompt}")
         response = client.chat.completions.create(
             model="gpt-4",
             messages=[{
@@ -126,8 +123,9 @@ class DALLEAutoPrompt:
         self.add_prompt(response.choices[0].message.content)
         return response.choices[0].message.content
 
-    def openai_based_evaluation(self, prompt, image_url):
+    def openai_based_evaluation(self, prompt, eval_prompt, image_url):
         client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        eval_prompt = eval_prompt.replace("{text_content}", prompt)
         response = client.chat.completions.create(
             model="gpt-4-vision-preview",
             messages=[{
@@ -150,14 +148,15 @@ class DALLEAutoPrompt:
         return response.choices[0].message.content
 
 
-def human_tune():
+def main():
 
     # CASE 1
     dalle = DALLEAutoPrompt()
     ## Step 1: Generate initial prompt
     print("----- first generation prompt -----")
     prompt = dalle.generate_initial_prompt(
-        "A newspaper with the headline 'The End of the World'"
+        # "A newspaper with the headline 'The End of the World'"
+        "an elegant girl playing the piano in a beautiful garden, emphasize her beautiful hands"
     )
     print(prompt)
 
@@ -173,7 +172,7 @@ def human_tune():
 
     print("----- first evaluation -----")
     evaluation_result = dalle.openai_based_evaluation(
-        eval_prompt, initial_image_url
+        prompt, eval_prompt, initial_image_url
     )
     print(evaluation_result)
 
@@ -189,4 +188,4 @@ def human_tune():
 
 
 if __name__ == "__main__":
-    human_tune()
+    main()
