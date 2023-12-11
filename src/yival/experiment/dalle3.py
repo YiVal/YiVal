@@ -137,10 +137,10 @@ class DALLEAutoPrompt:
 
     def openai_based_evaluation(self, prompt, ini_eval_prompt, image_url):
         client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-        print(f"[DEBUG]ini_eval_prompt:{ini_eval_prompt}")
+        # print(f"[DEBUG]ini_eval_prompt:{ini_eval_prompt}")
 
         eval_prompt = ini_eval_prompt.replace("{text content}", prompt)
-        print(f"[DEBUG]eval_prompt:{eval_prompt}")
+        # print(f"[DEBUG]eval_prompt:{eval_prompt}")
         response = client.chat.completions.create(
             model="gpt-4-vision-preview",
             messages=[{
