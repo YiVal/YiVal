@@ -1,4 +1,5 @@
 import openai
+import argparse
 
 INITIAL_PROMPT = """
 Diffusion is a Vincent graph model using deep learning that supports generating new images by using prompt words to describe elements to be included or omitted.
@@ -24,11 +25,11 @@ Use the [keyword1: keyword2: factor] syntax to transition from one keyword to an
 For example, sorceress[early phase: late phase: 0.5] can be used to start with a focus on the sorceress and transition to another theme halfway through the process.
 If aiming for consistency in certain features across multiple images, use multiple related keywords with weights.
 For example, (striking features:0.5), (mysterious aura:1.2) ensures that the sorceress's features and aura are blended consistently.
-Reinforce your negative prompts with weighting or strength adjustment for unwanted elements. Example: [(ugly:0.5), (poorly drawn hands:0)], indicating a strong avoidance of these elements. 
+Reinforce your negative prompts with weighting or strength adjustment for unwanted elements. Example: [(ugly:0.5), (poorly drawn hands:0)], indicating a strong avoidance of these elements.
 Use color and lighting keywords with weights to emphasize or de-emphasize certain aspects.
 For instance, (iridescent gold: 1.3), (cinematic lighting: 1.2).
 
-The followings are 2 examples of using prompt to help the AI model generate images: 
+The followings are 2 examples of using prompt to help the AI model generate images:
 1.
 Prompt: Iron Man, (Arnold Tsang, Toru Nakayama), Masterpiece, Studio Quality, 6k , toa, toaair, 1boy, glowing, axe, mecha, science_fiction, solo, weapon, jungle , green_background, nature, outdoors, solo, tree, weapon, mask, dynamic lighting, detailed shading, digital texture painting
 
@@ -63,7 +64,7 @@ Use the [keyword1: keyword2: factor] syntax to transition from one keyword to an
 For example, sorceress[early phase: late phase: 0.5] can be used to start with a focus on the sorceress and transition to another theme halfway through the process.
 If aiming for consistency in certain features across multiple images, use multiple related keywords with weights.
 For example, (striking features:0.5), (mysterious aura:1.2) ensures that the sorceress's features and aura are blended consistently.
-Reinforce your negative prompts with weighting or strength adjustment for unwanted elements. Example: [(ugly:0.5), (poorly drawn hands:0)], indicating a strong avoidance of these elements. 
+Reinforce your negative prompts with weighting or strength adjustment for unwanted elements. Example: [(ugly:0.5), (poorly drawn hands:0)], indicating a strong avoidance of these elements.
 Use color and lighting keywords with weights to emphasize or de-emphasize certain aspects.
 For instance, (iridescent gold: 1.3), (cinematic lighting: 1.2).
 I already have some prompts and their critcs: \n
@@ -71,7 +72,7 @@ I already have some prompts and their critcs: \n
 
 END_META_PROMPT = """
 Give me a new prompt that address all the critcs above and keep the original format of the prompts. Emphezise on solving the critics
-The followings is an example of using prompt to help the AI model generate images: 
+The followings is an example of using prompt to help the AI model generate images:
 masterpiece, (best quality), highly-detailed, ultra-detailed, cold, solo, (1girl), (detailed eyes), (shine golden eyes), expressionless, (long sleeves),(puffy sleeves),(white wings),(heavy metal:1.2),(metal jewelry), cross-laced footwear, (chain),(White doves:1.2)
 """
 
@@ -114,24 +115,78 @@ class StableDiffusionAutoPrompt:
         self.add_prompt(response["choices"][0]["message"]["content"])
         return response["choices"][0]["message"]["content"]
 
+parser = argparse.ArgumentParser(description="Arguments for stable_diffusion",
+                                 formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+parser.add_argument("-t", "--iteration", default = 1, help="number of iteration")
+parser.add_argument("-n", "--prompts", default = 1, help="number of prompts")
+parser.add_argument("-c", "--comment", help="comment")
+parser.add_argument("-p", "--prev", default = [], help="previous prompts")
+args = parser.parse_args()
+# config = vars(args)
 
-def main():
-    # CASE 1
-    sd = StableDiffusionAutoPrompt()
-    ## Step 1: Generate initial prompt
-    print("----- first prompt -----")
-    prompt = sd.generate_initial_prompt("a treasure chest")
-    print(prompt)
-    # Initialize the pipeline with the desired model, setting the torch dtype and variant
+def main(NumofIter, NumOfPrompts, comment, prev_prompts):
+    # NumofIter: num of iteration
+    # NumOfPrompts: num of output prompts
+    # comment: user's comments
+    # prev_prompts: previous prompts
 
-    #Step 2: Pass prompt and coment
-    print("----- second prompt -----")
-    print(sd.improve("it must be cute"))
-    print("----- 3 prompt -----")
-    print(sd.improve("it must be wooden"))
-    print("----- 4 prompt -----")
-    print(sd.improve("the back scene should fits in dark theme"))
+    prompts = []
+    # Break loop if we have enough output prompts
+    while len(prompts) < int(NumOfPrompts):
+        sd = StableDiffusionAutoPrompt()
 
+        # If no previous prompts provided
+        if prev_prompts == []:
+
+            # Iteration "NumofIter" times, argument given by user
+            for i in range(int(NumofIter)):
+
+                # First iteration: generate initial prompt
+                if i == 0:
+                    cur_prompt = sd.generate_initial_prompt(comment)
+
+                # Not first iteration: improve prompt
+                else:
+                    cur_prompt = sd.improve(cur_prompt)
+
+            # Finish iterations, add the prompt to the list
+            prompts.append(cur_prompt)
+
+        # Previous prompts provided, in this case, we don't need to generate initial
+        # prompt, we are only doing improvements
+        else:
+
+            # Improve for each previous prompt, add comment to the prompt and
+            # improve it, after NumofIter iterations, append the prompt in the list
+            for prevP in prev_prompts:
+                cur_prompt = prevP + comment
+                for i in range(int(NumofIter)):
+                    cur_prompt = sd.improve(cur_prompt)
+                prompts.append(cur_prompt)
+    print(prompts)
 
 if __name__ == "__main__":
-    main()
+    main(NumofIter=args.iteration, NumOfPrompts=args.prompts, comment=args.comment, prev_prompts=args.prev)
+
+
+
+
+    # # CASE 1
+    # sd = StableDiffusionAutoPrompt()
+    # ## Step 1: Generate initial prompt
+    # print("----- first prompt -----")
+    # prompt = sd.generate_initial_prompt("a treasure chest")
+    # print(prompt)
+    # # Initialize the pipeline with the desired model, setting the torch dtype and variant
+
+    # #Step 2: Pass prompt and coment
+    # print("----- second prompt -----")
+    # print(sd.improve("it must be cute"))
+    # print("----- 3 prompt -----")
+    # print(sd.improve("it must be wooden"))
+    # print("----- 4 prompt -----")
+    # print(sd.improve("the back scene should fits in dark theme"))
+
+
+# if __name__ == "__main__":
+#     main()
