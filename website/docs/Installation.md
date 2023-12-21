@@ -51,9 +51,21 @@ export OPENAI_API_KEY=$YOUR_OPENAI_API_KEY
 2. **Execute YiVal**: Run the following command from within the `/YiVal` directory:
 
 ```Plaintext
+poetry run yival [your args]
+```
+
+- If you want to run `generation` task, you can replace `your args` with `gen`. Such as:
+
+```Plaintext
 poetry run yival gen
 ```
 
+- If you want to run with your custom config, you can replace `your args` with your config path. Such as:
+
+```Plaintext
+poetry run yival demo\configs\alpaca_eval.yml
+```
+  
 ### Run With YiVal
 
 1. **Navigate to the** **`yival`** **Directory**:
