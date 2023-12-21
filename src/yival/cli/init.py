@@ -12,6 +12,7 @@ from ..enhancers.pe2_enhancer import PE2Enhancer
 from ..evaluators.bertscore_evaluator import BertScoreEvaluator
 from ..evaluators.openai_elo_evaluator import OpenAIEloEvaluator
 from ..evaluators.openai_prompt_based_evaluator import OpenAIPromptBasedEvaluator
+from ..evaluators.rags_evaluator import RAGSEvaluator
 from ..evaluators.rouge_evaluator import RougeEvaluator
 from ..evaluators.string_expected_result_evaluator import StringExpectedResultEvaluator
 from ..result_selectors.ahp_selection import AHPSelection
@@ -48,6 +49,7 @@ def _prevent_unused_imports():
     _ = BertScoreEvaluator
     _ = OpenAIEloEvaluator
     _ = OpenAIPromptBasedEvaluator
+    _ = RAGSEvaluator
 
     #Enhancer
     _ = OpenAIPromptBasedCombinationEnhancer
