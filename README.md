@@ -79,7 +79,7 @@ VSCode with Docker extension is recommended for running and developments. If you
 
 ```bash
 docker pull yival/release:cu12_torch_jupyter
-docker run --gpus all --it -p 8888:8888 yival/release:cu12_torch_jupyter
+docker run --gpus all -it -p 8888:8888 yival/release:cu12_torch_jupyter
 ```
 
 ### Prerequisites
