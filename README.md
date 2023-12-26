@@ -53,7 +53,7 @@ effortlessly with YiVal!
 [Check out our quickstart guide!][1]
 
 [1]: https://github.com/YiVal/YiVal/blob/master/demo/tutorial_notebook/tutorial.md
-<img src="https://github.com/YiVal/YiVal/assets/1544154/dba5acd9-995c-45fd-9d08-c7cf198a77ad">
+<img src="https://github.com/YiVal/YiVal/assets/1544154/dba5acd9-995c-45fd-9d08-c7cf198a77ad" alt="Gen AI workflow with YiVal">
 
 ### Link to demo
 
@@ -72,7 +72,7 @@ docker pull yival/release:latest
 Run our image:
 
 ```bash
-docker run --it yival/release:latest
+docker run -it yival/release:latest
 ```
 
 VSCode with Docker extension is recommended for running and developments. If you are developer using GPU with Pytorch, or need jupyter lab for data science:
@@ -224,7 +224,7 @@ connected and universally accessible.
 ## Contributors
 
 <a href="https://github.com/YiVal/YiVal/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=YiVal/YiVal" />
+  <img src="https://contrib.rocks/image?repo=YiVal/YiVal" alt="YiVal Contributers' profile photo" />
 </a>  
 <p align="center">
 <br>
