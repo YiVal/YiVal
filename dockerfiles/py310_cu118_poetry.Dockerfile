@@ -1,5 +1,5 @@
 # Use an official NVIDIA runtime as a parent image
-FROM nvcr.io/nvidia/pytorch:22.04-py3
+FROM nvcr.io/nvidia/pytorch:23.12-py3
 # Set the working directory in the container
 USER root
 ARG user=YiVal_test
@@ -56,19 +56,20 @@ RUN add-apt-repository ppa:deadsnakes/ppa
 #  && chmod +x /usr/local/bin/tini
 
 ## Install Python3
-RUN apt-get purge -y python python3 
-RUN apt-get update
-RUN apt-get install -y --no-install-recommends python3.10 python3.10-dev\
-    python3-pip \
-    python3-distutils \
-    python3-setuptools \
-    python3-wheel
+#RUN apt-get purge -y python python3 
+#RUN rm -rf /bin/python3 && rm -rf /usr/bin/python3
+#RUN apt-get update
+#RUN apt-get install -y --no-install-recommends python3.10 python3.10-dev
+#    python3.10-pip \
+#    python3-distutils \
+#    python3-setuptools \
+#    python3-wheel
 
-#RUN apt-get install -y python3.10-dev
-RUN pip3 install poetry
+RUN apt-get install -y python3.10-dev
+RUN pip install poetry
 RUN rm -rf /tmp/* && apt-get clean
-RUN pip3 install poetry
-RUN python3 -V
+RUN pip install poetry
+RUN python -V
 RUN rm -rf /tmp/* 
 
 # Copy the pyproject.toml file into the container at /usr/src/app
@@ -90,7 +91,6 @@ RUN cd YiVal && poetry install --no-ansi
 RUN cd YiVal && poetry add -D openai==0.27.10 requests jupyterlab
 
 ## Native jupyterlab require to build ipykernel first by poetry and then use
-RUN pip3 install jupyterlab
 RUN export PATH=/home/${user}/.local/bin:$PATH >> /home/${user}/.bashrc
 RUN cd YiVal && poetry run ipython kernel install --user --name=py310_foryival
 RUN poetry cache clear PyPI --all && poetry cache clear _default_cache --all
