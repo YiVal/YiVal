@@ -4,6 +4,7 @@ FROM cschranz/gpu-jupyter:v1.4_cuda-11.6_ubuntu-20.04_python-only
 # Set the working directory in the container
 USER root
 ARG user=YiVal_test
+ARG password=yival
 #RUN cp /etc/apt/sources.list /etc/apt/sources.list.bak
 #RUN export "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main restricted universe multiverse" > /etc/apt/sources.list
 RUN apt-get update && apt-get install -y sudo
@@ -11,7 +12,7 @@ RUN useradd --create-home --no-log-init --shell /bin/bash ${user}
     #&& groupadd sudo \
 RUN usermod -aG sudo ${user}
 RUN adduser ${user} sudo
-RUN echo "${user}:1" | chpasswd
+RUN echo "${user}:${password}" | chpasswd
 RUN usermod -u 1001 ${user} && usermod -G 1001 ${user}
 
 ## Install Python3 
