@@ -21,7 +21,7 @@ us: [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/YiValai.svg
 👉 Sponsored by Discord AIGC community:
 [![Discord](https://dcbadge.vercel.app/api/server/aigc?compact=true&style=flat)](https://discord.gg/aigc)
 
-[![License: MIT](https://img.shields.io/badge/License-Apache2.0-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache2.0-yellow.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![GitHub star chart](https://img.shields.io/github/stars/YiVal/YiVal?style=social)](https://star-history.com/#YiVal/YiVal)
 [![Open Issues](https://img.shields.io/github/issues-raw/YiVal/YiVal)](https://github.com/YiVal/YiVal/issues)
 
