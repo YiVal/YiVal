@@ -1,0 +1,1441 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../result-selectors/">
+      
+      
+      
+      <link rel="icon" href="../../fontawesome/brands/github">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.8">
+    
+    
+      
+        <title>Configs - YiVal</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.4b4a2bd9.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.356b1318.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="lightgreen" data-md-color-accent="purple">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#yivalschemasmodel_configs" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="https://yival.io" title="YiVal" class="md-header__button md-logo" aria-label="YiVal" data-md-component="logo">
+      
+  <img src="https://avatars.githubusercontent.com/u/134003593?s=400&u=34efa0d11568c1b5956f2e48dec7d15d95252a73&v=4" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            YiVal
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Configs
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/YiVal/YiVal" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    YiVal/YiVal
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://yival.io" title="YiVal" class="md-nav__button md-logo" aria-label="YiVal" data-md-component="logo">
+      
+  <img src="https://avatars.githubusercontent.com/u/134003593?s=400&u=34efa0d11568c1b5956f2e48dec7d15d95252a73&v=4" alt="logo">
+
+    </a>
+    YiVal
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/YiVal/YiVal" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    YiVal/YiVal
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Index
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Eng Spec
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Eng Spec
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../eng-spec/architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Demo
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Demo
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../eng-spec/demo/basic-interactive-mode/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Basic Interactive Mode
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../eng-spec/demo/question-answering-with-expected-result/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Question Answering with Expected Result
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../eng-spec/demo/auto-prompts-generation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Auto Prompts Generation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Custom Classes
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Custom Classes
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../eng-spec/custom_parent/custom-evaluator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Custom Evaluator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../eng-spec/custom_parent/custom-wrapper/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Custom Wrapper
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../eng-spec/custom_parent/custom-data-generator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Custom Data Generator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../eng-spec/custom_parent/custom-variation-generator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Custom Variation Generator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../eng-spec/custom_parent/custom-reader/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Custom Reader
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../eng-spec/custom_parent/custom-combination-enhancer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Custom Combination Enhancer
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../eng-spec/custom_parent/custom-selection-strategy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Custom Selection Strategy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing-guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Code Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Code Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../data/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Data
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../data-generators/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Data Generators
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dataset/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dataset
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../evaluators/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Evaluators
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../experiment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Experiment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../finetune/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Finetune
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../output-parsers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Output Parsers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../result-selectors/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Result Selectors
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Configs
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Configs
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#modelprovider-objects" class="md-nav__link">
+    ModelProvider Objects
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#request-objects" class="md-nav__link">
+    Request Objects
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#response-objects" class="md-nav__link">
+    Response Objects
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calloption-objects" class="md-nav__link">
+    CallOption Objects
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#modelprovider-objects" class="md-nav__link">
+    ModelProvider Objects
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#request-objects" class="md-nav__link">
+    Request Objects
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#response-objects" class="md-nav__link">
+    Response Objects
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calloption-objects" class="md-nav__link">
+    CallOption Objects
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<p><a id="yival.schemas.model_configs"></a></p>
+<h1 id="yivalschemasmodel_configs">yival.schemas.model_configs<a class="headerlink" href="#yivalschemasmodel_configs" title="Permanent link">&para;</a></h1>
+<p><a id="yival.schemas.model_configs.ModelProvider"></a></p>
+<h2 id="modelprovider-objects">ModelProvider Objects<a class="headerlink" href="#modelprovider-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ModelProvider</span><span class="p">()</span>
+</code></pre></div>
+<p>Represents the details required to interact with a GebAI model.</p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>api_key</code> <em>str</em> - The API key used for authenticating requests to the
+  model provider.</li>
+<li><code>provider_name</code> <em>str</em> - Name of the model provider.</li>
+</ul>
+<p><a id="yival.schemas.model_configs.Request"></a></p>
+<h2 id="request-objects">Request Objects<a class="headerlink" href="#request-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Request</span><span class="p">()</span>
+</code></pre></div>
+<p>Represents the information needed to make an inference request to a
+GenAI model.</p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>model_name</code> <em>str</em> - The name of the machine learning model to be used
+  for inference.</li>
+<li><code>params</code> <em>Dict[str, Any]</em> - Additional parameters to configure the model
+  for inference.</li>
+<li><code>prompt</code> <em>Union[str, List[Dict[str, str]]]</em> - The input prompt or set of
+  prompts to use for the inference.
+  Can be a simple string or a list of dictionaries, each containing
+  key-value pairs for more complex prompt structures.</li>
+</ul>
+<p><a id="yival.schemas.model_configs.Response"></a></p>
+<h2 id="response-objects">Response Objects<a class="headerlink" href="#response-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Response</span><span class="p">()</span>
+</code></pre></div>
+<p>Represents the outcome of an inference request.</p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>output</code> <em>Any</em> - The result generated by the GenAI model,
+  which can be of any type depending on the model and task.</li>
+</ul>
+<p><a id="yival.schemas.model_configs.CallOption"></a></p>
+<h2 id="calloption-objects">CallOption Objects<a class="headerlink" href="#calloption-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">CallOption</span><span class="p">()</span>
+</code></pre></div>
+<p>Represents call options with llm</p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>temperature</code> <em>float</em> - hyperparameter that
+  controls the randomness of predictions by scaling the logits
+  before applying softmax.</li>
+</ul>
+<p>presence_penalty (float)</p>
+<p><a id="yival.schemas.varation_generator_configs"></a></p>
+<h1 id="yivalschemasvaration_generator_configs">yival.schemas.varation_generator_configs<a class="headerlink" href="#yivalschemasvaration_generator_configs" title="Permanent link">&para;</a></h1>
+<p><a id="yival.schemas.varation_generator_configs.BaseVariationGeneratorConfig"></a></p>
+<h2 id="basevariationgeneratorconfig-objects">BaseVariationGeneratorConfig Objects<a class="headerlink" href="#basevariationgeneratorconfig-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">BaseVariationGeneratorConfig</span><span class="p">()</span>
+</code></pre></div>
+<p>Base configuration class for all variation generators.</p>
+<p><a id="yival.schemas.varation_generator_configs.OpenAIPromptBasedVariationGeneratorConfig"></a></p>
+<h2 id="openaipromptbasedvariationgeneratorconfig-objects">OpenAIPromptBasedVariationGeneratorConfig Objects<a class="headerlink" href="#openaipromptbasedvariationgeneratorconfig-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">OpenAIPromptBasedVariationGeneratorConfig</span><span class="p">(</span><span class="n">BaseVariationGeneratorConfig</span><span class="p">)</span>
+</code></pre></div>
+<p>Generate variation using chatgpt. Currently only support openai models.</p>
+<p><a id="yival.schemas.experiment_config"></a></p>
+<h1 id="yivalschemasexperiment_config">yival.schemas.experiment_config<a class="headerlink" href="#yivalschemasexperiment_config" title="Permanent link">&para;</a></h1>
+<p>Module for experiment configuration structures.</p>
+<p>This module provides data structures to capture configurations required to run
+an experiment.</p>
+<p><a id="yival.schemas.experiment_config.WrapperVariation"></a></p>
+<h2 id="wrappervariation-objects">WrapperVariation Objects<a class="headerlink" href="#wrappervariation-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">WrapperVariation</span><span class="p">()</span>
+</code></pre></div>
+<p>Represents a variation within a wrapper.
+The value can be any type, but typical usages might include strings, 
+numbers, configuration dictionaries, or even custom class configurations.</p>
+<p><a id="yival.schemas.experiment_config.WrapperVariation.value_type"></a></p>
+<h4 id="value_type">value_type<a class="headerlink" href="#value_type" title="Permanent link">&para;</a></h4>
+<p>e.g., "string", "int", "float", "ClassA", ...</p>
+<p><a id="yival.schemas.experiment_config.WrapperVariation.value"></a></p>
+<h4 id="value">value<a class="headerlink" href="#value" title="Permanent link">&para;</a></h4>
+<p>The actual value or parameters to initialize a value</p>
+<p><a id="yival.schemas.experiment_config.WrapperVariation.instantiate"></a></p>
+<h4 id="instantiate">instantiate<a class="headerlink" href="#instantiate" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">instantiate</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Any</span>
+</code></pre></div>
+<p>Returns an instantiated value based on value_type and params.</p>
+<p><a id="yival.schemas.experiment_config.WrapperConfig"></a></p>
+<h2 id="wrapperconfig-objects">WrapperConfig Objects<a class="headerlink" href="#wrapperconfig-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">WrapperConfig</span><span class="p">()</span>
+</code></pre></div>
+<p>Configuration for each individual wrapper used in the experiment.</p>
+<p><a id="yival.schemas.experiment_config.OutputConfig"></a></p>
+<h2 id="outputconfig-objects">OutputConfig Objects<a class="headerlink" href="#outputconfig-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">OutputConfig</span><span class="p">()</span>
+</code></pre></div>
+<p>Configuration for experiment output.</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li>path (str): Path where the experiment output should be saved.</li>
+<li>formatter (Callable): Function to format the output.</li>
+</ul>
+<p><a id="yival.schemas.experiment_config.ComparisonOutput"></a></p>
+<h2 id="comparisonoutput-objects">ComparisonOutput Objects<a class="headerlink" href="#comparisonoutput-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ComparisonOutput</span><span class="p">()</span>
+</code></pre></div>
+<p>Result of a comparison evaluation.</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li>better_output (str): Name of the wrapper that produced the better output.</li>
+<li>reason (str): Reason or metric based on which the decision was made.</li>
+</ul>
+<p><a id="yival.schemas.experiment_config.HumanRating"></a></p>
+<h2 id="humanrating-objects">HumanRating Objects<a class="headerlink" href="#humanrating-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">HumanRating</span><span class="p">()</span>
+</code></pre></div>
+<p>Human rating for an output.</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li>aspect (str): Aspect being rated.</li>
+<li>rating (float): Rating value.</li>
+<li>scale (Tuple[float, float]): Minimum and maximum value of the rating
+  scale.</li>
+</ul>
+<p><a id="yival.schemas.experiment_config.HumanRating.scale"></a></p>
+<h4 id="scale">scale<a class="headerlink" href="#scale" title="Permanent link">&para;</a></h4>
+<p>Default scale from 1 to 5</p>
+<p><a id="yival.schemas.experiment_config.Metric"></a></p>
+<h2 id="metric-objects">Metric Objects<a class="headerlink" href="#metric-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Metric</span><span class="p">()</span>
+</code></pre></div>
+<p>Represents a metric calculated from evaluator outputs.</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li>name (str): Name of the metric (e.g., "accuracy").</li>
+<li>value (float): Calculated value of the metric.</li>
+<li>description (Optional[str]): Description or details about the metric.</li>
+</ul>
+<p><a id="yival.schemas.experiment_config.ExperimentSummary"></a></p>
+<h2 id="experimentsummary-objects">ExperimentSummary Objects<a class="headerlink" href="#experimentsummary-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ExperimentSummary</span><span class="p">()</span>
+</code></pre></div>
+<p>Represents the summary of an entire experiment.</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li>aggregated_metrics (Dict[str, Dict[str, Metric]]):
+  A dictionary where keys are evaluator names and values are dictionaries
+  mapping metric names to their values.</li>
+<li>... (other summary attributes)</li>
+</ul>
+<p><a id="yival.schemas.experiment_config.Context"></a></p>
+<h2 id="context-objects">Context Objects<a class="headerlink" href="#context-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Context</span><span class="p">()</span>
+</code></pre></div>
+<p>Custom function context that will be used for evlaution</p>
+<p><a id="yival.schemas.experiment_config.MultimodalOutput"></a></p>
+<h2 id="multimodaloutput-objects">MultimodalOutput Objects<a class="headerlink" href="#multimodaloutput-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">MultimodalOutput</span><span class="p">()</span>
+</code></pre></div>
+<p>Multimodal output that can include a string, a PIL Image, or both.</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li>text_output (str): Text output for this example.</li>
+<li>image_output (PIL.Image.Image): Image output for this example.</li>
+</ul>
+<p><a id="yival.schemas.experiment_config.ExperimentResult"></a></p>
+<h2 id="experimentresult-objects">ExperimentResult Objects<a class="headerlink" href="#experimentresult-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ExperimentResult</span><span class="p">()</span>
+</code></pre></div>
+<p>Result for a single example based on a specific combination of active
+variations across wrappers.</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li>combination (Dict[str, str]): The combination of wrapper names and their
+  active variation_ids for this example.</li>
+<li>raw_output (Any): Raw output for this example. Support str and PILimage</li>
+<li>latency (float): Latency for producing the output for this example
+  (in milliseconds or appropriate unit).</li>
+<li>token_usage (int): Number of tokens used for this example.</li>
+<li>evaluator_outputs (List[EvaluatorOutput]): Evaluator outputs for this
+  example.</li>
+<li>human_rating (Optional[HumanRating]): Human rating for this example.</li>
+<li>intermediate_logs (List[str]): Logs captured during the experiment.</li>
+</ul>
+<p><a id="yival.schemas.experiment_config.FunctionMetadata"></a></p>
+<h2 id="functionmetadata-objects">FunctionMetadata Objects<a class="headerlink" href="#functionmetadata-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">FunctionMetadata</span><span class="p">()</span>
+</code></pre></div>
+<p><a id="yival.schemas.experiment_config.FunctionMetadata.parameters"></a></p>
+<h4 id="parameters">parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h4>
+<p>[(param_name, description), ...]</p>
+<p><a id="yival.schemas.experiment_config.EnhancerOutput"></a></p>
+<h2 id="enhanceroutput-objects">EnhancerOutput Objects<a class="headerlink" href="#enhanceroutput-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">EnhancerOutput</span><span class="p">()</span>
+</code></pre></div>
+<p>Represents the outputs related to the "enhancer" component of the
+experiment.</p>
+<p>The enhancer's role is to enhance or optimize certain aspects of the
+experiment.
+This dataclass captures the results, metrics, and decisions made by the
+enhancer.</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>group_experiment_results</code> <em>List[GroupedExperimentResult]</em> - List of
+  grouped results after enhancement.
+  combination_aggregated_metrics (List[CombinationAggregatedMetrics]):
+  Aggregated metrics post-enhancement.</li>
+<li><code>original_best_combo_key</code> <em>str</em> - The best combination key before the
+  enhancer made optimizations.</li>
+<li><code>selection_output</code> <em>Optional[SelectionOutput]</em> - Output from the selection</li>
+</ul>
+<p><a id="yival.schemas.experiment_config.Experiment"></a></p>
+<h2 id="experiment-objects">Experiment Objects<a class="headerlink" href="#experiment-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Experiment</span><span class="p">()</span>
+</code></pre></div>
+<p>Represents the entirety of an experiment run.</p>
+<p>This dataclass encapsulates the results, metrics, and configurations used
+and generated during the experiment.
+It is a comprehensive view of everything related to a specific experiment
+run.</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>group_experiment_results</code> <em>List[GroupedExperimentResult]</em> - List of
+  results grouped by test cases.
+  combination_aggregated_metrics (List[CombinationAggregatedMetrics]):
+  Metrics aggregated for specific combinations.</li>
+<li><code>selection_output</code> <em>Optional[SelectionOutput]</em> - Output from the
+  selection strategy. enhancer_output (Optional[enhancerOutput]):
+  Output from the enhancer component, if used.</li>
+</ul>
+<p><a id="yival.schemas.data_generator_configs"></a></p>
+<h1 id="yivalschemasdata_generator_configs">yival.schemas.data_generator_configs<a class="headerlink" href="#yivalschemasdata_generator_configs" title="Permanent link">&para;</a></h1>
+<p><a id="yival.schemas.data_generator_configs.BaseDataGeneratorConfig"></a></p>
+<h2 id="basedatageneratorconfig-objects">BaseDataGeneratorConfig Objects<a class="headerlink" href="#basedatageneratorconfig-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">BaseDataGeneratorConfig</span><span class="p">()</span>
+</code></pre></div>
+<p>Base configuration class for all data generators.</p>
+<p><a id="yival.schemas.data_generator_configs.OpenAIPromptBasedGeneratorConfig"></a></p>
+<h2 id="openaipromptbasedgeneratorconfig-objects">OpenAIPromptBasedGeneratorConfig Objects<a class="headerlink" href="#openaipromptbasedgeneratorconfig-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">OpenAIPromptBasedGeneratorConfig</span><span class="p">(</span><span class="n">BaseDataGeneratorConfig</span><span class="p">)</span>
+</code></pre></div>
+<p>Generate test cases from prompt. Currently only support openai models.</p>
+<p><a id="yival.schemas.data_generator_configs.DocumentDataGeneratorConfig"></a></p>
+<h2 id="documentdatageneratorconfig-objects">DocumentDataGeneratorConfig Objects<a class="headerlink" href="#documentdatageneratorconfig-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">DocumentDataGeneratorConfig</span><span class="p">(</span><span class="n">BaseDataGeneratorConfig</span><span class="p">)</span>
+</code></pre></div>
+<p>Generate question data from documents.</p>
+<p><a id="yival.schemas.common_structures"></a></p>
+<h1 id="yivalschemascommon_structures">yival.schemas.common_structures<a class="headerlink" href="#yivalschemascommon_structures" title="Permanent link">&para;</a></h1>
+<p><a id="yival.schemas.common_structures.InputData"></a></p>
+<h2 id="inputdata-objects">InputData Objects<a class="headerlink" href="#inputdata-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">InputData</span><span class="p">()</span>
+</code></pre></div>
+<p>Represents the input data for an experiment example.</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li>example_id Optional[str]: A unique identifier for the example.</li>
+<li>content (Dict[str, Any]): A dictionary that contains all the necessary input
+  parameters for the custom function.</li>
+<li>expected_result (Optional[Any]): The expected result given the input.</li>
+</ul>
+<p><a id="yival.schemas.evaluator_config"></a></p>
+<h1 id="yivalschemasevaluator_config">yival.schemas.evaluator_config<a class="headerlink" href="#yivalschemasevaluator_config" title="Permanent link">&para;</a></h1>
+<p><a id="yival.schemas.evaluator_config.MethodCalculationMethod"></a></p>
+<h2 id="methodcalculationmethod-objects">MethodCalculationMethod Objects<a class="headerlink" href="#methodcalculationmethod-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">MethodCalculationMethod</span><span class="p">(</span><span class="n">Enum</span><span class="p">)</span>
+</code></pre></div>
+<p>Configuration for metric calculation method.</p>
+<p><a id="yival.schemas.evaluator_config.MetricCalculatorConfig"></a></p>
+<h2 id="metriccalculatorconfig-objects">MetricCalculatorConfig Objects<a class="headerlink" href="#metriccalculatorconfig-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">MetricCalculatorConfig</span><span class="p">()</span>
+</code></pre></div>
+<p>Configuration for metric calculation.</p>
+<p><a id="yival.schemas.evaluator_config.BaseEvaluatorConfig"></a></p>
+<h2 id="baseevaluatorconfig-objects">BaseEvaluatorConfig Objects<a class="headerlink" href="#baseevaluatorconfig-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">BaseEvaluatorConfig</span><span class="p">()</span>
+</code></pre></div>
+<p>Base configuration for evaluators.</p>
+<p><a id="yival.schemas.evaluator_config.EvaluatorConfig"></a></p>
+<h2 id="evaluatorconfig-objects">EvaluatorConfig Objects<a class="headerlink" href="#evaluatorconfig-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">EvaluatorConfig</span><span class="p">(</span><span class="n">BaseEvaluatorConfig</span><span class="p">)</span>
+</code></pre></div>
+<p>Configuration for custom evaluator.</p>
+<p><a id="yival.schemas.evaluator_config.ComparisonEvaluatorConfig"></a></p>
+<h2 id="comparisonevaluatorconfig-objects">ComparisonEvaluatorConfig Objects<a class="headerlink" href="#comparisonevaluatorconfig-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ComparisonEvaluatorConfig</span><span class="p">(</span><span class="n">BaseEvaluatorConfig</span><span class="p">)</span>
+</code></pre></div>
+<p>Configuration for evaluators that compare different outputs.</p>
+<p><a id="yival.schemas.evaluator_config.GlobalEvaluatorConfig"></a></p>
+<h2 id="globalevaluatorconfig-objects">GlobalEvaluatorConfig Objects<a class="headerlink" href="#globalevaluatorconfig-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">GlobalEvaluatorConfig</span><span class="p">(</span><span class="n">BaseEvaluatorConfig</span><span class="p">)</span>
+</code></pre></div>
+<p>Configuration for evaluators that compare based on all outputs.</p>
+<p><a id="yival.schemas.evaluator_config.EvaluatorOutput"></a></p>
+<h2 id="evaluatoroutput-objects">EvaluatorOutput Objects<a class="headerlink" href="#evaluatoroutput-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">EvaluatorOutput</span><span class="p">()</span>
+</code></pre></div>
+<p>Result of an evaluator.</p>
+<p><a id="yival.schemas.evaluator_config.BertScoreEvaluatorConfig"></a></p>
+<h2 id="bertscoreevaluatorconfig-objects">BertScoreEvaluatorConfig Objects<a class="headerlink" href="#bertscoreevaluatorconfig-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">BertScoreEvaluatorConfig</span><span class="p">(</span><span class="n">EvaluatorConfig</span><span class="p">)</span>
+</code></pre></div>
+<p><a id="yival.schemas.evaluator_config.BertScoreEvaluatorConfig.indicator"></a></p>
+<h4 id="indicator">indicator<a class="headerlink" href="#indicator" title="Permanent link">&para;</a></h4>
+<p>p,r,f</p>
+<p><a id="yival.schemas.combination_enhancer_configs"></a></p>
+<h1 id="yivalschemascombination_enhancer_configs">yival.schemas.combination_enhancer_configs<a class="headerlink" href="#yivalschemascombination_enhancer_configs" title="Permanent link">&para;</a></h1>
+<p><a id="yival.schemas.combination_enhancer_configs.BaseCombinationEnhancerConfig"></a></p>
+<h2 id="basecombinationenhancerconfig-objects">BaseCombinationEnhancerConfig Objects<a class="headerlink" href="#basecombinationenhancerconfig-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">BaseCombinationEnhancerConfig</span><span class="p">()</span>
+</code></pre></div>
+<p>Base configuration class for all combination enhancers.</p>
+<p><a id="yival.schemas.trainer_configs"></a></p>
+<h1 id="yivalschemastrainer_configs">yival.schemas.trainer_configs<a class="headerlink" href="#yivalschemastrainer_configs" title="Permanent link">&para;</a></h1>
+<p><a id="yival.schemas.trainer_configs.BaseTrainerConfig"></a></p>
+<h2 id="basetrainerconfig-objects">BaseTrainerConfig Objects<a class="headerlink" href="#basetrainerconfig-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">BaseTrainerConfig</span><span class="p">()</span>
+</code></pre></div>
+<p>Base configuration class for all trainers</p>
+<p><a id="yival.schemas.trainer_configs.LoRAConfig"></a></p>
+<h2 id="loraconfig-objects">LoRAConfig Objects<a class="headerlink" href="#loraconfig-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">LoRAConfig</span><span class="p">()</span>
+</code></pre></div>
+<p>LoRA config for SFT Trainer</p>
+<p><a id="yival.schemas.trainer_configs.TrainArguments"></a></p>
+<h2 id="trainarguments-objects">TrainArguments Objects<a class="headerlink" href="#trainarguments-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">TrainArguments</span><span class="p">()</span>
+</code></pre></div>
+<p>Train Arguments in trl trainer
+Parameters for training arguments details =&gt; <a href="https://github.com/huggingface/transformers/blob/main/src/transformers/training_args.py#L158">https://github.com/huggingface/transformers/blob/main/src/transformers/training_args.py#L158</a></p>
+<p><a id="yival.schemas.trainer_configs.SFTTrainerConfig"></a></p>
+<h2 id="sfttrainerconfig-objects">SFTTrainerConfig Objects<a class="headerlink" href="#sfttrainerconfig-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">SFTTrainerConfig</span><span class="p">(</span><span class="n">BaseTrainerConfig</span><span class="p">)</span>
+</code></pre></div>
+<p>Supervised Fine-tuning trainer config</p>
+<p><a id="yival.schemas.dataset_config"></a></p>
+<h1 id="yivalschemasdataset_config">yival.schemas.dataset_config<a class="headerlink" href="#yivalschemasdataset_config" title="Permanent link">&para;</a></h1>
+<p><a id="yival.schemas.dataset_config.DatasetSourceType"></a></p>
+<h2 id="datasetsourcetype-objects">DatasetSourceType Objects<a class="headerlink" href="#datasetsourcetype-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">DatasetSourceType</span><span class="p">(</span><span class="n">Enum</span><span class="p">)</span>
+</code></pre></div>
+<p>Enum to specify the source of dataset: USER, DATASET, or MACHINE_GENERATED.</p>
+<p><a id="yival.schemas.dataset_config.DatasetConfig"></a></p>
+<h2 id="datasetconfig-objects">DatasetConfig Objects<a class="headerlink" href="#datasetconfig-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">DatasetConfig</span><span class="p">()</span>
+</code></pre></div>
+<p>Configuration for the dataset used in the experiment.</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li>source_type (DatasetSourceType): Source of dataset, either directly from the user,
+  from a dataset, or machine-generated.</li>
+<li>file_path (Union[str, None]): Path to the dataset file. Relevant only if
+  source_type is DATASET.</li>
+<li>reader (Union[str, None]): Class name to process the dataset file.
+  Relevant only if source_type is DATASET.</li>
+<li>reader_config (Union[BaseReaderConfig, None]): Configuration for the reader.</li>
+<li>output_path (Union[str, None]): Path to store the machine-generated data. Relevant
+  only if source_type is MACHINE_GENERATED.</li>
+<li>data_generators (Optional[Dict[str, BaseDataGeneratorConfig]]): List of data_generators to generate data.
+  Relevant only if source_type is MACHINE_GENERATED.</li>
+</ul>
+<p><a id="yival.schemas.wrapper_configs"></a></p>
+<h1 id="yivalschemaswrapper_configs">yival.schemas.wrapper_configs<a class="headerlink" href="#yivalschemaswrapper_configs" title="Permanent link">&para;</a></h1>
+<p><a id="yival.schemas.wrapper_configs.BaseWrapperConfig"></a></p>
+<h2 id="basewrapperconfig-objects">BaseWrapperConfig Objects<a class="headerlink" href="#basewrapperconfig-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">BaseWrapperConfig</span><span class="p">()</span>
+</code></pre></div>
+<p>Base configuration class for wrappers.</p>
+<p><a id="yival.schemas.wrapper_configs.StringWrapperConfig"></a></p>
+<h2 id="stringwrapperconfig-objects">StringWrapperConfig Objects<a class="headerlink" href="#stringwrapperconfig-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">StringWrapperConfig</span><span class="p">(</span><span class="n">BaseWrapperConfig</span><span class="p">)</span>
+</code></pre></div>
+<p>Configuration specific to the StringWrapper.</p>
+<p><a id="yival.schemas.selector_strategies"></a></p>
+<h1 id="yivalschemasselector_strategies">yival.schemas.selector_strategies<a class="headerlink" href="#yivalschemasselector_strategies" title="Permanent link">&para;</a></h1>
+<p><a id="yival.schemas.reader_configs"></a></p>
+<h1 id="yivalschemasreader_configs">yival.schemas.reader_configs<a class="headerlink" href="#yivalschemasreader_configs" title="Permanent link">&para;</a></h1>
+<p><a id="yival.schemas.reader_configs.BaseReaderConfig"></a></p>
+<h2 id="basereaderconfig-objects">BaseReaderConfig Objects<a class="headerlink" href="#basereaderconfig-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">BaseReaderConfig</span><span class="p">()</span>
+</code></pre></div>
+<p>Base configuration class for all readers.</p>
+<p><a id="yival.schemas.reader_configs.CSVReaderConfig"></a></p>
+<h2 id="csvreaderconfig-objects">CSVReaderConfig Objects<a class="headerlink" href="#csvreaderconfig-objects" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">CSVReaderConfig</span><span class="p">(</span><span class="n">BaseReaderConfig</span><span class="p">)</span>
+</code></pre></div>
+<p>Configuration specific to the CSV reader.</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.top", "header.autohide"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.81fa17fe.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1433 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      
+        <link rel="next" href="eng-spec/architecture/">
+      
+      
+      <link rel="icon" href="fontawesome/brands/github">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.8">
+    
+    
+      
+        <title>YiVal</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.4b4a2bd9.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.356b1318.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="lightgreen" data-md-color-accent="purple">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#what-is-yival" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="https://yival.io" title="YiVal" class="md-header__button md-logo" aria-label="YiVal" data-md-component="logo">
+      
+  <img src="https://avatars.githubusercontent.com/u/134003593?s=400&u=34efa0d11568c1b5956f2e48dec7d15d95252a73&v=4" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            YiVal
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Index
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/YiVal/YiVal" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    YiVal/YiVal
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://yival.io" title="YiVal" class="md-nav__button md-logo" aria-label="YiVal" data-md-component="logo">
+      
+  <img src="https://avatars.githubusercontent.com/u/134003593?s=400&u=34efa0d11568c1b5956f2e48dec7d15d95252a73&v=4" alt="logo">
+
+    </a>
+    YiVal
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/YiVal/YiVal" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    YiVal/YiVal
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Index
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Index
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-yival" class="md-nav__link">
+    What is YiVal?
+  </a>
+  
+    <nav class="md-nav" aria-label="What is YiVal?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#link-to-demo" class="md-nav__link">
+    Link to demo
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#docker-runtime" class="md-nav__link">
+    Docker Runtime
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    Prerequisites
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installation-methods" class="md-nav__link">
+    Installation Methods
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation Methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-pip-recommended-for-users" class="md-nav__link">
+    Using pip (Recommended for Users)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#development-setup-using-poetry" class="md-nav__link">
+    Development Setup Using Poetry
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trying-out-yival" class="md-nav__link">
+    Trying Out YiVal
+  </a>
+  
+    <nav class="md-nav" aria-label="Trying Out YiVal">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps-to-run-your-first-yival-program" class="md-nav__link">
+    Steps to Run Your First YiVal Program
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#demo" class="md-nav__link">
+    Demo
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contribution-guidelines" class="md-nav__link">
+    Contribution Guidelines
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contributors" class="md-nav__link">
+    Contributors
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Eng Spec
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Eng Spec
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="eng-spec/architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Demo
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Demo
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="eng-spec/demo/basic-interactive-mode/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Basic Interactive Mode
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="eng-spec/demo/question-answering-with-expected-result/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Question Answering with Expected Result
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="eng-spec/demo/auto-prompts-generation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Auto Prompts Generation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Custom Classes
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Custom Classes
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="eng-spec/custom_parent/custom-evaluator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Custom Evaluator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="eng-spec/custom_parent/custom-wrapper/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Custom Wrapper
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="eng-spec/custom_parent/custom-data-generator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Custom Data Generator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="eng-spec/custom_parent/custom-variation-generator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Custom Variation Generator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="eng-spec/custom_parent/custom-reader/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Custom Reader
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="eng-spec/custom_parent/custom-combination-enhancer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Custom Combination Enhancer
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="eng-spec/custom_parent/custom-selection-strategy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Custom Selection Strategy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="contributing-guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Code Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Code Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="code_reference/data/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Data
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="code_reference/data-generators/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Data Generators
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="code_reference/dataset/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dataset
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="code_reference/evaluators/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Evaluators
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="code_reference/experiment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Experiment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="code_reference/finetune/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Finetune
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="code_reference/output-parsers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Output Parsers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="code_reference/result-selectors/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Result Selectors
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="code_reference/configs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-yival" class="md-nav__link">
+    What is YiVal?
+  </a>
+  
+    <nav class="md-nav" aria-label="What is YiVal?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#link-to-demo" class="md-nav__link">
+    Link to demo
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#docker-runtime" class="md-nav__link">
+    Docker Runtime
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    Prerequisites
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installation-methods" class="md-nav__link">
+    Installation Methods
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation Methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-pip-recommended-for-users" class="md-nav__link">
+    Using pip (Recommended for Users)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#development-setup-using-poetry" class="md-nav__link">
+    Development Setup Using Poetry
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trying-out-yival" class="md-nav__link">
+    Trying Out YiVal
+  </a>
+  
+    <nav class="md-nav" aria-label="Trying Out YiVal">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps-to-run-your-first-yival-program" class="md-nav__link">
+    Steps to Run Your First YiVal Program
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#demo" class="md-nav__link">
+    Demo
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contribution-guidelines" class="md-nav__link">
+    Contribution Guidelines
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contributors" class="md-nav__link">
+    Contributors
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<!-- markdownlint-disable MD033 -->
+
+<!-- markdownlint-disable MD041 -->
+
+<p align="center">
+    <h1 align="center">
+        <img src="https://github.com/YiVal/YiVal/assets/1544154/b0c681e7-7474-4b87-9c69-fde6e0e47401"
+         alt="YiVal Logo" width="100"
+        height="100" style="vertical-align: middle;">
+        YiVal
+    </h1>
+     <p align="center">⚡ Auto Prompting ⚡</p>
+</p>
+
+<!-- markdownlint-disable-next-line MD013 -->
+
+<p>👉 Follow
+us: <a href="https://twitter.com/yivalloveaigc"><img alt="Twitter" src="https://img.shields.io/twitter/url/https/twitter.com/YiValai.svg?style=social&amp;label=Follow%20%40YiVal" /></a> |
+<a href="https://discord.gg/HnUWVW4kth"><img alt="Discord" src="https://dcbadge.vercel.app/api/server/HnUWVW4kth?compact=true&amp;style=flat" /></a></p>
+<p>👉 Sponsored by Discord AIGC community:
+<a href="https://discord.gg/aigc"><img alt="Discord" src="https://dcbadge.vercel.app/api/server/aigc?compact=true&amp;style=flat" /></a></p>
+<p><a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-Apache2.0-yellow.svg" /></a>
+<a href="https://star-history.com/#YiVal/YiVal"><img alt="GitHub star chart" src="https://img.shields.io/github/stars/YiVal/YiVal?style=social" /></a>
+<a href="https://github.com/YiVal/YiVal/issues"><img alt="Open Issues" src="https://img.shields.io/github/issues-raw/YiVal/YiVal" /></a></p>
+<h2 id="what-is-yival">What is YiVal?<a class="headerlink" href="#what-is-yival" title="Permanent link">&para;</a></h2>
+<p><strong>YiVal: Your Automatic Prompt Engineering Assistant for GenAI Applications</strong>
+YiVal is a state-of-the-art tool designed to streamline the tuning process for
+your GenAI app prompts and <strong>ANY</strong> configs in the loop. With YiVal, manual adjustments
+are a thing of the past. This <strong>data-driven and evaluation-centric</strong> approach ensures
+optimal prompts, precise RAG configurations, and fine-tuned model parameters.
+Empower your applications to achieve
+<strong>enhanced results, reduce latency, and minimize inference costs</strong>
+effortlessly with YiVal!</p>
+<p><strong>Problems YiVal trying to tackle:</strong></p>
+<ol>
+<li>Prompt Development Challenge: "I can't create a better prompt. A score of 60
+   for my current prompt isn't helpful at all🤔."</li>
+<li>Fine-tuning Difficulty: "I don't know how to fine-tune; the terminology and
+   numerous fine-tune algorithms are overwhelming😵."</li>
+<li>Confidence and Scalability: "I learned tutorials to build agents from Langchain
+   and LlamaIndex, but am I doing it right? Will the bot burn through my money
+   when I launch? Will users like my GenAI app🤯?"</li>
+<li>Models and Data Drift: "Models and data keep changing; I worry a well-performing
+   GenAI app now may fail later😰."</li>
+<li>Relevant Metrics and Evaluators: "Which metrics and evaluators should I focus
+   on for my use case📊?"</li>
+</ol>
+<p><a href="https://github.com/YiVal/YiVal/blob/master/demo/tutorial_notebook/tutorial.md">Check out our quickstart guide!</a></p>
+<p><img src="https://github.com/YiVal/YiVal/assets/1544154/dba5acd9-995c-45fd-9d08-c7cf198a77ad"></p>
+<h3 id="link-to-demo">Link to demo<a class="headerlink" href="#link-to-demo" title="Permanent link">&para;</a></h3>
+<p><strong><a href="http://ec2-35-85-28-134.us-west-2.compute.amazonaws.com:8074/enhancer-experiment-results">Tiktok title autotune</a></strong></p>
+<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
+<h3 id="docker-runtime">Docker Runtime<a class="headerlink" href="#docker-runtime" title="Permanent link">&para;</a></h3>
+<p>Install Docker and pull ourimage on DockerHub:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>pull<span class="w"> </span>yival/release:latest
+</code></pre></div>
+<p>Run our image:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--it<span class="w"> </span>yival/release:latest
+</code></pre></div>
+<p>VSCode with Docker extension is recommended for running and developments. If you are developer using GPU with Pytorch, or need jupyter lab for data science:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>pull<span class="w"> </span>yival/release:cu12_torch_jupyter
+docker<span class="w"> </span>run<span class="w"> </span>--gpus<span class="w"> </span>all<span class="w"> </span>--it<span class="w"> </span>-p<span class="w"> </span><span class="m">8888</span>:8888<span class="w"> </span>yival/release:cu12_torch_jupyter
+</code></pre></div>
+<h3 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Python Version</strong>: Ensure you have <code>Python 3.10</code> or later installed.</li>
+<li><strong>OpenAI API Key</strong>: Obtain an API key from OpenAI. Once you have the key, set
+  it as an environment variable named <code>OPENAI_API_KEY</code>.</li>
+</ul>
+<h3 id="installation-methods">Installation Methods<a class="headerlink" href="#installation-methods" title="Permanent link">&para;</a></h3>
+<h4 id="using-pip-recommended-for-users">Using pip (Recommended for Users)<a class="headerlink" href="#using-pip-recommended-for-users" title="Permanent link">&para;</a></h4>
+<p>Install the <code>yival</code> package directly using pip:</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>yival
+</code></pre></div>
+<h4 id="development-setup-using-poetry">Development Setup Using Poetry<a class="headerlink" href="#development-setup-using-poetry" title="Permanent link">&para;</a></h4>
+<p>If you're looking to contribute or set up a development environment:</p>
+<ol>
+<li><strong>Install Poetry</strong>: If you haven't already, <a href="https://python-poetry.org/docs/#installation">install Poetry</a>.</li>
+<li><strong>Clone the Repository, or use CodeSpace</strong>:</li>
+</ol>
+<p>2.1 <strong>Use CodeSpace</strong>
+   The easiest way to get YiVal enviornment. Click below to use the GitHub Codespace, then go to the next step.</p>
+<p><a href="https://codespaces.new/YiVal/YiVal?quickstart=1"><img alt="Open in GitHub Codespaces" src="https://github.com/codespaces/badge.svg" /></a></p>
+<p>2.2 <strong>Clone the Repository</strong></p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/YiVal/YiVal.git
+<span class="nb">cd</span><span class="w"> </span>YiVal
+</code></pre></div>
+<ol>
+<li><strong>Setup with Poetry</strong>: Initialize the Python virtual environment and install
+   dependencies using Poetry. Make sure to run the below cmd in <code>/YiVal</code> directory:</li>
+</ol>
+<div class="highlight"><pre><span></span><code>poetry<span class="w"> </span>install<span class="w"> </span>--sync
+</code></pre></div>
+<h2 id="trying-out-yival">Trying Out YiVal<a class="headerlink" href="#trying-out-yival" title="Permanent link">&para;</a></h2>
+<p>After setting up, you can quickly get started with YiVal by generating datasets
+of random tech startup business names.</p>
+<h3 id="steps-to-run-your-first-yival-program">Steps to Run Your First YiVal Program<a class="headerlink" href="#steps-to-run-your-first-yival-program" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Navigate to the yival Directory</strong>:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/YiVal/src/yival
+</code></pre></div>
+<ol>
+<li><strong>Set OpenAI API Key</strong>: Replace <code>$YOUR_OPENAI_API_KEY</code> with your
+   actual OpenAI API key.</li>
+</ol>
+<p>On macOS or Linux systems,</p>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">OPENAI_API_KEY</span><span class="o">=</span><span class="nv">$YOUR_OPENAI_API_KEY</span>
+</code></pre></div>
+<p>On Windows systems,</p>
+<div class="highlight"><pre><span></span><code><span class="n">setx</span> <span class="n">OPENAI_API_KEY</span> <span class="nv">$YOUR_OPENAI_API_KEY</span>
+</code></pre></div>
+<ol>
+<li><strong>Define YiVal Configuration</strong>:
+   Create a configuration file named <code>config_data_generation.yml</code> for automated
+   test dataset generation with the following content:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Generate test data</span>
+<span class="nt">dataset</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_generators</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">openai_prompt_data_generator</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">chunk_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100000</span>
+<span class="w">      </span><span class="nt">diversify</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">model_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gpt-4</span>
+<span class="w">      </span><span class="nt">input_function</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="c1"># Description of the function</span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">Given a tech startup business, generate a corresponding landing</span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">page headline</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">headline_generation_for_business</span>
+<span class="w">        </span><span class="nt">parameters</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">tech_startup_business</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">str</span><span class="w"> </span><span class="c1"># Parameter name and type</span>
+<span class="w">      </span><span class="nt">number_of_examples</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">      </span><span class="nt">output_csv_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">generated_examples.csv</span>
+<span class="w">  </span><span class="nt">source_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">machine_generated</span>
+</code></pre></div>
+<ol>
+<li><strong>Execute YiVal</strong>:
+   Run the following command from within the <code>/YiVal/src/yival</code> directory:</li>
+</ol>
+<div class="highlight"><pre><span></span><code>yival<span class="w"> </span>run<span class="w"> </span>config_data_generation.yml
+</code></pre></div>
+<ol>
+<li><strong>Check the Generated Dataset</strong>:
+   The generated test dataset will be stored in <code>generated_examples.csv</code>.</li>
+</ol>
+<p>Please refer to <a href="https://yival.github.io/YiValApi/">YiVal Docs Page</a> for more details about YiVal!</p>
+<h2 id="demo">Demo<a class="headerlink" href="#demo" title="Permanent link">&para;</a></h2>
+<p><a href="https://github.com/YiVal/YiVal/assets/80620352/f2438449-2c13-45d1-a660-a783c5ae4eb6">Demo Video</a></p>
+<table>
+<thead>
+<tr>
+<th>Use Case Demo</th>
+<th>Supported Features</th>
+<th>Github Link</th>
+<th>Video Demo Link</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🐯 Craft your AI story with ChatGPT and MidJourney</td>
+<td><strong>Multi-modal</strong> support: Design an AI-powered narrative using YiVal's multi-modal support of simultaneous text and images. It supports native and seamless <a href="https://en.wikipedia.org/wiki/Reinforcement_learning_from_human_feedback">Reinforcement Learning from Human Feedback</a>(RLHF) and <a href="https://arxiv.org/abs/2309.00267">Reinforcement Learning from AI Feedback</a>(RLAIF). Please watch the video above for this use case.</td>
+<td><a href="https://github.com/YiVal/YiVal/blob/master/demo/tutorial_notebook/yival_midjourney_animal_story.ipynb"><img alt="Open In GitHub" src="https://img.shields.io/badge/Github-@YiVal-CAC6FC" /></a></td>
+<td><a href="https://www.youtube.com/"><img alt="Open In Youtube" src="https://img.shields.io/badge/_-Open%20in%20Youtube-red?logo=youtube&amp;logoColor=red&amp;labelColor=white" /></a></td>
+</tr>
+<tr>
+<td>🌟 Evaluate performance of multiple LLMs with your own Q&amp;A test dataset</td>
+<td>Conveniently<strong>evaluate and compare</strong> performance of your model of choice against 100+ models, thanks to <a href="https://github.com/BerriAI/litellm">LiteLLM</a>. Analyze model performance benchmarks tailored to your <strong>customized test data</strong> or use case.</td>
+<td><a href="https://github.com/YiVal/YiVal/blob/master/demo/tutorial_notebook/model_compare.ipynb"><img alt="Open In GitHub" src="https://img.shields.io/badge/Github-@YiVal-CAC6FC" /></a></td>
+<td><a href="https://www.youtube.com/"><img alt="Open In Youtube" src="https://img.shields.io/badge/_-Open%20in%20Youtube-red?logo=youtube&amp;logoColor=red&amp;labelColor=white" /></a></td>
+</tr>
+<tr>
+<td>🔥 Startup Company Headline Generation Bot</td>
+<td>Streamline generation of headlines for your startup with automated test data<strong>creation</strong>, prompt <strong>crafting</strong>, results <strong>evaluation</strong>, and performance <strong>enhancement</strong> via GPT-4.</td>
+<td><a href="https://github.com/YiVal/YiVal/blob/master/demo/tutorial_notebook/headline_generation.ipynb"><img alt="Open In GitHub" src="https://img.shields.io/badge/Github-@YiVal-CAC6FC" /></a></td>
+<td><a href="https://github.com/YiVal/YiVal/assets/80620352/1a2916c1-de6a-452a-88e0-fb4461e7c04b"><img alt="Open In Youtube" src="https://img.shields.io/badge/_-Open%20in%20Youtube-red?logo=youtube&amp;logoColor=red&amp;labelColor=white" /></a></td>
+</tr>
+<tr>
+<td>🧳 Build a Customized Travel Guide Bot</td>
+<td>Leverage<strong>automated prompts</strong> inspired by the travel <strong>community's</strong> most popular suggestions, such as those from <a href="https://github.com/f/awesome-chatgpt-prompts">awesome-chatgpt-prompts</a>.</td>
+<td><a href="https://github.com/YiVal/YiVal/blob/master/demo/tutorial_notebook/yival_prompt_retrieval.ipynb"><img alt="Open In GitHub" src="https://img.shields.io/badge/Github-@YiVal-CAC6FC" /></a></td>
+<td><a href="https://www.youtube.com/watch?v=rIggQqW4iAM"><img alt="Open In Youtube" src="https://img.shields.io/badge/_-Open%20in%20Youtube-red?logo=youtube&amp;logoColor=red&amp;labelColor=white" /></a></td>
+</tr>
+<tr>
+<td>📖 Build a Cheaper Translator: Use GPT-3.5 to teach Llama2 to create a translator with lower inference cost</td>
+<td>Using<a href="https://replicate.com/docs/guides/fine-tune-a-language-model">Replicate</a> and GPT-3.5's test data, you can <strong>fine-tune</strong> Llama2's translation bot. Benefit from 18x savings while experiencing only a 6% performance decrease.</td>
+<td><a href="https://github.com/YiVal/YiVal/blob/master/demo/tutorial_notebook/yival_translator_demo.ipynb"><img alt="Open In GitHub" src="https://img.shields.io/badge/Github-@YiVal-CAC6FC" /></a></td>
+<td><a href="https://github.com/YiVal/YiVal/assets/80620352/f2438449-2c13-45d1-a660-a783c5ae4eb6"><img alt="Open In Youtube" src="https://img.shields.io/badge/_-Open%20in%20Youtube-red?logo=youtube&amp;logoColor=red&amp;labelColor=white" /></a></td>
+</tr>
+<tr>
+<td>🤖️ Chat with Your Favorite Characters - Dantan Ji from Till the End of the Moon</td>
+<td>Bring your favorite characters to life through automated prompt creation and<strong>character script retrieval</strong>.</td>
+<td><a href="https://github.com/YiVal/YiVal/blob/master/demo/tutorial_notebook/yival_auto_reply.ipynb"><img alt="Open In GitHub" src="https://img.shields.io/badge/Github-@YiVal-CAC6FC" /></a></td>
+<td><a href="https://www.youtube.com/watch?v=xD1G2Sl9UeU"><img alt="Open In Youtube" src="https://img.shields.io/badge/_-Open%20in%20Youtube-red?logo=youtube&amp;logoColor=red&amp;labelColor=white" /></a></td>
+</tr>
+<tr>
+<td>🔍Evaluate guardrails's performance in generating Python(.py) outputs</td>
+<td><a href="https://github.com/ShreyaR/guardrails">Guardrails</a>: where are my guardrails? 😭 <code>&lt;br&gt;</code>Yival: I am here. ⭐️<code>&lt;br&gt;&lt;br&gt;</code>The <strong>integrated evaluation</strong> <a href="https://github.com/ShreyaR/guardrails/issues/345">experiment</a> is carried out with 80 LeetCode problems in csv, using guardrail and using only GPT-4. The accuracy drops from 0.625 to 0.55 with guardrail, latency increases by 44%, and cost increases by 140%. Guardrail still has a long way to go from demo to production.</td>
+<td><a href="https://github.com/YiVal/YiVal/blob/master/demo/tutorial_notebook/Guardrails_run_leetcode.ipynb"><img alt="Open In GitHub" src="https://img.shields.io/badge/Github-@YiVal-CAC6FC" /></a></td>
+<td><a href="https://www.youtube.com/watch?v=UMPxORBBTFI"><img alt="Open In Youtube" src="https://img.shields.io/badge/_-Open%20in%20Youtube-red?logo=youtube&amp;logoColor=red&amp;labelColor=white" /></a></td>
+</tr>
+<tr>
+<td>🍨Visualize different foods around the world!🍱</td>
+<td>Just give the place where the food belongs and the best season to taste it, and you can get a video of the season-specific food!🤩</td>
+<td><a href="https://github.com/YiVal/YiVal/blob/master/demo/tutorial_notebook/place_food_demo.ipynb"><img alt="Open In GitHub" src="https://img.shields.io/badge/Github-@YiVal-CAC6FC" /></a></td>
+<td><a href="https://www.youtube.com/watch?v=qJj7zSXQbTI"><img alt="Open In Youtube" src="https://img.shields.io/badge/_-Open%20in%20Youtube-red?logo=youtube&amp;logoColor=red&amp;labelColor=white" /></a></td>
+</tr>
+<tr>
+<td>🎈News article summary with CoD</td>
+<td>By integrating the<a href="https://huggingface.co/papers/2309.04269">&#34;Chain of Density&#34;</a> method, <strong>evaluate the enhancer's ability</strong> in text summarization.🎆 Using <strong>3</strong> articles points generated by GPT-4 for evaluation, the coherent score increased by <strong>20.03%</strong>, the attributive score increased by <strong>25.18%!</strong>, the average token usage from <strong>2054.6 -&gt; 1473.4(-28.3%)</strong> 🚀.</td>
+<td><a href="https://github.com/YiVal/YiVal/blob/master/demo/tutorial_notebook/news_summary_with_CoD.ipynb"><img alt="Open In GitHub" src="https://img.shields.io/badge/Github-@YiVal-CAC6FC" /></a></td>
+<td><a href="https://www.youtube.com/watch?v=W86Bct9k7fI"><img alt="Open In Youtube" src="https://img.shields.io/badge/_-Open%20in%20Youtube-red?logo=youtube&amp;logoColor=red&amp;labelColor=white" /></a></td>
+</tr>
+<tr>
+<td>🥐 Automated TikTok Title Generation Bot</td>
+<td>With only two input lines, you can easily create<strong>concise and polished</strong> TikTok video titles based on your desired target audience and video content summaries. This is presented by our <strong>auto-prompt feature</strong>: the process is automated, so you can input your requirements and enjoy the results hassle-free!</td>
+<td><a href="https://github.com/YiVal/YiVal/blob/master/demo/tutorial_notebook/Auto_TikTok_Title_Generation_Bots_Demo.ipynb"><img alt="Open In GitHub" src="https://img.shields.io/badge/Github-@YiVal-CAC6FC" /></a></td>
+<td><a href="https://www.youtube.com/"><img alt="Open In Youtube" src="https://img.shields.io/badge/_-Open%20in%20Youtube-red?logo=youtube&amp;logoColor=red&amp;labelColor=white" /></a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="contribution-guidelines">Contribution Guidelines<a class="headerlink" href="#contribution-guidelines" title="Permanent link">&para;</a></h2>
+<p>If you want to contribute to YiVal, be sure to review
+the <a href="https://yival.github.io/YiVal/contributing/">contribution guidelines</a>.
+We use <a href="https://github.com/YiVal/YiVal/issues">GitHub issues</a> for tracking
+requests and bugs.
+Please join <a href="https://discord.gg/HnUWVW4kth">YiVal&#39;s discord channel</a> for
+general questions and discussion.
+Join our collaborative community where your unique expertise as researchers and
+software engineers is highly valued! Contribute to our project and be a part of
+an innovative space where every line of code and research insight actively
+fuels advancements in technology, fostering a future that is intelligently
+connected and universally accessible.</p>
+<h2 id="contributors">Contributors<a class="headerlink" href="#contributors" title="Permanent link">&para;</a></h2>
+<p><a href="https://github.com/YiVal/YiVal/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=YiVal/YiVal" />
+</a>  </p>
+<p align="center">
+<br>
+🌟 YiVal welcomes your contributions! 🌟<p align="center">
+🥳 Thanks so much to all of our amazing contributors 🥳</p>
+
+## Paper / Algorithm Implementation
+
+| **Paper**                                                                         | **Author**                                                                                                                                                                                                                                   | **Topics**                  | **YiVal Contributor**             | **Data Generator**                                                                                                       | **Variation Generator**                                                                                                                       | **Evaluator**                                                                                                                                                                                                                | **Selector**                                                                                 | **Enhancer**                                                                                                                              | **Config**                                                                                            |
+| --------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| [Large Language Models Are Human-Level Prompt Engineers](https://arxiv.org/abs/2211.01910) | [Yongchao Zhou](https://arxiv.org/search/cs?searchtype=author&query=Zhou,+Y), [Andrei Ioan Muresanu](https://arxiv.org/search/cs?searchtype=author&query=Muresanu,+A+I), [Ziwen Han](https://arxiv.org/search/cs?searchtype=author&query=Han,+Z)            | YiVal Evolver, Auto-Prompting     |  | [OpenAIPromptDataGenerator](https://github.com/YiVal/YiVal/blob/master/src/yival/data_generators/openai_prompt_data_generator.py) | [OpenAIPromptVariationGenerator](https://github.com/YiVal/YiVal/blob/master/src/yival/variation_generators/openai_prompt_based_variation_generator.py) | [OpenAIPromptEvaluator](https://github.com/YiVal/YiVal/blob/master/src/yival/evaluators/openai_prompt_based_evaluator.py), [OpenAIEloEvaluator](https://github.com/YiVal/YiVal/blob/master/src/yival/evaluators/openai_elo_evaluator.py) | [AHPSelector](https://github.com/YiVal/YiVal/blob/master/src/yival/result_selectors/ahp_selection.py) | [OpenAIPromptBasedCombinationEnhancer](https://github.com/YiVal/YiVal/blob/master/src/yival/enhancers/openai_prompt_based_combination_enhancer.py) | [config](https://github.com/YiVal/YiVal/blob/master/demo/configs/headline_generation_enhance.yml)              |
+| [BERTScore: Evaluating Text Generation with BERT](https://arxiv.org/abs/1904.09675)        | [Tianyi Zhang](https://arxiv.org/search/cs?searchtype=author&query=Zhang,+T), [Varsha Kishore](https://arxiv.org/search/cs?searchtype=author&query=Kishore,+V), [Felix Wu](https://arxiv.org/search/cs?searchtype=author&query=Wu,+F)                       | YiVal Evaluator, bertscore, rouge | [@crazycth](https://github.com/crazycth)   | -                                                                                                                              | -                                                                                                                                                   | [BertScoreEvaluator](https://github.com/YiVal/YiVal/blob/master/src/yival/evaluators/bertscore_evaluator.py)                                                                                                                          | -                                                                                                  | -                                                                                                                                               | -                                                                                                           |
+| [AlpacaEval](https://github.com/tatsu-lab/alpaca_eval)                                     | [Xuechen Li](https://arxiv.org/search/cs?searchtype=author&query=Xuechen%20Li), [Tianyi Zhang](https://arxiv.org/search/cs?searchtype=author&query=Tianyi%20Zhang), [Yann Dubois](https://arxiv.org/search/cs?searchtype=author&query=Yann%20Dubois) et. al | YiVal Evaluator                   | | -                                                                                                                              | -                                                                                                                                                   | [AlpacaEvalEvaluator](https://github.com/YiVal/YiVal/blob/master/src/yival/evaluators/alpaca_eval_evaluator.py)                                                                                                                       | -                                                                                                  | -                                                                                                                                               | [config](https://github.com/YiVal/YiVal/blob/master/demo/configs/alpaca_eval.yml)                              |
+| [Chain of Density](https://arxiv.org/pdf/2309.04269.pdf)                                   | [Griffin Adams](https://arxiv.org/search/?query=Griffin+Adam) [Alexander R. Fabbri](https://arxiv.org/search/?query=Alexander+R.+Fabbri) et. al                                                                                                          | Prompt Engineering                |  | -                                                                                                                              | [ChainOfDensityGenerator](https://github.com/YiVal/YiVal/blob/master/src/yival/variation_generators/chain_of_density_prompt.py)                        | -                                                                                                                                                                                                                                  | -                                                                                                  | -                                                                                                                                               | [config](https://github.com/YiVal/YiVal/blob/master/demo/configs/summary_config.yml)                           |
+| [Large Language Models as Optimizers](https://arxiv.org/abs/2309.03409)                    | [Chengrun Yang](https://arxiv.org/search/cs?searchtype=author&query=Yang,+C) [Xuezhi Wang](https://arxiv.org/search/cs?searchtype=author&query=Wang,+X) et. al                                                                                           | Prompt Engineering                | [@crazycth](https://github.com/crazycth)   | -                                                                                                                              | -                                                                                                                                                   | -                                                                                                                                                                                                                                  | -                                                                                                  | [optimize_by_prompt_enhancer](https://github.com/YiVal/YiVal/blob/opro_implement/src/yival/enhancers/optimize_by_prompt_improver.py)               | [config](https://github.com/YiVal/YiVal/blob/opro_implement/demo/configs/headline_generation_improve.yml#L174) |
+| [LoRA: Low-Rank Adaptation of Large Language Models](https://arxiv.org/abs/2106.09685)     | [Edward J. Hu](https://arxiv.org/search/cs?searchtype=author&query=Hu,+E+J) [Yelong Shen](https://arxiv.org/search/cs?searchtype=author&query=Shen,+Y) et. al                                                                                            | LLM Finetune                      | [@crazycth](https://github.com/crazycth)   | -                                                                                                                              | -                                                                                                                                                   | -                                                                                                                                                                                                                                  | -                                                                                                  | [sft_trainer](https://github.com/YiVal/YiVal/blob/add_finetune_module/src/yival/finetune/sft_trainer.py#L40)                                       | [config](https://github.com/YiVal/YiVal/blob/add_finetune_module/src/yival/schemas/trainer_configs.py#L48)     |
+
+<!--  -->
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": ".", "features": ["navigation.top", "header.autohide"], "search": "assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="assets/javascripts/bundle.81fa17fe.min.js"></script>
+      
+    
+  </body>
+</html>
